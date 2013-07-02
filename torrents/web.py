@@ -233,6 +233,16 @@ def init_g(app):
 
     # dominio de la web
     g.domain = "torrents.com"
+    g.domains_family = ["torrents.com", "torrents.fm", "torrents.ag", "torrents.ms"]
+    for domain in g.domains_family:
+        if domain in request.url_root:
+            g.domain = domain
+            break
+        
+    g.domains_family = [d for d in g.domains_family if d != g.domain]
+    
+    g.domain_capitalized = g.domain.capitalize()
+            
 
     # título de la página por defecto
     g.title = "Torrents.com | The Torrent Search Engine"

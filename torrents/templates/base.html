@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
     <head>
-        <title>{{ g.title }}</title>
+        <title>{{ g.title | replace("Torrents.com", g.domain_capitalized)}}</title>
         <meta charset="utf-8" />
         <meta http-equiv="content-language" content="en" />
         {% if g.page_description %}
@@ -126,6 +126,15 @@
                         <a class="{{ loop.cycle('odd', 'even') }}" style="font-size:{{0.8+weight}}em" href="{{url_for('files.search', query=search|clean_query)}}">{{search}}</a>
                     {%- endfor %}
                 </div>
+            </div>
+            <div id="family">
+                <div class="container_24">
+                    Part of the Torrents.com family of sites: 
+                    {%- for domain in g.domains_family  %}
+                        <a href="http://{{ domain }}">{{ domain }}</a> 
+                    {%- endfor %}
+                </div>
+                    
             </div>
         </footer>
     </body>

@@ -10,6 +10,8 @@ env/
 *.swp
 *.py[cod]
 datafixes
+torrents/static/.webassets-cache*
+torrents/static/gen*
 
 # C extensions
 *.so

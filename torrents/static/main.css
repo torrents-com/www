@@ -404,6 +404,16 @@ img.error {
     a.odd {color:$black; &:hover, &:focus, &:active { color:$red; outline: none }}
 }
 
+#family {
+    text-align:center;margin:40px 0px 0px 0px; padding:20px 0 20px 0;background-color:$lightgray;overflow-x:hidden;color:$grayfont;
+    a:first-child {border:none}
+    a {margin-right:10px;padding-left:10px;color:$red;font-weight:400;text-decoration:none;white-space:nowrap;display:inline-block;*display:inline;zoom:1;border-left:1px $red solid;
+        &:hover, &:focus, &:active { color:$red; outline: none }
+    }
+    a.odd {color:$black; &:hover, &:focus, &:active { color:$red; outline: none }}
+}
+
+
 #download {
     margin-top:50px;color:$redfont;clear:right;
     >div:first-child {

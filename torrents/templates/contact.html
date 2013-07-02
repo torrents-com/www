@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% from "helpers.html" import render_field -%}
+{% block content %}
+<h1>Contact</h1>
+<p style="line-height:25px"><img class="error" src="{{g.static_prefix}}/error.png" alt="Warning"/>Note: If you want to contact us in regard of a copyright claim, you must use <a href="{{url_for('files.copyright')}}">the copyright claim form</a>.</p>
+<form method="post">
+    <fieldset>
+        <input type="hidden" name="_csrf_token" value="{{ csrf_token() }}">
+        {{ render_field(form.email) }}
+        {{ render_field(form.message,cols="40", rows="4") }}
+        {{ render_field(form.captcha) }}
+        {{ render_field(form.accept_tos) }}
+    </fieldset>
+    <fieldset>
+        {{ form.submit }}
+    </fieldset>
+</form>
+{% endblock %}

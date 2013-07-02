@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="grid_6 home">
+{{featured|safe}}
+</div>
+<div class="grid_18">
+    
+
+    {% if pop_searches %}
+    <div id="popular">
+    {%- for search, weight in pop_searches | dictsort(case_sensitive=False) %}
+        <a class="{{ loop.cycle('odd', 'even') }}" style="font-size:{{0.9+weight}}em" href="{{url_for('files.search', query=search|clean_query)}}">{{search}}</a>
+    {%- endfor %}
+    </div>
+    <div>
+        <h1 class="extra">A free torrent search engine offering fast, simple, and easy access to torrent downloads in one place.</h1>
+    </div>
+    
+    {%- endif %}
+    {%- for (results, search_info), category in rankings %}
+    <div class="title ranking big_icon {{category.url}}">
+    <span></span><div><h2><a href='{{url_for("files.category", category=category.url)}}'>{{category.title|singular}} torrents</a></h2></div>
+    </div>
+        {%- if results %}
+            {{ results | safe }}
+            <a class='more_results' href='{{url_for("files.category", category=category.url)}}'>view more {{category.title|singular|lower}} torrents...</a>
+        {%- endif %}
+    {%- endfor %}
+</div>
+{% endblock %}

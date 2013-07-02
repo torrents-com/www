@@ -1,4 +1,15 @@
+development*
+downloader*
+downloads
+backup
+production.py
+datafixes.py
+discover_settings.py
+private.py
+env/
+*.swp
 *.py[cod]
+datafixes
 
 # C extensions
 *.so

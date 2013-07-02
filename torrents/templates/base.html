@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>{{ g.title }}</title>
+        <meta charset="utf-8" />
+        <meta http-equiv="content-language" content="en" />
+        {% if g.page_description %}
+        <meta name="description" content="{{g.page_description}}" />
+        {% endif %}
+        <meta name="keywords" content="{{(g.keywords|list)[:17]|join(', ')}}" />
+        <link rel="shortcut icon" href="{{ url_for('index.favicon') }}" />
+        <link rel="search" type="application/opensearchdescription+xml" href="{{ url_for('index.opensearch') }}" title="Torrents" />
+        {%- block assets -%}
+            {%- assets "css_torrents" -%}
+                <link type="text/css" href="{{ ASSET_URL }}" rel="stylesheet" />
+            {%- endassets -%}
+            {%- assets "js_torrents" -%}
+                <script src="{{ ASSET_URL }}"></script>
+            {%- endassets -%}
+        {%- endblock -%}
+        {%- block head -%}
+        {%- endblock -%}
+        <script type="text/javascript">
+          var _gaq = _gaq || []; _gaq.push(['_setAccount', 'UA-38333996-1']); _gaq.push(['_setDomainName', 'torrents.com']);
+          _gaq.push(['_setAllowLinker', true]); _gaq.push(['_trackPageview']);
+
+          (function() {
+            var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+            ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+            var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+          })();
+            
+          var _prum = [['id', '5166969ae6e53d1236000001'],
+                         ['mark', 'firstbyte', (new Date()).getTime()]];
+            (function() {
+                var s = document.getElementsByTagName('script')[0]
+                  , p = document.createElement('script');
+                p.async = 'async';
+                p.src = '//rum-static.pingdom.net/prum.min.js';
+                s.parentNode.insertBefore(p, s);
+            })();
+        </script>
+    
+    </head>
+    {% set hidden_category = g.category and not g.category in g.categories[:5] -%}
+    {% set hidden_categories_start = 5 if hidden_category else 6 -%}
+    <body 
+        data-downloader_title="Hey!<br/>You need a Torrent client to download this file"
+        data-downloader_text="Download Torrents Downloader to get this file right now.<br/>Our sofware lets you download torrents faster and more easily than ever - absolutely free! If you already have a Torrent client, click <i>No, thanks</i>."
+        data-downloader_href="{{'http://torrents.com/downloader'|forceescape}}"
+        data-downloader_yes="<p>Yes, download</p>Torrents Downloader"
+        data-downloader_no="<p>No, thanks</p>I already have a torrent client"
+        >
+        <div id="dialog" data-dialog_ok="{{'ok'}}" data-dialog_no="{{'no'}}" data-dialog_yes="{{'yes'}}"></div>
+        <header>
+            <div id="header">
+                <div class="container_24">
+                    <div class="grid_24">
+                        <ul id="header_links">
+                            <li><a href="/about">About</a></li>
+                            <li><a href="/contact">Contact</a></li>
+                            <li><a href="/legal">Terms & Privacy</a></li>
+                            <li><a href="/copyright">Copyright</a></li>
+                            <li><a href="/recent">Recent</a></li>
+                            <li><a href="/popular">Popular</a></li>
+                            <li><a href="/popular_searches">Popular searches</a></li>
+                            <li><a href="/downloader">Torrents Downloader</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="container_24">
+                    <div class="grid_6">
+                        <a href="/"><img src="{{g.static_prefix}}/torrents.png" alt="Torrents" title="Torrents" /></a>
+                    </div>
+                    <form method="get" action="{{ url_for('files.search', query='') }}" class="grid_18">
+                        <input type="hidden" name="c" value="{{g.category.url if g.category else ""}}" />
+                        <div class="grid_12 alpha"><input type="text" id="q" name="q" autocomplete="off" value="{{g.query or ""}}"/></div>
+                        <div class="grid_6 omega"><button type="submit"><span class="icon-search"></span> Search</button></div>
+                    </form>
+                </div>
+                <div class="container_24">
+                    <div class="grid_18 prefix_6">
+                        <ul id="categories">
+                            <li{{ ' class=active' if g.category==None }}><a href="{{ url_for('files.search', query=g.clean_query ) if g.category and g.clean_query else url_for('index.home')}}"><span class="icon-all"></span> All</a></li>
+                            {% for category in g.categories[:5] %}
+                                <li{{' class=active' if g.category == category }}><a href="{{ url_for('files.category', category=category.url, query=None if g.category == category else g.clean_query )}}"><span class="icon-{{ category.tag }}"></span> {{category.title}}</a></li>
+                            {% endfor %}
+                            {% if hidden_category %}
+                                <li class="active"><a href="{{ url_for('files.category', category=g.category.url)}}"><span class="icon-{{ g.category.tag }}"></span> {{g.category.title}}</a></li>
+                            {% else %}
+                                <li{{ ' class=active' if g.category == g.categories[5][0]}}><a href="{{ url_for('files.category', category=g.categories[5].url, query=None if g.category == g.categories[5] else g.clean_query)}}"><span class="icon-{{ g.categories[5].tag }}"></span> {{g.categories[5].title}}</a></li>
+                            {% endif %}
+                            <li class="more">
+                                <input type="checkbox" id="more"/><label for="more"><span>More ▼</span><span>Less ▲</span></label>
+                                <ul>
+                                {% for category in g.categories[hidden_categories_start:] %}
+                                    {%- if  g.category != category[0] %}
+                                        <li><a href="{{ url_for('files.category', category=category.url, query=g.clean_query)}}"><span class="icon-{{ category.tag }}"></span> {{category.title}}</a></li>
+                                    {%- endif %}
+                                {% endfor %}
+                                </ul>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </header>
+        <section>
+            {%- with messages = get_flashed_messages(with_categories=true) %}
+                {%- if messages %}
+                    <div id="messages">
+                        {%- for category, message in messages %}
+                        <div class="{{ category }}"><div class="container_24"><p class="grid_24">{{ message }}</p></div></div>
+                        {%- endfor %}
+                    </div>
+                {%- endif %}
+            {%- endwith %}
+            <div class="container_24">
+                {%- block content %}{%- endblock %}
+            </div>
+        </section>
+        <footer>
+            <div id="last_searches">
+                <div class="container_24">
+                    {%- for search, weight in g.last_searches | dictsort(case_sensitive=False) %}
+                        <a class="{{ loop.cycle('odd', 'even') }}" style="font-size:{{0.8+weight}}em" href="{{url_for('files.search', query=search|clean_query)}}">{{search}}</a>
+                    {%- endfor %}
+                </div>
+            </div>
+        </footer>
+    </body>
+</html>

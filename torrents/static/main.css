@@ -1,0 +1,780 @@
+@import url(http://fonts.googleapis.com/css?family=Lato:400,700,900);
+
+@mixin icon{background: url(/static/icons.png?1) top left no-repeat; display:inline-block;*display:inline;zoom:1;}
+.icon-all{ @include icon(); background-position: 0 0; width: 20px; height: 20px; }
+.icon-anime{ @include icon(); background-position: -21px 0; width: 20px; height: 20px; }
+.icon-audio{ @include icon(); background-position: -42px 0; width: 20px; height: 20px; }
+.icon-document{ @include icon(); background-position: -63px 0; width: 20px; height: 20px; }
+.icon-download{ @include icon(); background-position: -84px 0; width: 11px; height: 11px; }
+.icon-download_button{ @include icon(); background-position: -96px 0; width: 20px; height: 20px; }
+.icon-download_ind{ @include icon(); background-position: -117px 0; width: 11px; height: 11px; }
+.icon-download_no{ @include icon(); background-position: -129px 0; width: 11px; height: 11px; }
+.icon-ebook{ @include icon(); background-position: -141px 0; width: 20px; height: 20px; }
+.icon-error{ @include icon(); background-position: -162px 0; width: 20px; height: 20px; }
+.icon-facebook{ @include icon(); background-position: -183px 0; width: 17px; height: 17px; }
+.icon-game{ @include icon(); background-position: -201px 0; width: 20px; height: 20px; }
+.icon-image{ @include icon(); background-position: -222px 0; width: 20px; height: 20px; }
+.icon-magnet{ @include icon(); background-position: -243px 0; width: 11px; height: 11px; }
+.icon-magnet_no{ @include icon(); background-position: -255px 0; width: 11px; height: 11px; }
+.icon-mobile{ @include icon(); background-position: -267px 0; width: 20px; height: 20px; }
+.icon-movie{ @include icon(); background-position: -288px 0; width: 20px; height: 20px; }
+.icon-music{ @include icon(); background-position: -309px 0; width: 20px; height: 20px; }
+.icon-porn{ @include icon(); background-position: -330px 0; width: 20px; height: 20px; }
+.icon-search{ @include icon(); background-position: -351px 0; width: 20px; height: 20px; }
+.icon-series{ @include icon(); background-position: -372px 0; width: 20px; height: 20px; }
+.icon-software{ @include icon(); background-position: -393px 0; width: 20px; height: 20px; }
+.icon-trailer{ @include icon(); background-position: -414px 0; width: 26px; height: 20px; }
+.icon-twitter{ @include icon(); background-position: -441px 0; width: 17px; height: 17px; }
+.icon-unknown{ @include icon(); background-position: -459px 0; width: 16px; height: 16px; }
+.icon-video{ @include icon(); background-position: -476px 0; width: 20px; height: 20px; }
+
+/* colores */
+$halfblack: rgba(50,50,48,0.3);
+$black: #323230;
+$darkgray:#8c8c84;
+$gray:#afb0aa;
+$lightgray:#f1f2ec;
+
+$tabgray:#e3e5d7;
+
+$lightgrayfont:#8F8F8D;
+$grayfont:#7D7E74;
+$redfont:#ab2933;
+$red:#B43F48;
+$greenfont:#869e3b;
+$lightred:#E7C3AD;
+$lightgreen:#eef6e1;
+$green:#dcecc5;
+$darkgreen:#dcecc5;
+
+$greenhealth:#4BF22E; /*#4EE738;*/
+$yellowhealth:#F1F22E;
+$redhealth:#F2602E; /*#E94200;*/
+
+body, html {
+    font-size:0.9em;
+    font-family: 'Lato', Verdana, sans-serif;
+    margin:0px;
+    font-weight:400;
+}
+input, button {
+    font-family: 'Lato', Verdana, sans-serif;
+}
+a {
+    color:$redfont;
+    &:hover, &:focus, &:active { color:$red }
+}
+
+img {
+    border:none;
+    vertical-align: text-bottom;
+}
+img.error {
+    vertical-align:middle;
+    margin:11px 5px;
+    display:inline-block;*display:inline;zoom:1
+}
+
+.big_icon
+{
+    span:first-child {display:inline-block;*display:inline;zoom:1;background: url(/static/icons_big.png) 0px 0px no-repeat;width:60px;height:60px;vertical-align:middle}
+    &.anime { span:first-child {background-position: 0 0}}
+    &.books { span:first-child {background-position: -61px 0}}
+    &.games { span:first-child {background-position: -122px 0}}
+    &.mobile { span:first-child {background-position: -183px 0}}
+    &.movies {span:first-child {background-position: -244px 0}}
+    &.music { span:first-child {background-position: -305px 0}}
+    &.pictures { span:first-child {background-position: -366px 0}}
+    &.porn { span:first-child {background-position: -427px 0}}
+    &.software { span:first-child {background-position: -488px 0}}
+    &.tv { span:first-child {background-position: -549px 0}}
+    &.unknown {span:first-child {width:0px}}
+}
+
+.title {
+    font-weight:bold;font-size:0.9em;margin:15px 0px 40px;text-align: justify; white-space: nowrap;
+    >* {vertical-align:middle}
+    span:first-child {margin-right:-60px}
+    span:first-child + div {display:inline-block;*display:inline;zoom:1;padding-left:70px;white-space:normal;margin:20px 0px 0px}
+    h2 {text-transform:uppercase;font-size: 1.6em;margin:5px 0px}
+    h2 a {text-decoration:none;color:$black}
+}
+
+.ranking.title {
+    margin-bottom:5px;
+    h2 {margin-bottom:10px}
+}
+
+@mixin button()
+{
+    display:inline-block;*display:inline;zoom:1;
+    font-size: 1em;
+    letter-spacing: 1px;
+    font-weight:bold;
+    text-transform:uppercase;
+    color:white;
+    padding:10px 12px 7px 8px;
+    border: none;
+    background-color:$black;
+    box-shadow:inset 0px 17px lighten($black, 15%);
+    text-decoration:none;
+    cursor:pointer;
+    span {vertical-align:-7px}
+
+    &:focus, &:hover, &:active {
+        outline:none;
+        box-shadow:inset 0px 17px $redfont;
+        background:darken($redfont, 15%);
+    }
+
+    &.disable{
+        cursor:default;
+        box-shadow:none;
+        background:$black;
+        &:focus, &:hover, &:active {
+            box-shadow:none;
+            background:$black;
+        }
+    }
+}
+
+@mixin redbutton()
+{
+    @include button();
+    background-color:$red;
+    box-shadow:inset 0px 17px $red;
+}
+
+*:focus {
+    outline-color: $redfont;
+    outline-width: 1px;
+    outline-style: dotted;
+}
+
+#header {
+    background-color:$lightgray; margin:0px 0px 20px;
+
+    ul#header_links {
+        text-align:right;margin:10px 0px 25px;
+        li {
+            list-style:none; display:inline; margin-left:12px;padding-left:12px;border-left:1px solid $redfont;
+            &:first-child{border-left:none}
+            &, a {
+                font-size:0.95em;text-decoration:none;
+            }
+        }
+    }
+
+    h1 {
+        margin:0px;
+        
+    }
+    #q {
+        border: 2px $black solid;
+        border-top-left-radius: 9px;
+        border-bottom-left-radius: 9px;
+        font-size: 1.1em;
+        width:430px;
+        padding: 8px 16px;
+        margin:3px 0px;
+        &:focus, &:hover {
+            outline:none;
+            box-shadow:inset 0px 0px 2px 2px $green;
+        }
+    }
+    button{
+        width:230px;
+        margin:3px 0px;
+        border-top-right-radius: 9px;
+        border-bottom-right-radius: 9px;
+        @include button();
+    }
+
+
+    #categories {
+        padding-left:0px;font-size:0.95em;margin:0px;position:relative
+        >li {
+            width:auto; list-style:none; margin:0px -28px 0px 0px; background:url(/static/tab.png) top right no-repeat;position:relative;display:inline-block;padding-right:5px;*display:inline;zoom:1
+
+            &:first-child { z-index:7; >a {padding-left:10px;}}
+            &:first-child + li { z-index:6}
+            &:first-child + li + li { z-index:5}
+            &:first-child + li + li + li { z-index:4}
+            &:first-child + li + li + li + li { z-index:3}
+            &:first-child + li + li + li + li + li { z-index:2}
+            &:first-child + li + li + li + li + li + li { z-index:1}
+
+            &.more {
+                text-align:right;padding-right:0px;margin-right:0px;position:absolute;background:none;color:$redfont;top:6px;right:0px;font-weight:bold;
+
+                #more + label {span {margin-right:0px}span + span{display:none}cursor:pointer;display:inline-block;*display:inline;zoom:1}
+                label:hover span {text-decoration:underline}
+                #more {position:absolute;left:-200px}
+                #more.checked + label {
+                    display:block;
+                    &+ul {display:block}
+                    & {span + span{display:inline}span{display:none}}
+                }
+                #more:checked + label {
+                    display:block;
+                    & + ul {display:block}
+                    & {span + span{display:inline}span{display:none}}
+                }
+                ul {
+                    box-shadow:0 0 2px 2px $lightgray; display:none; margin-top:6px; border:1px solid $tabgray;  border-top:none;border-bottom-left-radius:5px; border-bottom-right-radius:5px;padding:0px;background:$lightgray;
+                    >li {
+                        text-align:left; display:block;list-style:none;border-top:1px solid $tabgray;
+                        &:first-child {border:none}
+                        &.active, &:hover {background:white}
+                        >a {width:100px;padding:5px 10px}
+                    }
+                }
+            }
+
+            >a {min-width:40px;padding:8px 29px 2px 27px;padding-right:23px\0}
+
+            &.active { border-left:1px solid $tabgray;background-image:url(/static/active_tab.png)}
+            a{color:$black;font-weight:bold;text-decoration:none;display:inline-block;*display:inline;zoom:1;
+               &:hover, &:focus, &:active { color:$red }}
+            span{margin-right:5px;vertical-align:-5px}
+        }
+    }
+}
+
+#messages {
+    margin-top:-17px;
+    > div {
+        margin-bottom:3px;
+        > div > p {
+            margin: 8px 5px;
+            text-transform:uppercase;
+            font-size:0.9em;
+            font-weight:bold;
+        }
+
+        &.message {
+            background:$lightgreen;
+            color:$greenfont;
+        }
+        &.error {
+            background:$lightred;
+            color:$redfont;
+        }
+    }
+}
+
+.results {
+    margin:0px;padding:0px;font-size:0.9em;
+    >li {
+        display:block;margin:0px;padding:0px;border-bottom:1px $green solid;
+        >ul {
+            vertical-align:top;margin:0px;padding:0px;
+            >li {white-space:nowrap;padding:6px 0px 11px;height:7px;text-align:center;
+                display:inline-block;*display:inline;zoom:1;
+                span {margin-top: -4px;vertical-align:middle;}
+                &:first-child{width:28px}
+                &:first-child + li {width:336px;text-align:left;
+                    a {color:$grayfont;width:100%;overflow: hidden;text-overflow:ellipsis;font-weight:bold;text-decoration:none;    display:inline-block;*display:inline;zoom:1;
+                        strong{color:$black};
+                        span{vertical-align:inherit}
+                }}
+                &:first-child + li + li{width:48px;visibility:hidden;a:first-child{margin-right:4px}}
+                &:first-child + li + li + li, &:first-child + li + li + li + li{width:16px}
+                &:first-child + li + li + li + li + li{text-align:right;color:$grayfont;width:70px}
+                &:first-child + li + li + li + li + li + li{color:$grayfont;width:90px}
+                &:first-child + li + li + li + li + li + li + li{width:50px;color:$greenfont;}
+                &:first-child + li + li + li + li + li + li + li + li{width:56px;color:$redfont;}
+            }
+        }
+        &:first-child {border-top: 1px $gray solid;padding-top: 2px;border-bottom:1px $gray solid;font-weight:bold;color:$black;
+            >ul>li {
+                padding:3px 0px 11px;height:6px;
+                &:first-child + li + li + li + li + li + li + li a {color:$greenfont;}
+                &:first-child + li + li + li + li + li, &:first-child + li + li + li + li + li + li {&,a{color:$black}text-align:center}
+            }
+            &:hover, &:active, &:focus {background:inherit}
+        }
+        &.even {background:$lightgreen;>ul>li{padding:5px 0px 10px;}}
+        &:hover, &:active, &:focus {background:$darkgreen;>ul>li:first-child + li + li{visibility:visible;}}
+    }
+
+}
+
+#featured {
+    padding-left:0px; margin-top:-20px;
+    .icon-stars {
+        margin:10px 0px 10px;height:12px;
+        span {background:url(/static/star_small.png) left center repeat-x;height:12px}
+        .nostars {background-image:url(/static/star_no_small.png)}
+        .stars-1 {width:12px*1}
+        .stars-2 {width:12px*2}
+        .stars-3 {width:12px*3}
+        .stars-4 {width:12px*4}
+        .stars-5 {width:12px*5}
+    }
+
+    li {
+        list-style:none;
+        >div:first-child {
+            overflow:hidden; margin-top:20px;
+            img { min-width:100%; max-width:140%; min-height:113px;max-height:147px}
+        }
+
+        >div:first-child + div {
+            > .icon-stars{margin-top:25px}
+        }
+
+        .filelink {
+            color:$black;
+            text-decoration:none;
+            text-transform:uppercase;
+            word-wrap:break-word;
+            width:97%;
+            font-weight:700;
+            display:inline-block;
+            line-height:1.1em;
+            overflow: hidden;
+            max-height: 4.5em;
+            margin-bottom:30px;
+        }
+
+        .download {
+            text-align:center;
+            @include redbutton();
+            box-shadow:inset 0px 10px $red;
+            &:hover {box-shadow:inset 0px 10px $red}
+            display:block;
+            font-size:0.7em;
+            padding: 0px 3px 0px 0px;
+            border-radius: 7px;
+            font-weight:700;
+            margin-top:-20px;
+            margin-left:115px;
+            width:100px;
+        }
+    }
+}
+
+.home #featured {
+    margin-top: 40px;
+}
+
+.icon-stars {
+    margin:21px 0px 15px;height:19px;
+    span {
+        background:url(/static/star.png) left center repeat-x;
+        height:19px;
+        float:left;
+    }
+    .nostars {
+        background-image:url(/static/star_no.png);
+        clear:right;
+    }
+    .stars-0 {width:0px;}
+    .stars-1 {width:19px*1;}
+    .stars-2 {width:19px*2;}
+    .stars-3 {width:19px*3;}
+    .stars-4 {width:19px*4;}
+    .stars-5 {width:19px*5;}
+}
+
+#links {
+    margin-top:30px;font-size:0.95em;border-top: 3px $darkgray solid; padding:0px;
+    >li {list-style:none; margin:12px 0px;
+        a{color:$black;font-weight:bold;text-decoration:none;
+            &:hover, &:focus, &:active { color:$red }}
+    }
+}
+
+#popular {
+    text-align:center;margin:50px 0px; overflow-x:hidden;
+    a {margin:0px 7px;color:$grayfont;font-weight:400;text-decoration:none;white-space:nowrap;display:inline-block;*display:inline;zoom:1; &:hover, &:focus, &:active { color:$red; outline: none }}
+    a.odd {color:$black; &:hover, &:focus, &:active { color:$red; outline: none }}
+}
+
+#popular.category {
+    font-size:0.9em;float:right;padding:0px 50px;margin:20px 0px;max-width:610px;
+}
+
+#last_searches {
+    text-align:center;margin:90px 0px;padding-top:10px;border-top: 2px $lightgray solid;overflow-x:hidden;
+    a {margin:0px 7px;color:$grayfont;font-weight:400;text-decoration:none;white-space:nowrap;display:inline-block;*display:inline;zoom:1;
+        &:hover, &:focus, &:active { color:$red; outline: none }
+    }
+    a.odd {color:$black; &:hover, &:focus, &:active { color:$red; outline: none }}
+}
+
+#download {
+    margin-top:50px;color:$redfont;clear:right;
+    >div:first-child {
+        overflow:hidden;
+        >img {width:225px;max-height:1000px}
+    }
+    .share_report {
+        margin-top:15px;text-align:right;font-size:0.9em;vertical-align:middle
+        > span:first-child {
+            margin: 10px 10px 0px;
+            color: $grayfont;
+            a:first-child {margin-left:5px}
+            span {vertical-align:middle}
+        }
+        form {
+            display:inline;
+            input {
+                font-size:0.95em;font-weight:bold;border:none; color:$redfont; background:none; cursor:pointer; margin-top:6px;
+                &:hover, &:focus, &:active { text-decoration:underline;color:$red; outline: none }
+            }
+        }
+    }
+
+    h2 {margin: 5px 0px}
+
+    .links {
+        > div > a {
+            text-align:center;
+            width:210px;
+            margin-top:10px;
+            border-radius: 9px;
+            @include button();
+        }
+
+        > div > a:first-child+a{@include redbutton();}
+        > ul {
+
+            li {
+                text-align:right;display:block;
+                font-size:0.8em;color: $grayfont;
+            }
+        }
+
+    }
+
+    .health, .date, .size, .imdb {
+        font-weight:bold;color:$lightgrayfont;
+        display:inline-block;*display:inline;zoom:1;
+        font-size: 0.95em;
+    }
+
+    .imdb, .size {
+        border-radius: 9px;
+        padding:5px 20px;
+        margin:5px 0px 5px 10px;
+        vertical-align: bottom;
+    }
+     .imdb {
+        border: 1px solid #F2DD5C;
+        background: #f7e67a;
+
+        a {color:$black;font-weight:900;text-shadow:0px 0px 1px white}
+     }
+    .size {
+        border: 1px solid $green;
+        background-color: $lightgray;
+    }
+
+    .health, .date {
+        margin:10px 10px 10px 0px;
+        dt {
+            font-size: 0.9em;
+        }
+
+        dt, dd {
+            margin:3px 0px;
+        }
+    }
+
+    @mixin innerspan($color,$percent){
+        border-color:$color;
+        span:first-child {height:100%;background-color: $color; width:20px+120px*$percent}
+    }
+
+    .health dd{
+        height:14px;padding:0px;width:140px;border-radius:5px;border:1px solid $black;background-color:$lightgray;
+
+        span {text-align:center;display:block}
+        span:first-child + span {color:white;text-shadow: 1px 1px 0px $halfblack, -1px 1px 0px $halfblack, 1px -1px 0px $halfblack, -1px -1px 0px $halfblack;margin-top:-15px;letter-spacing:1px}
+        &.v0 {@include innerspan($redhealth, 0)}
+        &.v1 {@include innerspan(mix($redhealth, $yellowhealth, 25%), 0.1)}
+        &.v2 {@include innerspan(mix($redhealth, $yellowhealth, 50%), 0.2)}
+        &.v3 {@include innerspan(mix($redhealth, $yellowhealth, 75%), 0.3)}
+        &.v4 {@include innerspan($yellowhealth, 0.4)}
+        &.v5 {@include innerspan(mix($yellowhealth, $greenhealth, 20%), 0.5)}
+        &.v6 {@include innerspan(mix($yellowhealth, $greenhealth, 35%), 0.6)}
+        &.v7 {@include innerspan(mix($yellowhealth, $greenhealth, 50%), 0.7)}
+        &.v8 {@include innerspan(mix($yellowhealth, $greenhealth, 65%), 0.8)}
+        &.v9 {@include innerspan(mix($yellowhealth, $greenhealth, 80%), 0.9)}
+        &.v10 {@include innerspan($greenhealth, 1)}
+    }
+
+    ul {
+        padding-left:0px;
+        >li {list-style:none;display:inline-block}
+    }
+
+    .seeders, .leechers {
+        strong {
+            font-size: 1.5em;
+            display:block;
+        }
+        width: 50%; margin: 30px 0px 0px; color: $grayfont; text-align:center;
+        display:inline-block; *display:inline; zoom:1
+    }
+    .seeders strong { color:$greenfont }
+    .leechers strong { color:$redfont }
+
+}
+
+
+h1 {text-transform:uppercase;font-size: 1.5em;margin:30px 0px 10px;color:$black;}
+
+h1.extra{text-transform:none; padding:6px; font-size:1em; color:#323230; text-align:center; background:#f1f2ec; margin-bottom:35px;margin-top:-10px;}
+.title h1{text-transform:none; font-size: 0.9em; margin-bottom:0px;}
+.title h1.category {text-transform:uppercase;font-size: 1.6em;margin:5px 0px}
+h2 {text-transform:uppercase;font-size: 1.5em;margin:30px 0px 10px;color:$black;}
+h2:first-child {margin-bottom:50px}
+h3 {text-transform:uppercase;font-size: 1.3em;margin:35px 0px 10px;color:$redfont;}
+
+#featured_col {clear:left;margin-top:30px}
+
+#metadata {
+    >ul {
+        padding-left:0px;
+        >li {
+            list-style:none;border-bottom:1px $green solid;padding:7px 0px;
+            >div:first-child {text-align:right;color:$black;font-weight:700;
+                span {color:$grayfont;font-style:italic;}
+            }
+            >div {
+                color:$darkgray;vertical-align:middle;
+                a{color:$redfont;&:hover, &:focus, &:active { color:$red; outline: none }}
+            }
+        }
+        >li:first-child {margin-top:-15px;}
+        >li.even {background:$lightgreen}
+    }
+}
+
+#files {
+    > .filepaths {
+        padding:0px;
+        li {padding: 0px; list-style:none;}
+        span {
+            margin-left:4px;
+        }
+    }
+    > .filepaths.treeview {
+        li {padding: 1px 5px 1px 16px}
+        a {
+            margin-left:2px
+        }
+    }
+}
+
+#metadata, #files, #long_desc, #related {
+    margin-top:20px
+}
+
+#download p, #metadata > ul , #files > ul, #long_desc {
+    font-size:0.9em;
+    color:$black;
+    text-align: justify;
+}
+
+.more_results {
+    text-align:right; text-decoration:none;font-size:0.9em;display:block;margin:3px;
+}
+
+form {
+    fieldset {
+        border: none;font-size:1.1em;
+        label {display:block;clear:left;margin-top:5px}
+        textarea, input[type=text] {border:1px solid $gray; width:400px;padding:3px}
+        span {color:$redfont}
+        .errors {
+            color:$redfont;display:inline-block;*display:inline;zoom:1
+        }
+    }
+}
+
+/*
+    Colorbox Core Style:
+    The following CSS is consistent between example themes and should not be altered.
+*/
+#colorbox, #cboxOverlay, #cboxWrapper{position:absolute; top:0; left:0; z-index:9999; overflow:hidden;}
+#cboxOverlay{position:fixed; width:100%; height:100%;}
+#cboxMiddleLeft, #cboxBottomLeft{clear:left;}
+#cboxContent{position:relative;}
+#cboxLoadedContent{overflow:auto; -webkit-overflow-scrolling: touch;}
+#cboxTitle{margin:0;}
+#cboxLoadingOverlay, #cboxLoadingGraphic{position:absolute; top:0; left:0; width:100%; height:100%;}
+#cboxPrevious, #cboxNext, #cboxClose, #cboxSlideshow{cursor:pointer;}
+.cboxPhoto{float:left; margin:auto; border:0; display:block; max-width:none; -ms-interpolation-mode:bicubic;}
+.cboxIframe{width:100%; height:100%; display:block; border:0;}
+#colorbox, #cboxContent, #cboxLoadedContent{box-sizing:content-box; -moz-box-sizing:content-box; -webkit-box-sizing:content-box;}
+
+/*
+    User Style:
+    Change the following styles to modify the appearance of Colorbox.  They are
+    ordered & tabbed in a way that represents the nesting of the generated HTML.
+*/
+#cboxOverlay{background:$halfblack}
+#colorbox{outline:0;padding:8px}
+    #cboxWrapper{padding:8px;background-color:white;border-radius:7px}
+    #cboxContent{background:url(/static/loading.gif) center center no-repeat;overflow:hidden}
+        .cboxIframe{}
+        #cboxError{padding:50px; border:1px solid #ccc;}
+        #cboxLoadedContent{margin-bottom:20px;}
+        #cboxTitle{position:absolute; bottom:0px; left:0; text-align:center; width:100%; color:#999;}
+        #cboxCurrent{position:absolute; bottom:0px; left:100px; color:#999;}
+
+        /* these elements are buttons, and may need to have additional styles reset to avoid unwanted base styles */
+        #cboxPrevious, #cboxNext, #cboxSlideshow, #cboxClose {border:0; padding:0; margin:0; overflow:visible; width:auto; background:none; }
+
+        /* avoid outlines on :active (mouseclick), but preserve outlines on :focus (tabbed navigating) */
+        #cboxPrevious:active, #cboxNext:active, #cboxSlideshow:active, #cboxClose:active {outline:0;}
+
+        #cboxSlideshow{position:absolute; bottom:0px; right:42px; color:#444;}
+        #cboxPrevious{position:absolute; bottom:0px; left:0; color:#444;}
+        #cboxNext{position:absolute; bottom:0px; left:63px; color:#444;}
+        #cboxClose{position:absolute; font-weight:700; bottom:0; right:0; display:block; color:$redfont;}
+
+/*
+  The following fixes a problem where IE7 and IE8 replace a PNG's alpha transparency with a black fill
+  when an alpha filter (opacity change) is set on the element or ancestor element.  This style is not applied to or needed in IE9.
+  See: http://jacklmoore.com/notes/ie-transparency-problems/
+*/
+.cboxIE #cboxTopLeft,
+.cboxIE #cboxTopCenter,
+.cboxIE #cboxTopRight,
+.cboxIE #cboxBottomLeft,
+.cboxIE #cboxBottomCenter,
+.cboxIE #cboxBottomRight,
+.cboxIE #cboxMiddleLeft,
+.cboxIE #cboxMiddleRight {
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#00FFFFFF,endColorstr=#00FFFFFF);
+}
+
+/* dialog */
+#dialog{
+    position:fixed;
+    display:none;
+    width:auto;height:auto;
+    left:0;top:0;bottom:0;right:0;
+    background-color:rgba(50,50,50,0.5);
+    line-height:625px; /* minimun body */
+    text-align:center;
+    font-size:1.5em;
+    color:$darkgray;
+    z-index:101;
+    &.visible{display:block;}
+    p {
+        margin:0;
+        padding:0;
+    }
+    .outer{
+        border:1px solid rgba(0,0,0,0.5);
+        background:white;
+
+        -moz-box-shadow: 0 0 20px rgba(0,0,0,0.5);
+        -webkit-box-shadow: 0 0 20px rgba(0,0,0,0.5);
+        box-shadow: 0 0 20px rgba(0,0,0,0.5);
+
+        width:500px;
+        padding:1px;
+        vertical-align:middle;
+        display:inline-block;
+        line-height:1em;
+        border-radius:6px;
+        }
+    .inner{
+        background:$darkwhite;
+        border-radius:5px;
+        text-align:left;
+        }
+    header{
+        border-radius:2px;
+        padding:15px;
+        color:$black;
+        font-weight:bold;
+        min-height:28px;
+        p:first-child{
+            font-size:1.3em;
+            line-height:1.1em;
+            }
+        }
+    section{
+        padding:25px 60px 20px;
+        line-height:1.2em;
+        p{
+            padding:10px 0;
+            }
+
+        }
+    footer{
+        text-align:center;
+        white-space:nowrap;
+        padding:15px;
+        padding-top:10px;
+    }
+    .button{
+        vertical-align:top;
+        font-weight:bolder;
+        white-space:normal;
+        width:47.5%;
+        cursor:pointer;
+        background:$black;
+        padding-left:8px;
+        padding-right:8px;
+        color:#FFF;
+        
+        
+        border: medium none;
+        font-size: 0.7em;
+        letter-spacing: 1px;
+        padding: 10px 12px 7px 8px;
+        border-radius: 9px;
+        
+        box-shadow:inset 0px 17px lighten($black, 15%);
+        text-decoration:none;
+        cursor:pointer;
+        span {vertical-align:-7px}
+
+        &:focus, &:hover, &:active {
+            outline:none;
+            box-shadow:inset 0px 17px $redfont;
+            background:darken($redfont, 15%);
+        }
+    }
+    .dialog_ok {
+
+    }
+    .dialog_no {
+        margin-right:2.5%;
+
+    }
+    .dialog_yes {
+        margin-left:2.5%;
+        background:$red;
+        box-shadow:inset 0px 17px lighten($redfont, 15%);
+        }
+    }
+
+/* dialog downloader */
+#dialog.downloader{
+    header{
+        padding-left:58px;
+    }
+    .button{
+        font-weight:normal;
+        font-size:0.6em;
+    }
+    .button p:first-child{
+        font-weight:bolder;
+        font-size:1.5em;
+    }
+
+}
+
+#downloader h1{font-size: 1em; font-weight: 400;text-transform:none; color:#000;}
+
+ 

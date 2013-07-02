@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+{% block head %}
+{% if mode == "success" %}
+<script type="text/javascript">
+    $(function(){
+        _gaq.push(['_trackEvent', "TD", "installed"]);
+    });
+</script>
+{% endif %}
+{% endblock %}
+
+{% block content %}
+{% if mode == "success" %}
+<div class="grid_6">&nbsp;</div>
+    <div class="grid_18" id="downloader">
+    <h1>Happy downloading!</h1>
+    <p>Thanks for installing Torrents Downloader, we hope you enjoy it. </p>
+</div>
+{% elif mode == "download" %}
+    <div class="grid_6">&nbsp;</div>
+    <div class="grid_18" id="downloader">
+        {% if properties["available"] -%}
+            <a class="download" id="downloader_button" href="{{url_for('downloads.download', instfile=properties['filename'])}}">
+             <span>Download Torrents Downloader</span>
+             <span class="info">Windows · {{properties["version_code"].split("-")[0]}} · {{properties["length"]|numbersizeformat}}</span>
+            </a>
+         {% endif %}
+         {% if properties["source_available"] -%}
+            <div class="source-panel">
+                <a class="source" href="{{url_for('downloads.download', instfile=properties['source_filename'])}}">{{"Download Source"|capitalize}} · {{properties["source_length"]|numbersizeformat}}</a>
+            </div>
+         {% endif %}
+    
+        <h1><b>Torrents Downloader</b> is a fast client for the <b>Torrent</b> P2P network.</h1>
+        <p>Torrents Downloader is designed to be very easy to use, intuitive, and safe. You can pause, resume and find your downloads more easily than ever, check out some of its features:</p>
+        <ul>
+            <li>Rock solid torrent client.</li>
+            <li>Simplified interface.</li>
+            <li>DHT, uPnP and uTorrent protocol extensions.</li>
+        </ul>
+        <h2>Download and share files</h2>
+        <p>Now, with <b>Torrents Downloader</b> you can download faster than ever before. Thanks to the torrent network, the fastest P2P solution ever made, your downloads will fly.</p>
+        <p>Give it a try! <b>The future of downloading is only one click away.</b></p>
+        <h2>Get your files in a safe way</h2>
+        <p>We take security very seriously. <b>Torrents Downloader</b> uses the award winning libtorrent library, which will make your download experience a safe and secure one.</p>
+        <p>We strongly recomment you use an antivirus, you can download malware from untrusted sources.</p>
+    </div>
+    
+
+{% endif %}
+{% endblock %}
+

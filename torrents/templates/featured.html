@@ -1,0 +1,24 @@
+{%- if files %}
+<ul id="featured">
+{%- for beauty, quality, file in files %}
+    <li class="grid_6 alpha omega">
+        <div class="grid_3 alpha"><a title="{{file['view']['fn']}}" href='{{ url_for("files.download", file_name=file["view"]["seo-fn"], file_id=file["view"]["url"])}}'>
+    {%- if 'images_server' in file['view'] or 'thumbnail' in file['view']%}
+        <img src="http://images.torrents.com/{{ file['file']['_id'] }}0" alt="preview" />
+    {%- else%}
+        <img src="{{g.static_prefix}}/missing-{{ file['view']['icon'].url}}.jpg" alt="preview" />
+    {%- endif%}
+        </a></div>
+        <div class="grid_3 alpha omega">
+            <div class="icon-stars"><span class="stars-{{file['view']['rating']}}"></span><span class="nostars stars-{{5-file['view']['rating']}}"></span></div>
+            <a class="filelink" title="{{file['view']['fn']}}" href='{{ url_for("files.download", file_name=file["view"]["seo-fn"], file_id=file["view"]["url"])}}'>{{ file["view"]["fn"] | seoize(" ",True) }}</a>
+        </div>
+
+        <div class="grid_6 alpha omega">
+            <a target="_blank" class="download" data-downloader="1" data-track="Download,{{'Torrent' if 'download' in file['view']['sources'] else 'Magnet' if 'tmagnet' in file['view']['sources'] else 'HTML'}},Featured / Button" href="{{file['view']['sources']['download']['urls'][0] if 'download' in file['view']['sources'] else file['view']['sources']['tmagnet']['urls'][0] if 'tmagnet' in file['view']['sources'] else
+                file['view']['sources']['download']['urls'][0]}}"><span class="icon-download_button"></span> Download</a>
+        </div>
+    </li>
+{%- endfor %}
+</ul>
+{%- endif %}

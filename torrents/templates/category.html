@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{%- block head -%}
+    {%- if g.query and g.query!=search_info["canonical_query"] %}
+        <link rel="canonical" href="{{url_for('files.category', category=g.category.url, query=search_info['canonical_query'])}}" />
+    {%- endif %}
+{%- endblock -%}
+{% block content %}
+
+{% if pop_searches %}
+<div id="popular" class="category">
+{%- for search, weight in pop_searches | dictsort(case_sensitive=False) %}
+    <a class="{{ loop.cycle('odd', 'even') }}" style="font-size:{{0.9+weight}}em" href="{{url_for('files.category', category=g.category.url, query=search|clean_query)}}">{{search}}</a>
+{%- endfor %}
+</div>
+{%- endif %}
+
+<div class="title big_icon {{g.category.url}}">
+<span></span><div>
+<a href='{{url_for("index.home")}}'>All</a>&nbsp;&nbsp;&gt;&nbsp;&nbsp;
+{%- if g.query %}<a href='{{url_for("files.category", category=g.category.url)}}'>{{g.category.title}}</a>&nbsp;&nbsp;&gt;&nbsp;&nbsp;{{g.query}}
+<h1 class="category">{{g.query}} {{g.category.title|singular}} torrents</h1>
+{%- else %}
+{{g.category.title}}
+<h1 class="category">{{g.category.title|singular}} torrents</h1>
+{%- endif %}
+</div></div>
+{%- if featured %}
+    <div class="grid_6">
+        {{featured|safe}}
+    </div>
+    <div class="grid_18">
+    {%- else %}
+    <div class="prefix_6 grid_18">
+{%- endif %}
+
+{%- if results %}
+    {{ results |safe }}
+    {%- if search_info["next"] %}
+        <a class='more_results' href='{{url_for("files.category", category=g.category.url, query=g.clean_query)}}?s={{search_info["next"]}}{{'&o='+show_order if show_order}}'>more {{g.category.title|lower}} torrents...</a>
+    {%- endif %}
+{%- else %}
+    <p>No <strong>{{g.category.title|singular}}</strong> torrents found for <strong>{{g.query}}</strong>.</p>
+    <p>Sorry, we don't have any result that matches your query in this category. Please, try another search or another category.</p>
+{%- endif %}
+    </div>
+{% endblock %}

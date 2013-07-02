@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Torrents Downloader</title>
+        <meta charset="utf-8" />
+        <meta http-equiv="content-language" content="en" />
+        {% if g.page_description %}
+        <meta name="description" content="{{g.page_description}}" />
+        {% endif %}
+        <meta name="keywords" content="{{(g.keywords|list)[:10]|join(', ')}}" />
+        <link rel="shortcut icon" href="{{ url_for('web.favicon') }}" />
+        <link rel="search" type="application/opensearchdescription+xml" href="/opensearch.xml" title="Torrents" />
+        {%- block assets -%}
+            {%- assets "css_torrents" -%}
+                <link type="text/css" href="{{ ASSET_URL }}" rel="stylesheet" />
+            {%- endassets -%}
+            {%- assets "css_torrentsdownloader" -%}
+                <link type="text/css" href="{{ ASSET_URL }}" rel="stylesheet" />
+            {%- endassets -%}
+            {%- assets "js_torrents" -%}
+                <script src="{{ ASSET_URL }}"></script>
+            {%- endassets -%}
+        {%- endblock -%}
+        {%- block head -%}
+        {%- endblock -%}
+        <script type="text/javascript">
+          var _gaq = _gaq || []; _gaq.push(['_setAccount', 'UA-38333996-1']); _gaq.push(['_setDomainName', 'torrents.com']);
+          _gaq.push(['_setAllowLinker', true]); _gaq.push(['_trackPageview']);
+
+          (function() {
+            var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+            ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+            var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+          })();
+        </script>
+    </head>
+    {% set hidden_category = g.category and not g.category in g.categories[:5] -%}
+    {% set hidden_categories_start = 5 if hidden_category else 6 -%}
+    <body>
+        <header>
+            <div id="header">
+                <div class="container_24">
+                    <div class="grid_24">
+                        <ul id="header_links">
+                            <li><a href="/about">About</a></li>
+                            <li><a href="/contact">Contact</a></li>
+                            <li><a href="/legal">Terms & Privacy</a></li>
+                            <li><a href="/copyright">Copyright</a></li>
+                            <li><a href="/recent">Recent</a></li>
+                            <li><a href="/popular">Popular</a></li>
+                            <li><a href="/popular_searches">Popular searches</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="container_24">
+                    <div class="grid_6">
+                        <a href="/"><h1><img src="{{g.static_prefix}}/torrents.png" alt="Torrents" title="Torrents" /></h1></a>
+                    </div>
+                    <form method="get" action="{{ url_for('files.search', query='') }}" class="grid_18">
+                        <input type="hidden" name="c" value="{{g.category.url if g.category else ""}}" />
+                        <div class="grid_12 alpha"><input type="text" id="q" name="q" autocomplete="off" value="{{g.query or ""}}"/></div>
+                        <div class="grid_6 omega"><button type="submit"><span class="icon-search"></span> Search</button></div>
+                    </form>
+                </div>
+                <div class="container_24">
+                    <div class="grid_18 prefix_6">
+                        <ul id="categories">
+                            <li{{ ' class=active' if not g.category }}><a href="{{ url_for('files.search', query=g.clean_query ) if g.category and g.clean_query else '/'}}"><span class="icon-all"></span> All</a></li>
+                            {% for category in g.categories[:5] %}
+                                <li{{' class=active' if g.category == category }}><a href="{{ url_for('files.category', category=category.url, query=None if g.category == category else g.clean_query )}}"><span class="icon-{{ category.tag }}"></span> {{category.title}}</a></li>
+                            {% endfor %}
+                            {% if hidden_category %}
+                                <li class="active"><a href="{{ url_for('files.category', category=g.category.url)}}"><span class="icon-{{ g.category.tag }}"></span> {{g.category.title}}</a></li>
+                            {% else %}
+                                <li{{ ' class=active' if g.category == g.categories[5][0]}}><a href="{{ url_for('files.category', category=g.categories[5].url, query=None if g.category == g.categories[5] else g.clean_query)}}"><span class="icon-{{ g.categories[5].tag }}"></span> {{g.categories[5].title}}</a></li>
+                            {% endif %}
+                            <li class="more">
+                                <input type="checkbox" id="more"/><label for="more"><span>More ▼</span><span>Less ▲</span></label>
+                                <ul>
+                                {% for category in g.categories[hidden_categories_start:] %}
+                                    {%- if  g.category != category[0] %}
+                                        <li><a href="{{ url_for('files.category', category=category.url, query=g.clean_query)}}"><span class="icon-{{ category.tag }}"></span> {{category.title}}</a></li>
+                                    {%- endif %}
+                                {% endfor %}
+                                </ul>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </header>
+        <section>
+            {%- with messages = get_flashed_messages(with_categories=true) %}
+                {%- if messages %}
+                    <div id="messages">
+                        {%- for category, message in messages %}
+                        <div class="{{ category }}"><div class="container_24"><p class="grid_24">{{ message }}</p></div></div>
+                        {%- endfor %}
+                    </div>
+                {%- endif %}
+            {%- endwith %}
+            <div class="container_24">
+                {% block content %}
+                {% if mode == "success" %}
+                <div class="grid_6">&nbsp;</div>
+                    <div class="grid_18" id="downloader">
+                    <h2>Happy downloading!</h2>
+                    <p>Thanks for installing Torrents Downloader, we hope you enjoy it. </p>
+                </div>
+                {% elif mode == "download" %}
+                    <div class="grid_6">&nbsp;</div>
+                    <div class="grid_18" id="downloader">
+                        {% if properties["available"] -%}
+                            <a class="download"
+                            {%- if standalone_microsite %}
+                            href="{{url_for('downloads.download', instfile=properties['filename'])}}"
+                            {%- else -%}
+                            href="{{url_for('downloads.foodownloader_download')}}"
+                            {%- endif -%}>
+                             <span>Download Torrents Downloader</span>
+                             <span class="info">Windows · {{properties["version_code"].split("-")[0]}} · {{properties["length"]|numbersizeformat}}</span>
+                             </a>
+                         {% endif %}
+                         {% if properties["source_available"] -%}
+                            <div class="source-panel">
+                                <a class="source"
+                                {%- if standalone_microsite -%}
+                                href="{{url_for('downloads.download', instfile=properties['source_filename'])}}"
+                                {%- else -%}
+                                href="{{url_for('downloads.foodownloader_source_download')}}"
+                                {%- endif -%}>{{_("foodownloader_download_source")|capitalize}} · {{properties["source_length"]|numbersizeformat}}</a>
+                            </div>
+                         {% endif %}
+                    
+                        <h2>Overview</h2>
+                        <p><b>Torrents Downloader</b> is a fast client for the <b>Torrent</b> P2P network.</p>
+                        <p>Torrents Downloader is designed to be very easy to use, intuitive, and safe. You can pause, resume and find your downloads more easily than ever, check out some of its features:</p>
+                        <ul>
+                            <li>Rock solid torrent client.</li>
+                            <li>Simplified interface.</li>
+                            <li>DHT, uPnP and uTorrent protocol extensions.</li>
+                        </ul>
+                        <h2>Download and share files</h2>
+                        <p>Now, with <b>Torrents Downloader</b> you can download faster than ever before. Thanks to the torrent network, the fastest P2P solution ever made, your downloads will fly.</p>
+                        <p>Give it a try! <b>The future of downloading is only one click away.</b></p>
+                        <h2>Get your files in a safe way</h2>
+                        <p>We take security very seriously. <b>Torrents Downloader</b> uses the award winning libtorrent library, which will make your download experience a safe and secure one.</p>
+                        <p>We strongly recomment you use an antivirus, you can download malware from untrusted sources.</p>
+                    </div>
+                    
+                
+                {% endif %}
+                {% endblock %}
+
+            </div>
+        </section>
+        <footer>
+            <div id="last_searches">
+                <div class="container_24">
+                    {%- for search, weight in g.last_searches | dictsort(case_sensitive=False) %}
+                        <a class="{{ loop.cycle('odd', 'even') }}" style="font-size:{{0.8+weight}}em" href="{{url_for('files.search', query=search|clean_query)}}">{{search}}</a>
+                    {%- endfor %}
+                </div>
+            </div>
+        </footer>
+    </body>
+</html>
+

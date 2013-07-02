@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="grid_24">
+<div class="title">
+    <h1>{{g.h1}}</h1>
+    <h2>{{title}}</h2>
+</div>
+</div>
+<div class="grid_6">
+{{featured|safe}}
+</div>
+<div class="grid_18">
+{{ results |safe }}
+{%- if search_info["next"] %}
+<a class='more_results' href='?s={{search_info["next"]}}'>more torrents...</a>
+{%- endif %}
+</div>
+{% endblock %}

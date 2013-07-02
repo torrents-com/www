@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="title">
+    <h1>{{g.h1}}</h1>
+    <h2>Popular searches</h2>
+</div>
+
+    <div id="popular">
+    {%- for search, weight in pop_searches | dictsort(case_sensitive=False) %}
+        <a class="{{ loop.cycle('odd', 'even') }}" style="font-size:{{0.9+weight}}em" href="{{url_for('files.search', query=search|clean_query)}}">{{search}}</a>
+    {%- endfor %}
+    </div>
+{% endblock %}

@@ -1,0 +1,77 @@
+#
+# Librerías requeridas, tal cual se llaman en el repositorio
+# de paquetes de python.
+# Serán eventualmente procesados por el script de despliegue.
+#
+# Formato:
+#   Cada línea será un nombre de paquete.
+#   Líneas que comiencen con # o sean vacías serán ignoradas.
+#
+
+flask
+
+python-memcached
+
+flask-assets==0.8
+cssutils
+
+flask-babel
+
+flask-wtf==0.8
+
+flask-zen
+
+flask-cache==0.9.2
+
+flask-login==0.1.1
+
+flask-mail
+
+flask-seasurf
+
+pymongo>=2.5
+
+polib
+
+GitPython
+
+flask-oauth
+
+pil
+
+pycrypto
+
+fabric
+
+raven==2.0.10
+blinker==1.2
+
+webassets>=0.8
+slimmer
+
+pyquery
+lxml
+
+pyScss>=1.1.5
+
+greenlet
+uwsgi
+
+chardet
+
+timelib
+
+markdown
+
+newrelic>=1.11
+
+# Para el microsite del downloader, detección de metadatos de fichero
+hachoir-parser
+hachoir-metadata
+hachoir-core
+
+msgpack-python
+
+# cliente nuevo searchd
+redis
+

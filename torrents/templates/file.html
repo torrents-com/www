@@ -1,0 +1,171 @@
+{% extends "base.html" %}
+{%- block head -%}
+    {%- if not is_canonical_filename: %}
+        <link rel="canonical" href="{{url_for('files.download', file_id=file_data["view"]["url"], file_name=file_data["view"]["seo-fn"])}}" />
+    {%- endif %}
+{%- endblock -%}
+{% set url_search_base = url_for("files.search",query="___") %}
+{%- macro print_filepaths(paths) %}
+    <ul class="filepaths">
+        {%- for path, info in (paths.items() | sort) %}
+            <li>
+                {% if path[0] == "/" %}
+                    <a href="{{ url_search_base|replace('___', path[1:]|seoize('_', True))}}">{{ path[1:] }}</a>
+                    {{ print_filepaths(info) }}
+                {% else %}
+                    <a href="{{ url_search_base|replace('___', path|seoize('_', True)) }}" title="{{ path }}">{{ path }}</a><span>{{ info | numbersizeformat("en") }}</span>
+                {% endif %}
+            </li>
+        {%- endfor %}
+    </ul>
+{% endmacro -%}
+{% block content %}
+<article>
+    <div id="download">
+        <div class="grid_6">
+            {%- if 'images_server' in file_data['view'] or 'thumbnail' in file_data['view']%}
+            <img src="http://images.torrents.com/{{ file_data['file']['_id'] }}0" alt="preview" />
+            {%- else %}
+            <img src="{{g.static_prefix}}/missing-{{ file_data['view']['icon'].url}}.jpg" alt="preview" />
+            {%- endif %}
+        </div>
+        <div class="grid_18">
+            <div class="grid_12 alpha">
+                <div class="icon-stars"><span class="stars-{{file_data['view']['rating']}}"></span><span class="nostars stars-{{5-file_data['view']['rating']}}"></span></div>
+            </div>
+            <div class="grid_6 omega share_report">
+                <span>Share <a target="_blank" href="http://www.facebook.com/share.php?u={{ url_for("files.download", file_name=file_data["view"]["seo-fn"], file_id=file_data["view"]["url"], _external=True)}}"><span class="icon-facebook"></span></a>&nbsp;<a target="_blank" href="http://twitter.com/home?status={{ url_for("files.download", file_name=file_data["view"]["seo-fn"], file_id=file_data["view"]["url"], _external=True)}}"><span class="icon-twitter"></span></a></span>
+                | <form action="{{url_for('files.copyright')}}" method="POST">
+                <input type="hidden" name="_csrf_token" value="{{ csrf_token() }}">
+                <input type="hidden" name="file_id" value="{{file_data["view"]["url"]}}"/>
+                <input type="hidden" name="file_name" value="{{file_data["view"]["fn"]}}"/>
+                <input type="submit" value="Report link"/>
+                </form>
+            </div>
+            <div class="grid_18 alpha omega">
+                <h1>{{ file_data['view']['fn'] | seoize(" ",True,0) }}.torrent</h1>
+            </div>
+            <div class="grid_12 alpha">
+                <div class="big_icon {{file_data['view']['icon'].url}}"><span></span>
+                {%- if 'imdb_link' in file_data['view'] %}
+                <div class="imdb"><a href="{{ file_data['view']['imdb_link'] }}">IMDb</a></div>
+                {% endif %}
+                {%- if 'z' in file_data['file'] and file_data['file']['z'] %}
+                <div class="size">{{ file_data['file']['z']|numbersizeformat }}</div>
+                {% endif %}
+                </div>
+                <dl class="health"><dt>Health</dt><dd class="v{{file_data['view']['health']}}"><span></span><span title="{{file_data['view']['md']['seeds'] or "0"}} seeds / {{file_data['view']['md']['leechs'] or "0"}} leechers">{{file_data['view']['md']['seeds'] or "0"}} / {{file_data['view']['md']['leechs'] or "0"}}</span></dd></dl>
+                {%- if 'date' in file_data['file'] %}
+                <dl class="date"><dt>Created</dt><dd>{{ file_data['file']['date'] }}</dd></dl>
+                {%- endif %}
+                {% if "short_desc" in file_data['view']['md'] %}
+                    <p>{{ file_data['view']['md']['short_desc']|truncate(400) }}</p>
+                {% endif %}
+            </div>
+            <div class="grid_6 omega links">
+                <ul>
+                    <li>Alternative sources:</li>
+                    {% if "tmagnet" in file_data['view']["sources"] %}
+                        <li><a class="download" data-downloader="1"  data-track="Download,Magnet,File / Link List"  href="{{ file_data['view']["sources"]["tmagnet"]["urls"][0] }}">magnet link</a></li>
+                    {% endif %}
+                    {% for s,src in file_data['view']["sources"].iteritems() if s not in ["tmagnet", "download", "download_ind"] and src["icon"] == "torrent"%}
+                        <li><a class="download" data-downloader="1"  data-track="Download,{{'HTML' if 'i' in src['g'] else 'Torrent'}},File / Link List"  href="{{ src["urls"][0] }}">{{src["tip"]}}</a></li>
+                    {% endfor %}
+                </ul>
+                <div>
+                {%- if file_data['view']["has_trailer"] %}<a target="_blank" id="view-trailer" data-link="{{ file_data['view']['trailer_link'] if 'trailer_link' in file_data['view']}}" data-search="{{related_query|urlencode}}+trailer" href="{{ file_data['view'].get('trailer_link','http://www.youtube.com/results?search_query='+related_query|urlencode+'+trailer')}}"><span class="icon-trailer"></span> Watch trailer</a>{% endif %}
+                <a target="_blank" class="download" data-track="Download,{{'Torrent' if 'download' in file_data['view']['sources'] else 'Magnet' if 'tmagnet' in file_data['view']['sources'] else 'HTML'}},File / Big Button" data-downloader="1" href="{{file_data['view']['sources']['download']['urls'][0] if 'download' in file_data['view']['sources'] else file_data['view']['sources']['tmagnet']['urls'][0] if 'tmagnet' in file_data['view']['sources'] else file_data['view']['sources']['download_ind']['urls'][0]}}"><span class="icon-download_button"></span> Download</a></div>
+            </div>
+        </div>
+    </div>
+</article>
+<div id="featured_col" class="grid_6">
+{{featured|safe}}
+</div>
+<div class="grid_18">
+{%- if "filepaths" in file_data['view']['md'] %}
+<article>
+    <div id="files">
+        <h2><span>Torrent files</span></h2>
+        {%- if 'torrent:partial_filepaths' in file_data['file']['md'] and file_data['file']['md']['torrent:partial_filepaths']: %}
+            <span>(showing only first 100 files)</span>
+        {%- endif %}
+        {{print_filepaths(file_data['view']['md']['filepaths'])}}
+    </div>
+</article>
+{%- endif %}
+
+<article>
+    <div id="metadata" class="grid_18 alpha omega">
+        <h2>Torrent information</h2>
+        {% set rowcycle = ['even', 'odd'] %}
+        <ul>
+            <li class="grid_18 alpha omega {{ rowcycle|cycle }}"><div class="grid_6 alpha">Name</div>
+            <div class="grid_12 omega">{{ file_data['view']['nfn'] }}</div>
+            </li>
+            {%- if file_data['view']['file_type'] %}
+            <li class="grid_18 alpha omega {{ rowcycle|cycle }}"><div class="grid_6 alpha">Type</div>
+            <div class="grid_12 omega">{{ file_data['view']['file_type']|capitalize}}</div>
+            </li>
+            {% endif %}
+            {%- if file_data['view']["categories"] %}
+            <li class="grid_18 alpha omega {{ rowcycle|cycle }}"><div class="grid_6 alpha">{{"Category" if file_data['view']["categories"]|length==1 else "Categories"}}</div>
+            <div class="grid_12 omega">
+                {%- for category in file_data['view']["categories"] %}
+                <a href="{{ url_for("files.category",category=category.url) }}">{{ category.title }}</a>
+                {{ ", " if not loop.last }}
+                {%- endfor %}</div>
+            </li>
+            {% endif %}
+            {%- for metadata, value in file_data['view']['md'].iteritems() if metadata not in ("long_desc", "short_desc", "filepaths", "seeds","leechs") %}
+            <li class="grid_18 alpha omega {{ rowcycle|cycle }}">
+            <div class="grid_6 alpha">{{metadata|replace("_"," ")|capitalize}}</div>
+            <div class="grid_12 omega">
+                {%-if metadata in file_data['view']['searches'] %}
+                    {%-if file_data['view']['searches'][metadata] == [] %}
+                        {% for avalue in value.split(",") %}
+                            <a href="{{ url_for("files.search",query=avalue|clean_query)}}">{{ avalue|trim }}</a>{{", " if not loop.last}}
+                        {% endfor %}
+                    {%-elif file_data['view']['searches'][metadata] == {} %}
+                        {{print_filepaths(value)}}
+                    {%-else %}
+                        <a href="{{ url_for("files.search",query=file_data['view']['searches'][metadata])}}">{{ (value|string)[:100000].replace("\n","<br />") | safe }}</a>
+                    {%-endif %}
+                {%-else %}
+                    {{ (value|string)[:100000].replace("\n","<br />") | safe }}
+                {%-endif %}
+            </div>
+            </li>
+            {%- endfor %}
+            {%- if file_data['view']['providers'] %}
+                <li class="grid_18 alpha omega {{ rowcycle|cycle }}"><div class="grid_6 alpha">Providers</div>
+                <div class="grid_12 omega">
+                    {%- for provider in file_data['view']['providers'] %}
+                         <a target='_blank' href='http://{{provider}}'>{{provider}}</a>{{ "," if not loop.last }}
+                    {%- endfor %}
+                </div>
+                </li>
+            {%- endif %}
+        </ul>
+    </div>
+</article>
+
+{%- if "long_desc" in file_data['view']['md'] %}
+<article>
+    <div id="long_desc" class="grid_18 alpha omega">
+        <h2>Torrent description</h2>
+        {{ (file_data['view']['md']['long_desc']|string)[:100000].replace("\n","<br />") | safe }}
+    </div>
+</article>
+{%- endif %}
+
+{%- if related_files[1] and related_files[1]["count"]>0%}
+<article>
+    <div id="related" class="grid_18 alpha omega">
+        <h2>Related torrents</h2>
+    {{ related_files[0]|safe}}
+    </div>
+</article>
+{%- endif %}
+</div>
+{% endblock %}

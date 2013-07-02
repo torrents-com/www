@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<OpenSearchDescription xmlns="http://a9.com/-/spec/opensearch/1.1/">
+    <ShortName>{{ shortname | forceescape }}</ShortName>
+    <Description>{{ description | forceescape }}</Description>
+    <InputEncoding>UTF-8</InputEncoding>
+    <Image height="16" width="16">{{ url_for('index.favicon',_external=True) }}</Image>
+    <Url type="text/html" method="GET" template="{{ url_for('files.search', query='',_external=True)|safe }}{searchTerms}" />
+</OpenSearchDescription>

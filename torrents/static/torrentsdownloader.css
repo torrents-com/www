@@ -1,0 +1,29 @@
+#downloader{margin-top:50px }
+
+#downloader .download {
+    background-color: #323230;
+    border: medium none;
+    border-radius: 9px 9px 9px 9px;
+    box-shadow: 0 30px #595955 inset;
+    color: #FFFFFF;
+    cursor: pointer;
+    display: block;
+    font-size: 1.5em;
+    font-weight: bold;
+    letter-spacing: 1px;
+    margin-top: 10px;
+    padding: 20px 12px 20px 8px;
+    text-align: center;
+    text-decoration: none;
+    text-transform: uppercase;
+    width: 446px;
+}
+#downloader .download:hover {
+    background: none repeat scroll 0 0 #6D1A21;
+    box-shadow: 0 30px #AB2933 inset;
+    outline: medium none;
+}
+#downloader .download span{display:block}
+#downloader .download span.info{font-size:0.6em}
+
+#downloader .source-panel{width:446px;text-align:center}

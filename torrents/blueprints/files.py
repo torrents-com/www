@@ -236,7 +236,7 @@ def search(query=None):
     order, show_order = get_order(SEARCH_ORDER)
 
     results, search_info = single_search(g.clean_query, None, zone="Search", order=order, title=("%s torrents"%escape(g.query), 2, None), last_items=get_last_items(), skip=get_skip(), show_order=show_order or True)
-    
+
     if search_info['count'] == 0:
         _query = normalize('NFC', g.query)
         if g.query != _query:
@@ -269,12 +269,13 @@ def category(category, query=None):
     if g.query:
         page_title += " | " + g.query
         g.page_description = "%s %s torrents at Torrents.com, the free and fast torrent search engine."%(g.query.capitalize(), singular_filter(g.category.title).lower())
+        order, show_order = get_order(SEARCH_ORDER)
     else:
-        pop_searches = get_popular_searches(15, 3, g.category.cat_id) # no muestra busquedas en categorias por ahora
+        pop_searches = get_popular_searches(15, 3, g.category.cat_id)
         g.page_description = "%s torrents at Torrents.com, the free and fast torrent search engine."%singular_filter(g.category.title).capitalize()
+        order, show_order = get_order(CATEGORY_ORDER)
     g.title+=" | " + page_title
 
-    order, show_order = get_order(CATEGORY_ORDER)
 
     results, search_info = single_search(g.clean_query, g.category.tag, order=order, zone=g.category.url, title=(page_title, 2, g.category.tag), last_items=get_last_items(), skip=get_skip(), show_order=show_order or True)
 
@@ -599,24 +600,11 @@ def process_search_results(s=None, query=None, category=None, not_category=None,
                    "count": count, "next": False if "end" in stats and stats["end"] or skip>=10 else (skip or 0)+1, "files_text":files_text, "canonical_query":canonical_query, "sure":sure}
     else:
         search_info = {"time": 0, "total_found": 0, "count": 0, "next": False, "files_text":[], "canonical_query":"-", "sure":sure}
-    
-    #files_visited = []
-    
-    #first = 3
-    #for f in files:
-    #    if first > 0 or not 'seeds' in f['view']['md'] or not 'leechs' in f['view']['md']:
-    #        print "A feedback %s "%f['view']['fn']
-
-    #    first -= 1
-        
-
 
     # intenta evitar problemas de memoria
     del files
 
     return results, search_info
-
-import pprint
 
 def prepare_data(f, text=None, ntts=[], details=False):
     try:

@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+import re
 from flask import current_app
 from foofind.templates import number_format_filter, number_size_format_filter, format_timedelta_filter, urlencode_filter, number_friendly_filter, pformat, numeric_filter, markdown_filter, seoize_filter
 from foofind.utils.htmlcompress import HTMLCompress
@@ -25,8 +26,9 @@ def register_filters(app):
     app.jinja_env.filters['cycle'] = cycle_filter
     app.jinja_env.add_extension(HTMLCompress)
 
+whitespaces = re.compile(r'[\s\/]+')
 def clean_query(query):
-    query = query.strip().replace(" ", "_").replace("/", "_")
+    query = re.sub(whitespaces, '_', query.strip())
     maxlen = current_app.config["MAX_LENGTH"]
     if len(query)>maxlen:
         final = query[:maxlen].rfind("_")

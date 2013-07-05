@@ -1,5 +1,6 @@
 development*
-downloader*
+downloader.*
+downloader_*
 downloads
 backup
 production.py

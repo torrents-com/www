@@ -31,7 +31,7 @@ def handler():
         data["records"] = json.loads(rdata)
         data["remote_addr"] = request.remote_addr
 
-        logging.warn("Downloader error received", data=data)
+        logging.warn("Downloader error received", extra=data)
 
         response = make_response("OK")
         response.status_code = 202

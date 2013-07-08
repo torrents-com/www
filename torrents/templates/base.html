@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
     <head>
-        <title>{{ g.title | replace("Torrents.com", g.domain_capitalized)}}</title>
+        <title>{{ g.title | replace("Torrents.com", g.domain_capitalized, 1)}}</title>
         <meta charset="utf-8" />
         <meta http-equiv="content-language" content="en" />
         {% if g.page_description %}

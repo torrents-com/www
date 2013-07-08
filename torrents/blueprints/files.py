@@ -234,16 +234,22 @@ def search(query=None):
             return redirect(url_for("files.search", query=g.clean_query))
 
     order, show_order = get_order(SEARCH_ORDER)
-
-    results, search_info = single_search(g.clean_query, None, zone="Search", order=order, title=("%s torrents"%escape(g.query), 2, None), last_items=get_last_items(), skip=get_skip(), show_order=show_order or True)
+    
+    skip = get_skip()
+    
+    results, search_info = single_search(g.clean_query, None, zone="Search", order=order, title=("%s torrents"%escape(g.query), 2, None), last_items=get_last_items(), skip=skip, show_order=show_order or True)
 
     if search_info['count'] == 0:
         _query = normalize('NFC', g.query)
         if g.query != _query:
-            results, search_info = single_search(_query, None, zone="Search", order=order, title=("%s torrents"%escape(g.query), 2, None), last_items=get_last_items(), skip=get_skip(), show_order=show_order or True)
+            results, search_info = single_search(_query, None, zone="Search", order=order, title=("%s torrents"%escape(g.query), 2, None), last_items=get_last_items(), skip=skip, show_order=show_order or True)
 
     #g.title+=" | " + g.query
     g.title = "Torrents.com | " + g.query
+    
+    g.title += " | Page %d" % (int(skip) + 1) if skip > 0 else ""
+        
+    g.page_description = "Download %s torrent from Torrents.com search engine with free, fast downloads." % g.query
 
     if search_bot:
         searchd.log_bot_event(search_bot, (search_info["total_found"]>0 or search_info["sure"]))
@@ -442,10 +448,15 @@ def download(file_id, file_name=""):
     if "description" in file_data["view"]["md"]:
         page_description = file_data["view"]["md"]["description"].replace("\n", " ")
 
+    if not page_description:
+        page_description = "Download %s torrents from Torrents.com" % file_data["view"]['file_type'].capitalize()
+
     if len(page_description)<50:
         if page_description:
            page_description += ". "
         page_description += " ".join(text.capitalize()+"." for text in related[1]["files_text"])
+    
+    
 
     if len(page_description)>180:
         last_stop = page_description[:180].rindex(".") if "." in page_description[:180] else 0

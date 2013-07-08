@@ -2,14 +2,14 @@
 {% from "helpers.html" import render_field -%}
 {% block content %}
 <h1>Copyright</h1>
-<p>Torrents.com is a search engine, we do not host any copyrighted content and therefore we can't remove the content itself. If you are looking for content removal, you should contact the provider of that content. Nevertheless, if you believe any of the linked works are being disseminated without the appropriate authorisation from the rights holders, or that they infringe the rights of third parties, you may request that we remove them using this copyright claim form or sending a copyright claim by email. Please read this important information before doing so.</p>
+<p>{{ g.domain_capitalized }} is a search engine, we do not host any copyrighted content and therefore we can't remove the content itself. If you are looking for content removal, you should contact the provider of that content. Nevertheless, if you believe any of the linked works are being disseminated without the appropriate authorisation from the rights holders, or that they infringe the rights of third parties, you may request that we remove them using this copyright claim form or sending a copyright claim by email. Please read this important information before doing so.</p>
 <p>If you knowingly misrepresent that material or activity is infringing, you may be subject to liability for damages. Accordingly, if you are not sure whether material available online infringes your copyright, we suggest that you first contact a lawyer. Please also note that your message to us may be forwarded to the party involved in the activity.</p>
 <p>Please follow these the instructions:</p>
 <ul>
 <li>Send your copyright claim to <img src="{{g.static_prefix}}/copyright-email.gif" alt="Copyright claim email address." title="Copyright claim email address." />, in English or Spanish.</li>
 <li>Please, try to be nice and respect grammar so we can understand what your claims are.</li>
 <li>Present evidence that clearly shows that you are the copyright holder or acting on behalf of the copyright holder.
-<li>Provide the name, the link and the URL of the final torrent that your claim refers to. Otherwise we won't be able to find it and process the claim. A link to a search results page, for example, is not a valid link for a claim. There are millions of links in Torrents.com, if you don't provide us with uniquely identifying information, it will be almost impossible for us to find it.</li>
+<li>Provide the name, the link and the URL of the final torrent that your claim refers to. Otherwise we won't be able to find it and process the claim. A link to a search results page, for example, is not a valid link for a claim. There are millions of links in {{ g.domain_capitalized }}, if you don't provide us with uniquely identifying information, it will be almost impossible for us to find it.</li>
 <li>Provide sufficient contact information and an email address.</li>
 <li>Please, allow a few days (usually 24-48 hours) for us to process the claim, and check again the links.</li>
 </ul>
@@ -22,7 +22,7 @@
         {{ render_field(form.email) }}
         {{ render_field(form.phonenumber) }}
         {{ render_field(form.linkreported) }}
-        {{ render_field(form.urlreported,placeholder="http://torrents.com/") }}
+        {{ render_field(form.urlreported,placeholder="http://{{ g.domain }}/") }}
         {{ render_field(form.reason) }}
         {{ render_field(form.message,cols="45", rows="4") }}
         {{ render_field(form.captcha) }}

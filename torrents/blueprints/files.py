@@ -449,7 +449,7 @@ def download(file_id, file_name=""):
         page_description = file_data["view"]["md"]["description"].replace("\n", " ")
 
     if not page_description:
-        page_description = "Download %s torrents from %s" % (file_data["view"]['file_type'].capitalize(), g.domain_capitalized)
+        page_description = "Download %s torrents from %s" % (file_data["view"]['file_type'].capitalize() if file_data["view"]['file_type'] != "unknown" else "All", g.domain_capitalized)
 
     if len(page_description)<50:
         if page_description:

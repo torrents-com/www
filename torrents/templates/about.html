@@ -1,11 +1,11 @@
 {% extends "base.html" %}
 {% block content %}
-<h1>About Torrents.com</h1>
-<p>Torrents.com is a free torrent search engine that offers you fast, simple and easy access to every torrent in one place. Torrents.com crawls millions of Internet addresses to automatically generate meaningful links to your queries.</p>
+<h1>About {{ g.domain_capitalized }}</h1>
+<p>{{ g.domain_capitalized }} is a free torrent search engine that offers you fast, simple and easy access to every torrent in one place. {{ g.domain_capitalized }} crawls millions of Internet addresses to automatically generate meaningful links to your queries.</p>
 <p>We are not a torrent tracker. We are not a search aggregator. You can think of us as the Google for torrents.</p>
-<p>Torrents.com does not host, does not reproduce nor publish the linked torrents that appear as search results. Nevertheless, if you believe any of the linked works are being disseminated without the appropriate authorisation from the rights holders, or that they infringe the rights of third parties, you may request that we remove them using <a href="{{url_for('files.copyright')}}">the copyright claim form</a>.</p>
-<p>You should read and accept our terms of use and our privacy policy before using the services provided by Torrents.com.</p>
-<p>Torrents.com uses these amazing technologies:</p>
+<p>{{ g.domain_capitalized }} does not host, does not reproduce nor publish the linked torrents that appear as search results. Nevertheless, if you believe any of the linked works are being disseminated without the appropriate authorisation from the rights holders, or that they infringe the rights of third parties, you may request that we remove them using <a href="{{url_for('files.copyright')}}">the copyright claim form</a>.</p>
+<p>You should read and accept our terms of use and our privacy policy before using the services provided by {{ g.domain_capitalized }}.</p>
+<p>{{ g.domain_capitalized }} uses these amazing technologies:</p>
 <ul>
 <li><a href="http://foofind.is">Foofind</a>: Foofind is an open source universal search engine.</li>
 <li><a href="http://flask.pocoo.org/">Flask</a>: Flask is a microframework for Python based on Werkzeug, Jinja 2 and it's BSD licensed.</li>

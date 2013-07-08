@@ -843,7 +843,7 @@ class ComplaintForm(Form):
     company = TextField("Company")
     email = TextField("Email", [Required("Required field."),Email("Invalid email.")])
     phonenumber = TextField("Phone")
-    linkreported = TextField("Link reported", [Required("Required field."),Regexp("^(?!http://[^/]*torrents.(com|is|ms|fm)/?.*).*$",re.IGNORECASE,"Link URL can't be from Torrents.")])
+    linkreported = TextField("Link reported", [Required("Required field."),Regexp("^(?!http://[^/]*torrents.(com|is|ms|fm|ag)/?.*).*$",re.IGNORECASE,"Link URL can't be from Torrents.")])
     urlreported = TextField("Torrents URL", [Required("Required field."),URL("Torrents URL must be a valid URL."),Regexp("^http://torrents.(com|is|ms|fm)/",re.IGNORECASE,"The link must be a Torrents page.")])
     reason = TextField("Complaint reason", [Required("Required field.")])
     message = TextAreaField("Message", [Required("Required field.")])

@@ -249,7 +249,7 @@ def search(query=None):
     
     g.title += " | Page %d" % (int(skip) + 1) if skip > 0 else ""
         
-    g.page_description = "Download %s torrent from Torrents.com search engine with free, fast downloads." % g.query
+    g.page_description = "Download %s torrent from %s search engine with free, fast downloads." % (g.query, g.domain_capitalized)
 
     if search_bot:
         searchd.log_bot_event(search_bot, (search_info["total_found"]>0 or search_info["sure"]))
@@ -274,11 +274,11 @@ def category(category, query=None):
     pop_searches = None
     if g.query:
         page_title += " | " + g.query
-        g.page_description = "%s %s torrents at Torrents.com, the free and fast torrent search engine."%(g.query.capitalize(), singular_filter(g.category.title).lower())
+        g.page_description = "%s %s torrents at %s, the free and fast torrent search engine."%(g.query.capitalize(), singular_filter(g.category.title).lower(), g.domain_capitalized)
         order, show_order = get_order(SEARCH_ORDER)
     else:
         pop_searches = get_popular_searches(15, 3, g.category.cat_id)
-        g.page_description = "%s torrents at Torrents.com, the free and fast torrent search engine."%singular_filter(g.category.title).capitalize()
+        g.page_description = "%s torrents at %s, the free and fast torrent search engine."%(singular_filter(g.category.title).capitalize(), g.domain_capitalized)
         order, show_order = get_order(CATEGORY_ORDER)
     g.title+=" | " + page_title
 
@@ -301,7 +301,7 @@ def recent():
     results, search_info = single_search(None, "torrent", "porn", order=RECENT_ORDER, zone="Recent", title=("Recent torrents", 2, None), last_items=get_last_items(), skip=get_skip(), show_order=None)
     g.keywords.clear()
     g.keywords.update(["recent", "torrents", "search", "search engine", "free", "full movie", "2013"])
-    g.page_description = "Torrents.com is a free torrent search engine that offers users fast, simple, easy access to every torrent in one place."
+    g.page_description = "%s is a free torrent search engine that offers users fast, simple, easy access to every torrent in one place."%g.domain_capitalized
     g.h1 = "Find recently created torrents on this page. For specific category torrents, click the tab above and sort by creation date."
     return render_template('ranking.html', title="Recent torrents", results=results, search_info=search_info, featured=get_featured(search_info["count"]))
 
@@ -312,7 +312,7 @@ def popular():
     results, search_info = single_search(None, "torrent", "porn", order=POPULAR_ORDER, zone="Popular", title=("Popular torrents", 2, None), last_items=get_last_items(), skip=get_skip(), show_order=None)
     g.keywords.clear()
     g.keywords.update(["torrent", "torrents", "search engine", "popular downloads", "online movies"])
-    g.page_description = "Torrents.com is a free torrent search engine that offers users fast, simple, easy access to every torrent in one place."
+    g.page_description = "%s is a free torrent search engine that offers users fast, simple, easy access to every torrent in one place." % g.domain_capitalized 
     g.h1 = " These are the most popular torrents."
     return render_template('ranking.html', title="Popular torrents", results=results, search_info=search_info, featured=get_featured(search_info["count"]))
 
@@ -449,7 +449,7 @@ def download(file_id, file_name=""):
         page_description = file_data["view"]["md"]["description"].replace("\n", " ")
 
     if not page_description:
-        page_description = "Download %s torrents from Torrents.com" % file_data["view"]['file_type'].capitalize()
+        page_description = "Download %s torrents from %s" % (file_data["view"]['file_type'].capitalize(), g.domain_capitalized)
 
     if len(page_description)<50:
         if page_description:
@@ -487,7 +487,7 @@ def copyright():
     Muestra el formulario para reportar enlaces
     '''
     g.category = False
-    g.page_description = "Torrents.com is a free torrent search engine that offers users fast, simple, easy access to every torrent in one place."
+    g.page_description = "%s is a free torrent search engine that offers users fast, simple, easy access to every torrent in one place." % g.domain_capitalized
     g.keywords.clear()
     g.keywords.update(["torrents search engine popular largest copyright"])
     g.title+=" | Copyright"

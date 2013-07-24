@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import os.path
-from flask import render_template, current_app
+from flask import render_template, current_app, g
 from foofind.utils.fooprint import Fooprint
 from foofind.services import *
 

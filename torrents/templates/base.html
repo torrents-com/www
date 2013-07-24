@@ -2,14 +2,16 @@
 <html lang="en">
     <head>
         <title>{{ g.title | replace("Torrents.com", g.domain_capitalized, 1)}}</title>
-        <meta charset="utf-8" />
-        <meta http-equiv="content-language" content="en" />
-        {% if g.page_description %}
-        <meta name="description" content="{{g.page_description}}" />
+        {% if not g.override_header %}
+            <meta http-equiv="content-language" content="en" />
+            {% if g.page_description %}
+            <meta name="description" content="{{g.page_description}}" />
+            {% endif %}
+            <meta name="keywords" content="{{(g.keywords|list)[:17]|join(', ')}}" />
         {% endif %}
-        <meta name="keywords" content="{{(g.keywords|list)[:17]|join(', ')}}" />
-        <link rel="shortcut icon" href="{{ url_for('index.favicon') }}" />
         <link rel="search" type="application/opensearchdescription+xml" href="{{ url_for('index.opensearch') }}" title="Torrents" />
+        <meta charset="utf-8" />
+        <link rel="shortcut icon" href="{{ url_for('index.favicon') }}" />
         {%- block assets -%}
             {%- assets "css_torrents" -%}
                 <link type="text/css" href="{{ ASSET_URL }}" rel="stylesheet" />

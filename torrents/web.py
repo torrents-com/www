@@ -230,6 +230,9 @@ def init_g(app):
     else:
         app_static_prefix = app.config["STATIC_PREFIX"] or app.static_url_path
     g.static_prefix = app.assets.url = app_static_prefix
+    
+    # permite sobreescribir practicamente todo el <head> si es necesario
+    g.override_header = False
 
     # dominio de la web
     g.domain = "torrents.com"

@@ -5,6 +5,8 @@ downloads
 backup
 production.py
 datafixes.py
+admin.py
+localscss.sh
 discover_settings.py
 private.py
 env/

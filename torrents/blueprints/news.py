@@ -31,5 +31,6 @@ def load_html_parts(filename):
 @news.route('/news')
 @news.route('/news/<path:path>')
 def main(path=""):
+    g.override_header = True
     path_parts = load_html_parts(path)
     return render_template('news.html', **path_parts)

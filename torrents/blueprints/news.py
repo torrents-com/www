@@ -34,3 +34,20 @@ def main(path=""):
     g.override_header = True
     path_parts = load_html_parts(path)
     return render_template('news.html', **path_parts)
+
+@index.route('/sitemap_index.xml')
+def sitemap_index():
+    return send_from_directory(os.path.join(current_app.root_path, 'news', 'sitemap_index.xml'))
+
+@index.route('/post-sitemap.xml')
+def post_sitemap():
+    return send_from_directory(os.path.join(current_app.root_path, 'news', 'post-sitemap.xml'))
+
+@index.route('/category-sitemap.xml')
+def category_sitemap():
+    return send_from_directory(os.path.join(current_app.root_path, 'news', 'category-sitemap.xml'))
+
+@index.route('/author-sitemap.xml')
+def author_sitemap():
+    return send_from_directory(os.path.join(current_app.root_path, 'news', 'author-sitemap.xml'))
+

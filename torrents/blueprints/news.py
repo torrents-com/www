@@ -37,17 +37,17 @@ def main(path=""):
 
 @news.route('/news/sitemap.xml')
 def main_sitemap():
-    return send_from_directory(os.path.join(current_app.root_path, 'news', 'sitemap_index.xml'))
+    return send_from_directory(os.path.join(current_app.root_path, 'news'), 'sitemap_index.xml')
 
 @news.route('/news/post-sitemap.xml')
 def post_sitemap():
-    return send_from_directory(os.path.join(current_app.root_path, 'news', 'post-sitemap.xml'))
+    return send_from_directory(os.path.join(current_app.root_path, 'news'), 'post-sitemap.xml')
 
 @news.route('/news/category-sitemap.xml')
 def category_sitemap():
-    return send_from_directory(os.path.join(current_app.root_path, 'news', 'category-sitemap.xml'))
+    return send_from_directory(os.path.join(current_app.root_path, 'news'), 'category-sitemap.xml')
 
 @news.route('/news/author-sitemap.xml')
 def author_sitemap():
-    return send_from_directory(os.path.join(current_app.root_path, 'news', 'author-sitemap.xml'))
+    return send_from_directory(os.path.join(current_app.root_path, 'news'), 'author-sitemap.xml')
 

@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import os.path
-from flask import render_template, current_app, g, send_from_directory
+from flask import render_template, current_app, g, send_from_directory, abort
 from foofind.utils.fooprint import Fooprint
 from foofind.services import *
 
@@ -13,6 +13,11 @@ def load_html_parts(filename):
     open_block = None
     block_content = []
     full_filename = os.path.join(current_app.root_path, 'news', filename, "index.html")
+
+    # chequea que exista el fichero pedido
+    if not os.path.exists(full_filename):
+        return None
+
     with open(full_filename) as input_file:
         for line in input_file:
             if open_block:
@@ -33,6 +38,10 @@ def load_html_parts(filename):
 def main(path=""):
     g.override_header = True
     path_parts = load_html_parts(path)
+
+    if not path_parts:
+        return abort(404)
+
     return render_template('news.html', **path_parts)
 
 @news.route('/news/sitemap.xml')

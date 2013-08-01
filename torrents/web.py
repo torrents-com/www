@@ -212,7 +212,7 @@ def create_app(config=None, debug=False):
 def init_g(app):
 
     # cache por defecto
-    g.must_cache = 3600
+    g.must_cache = 7200
 
     # caracteristicas del cliente
     g.full_browser=is_full_browser()

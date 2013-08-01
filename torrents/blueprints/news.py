@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import os.path
-from flask import render_template, current_app, g
+from flask import render_template, current_app, g, send_from_directory
 from foofind.utils.fooprint import Fooprint
 from foofind.services import *
 
@@ -34,3 +34,20 @@ def main(path=""):
     g.override_header = True
     path_parts = load_html_parts(path)
     return render_template('news.html', **path_parts)
+
+@news.route('/news/sitemap.xml')
+def main_sitemap():
+    return send_from_directory(os.path.join(current_app.root_path, 'news'), 'sitemap_index.xml')
+
+@news.route('/news/post-sitemap.xml')
+def post_sitemap():
+    return send_from_directory(os.path.join(current_app.root_path, 'news'), 'post-sitemap.xml')
+
+@news.route('/news/category-sitemap.xml')
+def category_sitemap():
+    return send_from_directory(os.path.join(current_app.root_path, 'news'), 'category-sitemap.xml')
+
+@news.route('/news/author-sitemap.xml')
+def author_sitemap():
+    return send_from_directory(os.path.join(current_app.root_path, 'news'), 'author-sitemap.xml')
+

@@ -100,7 +100,10 @@ class XmlFile:
     def __init__(self, xml_line=None, path=None):
         if xml_line:
             # parsea <sitemap><loc>%s</loc><lastmod>%s</lastmod></sitemap>
-            filename, lastmod = xml_line[14:-21].split("</loc><lastmod>")
+            url, lastmod = xml_line[14:-21].split("</loc><lastmod>")
+
+            # obtiene el nombre del fichero de la url
+            filename = url[url.rfind("/")+1:]
 
             # separa extensiones
             filename, exts = filename.split(".",1)
@@ -149,7 +152,6 @@ class OutputTree:
         if input_folder:
             i=0
             main_filename = input_folder+"sitemap%d.xml.gz"
-
             while os.path.exists(main_filename%i):
                 with self._open_file(main_filename%i) as main:
                     for entry in main:
@@ -188,7 +190,7 @@ class OutputTree:
             new_size = size+outfile.size
 
             # modo actualizacion solo hasta el último fichero generado anteriormente
-            if update_mode and full_path >= self.last_old_file:
+            if update_mode and full_path > self.last_old_file:
                 self.half_outfile = None
                 update_mode = False
 
@@ -196,8 +198,10 @@ class OutputTree:
                 # si en la generación anterior se habia cortado aqui, se respeta
                 if full_path in self.old_files:
                     # no hace falta crear un fichero a la mitad, unifica info con fichero actual
-                    if self.half_outfile and self.half_outfile.lastmod>outfile.lastmod:
-                        outfile.lastmod = self.half_outfile.lastmod
+                    if self.half_outfile:
+                        if self.half_outfile.lastmod>outfile.lastmod:
+                            outfile.lastmod = self.half_outfile.lastmod
+                        self.half_outfile = None
                     next_file = True
 
                 else:

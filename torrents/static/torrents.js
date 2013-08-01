@@ -187,11 +187,10 @@ $(function(){
                 }
             });
         });
-    /*
+
     window.downloader.link_lookup("#download");
     window.downloader.link_lookup("#featured");
     window.downloader.link_lookup(".results");
-    */
 
 
     $("#q").focus();

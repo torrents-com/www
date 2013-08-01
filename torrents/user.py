@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from flask import session, request
-from flask.ext.login import UserMixin, AnonymousUser as AnonymousUserMixin
+from flask.ext.login import UserMixin, AnonymousUserMixin
 from datetime import datetime
 from time import time
 

@@ -9,7 +9,7 @@ from foofind import defaults
 from collections import OrderedDict
 from flask import Flask, g, request, render_template, redirect, abort, url_for, make_response, get_flashed_messages, current_app
 from flask.ext.assets import Environment, Bundle
-from flask.ext.babel import get_translations, gettext as _
+from flask.ext.babelex import gettext as _
 from babel import support, localedata, Locale
 from raven.contrib.flask import Sentry
 from webassets.filter import register_filter
@@ -212,7 +212,7 @@ def create_app(config=None, debug=False):
 def init_g(app):
 
     # cache por defecto
-    g.must_cache = 3600
+    g.must_cache = 7200
 
     # caracteristicas del cliente
     g.full_browser=is_full_browser()
@@ -230,7 +230,7 @@ def init_g(app):
     else:
         app_static_prefix = app.config["STATIC_PREFIX"] or app.static_url_path
     g.static_prefix = app.assets.url = app_static_prefix
-    
+
     # permite sobreescribir practicamente todo el <head> si es necesario
     g.override_header = False
 
@@ -241,11 +241,11 @@ def init_g(app):
         if domain in request.url_root:
             g.domain = domain
             break
-        
+
     g.domains_family = [d for d in g.domains_family if d != g.domain]
-    
+
     g.domain_capitalized = g.domain.capitalize()
-            
+
 
     # título de la página por defecto
     g.title = "Torrents.com | The Torrent Search Engine"

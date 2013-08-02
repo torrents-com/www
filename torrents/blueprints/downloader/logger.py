@@ -8,7 +8,7 @@ import zlib
 import base64
 
 from flask import Blueprint, current_app, request, jsonify, url_for, make_response, abort
-from flask.ext.babel import gettext as _
+from flask.ext.babelex import gettext as _
 
 from foofind.utils.downloader import downloader_url
 from foofind.utils import logging

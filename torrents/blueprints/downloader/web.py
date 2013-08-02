@@ -6,7 +6,7 @@ import os.path
 from foofind.services.extensions import cache
 
 from flask import Blueprint, render_template, g, current_app, request, send_file
-from flask.ext.babel import gettext as _
+from flask.ext.babelex import gettext as _
 
 from foofind.utils.downloader import get_file_metadata
 
@@ -30,7 +30,7 @@ def robots():
 def index():
     g.category=False
     downloader_files = current_app.config["DOWNLOADER_FILES"]
-    
+
     installer_metadata = get_file_metadata(downloader_files["installer.exe"])
     setup_metadata = get_file_metadata(downloader_files["setup.exe"])
     source_metadata = get_file_metadata(downloader_files["source.zip"])

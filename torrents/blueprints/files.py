@@ -234,9 +234,9 @@ def search(query=None):
             return redirect(url_for("files.search", query=g.clean_query))
 
     order, show_order = get_order(SEARCH_ORDER)
-    
+
     skip = get_skip()
-    
+
     results, search_info = single_search(g.clean_query, None, zone="Search", order=order, title=("%s torrents"%escape(g.query), 2, None), last_items=get_last_items(), skip=skip, show_order=show_order or True)
 
     if search_info['count'] == 0:
@@ -246,9 +246,9 @@ def search(query=None):
 
     #g.title+=" | " + g.query
     g.title = "Torrents.com | " + g.query
-    
+
     g.title += " | Page %d" % (int(skip) + 1) if skip > 0 else ""
-        
+
     g.page_description = "Download %s torrent from %s search engine with free, fast downloads." % (g.query, g.domain_capitalized)
 
     if search_bot:
@@ -312,7 +312,7 @@ def popular():
     results, search_info = single_search(None, "torrent", "porn", order=POPULAR_ORDER, zone="Popular", title=("Popular torrents", 2, None), last_items=get_last_items(), skip=get_skip(), show_order=None)
     g.keywords.clear()
     g.keywords.update(["torrent", "torrents", "search engine", "popular downloads", "online movies"])
-    g.page_description = "%s is a free torrent search engine that offers users fast, simple, easy access to every torrent in one place." % g.domain_capitalized 
+    g.page_description = "%s is a free torrent search engine that offers users fast, simple, easy access to every torrent in one place." % g.domain_capitalized
     g.h1 = " These are the most popular torrents."
     return render_template('ranking.html', title="Popular torrents", results=results, search_info=search_info, featured=get_featured(search_info["count"]))
 
@@ -344,7 +344,7 @@ def download(file_id, file_name=""):
                     logging.warn("Identificadores numericos antiguos encontrados: %s."%e, extra={"fileid":file_id})
                     return {"html": redirect(url_for(".download", file_id=mid2url(possible_file_id), file_name=file_name), 301),"error":301}
 
-            except filesdb.BogusMongoException as e:
+            except BaseException as e:
                 logging.exception(e)
                 error=503
 
@@ -455,8 +455,8 @@ def download(file_id, file_name=""):
         if page_description:
            page_description += ". "
         page_description += " ".join(text.capitalize()+"." for text in related[1]["files_text"])
-    
-    
+
+
 
     if len(page_description)>180:
         last_stop = page_description[:180].rindex(".") if "." in page_description[:180] else 0
@@ -501,7 +501,7 @@ def copyright():
                 if data:
                     form.urlreported.data=url_for("files.download",file_id=file_id,file_name=file_name,_external=True)
                     form.linkreported.data=data['view']["sources"]["tmagnet"]["urls"][0] if "tmagnet" in data['view']["sources"] else data['view']["sources"]["download"]["urls"][0] if "download" in data['view']["sources"] else data['view']["sources"]["download_ind"]["urls"][0]
-            except filesdb.BogusMongoException as e:
+            except BaseException as e:
                 logging.exception(e)
         elif form.validate():
             pagesdb.create_complaint(dict([("ip",request.remote_addr)]+[(field.name,field.data) for field in form]))

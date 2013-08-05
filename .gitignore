@@ -15,6 +15,9 @@ env/
 datafixes
 torrents/static/.webassets-cache*
 torrents/static/gen*
+runserver
+torrents/news
+sitemap/output
 
 # C extensions
 *.so

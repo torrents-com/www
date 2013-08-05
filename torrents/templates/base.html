@@ -23,16 +23,17 @@
         {%- block head -%}
         {%- endblock -%}
         <script type="text/javascript">
-          var _gaq = _gaq || []; _gaq.push(['_setAccount', 'UA-38333996-1']); _gaq.push(['_setDomainName', '{{ g.domain }}']);
-          _gaq.push(['_setAllowLinker', true]); _gaq.push(['_trackPageview']);
+            var _gaq = _gaq || []; _gaq.push(['_setAccount', 'UA-38333996-1']); _gaq.push(['_setDomainName', '{{ g.domain }}']);
+            _gaq.push(['_setAllowLinker', true]); _gaq.push(['_trackPageview']);
 
-          (function() {
+            (function() {
             var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
             ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
             var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-          })();
-            
-          var _prum = [['id', '5166969ae6e53d1236000001'],
+            })();
+
+            {% if g.RUM_code %}
+            var _prum = [['id', '{{g.RUM_code}}'],
                          ['mark', 'firstbyte', (new Date()).getTime()]];
             (function() {
                 var s = document.getElementsByTagName('script')[0]
@@ -41,12 +42,13 @@
                 p.src = '//rum-static.pingdom.net/prum.min.js';
                 s.parentNode.insertBefore(p, s);
             })();
+            {% endif %}
         </script>
-    
+
     </head>
     {% set hidden_category = g.category and not g.category in g.categories[:5] -%}
     {% set hidden_categories_start = 5 if hidden_category else 6 -%}
-    <body 
+    <body
         data-downloader_title="Hey!<br/>You need a Torrent client to download this file"
         data-downloader_text="Download Torrents Downloader to get this file right now.<br/>Our sofware lets you download torrents faster and more easily than ever - absolutely free! If you already have a Torrent client, click <i>No, thanks</i>."
         data-downloader_href="{{'http://torrents.com/downloader'|forceescape}}"
@@ -131,12 +133,12 @@
             </div>
             <div id="family">
                 <div class="container_24">
-                    Part of the Torrents.com family of sites: 
+                    Part of the Torrents.com family of sites:
                     {%- for domain in g.domains_family  %}
-                        <a href="http://{{ domain }}">{{ domain }}</a> 
+                        <a href="http://{{ domain }}">{{ domain }}</a>
                     {%- endfor %}
                 </div>
-                    
+
             </div>
         </footer>
     </body>

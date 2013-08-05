@@ -246,6 +246,11 @@ def init_g(app):
 
     g.domain_capitalized = g.domain.capitalize()
 
+    if "RUM_CODES" in app.config:
+        rum_codes = app.config["RUM_CODES"]
+        g.RUM_code = rum_codes[g.domain] if g.domain in rum_codes else rum_codes["torrents.com"]
+    else:
+        g.RUM_code = None
 
     # título de la página por defecto
     g.title = "Torrents.com | The Torrent Search Engine"

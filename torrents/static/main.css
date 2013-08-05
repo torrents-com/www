@@ -1,38 +1,43 @@
-@import url(http://fonts.googleapis.com/css?family=Lato:400,700,900);
+@import url(http://fonts.googleapis.com/css?family=Open+Sans:400,600,700);
 
-@mixin icon{background: url(/static/icons.png?1) top left no-repeat; display:inline-block;*display:inline;zoom:1;}
-.icon-all{ @include icon(); background-position: 0 0; width: 20px; height: 20px; }
-.icon-anime{ @include icon(); background-position: -21px 0; width: 20px; height: 20px; }
-.icon-audio{ @include icon(); background-position: -42px 0; width: 20px; height: 20px; }
-.icon-document{ @include icon(); background-position: -63px 0; width: 20px; height: 20px; }
-.icon-download{ @include icon(); background-position: -84px 0; width: 11px; height: 11px; }
-.icon-download_button{ @include icon(); background-position: -96px 0; width: 20px; height: 20px; }
-.icon-download_ind{ @include icon(); background-position: -117px 0; width: 11px; height: 11px; }
-.icon-download_no{ @include icon(); background-position: -129px 0; width: 11px; height: 11px; }
-.icon-ebook{ @include icon(); background-position: -141px 0; width: 20px; height: 20px; }
-.icon-error{ @include icon(); background-position: -162px 0; width: 20px; height: 20px; }
-.icon-facebook{ @include icon(); background-position: -183px 0; width: 17px; height: 17px; }
-.icon-game{ @include icon(); background-position: -201px 0; width: 20px; height: 20px; }
-.icon-image{ @include icon(); background-position: -222px 0; width: 20px; height: 20px; }
-.icon-magnet{ @include icon(); background-position: -243px 0; width: 11px; height: 11px; }
-.icon-magnet_no{ @include icon(); background-position: -255px 0; width: 11px; height: 11px; }
-.icon-mobile{ @include icon(); background-position: -267px 0; width: 20px; height: 20px; }
-.icon-movie{ @include icon(); background-position: -288px 0; width: 20px; height: 20px; }
-.icon-music{ @include icon(); background-position: -309px 0; width: 20px; height: 20px; }
-.icon-porn{ @include icon(); background-position: -330px 0; width: 20px; height: 20px; }
-.icon-search{ @include icon(); background-position: -351px 0; width: 20px; height: 20px; }
-.icon-series{ @include icon(); background-position: -372px 0; width: 20px; height: 20px; }
-.icon-software{ @include icon(); background-position: -393px 0; width: 20px; height: 20px; }
-.icon-trailer{ @include icon(); background-position: -414px 0; width: 26px; height: 20px; }
-.icon-twitter{ @include icon(); background-position: -441px 0; width: 17px; height: 17px; }
-.icon-unknown{ @include icon(); background-position: -459px 0; width: 16px; height: 16px; }
-.icon-video{ @include icon(); background-position: -476px 0; width: 20px; height: 20px; }
+@mixin icon{background: url(/static/icons.png?2) top left no-repeat; display:inline-block;*display:inline;zoom:1;}
+.icon-all{ @include icon(); background-position: 0 0; width: 18px; height: 16px; }
+.icon-anime{ @include icon(); background-position: -19px 0; width: 20px; height: 20px; }
+.icon-audio, .icon-music{ @include icon(); background-position: -40px 0; width: 20px; height: 20px; }
+.icon-document, .icon-ebook{ @include icon(); background-position: -61px 0; width: 20px; height: 20px; }
+.icon-download{ @include icon(); background-position: -82px 0; width: 11px; height: 11px; }
+.icon-download_button{ @include icon(); background-position: -94px 0; width: 20px; height: 20px; }
+.icon-download_ind{ @include icon(); background-position: -115px 0; width: 11px; height: 11px; }
+.icon-download_no{ @include icon(); background-position: -127px 0; width: 11px; height: 11px; }
+.icon-error{ @include icon(); background-position: -139px 0; width: 20px; height: 20px; }
+.icon-facebook{ @include icon(); background-position: -160px 0; width: 17px; height: 17px; }
+.icon-game{ @include icon(); background-position: -178px 0; width: 20px; height: 20px; }
+.icon-image{ @include icon(); background-position: -199px 0; width: 20px; height: 20px; }
+.icon-magnet{ @include icon(); background-position: -220px 0; width: 11px; height: 11px; }
+.icon-magnet_no{ @include icon(); background-position: -232px 0; width: 11px; height: 11px; }
+.icon-mobile{ @include icon(); background-position: -244px 0; width: 20px; height: 20px; }
+.icon-movie, .icon-video{ @include icon(); background-position: -265px 0; width: 20px; height: 20px; }
+.icon-porn{ @include icon(); background-position: -286px 0; width: 20px; height: 20px; }
+.icon-search{ @include icon(); background-position: -307px 0; width: 20px; height: 20px; }
+.icon-series{ @include icon(); background-position: -328px 0; width: 20px; height: 20px; }
+.icon-software{ @include icon(); background-position: -349px 0; width: 20px; height: 20px; }
+.icon-trailer{ @include icon(); background-position: -370px 0; width: 26px; height: 20px; }
+.icon-twitter{ @include icon(); background-position: -397px 0; width: 17px; height: 17px; }
+.icon-unknown{ @include icon(); background-position: -415px 0; width: 16px; height: 16px; }
+
+/* colores v2 */
+$black: #323230;
+$gray:#afb0aa;
+
+$red:#B23633;
+$lightred:#C9817F;
+$verylightred:#E7B8B7;
+
+
 
 /* colores */
 $halfblack: rgba(50,50,48,0.3);
-$black: #323230;
 $darkgray:#8c8c84;
-$gray:#afb0aa;
 $lightgray:#f1f2ec;
 
 $tabgray:#e3e5d7;
@@ -40,9 +45,7 @@ $tabgray:#e3e5d7;
 $lightgrayfont:#8F8F8D;
 $grayfont:#7D7E74;
 $redfont:#ab2933;
-$red:#B43F48;
 $greenfont:#869e3b;
-$lightred:#E7C3AD;
 $lightgreen:#eef6e1;
 $green:#dcecc5;
 $darkgreen:#dcecc5;
@@ -53,12 +56,11 @@ $redhealth:#F2602E; /*#E94200;*/
 
 body, html {
     font-size:0.9em;
-    font-family: 'Lato', Verdana, sans-serif;
+    font-family: 'Open Sans', Arial, Verdana, sans-serif;
     margin:0px;
-    font-weight:400;
 }
 input, button {
-    font-family: 'Lato', Verdana, sans-serif;
+    font-family: 'Open Sans', Arial, Verdana, sans-serif;
 }
 a {
     color:$redfont;
@@ -108,23 +110,21 @@ img.error {
 @mixin button()
 {
     display:inline-block;*display:inline;zoom:1;
-    font-size: 1em;
-    letter-spacing: 1px;
-    font-weight:bold;
+    font-size: 1.45em;
+    font-weight:600;
     text-transform:uppercase;
     color:white;
-    padding:10px 12px 7px 8px;
+    padding:6px 12px 5px 8px;
     border: none;
     background-color:$black;
-    box-shadow:inset 0px 17px lighten($black, 15%);
     text-decoration:none;
     cursor:pointer;
-    span {vertical-align:-7px}
+    span {vertical-align:-3px}
 
     &:focus, &:hover, &:active {
         outline:none;
-        box-shadow:inset 0px 17px $redfont;
-        background:darken($redfont, 15%);
+        box-shadow:inset 0px 17px $gray;
+        background:darken($gray, 15%);
     }
 
     &.disable{
@@ -152,91 +152,103 @@ img.error {
 }
 
 #header {
-    background-color:$lightgray; margin:0px 0px 20px;
+    margin:20px 0px;
 
-    ul#header_links {
-        text-align:right;margin:10px 0px 25px;
-        li {
-            list-style:none; display:inline; margin-left:12px;padding-left:12px;border-left:1px solid $redfont;
-            &:first-child{border-left:none}
-            &, a {
-                font-size:0.95em;text-decoration:none;
+    #logo {
+        display:block;
+        width:300px;
+        img { vertical-align: top }
+    }
+
+    #main-nav {
+        text-align:right;
+        a {
+            font-size:1.4em;
+            font-weight:700;
+            color:$darkgray;
+            text-decoration:none;
+            margin:0px 0px 0px 24px;
+            text-transform:uppercase;
+            position:relative;
+            .arrow {
+                position:absolute;
+                top:-1.1em;
+                width: 0;
+                height: 0;
+                border-left: 15px solid transparent;
+                border-right: 15px solid transparent;
+                border-top: 15px solid $red;
+                left: 50%;
+                margin-left: -15px;
+                display:none;
+            }
+        }
+        a.active {
+            color:$red;
+            .arrow {
+                display:block;
             }
         }
     }
 
-    h1 {
-        margin:0px;
-        
-    }
-    #q {
-        border: 2px $black solid;
-        border-top-left-radius: 9px;
-        border-bottom-left-radius: 9px;
-        font-size: 1.1em;
-        width:430px;
-        padding: 8px 16px;
-        margin:3px 0px;
-        &:focus, &:hover {
-            outline:none;
-            box-shadow:inset 0px 0px 2px 2px $green;
+
+    #search-banner {
+        box-shadow: 20px 0px 20px $darkgray, -20px 0px 20px $darkgray;
+        margin:20px 0px;
+        padding:10px 0px;
+        background-color:$red;
+
+        .legend {
+            color:$lightred;
+            font-size:1.8em;
+            font-weight:600;
+            margin:12px 0px;
         }
-    }
-    button{
-        width:230px;
-        margin:3px 0px;
-        border-top-right-radius: 9px;
-        border-bottom-right-radius: 9px;
-        @include button();
-    }
 
+        #q {
+            border: none;
+            border-radius: 5px;
+            font-size:1.1em;
+            width:510px;
+            padding:9px 16px;
+            margin:10px 0px;
+            &:focus, &:hover {
+                outline:none;
+                box-shadow:inset 0px 0px 2px 2px $green;
+            }
+        }
 
-    #categories {
-        padding-left:0px;font-size:0.95em;margin:0px;position:relative
-        >li {
-            width:auto; list-style:none; margin:0px -28px 0px 0px; background:url(/static/tab.png) top right no-repeat;position:relative;display:inline-block;padding-right:5px;*display:inline;zoom:1
+        button{
+            width:230px;
+            margin:10px 0px;
+            border-radius: 5px;
+            @include button();
+        }
 
-            &:first-child { z-index:7; >a {padding-left:10px;}}
-            &:first-child + li { z-index:6}
-            &:first-child + li + li { z-index:5}
-            &:first-child + li + li + li { z-index:4}
-            &:first-child + li + li + li + li { z-index:3}
-            &:first-child + li + li + li + li + li { z-index:2}
-            &:first-child + li + li + li + li + li + li { z-index:1}
-
-            &.more {
-                text-align:right;padding-right:0px;margin-right:0px;position:absolute;background:none;color:$redfont;top:6px;right:0px;font-weight:bold;
-
-                #more + label {span {margin-right:0px}span + span{display:none}cursor:pointer;display:inline-block;*display:inline;zoom:1}
-                label:hover span {text-decoration:underline}
-                #more {position:absolute;left:-200px}
-                #more.checked + label {
-                    display:block;
-                    &+ul {display:block}
-                    & {span + span{display:inline}span{display:none}}
-                }
-                #more:checked + label {
-                    display:block;
-                    & + ul {display:block}
-                    & {span + span{display:inline}span{display:none}}
-                }
-                ul {
-                    box-shadow:0 0 2px 2px $lightgray; display:none; margin-top:6px; border:1px solid $tabgray;  border-top:none;border-bottom-left-radius:5px; border-bottom-right-radius:5px;padding:0px;background:$lightgray;
-                    >li {
-                        text-align:left; display:block;list-style:none;border-top:1px solid $tabgray;
-                        &:first-child {border:none}
-                        &.active, &:hover {background:white}
-                        >a {width:100px;padding:5px 10px}
+        ul {
+            font-weight:600;font-size:1.2em;margin:0px 0px;padding:0px;width:100%;
+            font-weight:400\9;
+            li {
+                list-style:none;margin: 0px 0px 0px 2.2em;padding:0px;display:inline;
+                a { color:$verylightred; text-decoration:none;position:relative;
+                    .arrow {
+                        position:absolute;
+                        top:2em;
+                        width: 0;
+                        height: 0;
+                        border-left: 15px solid transparent;
+                        border-right: 15px solid transparent;
+                        border-top: 15px solid $red;
+                        left: 50%;
+                        margin-left: -15px;
+                        display:none;
                     }
                 }
+
+                &:first-child {margin-left:5px}
+                &.active a, > a:hover { color:white }
+                &.active a .arrow { display:block }
             }
-
-            >a {min-width:40px;padding:8px 29px 2px 27px;padding-right:23px\0}
-
-            &.active { border-left:1px solid $tabgray;background-image:url(/static/active_tab.png)}
-            a{color:$black;font-weight:bold;text-decoration:none;display:inline-block;*display:inline;zoom:1;
-               &:hover, &:focus, &:active { color:$red }}
-            span{margin-right:5px;vertical-align:-5px}
         }
     }
 }
@@ -736,14 +748,14 @@ form {
         padding-left:8px;
         padding-right:8px;
         color:#FFF;
-        
-        
+
+
         border: medium none;
         font-size: 0.7em;
         letter-spacing: 1px;
         padding: 10px 12px 7px 8px;
         border-radius: 9px;
-        
+
         box-shadow:inset 0px 17px lighten($black, 15%);
         text-decoration:none;
         cursor:pointer;
@@ -787,4 +799,4 @@ form {
 
 #downloader h1{font-size: 1em; font-weight: 400;text-transform:none; color:#000;}
 
- 
+

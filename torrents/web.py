@@ -257,6 +257,9 @@ def init_g(app):
 
     g.keywords = {'torrents', 'download', 'files', 'search', 'audio', 'video', 'image', 'document', 'software'}
 
+    # seccion por defecto
+    g.section = "torrents"
+
     # informacion de categorias
     g.categories = app_categories = app.config["TORRENTS_CATEGORIES"]
     g.categories_by_url = {category.url:category for category in app_categories}

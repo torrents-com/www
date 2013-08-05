@@ -59,51 +59,28 @@
         <header>
             <div id="header">
                 <div class="container_24">
-                    <div class="grid_24">
-                        <ul id="header_links">
-                            <li><a href="/about">About</a></li>
-                            <li><a href="/contact">Contact</a></li>
-                            <li><a href="/legal">Terms & Privacy</a></li>
-                            <li><a href="/copyright">Copyright</a></li>
-                            <li><a href="/recent">Recent</a></li>
-                            <li><a href="/popular">Popular</a></li>
-                            <li><a href="/popular_searches">Popular searches</a></li>
-                            <li><a href="/downloader">Torrents Downloader</a></li>
-                        </ul>
-                    </div>
-                </div>
-                <div class="container_24">
                     <div class="grid_6">
-                        <a href="/"><img src="{{g.static_prefix}}/torrents.png" alt="Torrents" title="Torrents" /></a>
+                        <a id="logo" href="/"><img src="{{g.static_prefix}}/torrents.png" alt="Torrents" title="Torrents" /><img src="{{g.static_prefix}}/dot-com.png" alt=".com"/></a>
                     </div>
-                    <form method="get" action="{{ url_for('files.search', query='') }}" class="grid_18">
-                        <input type="hidden" name="c" value="{{g.category.url if g.category else ""}}" />
-                        <div class="grid_12 alpha"><input type="text" id="q" name="q" autocomplete="off" value="{{g.query or ""}}"/></div>
-                        <div class="grid_6 omega"><button type="submit"><span class="icon-search"></span> Search</button></div>
-                    </form>
+                    <div id="main-nav" class="grid_18">
+                        <a href="/news"{{' class=active' if g.section=="news" }}><div class="arrow"></div>News</a>
+                        <a href="/downloader"{{' class=active' if g.section=="downloader" }}><div class="arrow"></div>Downloader</a>
+                        <a href="/"{{' class=active' if g.section=="torrents" }}><div class="arrow"></div>Torrents</a>
+                    </div>
                 </div>
-                <div class="container_24">
-                    <div class="grid_18 prefix_6">
-                        <ul id="categories">
-                            <li{{ ' class=active' if g.category==None }}><a href="{{ url_for('files.search', query=g.clean_query ) if g.category and g.clean_query else url_for('index.home')}}"><span class="icon-all"></span> All</a></li>
-                            {% for category in g.categories[:5] %}
-                                <li{{' class=active' if g.category == category }}><a href="{{ url_for('files.category', category=category.url, query=None if g.category == category else g.clean_query )}}"><span class="icon-{{ category.tag }}"></span> {{category.title}}</a></li>
+                <div id="search-banner">
+                    <div class="container_24">
+                        <form method="get" action="{{ url_for('files.search', query='') }}" class="grid_24">
+                            <input type="hidden" name="c" value="{{g.category.url if g.category else ""}}" />
+                            <div class="legend grid_4 alpha">find torrents</div>
+                            <div class="grid_14"><input type="text" id="q" name="q" autocomplete="off" value="{{g.query or ""}}"/></div>
+                            <div class="grid_6 omega"><button type="submit">Search files&nbsp;&nbsp;&nbsp;<span class="icon-search"></span></button></div>
+                        </form>
+                        <ul class="grid_24">
+                            <li{{ ' class=active' if g.category==None and g.section=="torrents" }}><a href="{{ url_for('files.search', query=g.clean_query ) if g.category and g.clean_query else url_for('index.home')}}"><div class="arrow"></div>all torrents</a></li>
+                            {% for category in g.categories %}
+                            <li{{' class=active' if g.category == category and g.section=="torrents" }}><a href="{{ url_for('files.category', category=category.url, query=None if g.category == category else g.clean_query )}}"><div class="arrow"></div>{{category.title|lower}}</a></li>
                             {% endfor %}
-                            {% if hidden_category %}
-                                <li class="active"><a href="{{ url_for('files.category', category=g.category.url)}}"><span class="icon-{{ g.category.tag }}"></span> {{g.category.title}}</a></li>
-                            {% else %}
-                                <li{{ ' class=active' if g.category == g.categories[5][0]}}><a href="{{ url_for('files.category', category=g.categories[5].url, query=None if g.category == g.categories[5] else g.clean_query)}}"><span class="icon-{{ g.categories[5].tag }}"></span> {{g.categories[5].title}}</a></li>
-                            {% endif %}
-                            <li class="more">
-                                <input type="checkbox" id="more"/><label for="more"><span>More ▼</span><span>Less ▲</span></label>
-                                <ul>
-                                {% for category in g.categories[hidden_categories_start:] %}
-                                    {%- if  g.category != category[0] %}
-                                        <li><a href="{{ url_for('files.category', category=category.url, query=g.clean_query)}}"><span class="icon-{{ category.tag }}"></span> {{category.title}}</a></li>
-                                    {%- endif %}
-                                {% endfor %}
-                                </ul>
-                            </li>
                         </ul>
                     </div>
                 </div>

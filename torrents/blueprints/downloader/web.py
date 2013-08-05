@@ -12,22 +12,10 @@ from foofind.utils.downloader import get_file_metadata
 
 web = Blueprint("web", __name__)
 
-@web.route('/favicon.ico')
-def favicon():
-    return send_file(
-        os.path.join(current_app.static_folder, 'favicon.ico'),
-        mimetype='image/vnd.microsoft.icon'
-        )
-
-@web.route('/robots.txt')
-def robots():
-    return send_file(
-        os.path.join(current_app.static_folder, 'robots.txt')
-        )
-
 @web.route('/downloader')
 @cache.cached(60)
 def index():
+    g.section="downloader"
     g.category=False
     downloader_files = current_app.config["DOWNLOADER_FILES"]
 
@@ -67,6 +55,7 @@ def index():
 @web.route("/success")
 @cache.cached()
 def foodownloader_success():
+    g.section="downloader"
     return render_template(
         "microsite/foodownloader.html",
         mode = "success",

@@ -27,6 +27,7 @@
 
 /* colores v2 */
 $black: #323230;
+$darkgray:lighten($black,10%);
 $gray:#afb0aa;
 
 $red:#B23633;
@@ -37,7 +38,6 @@ $verylightred:#E7B8B7;
 
 /* colores */
 $halfblack: rgba(50,50,48,0.3);
-$darkgray:#8c8c84;
 $lightgray:#f1f2ec;
 
 $tabgray:#e3e5d7;
@@ -123,17 +123,15 @@ img.error {
 
     &:focus, &:hover, &:active {
         outline:none;
-        box-shadow:inset 0px 17px $gray;
-        background:darken($gray, 15%);
+        background:$darkgray;
     }
 
     &.disable{
         cursor:default;
         box-shadow:none;
-        background:$black;
+        background:$halfblack;
         &:focus, &:hover, &:active {
-            box-shadow:none;
-            background:$black;
+            background:$halfblack;
         }
     }
 }
@@ -142,7 +140,7 @@ img.error {
 {
     @include button();
     background-color:$red;
-    box-shadow:inset 0px 17px $red;
+    span {vertical-align:-7px}
 }
 
 *:focus {
@@ -154,7 +152,7 @@ img.error {
 #header {
     margin:20px 0px;
 
-    #logo {
+    .logo {
         display:block;
         width:300px;
         img { vertical-align: top }
@@ -353,8 +351,6 @@ img.error {
         .download {
             text-align:center;
             @include redbutton();
-            box-shadow:inset 0px 10px $red;
-            &:hover {box-shadow:inset 0px 10px $red}
             display:block;
             font-size:0.7em;
             padding: 0px 3px 0px 0px;
@@ -416,13 +412,21 @@ img.error {
     a.odd {color:$black; &:hover, &:focus, &:active { color:$red; outline: none }}
 }
 
-#family {
-    text-align:center;margin:40px 0px 0px 0px; padding:20px 0 20px 0;background-color:$lightgray;overflow-x:hidden;color:$grayfont;
-    a:first-child {border:none}
-    a {margin-right:10px;padding-left:10px;color:$red;font-weight:400;text-decoration:none;white-space:nowrap;display:inline-block;*display:inline;zoom:1;border-left:1px $red solid;
+#footer_links {
+    background-color:$lightgray;
+    ul {
+        padding-left:5px;list-style:none;margin:5px 0px 0px;
+        li {display:inline}
+    }
+    a.logo {margin:35px 0px 45px;}
+    a {margin:0px 0px 0px 15px;color:$red;font-size:1.2em;font-weight:400;text-decoration:none;white-space:nowrap;display:inline-block;*display:inline;zoom:1;
+        img {vertical-align:middle}
         &:hover, &:focus, &:active { color:$red; outline: none }
     }
-    a.odd {color:$black; &:hover, &:focus, &:active { color:$red; outline: none }}
+    ul#domains {
+        margin-top:15px;
+        a {font-size:1.5em}
+    }
 }
 
 

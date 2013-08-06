@@ -242,8 +242,6 @@ def init_g(app):
             g.domain = domain
             break
 
-    g.domains_family = [d for d in g.domains_family if d != g.domain]
-
     g.domain_capitalized = g.domain.capitalize()
 
     if "RUM_CODES" in app.config:

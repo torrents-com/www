@@ -59,10 +59,10 @@
         <header>
             <div id="header">
                 <div class="container_24">
-                    <div class="grid_6">
-                        <a id="logo" href="/"><img src="{{g.static_prefix}}/torrents.png" alt="Torrents" title="Torrents" /><img src="{{g.static_prefix}}/dot-com.png" alt=".com"/></a>
+                    <div class="grid_7">
+                        <a class="logo" href="/"><img src="{{g.static_prefix}}/torrents.png" alt="Torrents" title="Torrents" /><img src="{{g.static_prefix}}/dot-com.png" alt=".com"/></a>
                     </div>
-                    <div id="main-nav" class="grid_18">
+                    <div id="main-nav" class="grid_17">
                         <a href="/news"{{' class=active' if g.section=="news" }}><div class="arrow"></div>News</a>
                         <a href="/downloader"{{' class=active' if g.section=="downloader" }}><div class="arrow"></div>Downloader</a>
                         <a href="/"{{' class=active' if g.section=="torrents" }}><div class="arrow"></div>Torrents</a>
@@ -108,12 +108,19 @@
                     {%- endfor %}
                 </div>
             </div>
-            <div id="family">
+            <div id="footer_links">
                 <div class="container_24">
-                    Part of the Torrents.com family of sites:
-                    {%- for domain in g.domains_family  %}
-                        <a href="http://{{ domain }}">{{ domain }}</a>
-                    {%- endfor %}
+                    <div class="grid_6">
+                        <a class="logo" href="/"><img src="{{g.static_prefix}}/torrents_g.png" alt="Torrents" title="Torrents" /></a>
+                    </div>
+                    <div class="grid_18">
+                        <ul id="domains">
+                        {%- for domain in g.domains_family  %}
+                            <li><a href="http://{{ domain }}">torrents<img src="{{g.static_prefix}}/{{domain|replace('torrents.','dot-')}}.png" alt=".com"/></a></li>
+                        {%- endfor %}
+                        </ul>
+                        <ul><li><a href="/about">About</a></li><li><a href="/contact">Contact</a></li><li><a href="/legal">Terms &amp; Privacy</a></li><li><a href="/copyright">Copyright</a></li><li><a href="/recent">Recent</a></li><li><a href="/popular">Popular</a></li><li><a href="/popular_searches">Popular searches</a></li></ul>
+                    </div>
                 </div>
 
             </div>

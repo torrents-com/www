@@ -15,8 +15,7 @@
         </div>
 
         <div class="grid_6 alpha omega">
-            <a target="_blank" class="download" data-downloader="1" data-track="Download,{{'Torrent' if 'download' in file['view']['sources'] else 'Magnet' if 'tmagnet' in file['view']['sources'] else 'HTML'}},Featured / Button" href="{{file['view']['sources']['download']['urls'][0] if 'download' in file['view']['sources'] else file['view']['sources']['tmagnet']['urls'][0] if 'tmagnet' in file['view']['sources'] else
-                file['view']['sources']['download']['urls'][0]}}"><span class="icon-download_button"></span> Download</a>
+            <a class="download" data-downloader="1" data-track="Download,{{'Torrent' if 'download' in file['view']['sources'] else 'Magnet' if 'tmagnet' in file['view']['sources'] else 'HTML'}},Featured / Button" href="{{file['view']['sources']['tmagnet']['urls'][0] if 'tmagnet' in file['view']['sources'] else file['view']['sources']['download']['urls'][0] if 'download' in file['view']['sources'] else file['view']['sources']['download_ind']['urls'][0]}}"{{ ' target="_blank"' if not 'tmagnet' in file['view']['sources'] and not 'download' in file['view']['sources']}}><span class="icon-download_button"></span> Download</a>
         </div>
     </li>
 {%- endfor %}

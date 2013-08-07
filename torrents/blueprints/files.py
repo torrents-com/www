@@ -506,21 +506,21 @@ def process_search_results(s=None, query=None, category=None, not_category=None,
 
         if canonical_query:
             # elimina categoria y no categoria de la busqueda canonica
-            if not_category:
-                not_category_search = u"_-("+not_category+")"
-                if canonical_query.endswith(not_category_search):
-                    canonical_query = canonical_query[:-len(not_category_search)]
+            canonical_query_parts = [part for part in canonical_query.split("_") if not ((not_category and part==u"-("+not_category+")")
+                                                                                        or (category and part==u"("+category+")"))]
 
-            if canonical_query and category:
-                category_search = u"_("+category+")"
-                if canonical_query.endswith(category_search):
-                    canonical_query = canonical_query[:-len(category_search)]
+            canonical_query = "_".join(canonical_query_parts) if any(len(part)>1 for part in canonical_query_parts) else ""
 
         sure = stats["s"]
         if (not sure) or ("total_sure" in stats and not stats["total_sure"]):
             g.must_cache = 0
             cache.cacheme = False
+    else:
+        sure = True
+        canonical_query = ""
 
+    # si la canonical query es vacia, solo interesan resultados para busquedas con query nulo (rankings)
+    if canonical_query or not query:
         if ids:
             files_dict={str(f["_id"]):prepare_data(f,text=query,ntts=ntts) for f in get_files(ids,s)}
             # ordena resultados y añade informacion de la busqueda
@@ -533,19 +533,17 @@ def process_search_results(s=None, query=None, category=None, not_category=None,
                     files.append(afile)
                     files_text.append(afile["view"]["nfn"])
 
-                    if 'images_server' in afile['view'] or 'thumbnail' in afile['view']:
-                        g.featured.append((-4-afile['view']["rating"], position, afile))
-                    else:
-                        g.featured.append((-afile['view']["rating"], position, afile))
+
+                    featured_weight = (afile['view']["rating"]
+                                        + (3 if 'images_server' in afile['view'] or 'thumbnail' in afile['view'] else 0)
+                                        + (4 if all(cat.show_in_home for cat in afile["view"]["categories"]) else 0))
+
+                    g.featured.append((-featured_weight, position, afile))
+
                     position-=1
 
             results = render_template('results.html', files=files[:max_limit or limit], list_title=title[0] or query or category, title_level=title[1], title_class=title[2], zone=zone, show_order=show_order)
 
-    else:
-        sure = True
-        canonical_query = ""
-
-    if canonical_query:
         count = min(len(files), max_limit or limit)
         search_info = {"time": max(stats["t"].itervalues()) if stats["t"] else 0, "total_found": stats["cs"],
                    "count": count, "next": False if "end" in stats and stats["end"] or skip>=10 else (skip or 0)+1, "files_text":files_text, "canonical_query":canonical_query, "sure":sure}
@@ -712,8 +710,6 @@ def torrents_data(data, details=False):
             file_categories.append(category)
         if not file_category_type and category.content_main and category.content==data["view"]["file_type"]:
             file_category_type = category
-        if file_category and file_category_type:
-            break
 
     data["view"]["category"] = file_category
     data["view"]["categories"] = file_categories

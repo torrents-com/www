@@ -191,7 +191,7 @@ img.error {
 
 
     #search-banner {
-        box-shadow: 20px 0px 20px $darkgray, -20px 0px 20px $darkgray;
+        box-shadow: 0px 0px 10px $darkgray;
         margin:20px 0px;
         padding:10px 0px;
         background-color:$red;

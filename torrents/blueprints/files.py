@@ -14,7 +14,6 @@ from foofind.utils.fooprint import Fooprint
 from foofind.utils.seo import seoize_text
 from foofind.utils.splitter import SEPPER
 from foofind.services import *
-from foofind.services.searchd import REQUEST_MODE_PER_GROUPS, REQUEST_MODE_PER_SERVER
 from foofind.templates import number_size_format_filter
 from torrents.services import *
 from foofind.blueprints.files import download_search
@@ -40,78 +39,31 @@ def get_popular_searches(size, bins, cat_id=None):
     bin_size = 1.0*len(pop_searches)/bins
     return {search:int(order/bin_size)/float(bins) for order, (search, weight) in enumerate(sorted(pop_searches.iteritems(), key=itemgetter(1)))}
 
-if searchd.service:
-    def weight_processor(w, ct, r, nr):
-        return w if w else -10
+def weight_processor(w, ct, r, nr):
+    return w if w else -10
 
-    def tree_visitor(item):
-        if item[0]=="_w" or item[0]=="_u":
-            return None
-        else:
-            return item[1]["_w"]
+def tree_visitor(item):
+    if item[0]=="_w" or item[0]=="_u":
+        return None
+    else:
+        return item[1]["_w"]
 
-    CATEGORY_ORDER = ("IDIV(fs,8640000)*(r+5)", "ok DESC, r DESC, fs DESC", "IDIV(fs,8640000)*(r+5)")
-    RECENT_ORDER = ("fs", "ok DESC, r DESC, e DESC", "fs")
-    RANKING_ORDER = ("IDIV(fs,172800)*(r+10)", "ok DESC, r DESC, fs DESC", "IDIV(fs,172800)*(r+10)")
-    POPULAR_ORDER = RANKING_ORDER
-    SEARCH_ORDER = ("@weight*(r+10)", "e DESC, ok DESC, r DESC, fs DESC", "@weight*(r+10)")
+CATEGORY_ORDER = ("IDIV(fs,8640000)*(r+5)", "ok DESC, r DESC, fs DESC", "IDIV(fs,8640000)*(r+5)")
+RECENT_ORDER = ("fs", "ok DESC, r DESC, e DESC", "fs")
+RANKING_ORDER = ("IDIV(fs,172800)*(r+10)", "ok DESC, r DESC, fs DESC", "IDIV(fs,172800)*(r+10)")
+POPULAR_ORDER = RANKING_ORDER
+SEARCH_ORDER = ("@weight*(r+10)", "e DESC, ok DESC, r DESC, fs DESC", "@weight*(r+10)")
 
-    CATEGORY_UNKNOWN = Category(cat_id=11, url="unknown", title='Unknown', tag=u'unknown', content='unknown', content_main=True, show_in_home=False)
+CATEGORY_UNKNOWN = Category(cat_id=11, url="unknown", title='Unknown', tag=u'unknown', content='unknown', content_main=True, show_in_home=False)
 
-    COLUMN_ORDERS = {
-        "fs": ("fs", "ok DESC, r DESC, e DESC", "fs"),
-        "rfs": ("-fs", "ok DESC, r DESC, e DESC", "-fs"),
-        "z": ("z", "ok DESC, r DESC, e DESC, e DESC, fs DESC", "z"),
-        "rz": ("if(z>0,1/z,-1)", "ok DESC, r DESC, e DESC, e DESC, fs DESC", "if(z>0,1/z,-1)"),
-        "s": ("r", "ok DESC, e DESC, fs DESC", "r"),
-        "rs": ("if(r>0,1/r,-1)", "ok DESC, e DESC, fs DESC", "if(r>0,1/r,-1)"),
-    }
-else:
-
-    def search_order(row, weight, rating, normalized_rating):
-        return weight*int(row["attrs"]["fs"]/86400)*(rating+10)
-
-    def popular_order(row, weight, rating, normalized_rating):
-        return int(row["attrs"]["fs"]/86400)*(rating+10)
-
-    def home_order(row, weight, rating, normalized_rating):
-        return int(row["attrs"]["fs"]/86400)
-
-    def created_order(row, weight, rating, normalized_rating):
-        return row["attrs"]["fs"]
-
-    def rcreated_order(row, weight, rating, normalized_rating):
-        return 1./row["attrs"]["fs"] if row["attrs"]["fs"] else 1
-
-    def size_order(row, weight, rating, normalized_rating):
-        return row["attrs"]["z"]
-
-    def rsize_order(row, weight, rating, normalized_rating):
-        return 1./row["attrs"]["z"] if row["attrs"]["z"] else 1.
-
-    def rating_order(row, weight, rating, normalized_rating):
-        return rating
-
-    def rrating_order(row, weight, rating, normalized_rating):
-        return 1./rating if rating else 1.
-
-    CATEGORY_ORDER = ("IDIV(fs,86400)*(r+10)", "rw DESC, r DESC, fs DESC", popular_order, True)
-    RECENT_ORDER = ("fs", "rw DESC, r DESC, e DESC", created_order, True)
-    POPULAR_ORDER = CATEGORY_ORDER
-    RANKING_ORDER = ("IDIV(fs,8640)*(r+5)", "rw DESC, r DESC, fs DESC", home_order, True)
-    SEARCH_ORDER = None
-
-    CATEGORY_UNKNOWN = Category(cat_id=11, url="unknown", title='Unknown', tag=u'unknown', content='unknown', content_main=True, show_in_home=False)
-
-    COLUMN_ORDERS = {
-        "fs": ("fs", "rw DESC, r DESC, e DESC", created_order, True),
-        "rfs": ("-fs", "rw DESC, r DESC, e DESC", rcreated_order, True),
-        "z": ("z", "rw DESC, r DESC, e DESC, e DESC, fs DESC", size_order, True),
-        "rz": ("-z", "rw DESC, r DESC, e DESC, e DESC, fs DESC", rsize_order, True),
-        "s": ("r", "rw DESC, r DESC, e DESC, fs DESC", rating_order, True),
-        "rs": ("-r", "rw DESC, r DESC, e DESC, fs DESC", rrating_order, True),
-    }
-
+COLUMN_ORDERS = {
+    "fs": ("fs", "ok DESC, r DESC, e DESC", "fs"),
+    "rfs": ("-fs", "ok DESC, r DESC, e DESC", "-fs"),
+    "z": ("z", "ok DESC, r DESC, e DESC, e DESC, fs DESC", "z"),
+    "rz": ("if(z>0,1/z,-1)", "ok DESC, r DESC, e DESC, e DESC, fs DESC", "if(z>0,1/z,-1)"),
+    "s": ("r", "ok DESC, e DESC, fs DESC", "r"),
+    "rs": ("if(r>0,1/r,-1)", "ok DESC, e DESC, fs DESC", "if(r>0,1/r,-1)"),
+}
 
 def get_order(default_order):
     try:
@@ -523,22 +475,13 @@ def get_last_items():
 
 def single_search(query, category=None, not_category=None, order=None, title=None, zone="", query_time=800, skip=None, last_items=[], limit=100, ignore_ids=[], show_order=None):
     if (query and len(query)>1) or category:
-        if searchd.service:
-            s = searchd.search((query+u" " if query else u"")+(u"("+category+")" if category else u"")+(u" -("+not_category+")" if not_category else u""), None, order=order, start=not skip, group=not skip, no_group=True)
-        else:
-            s = searchd.search({"type":"text", "text":(query+u" " if query else u"")+(u"("+category+")" if category else u"")+(u" -("+not_category+")" if not_category else u"")}, None, order=order, request_mode=REQUEST_MODE_PER_SERVER, query_time=query_time)
+        s = searchd.search((query+u" " if query else u"")+(u"("+category+")" if category else u"")+(u" -("+not_category+")" if not_category else u""), None, order=order, start=not skip, group=not skip, no_group=True)
         return process_search_results(s, query, category, not_category, zone=zone, title=title, last_items=last_items, skip=skip, limit=limit, ignore_ids=ignore_ids, show_order=show_order)
     else:
         return process_search_results(None, query, category, zone=zone, title=title, last_items=last_items, skip=skip, limit=limit, ignore_ids=ignore_ids, show_order=show_order)
 
 def multi_search(params, query_time=500, extra_wait_time=500):
-    if searchd.service:
-        searches = [(searchd.search((query+u" " if query else u"")+(u"("+category+")" if category else u"")+(u" -("+not_category+")" if not_category else u""), None, order=order, start=True, group=True, no_group=True), query, category, not_category, zone, title, limit, max_limit, show_order) for query, category, not_category, order, zone, title, limit, max_limit, show_order in params]
-    else:
-        searches = [(searchd.search({"type":"text", "text":(query+u" " if query else u"")+(u"("+category+")" if category else u"")+(u" -("+not_category+")" if not_category else u"")}, None, order=order, request_mode=REQUEST_MODE_PER_SERVER, query_time=query_time, async=True), query, category, not_category, zone, title, limit, max_limit, show_order) for query, category, not_category, order, zone, title, limit, max_limit, show_order in params]
-
-        for s, query, category, not_category, zone, title, limit, max_limit, show_order in searches:
-            s.usable.wait(extra_wait_time/1000.)
+    searches = [(searchd.search((query+u" " if query else u"")+(u"("+category+")" if category else u"")+(u" -("+not_category+")" if not_category else u""), None, order=order, start=True, group=True, no_group=True), query, category, not_category, zone, title, limit, max_limit, show_order) for query, category, not_category, order, zone, title, limit, max_limit, show_order in params]
 
     for s, query, category, not_category, zone, title, limit, max_limit, show_order in searches:
         yield process_search_results(s, query, category, not_category, zone=zone, title=title, limit=limit, max_limit=max_limit, show_order=show_order)
@@ -554,10 +497,7 @@ def process_search_results(s=None, query=None, category=None, not_category=None,
         title = (None, 2, False)
 
     if s:
-        if searchd.service:
-            ids = [result for result in ((bin2hex(fileid), server, sphinxid, weight, sg) for (fileid, server, sphinxid, weight, sg) in s.get_results((3.0, 0.1), last_items=last_items, skip=skip*100 if skip else None, min_results=limit, max_results=limit, extra_browse=limit, weight_processor=weight_processor, tree_visitor=tree_visitor)) if result[0] not in ignore_ids]
-        else:
-            ids = [result for result in s.get_results(last_items=last_items, skip=skip*100 if skip else None, min_results=limit, max_results=limit) if result[0] not in ignore_ids]
+        ids = [result for result in ((bin2hex(fileid), server, sphinxid, weight, sg) for (fileid, server, sphinxid, weight, sg) in s.get_results((3.0, 0.1), last_items=last_items, skip=skip*100 if skip else None, min_results=limit, max_results=limit, extra_browse=limit, weight_processor=weight_processor, tree_visitor=tree_visitor)) if result[0] not in ignore_ids]
 
         results_entities = list(set(int(aid[4])>>32 for aid in ids if int(aid[4])>>32))
         ntts = {int(ntt["_id"]):ntt for ntt in entitiesdb.get_entities(results_entities)} if results_entities else {}

@@ -90,16 +90,14 @@ def register_search(query, category, must_register, has_results=None, canonical_
         return
 
     # conjunto de palabras
-    words = frozenset(word.rstrip("s") for word in safe_query.lower().split("_"))
+    words = frozenset(word[:-1] if word[-1]=="s" else word for word in safe_query.lower().split("_"))
 
     # no registra busquedas con palabras no permitidas
-    word_blacklist = current_app.config["SEARCHES_BLACKLIST"]
-    if any(word in word_blacklist for word in words):
+    if any(word in g.word_blacklist for word in words):
         return
 
     # comprueba lista de conjuntos de palabras no permitidas
-    word_blacklist_set = current_app.config["SEARCHES_BLACKLIST_SET"]
-    if any(word_set <= words for word_set in word_blacklist_set):
+    if any(word_set <= words for word_set in g.word_blacklist_set):
         return
 
     # si no sabe si hay resultados, mira si se ha guardado anteriormente

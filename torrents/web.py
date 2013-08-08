@@ -88,8 +88,6 @@ def create_app(config=None, debug=False):
             REVISION = ()
             )
 
-    # Registra filtros de plantillas
-    register_filters(app)
 
     # Registra valores/funciones para plantillas
     app.jinja_env.globals["u"] = u
@@ -99,6 +97,9 @@ def create_app(config=None, debug=False):
     app.register_blueprint(files)
     for blueprint in downloader_blueprints:
         app.register_blueprint(blueprint)
+
+    # Registra filtros de plantillas
+    register_filters(app)
 
     # Web Assets
     if not os.path.isdir(app.static_folder+"/gen"): os.mkdir(app.static_folder+"/gen")
@@ -252,10 +253,15 @@ def init_g(app):
     else:
         g.RUM_code = None
 
+    # Patrón de URL de busqueda, para evitar demasiadas llamadas a url_for
+    g.url_search_base = url_for("files.search", query="___")
+
     # título de la página por defecto
     g.title = "Torrents.com | The Torrent Search Engine"
 
     g.keywords = {'torrents', 'download', 'files', 'search', 'audio', 'video', 'image', 'document', 'software'}
+
+    g.word_blacklist, g.word_blacklist_set = torrentsdb.get_blacklists()
 
     # informacion de categorias
     g.categories = app_categories = app.config["TORRENTS_CATEGORIES"]

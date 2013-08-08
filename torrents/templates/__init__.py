@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 import re
-from flask import current_app
+from flask import current_app, url_for, g, Markup
 from foofind.templates import number_format_filter, number_size_format_filter, format_timedelta_filter, urlencode_filter, number_friendly_filter, pformat, numeric_filter, markdown_filter, seoize_filter
 from foofind.utils.htmlcompress import HTMLCompress
 
@@ -22,6 +22,7 @@ def register_filters(app):
     app.jinja_env.filters['markdown'] = markdown_filter
     app.jinja_env.filters['seoize'] = seoize_filter
     app.jinja_env.filters['clean_query'] = clean_query
+    app.jinja_env.filters['blacklist_query'] = blacklist_query
     app.jinja_env.filters['singular'] = singular_filter
     app.jinja_env.filters['cycle'] = cycle_filter
     app.jinja_env.add_extension(HTMLCompress)
@@ -43,3 +44,13 @@ def singular_filter(text):
 def cycle_filter(alist):
     alist.insert(0, alist.pop())
     return alist[0]
+
+def blacklist_query(query, text=None, title=None):
+    # conjunto de palabras
+    words = frozenset(word[:-1] if word[-1]=="s" else word for word in query.lower().split("_"))
+
+    # comprueba lista de palabras o conjuntos de palabras no permitidas
+    if any(word in g.word_blacklist for word in words) or any(word_set <= words for word_set in g.word_blacklist_set):
+        return Markup("<a>"+(text or query)+"</a>")
+
+    return Markup("<a href='" + g.url_search_base.replace('___', query)+"' title='"+(title or text or query)+"'>"+(text or query)+"</a>")

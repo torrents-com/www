@@ -4,16 +4,15 @@
         <link rel="canonical" href="{{url_for('files.download', file_id=file_data["view"]["url"], file_name=file_data["view"]["seo-fn"])}}" />
     {%- endif %}
 {%- endblock -%}
-{% set url_search_base = url_for("files.search",query="___") %}
 {%- macro print_filepaths(paths) %}
     <ul class="filepaths">
         {%- for path, info in (paths.items() | sort) %}
             <li>
                 {% if path[0] == "/" %}
-                    <a href="{{ url_search_base|replace('___', path[1:]|seoize('_', True))}}">{{ path[1:] }}</a>
+                    {{ path[1:]|seoize('_', True) | blacklist_query(path[1:]) }}
                     {{ print_filepaths(info) }}
                 {% else %}
-                    <a href="{{ url_search_base|replace('___', path|seoize('_', True)) }}" title="{{ path }}">{{ path }}</a><span>{{ info | numbersizeformat("en") }}</span>
+                    {{ path|seoize('_', True) | blacklist_query(path) }}<span>{{ info | numbersizeformat("en") }}</span>
                 {% endif %}
             </li>
         {%- endfor %}
@@ -124,12 +123,12 @@
                 {%-if metadata in file_data['view']['searches'] %}
                     {%-if file_data['view']['searches'][metadata] == [] %}
                         {% for avalue in value.split(",") %}
-                            <a href="{{ url_for("files.search",query=avalue|clean_query)}}">{{ avalue|trim }}</a>{{", " if not loop.last}}
+                            {{avalue|clean_query|blacklist_query(avalue|trim)}}{{", " if not loop.last}}
                         {% endfor %}
                     {%-elif file_data['view']['searches'][metadata] == {} %}
                         {{print_filepaths(value)}}
                     {%-else %}
-                        <a href="{{ url_for("files.search",query=file_data['view']['searches'][metadata])}}">{{ (value|string)[:100000].replace("\n","<br />") | safe }}</a>
+                        {{file_data['view']['searches'][metadata]|clean_query|blacklist_query((value|string)[:100000].replace("\n","<br />"))}}
                     {%-endif %}
                 {%-else %}
                     {{ (value|string)[:100000].replace("\n","<br />") | safe }}

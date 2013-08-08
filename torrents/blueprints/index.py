@@ -20,7 +20,7 @@ def home():
     g.page_description = "A free torrent search engine providing download results for movies, software and other torrent files."
     g.keywords.clear()
     g.keywords.update(["torrents", "search engine", "free download", "music", "online", "movie", "games", "TV", "music", "Anime", "Books", "Adult", "Porn", "Spoken word", "Software", "Mobile", "Pictures"])
-    
+
     pop_searches = get_popular_searches(50, 10)
     rankings, featured = get_rankings()
 
@@ -33,12 +33,26 @@ def popular_searches():
     '''
     g.category=False
     g.keywords.clear()
-    g.keywords.update(["populartorrent", "free movie", "full download", "search engine", "largest"])
+    g.keywords.update(["popular torrent", "free movie", "full download", "search engine", "largest"])
     g.page_description = "Torrents.com is a free torrent search engine that offers users fast, simple, easy access to every torrent in one place."
     g.title+=" | Popular searches"
     g.h1 = "See up to the minute results for most popular torrent searches ranging from movies to music."
     pop_searches = get_popular_searches(500, 50)
-    return render_template('popular.html', pop_searches = dict(pop_searches))
+    return render_template('searches.html', subtitle="Popular searches", searches = dict(pop_searches))
+
+@index.route('/recent_searches')
+def recent_searches():
+    '''
+    Renderiza la página de búsquedas populares.
+    '''
+    g.category=False
+    g.keywords.clear()
+    g.keywords.update(["recent torrent", "free movie", "full download", "search engine", "largest"])
+    g.page_description = "Torrents.com is a free torrent search engine that offers users fast, simple, easy access to every torrent in one place."
+    g.title+=" | Recent searches"
+    g.h1 = "See up to the minute results for most recent torrent searches ranging from movies to music."
+    recent_searches = get_last_searches(500, 50)
+    return render_template('searches.html', subtitle="Recent searches", searches = dict(recent_searches))
 
 @index.route('/robots.txt')
 def robots():

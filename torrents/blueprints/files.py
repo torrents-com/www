@@ -33,7 +33,7 @@ def get_last_searches(size, bins):
     bin_size = 1.0*len(last_searches)/bins
     return {search:int(order/bin_size)/float(bins) for order, (search, weight) in enumerate(sorted(last_searches.iteritems(), key=itemgetter(1)))}
 
-@cache.memoize(timeout=60*60)
+@cache.memoize(timeout=60)
 def get_popular_searches(size, bins, cat_id=None):
     pop_searches = torrentsdb.get_popular_searches(size, cat_id)
     bin_size = 1.0*len(pop_searches)/bins

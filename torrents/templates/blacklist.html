@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>Blacklist manager</h1>
+<p>Blacklisted terms will not be included in tag clouds or any other search link in the site.</p>
+<h2>Single words</h2>
+<p>Searches that contain any of these words will be blacklisted. Click on any word to remove it.</p>
+<p>
+{%- for word in words|sort %}
+    <a onclick="return confirm('You will delete the word \'{{word}}\'. Are you sure?')" href="{{url_for('blacklist.delete', block=word)}}">{{word}}</a>,
+{%- endfor %}
+</p>
+
+<h2>Word sets</h2>
+<p>Searches that include any of these word sets will be blacklisted. Click on any word set to remove it.</p>
+{%- for set in sets|sort %}
+    <a onclick="return confirm('You will delete the word set \'{{set|join(', ')}}\'. Are you sure?')" href="{{url_for('blacklist.delete', block=set|join(' '))}}">{{set|join(', ')}}</a> |
+{%- endfor %}
+
+<h2>Add terms</h2>
+<p>Add a single word or a word set (several words separated by spaces).</p>
+<p>"__" means all the numbers from 0 to 17 (e.g "__a" would add the words 0a, 1a, ... 17a and "__ a" would add the word sets 0 a, 1 a, ... 17 a).</p>
+<form>
+    {{ form.block }}
+    <input type="submit"/>
+</form>
+{% endblock %}
+

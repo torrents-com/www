@@ -71,9 +71,6 @@ class TorrentsStore(object):
 
         self.torrents_conn.end_request()
 
-
-        self.get_blacklists()
-
     def save_search(self, search, rowid, cat_id):
         self.torrents_conn.torrents.searches.insert({"_id":bson.objectid.ObjectId(rowid[:12]), "t":time(), "s":search, "c":cat_id})
         self.torrents_conn.end_request()

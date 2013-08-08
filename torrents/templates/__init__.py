@@ -47,7 +47,7 @@ def cycle_filter(alist):
 
 def blacklist_query(query, text=None, title=None):
     # conjunto de palabras
-    words = frozenset(word[:-1] if word[-1]=="s" else word for word in query.lower().split("_"))
+    words = frozenset(word[:-1] if word[-1]=="s" else word for word in query.lower().split("_") if word)
 
     # comprueba lista de palabras o conjuntos de palabras no permitidas
     if any(word in g.word_blacklist for word in words) or any(word_set <= words for word_set in g.word_blacklist_set):

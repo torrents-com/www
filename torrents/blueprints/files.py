@@ -4,7 +4,6 @@ import datetime, time, itertools, re, math, urllib, hashlib
 from flask import flash, request, render_template, redirect, url_for, g, current_app, abort, escape, jsonify
 from struct import pack, unpack
 from base64 import urlsafe_b64encode, urlsafe_b64decode
-from operator import itemgetter
 from urlparse import urlparse, parse_qs
 
 from heapq import heapify, heappop
@@ -26,18 +25,6 @@ from unicodedata import normalize
 files = Fooprint('files', __name__)
 
 referrer_parser = re.compile("^(?:.*\://.+/.+/([^\?]+))|(?:.*\?(?:.*\&)?q=([^\&]+))", re.UNICODE)
-
-@cache.memoize(timeout=60)
-def get_last_searches(size, bins):
-    last_searches = torrentsdb.get_last_searches(size)
-    bin_size = 1.0*len(last_searches)/bins
-    return {search:int(order/bin_size)/float(bins) for order, (search, weight) in enumerate(sorted(last_searches.iteritems(), key=itemgetter(1)))}
-
-@cache.memoize(timeout=60)
-def get_popular_searches(size, bins, cat_id=None):
-    pop_searches = torrentsdb.get_popular_searches(size, cat_id)
-    bin_size = 1.0*len(pop_searches)/bins
-    return {search:int(order/bin_size)/float(bins) for order, (search, weight) in enumerate(sorted(pop_searches.iteritems(), key=itemgetter(1)))}
 
 def weight_processor(w, ct, r, nr):
     return w if w else -10
@@ -228,7 +215,7 @@ def category(category, query=None):
         g.page_description = "%s %s torrents at %s, the free and fast torrent search engine."%(g.query.capitalize(), singular_filter(g.category.title).lower(), g.domain_capitalized)
         order, show_order = get_order(SEARCH_ORDER)
     else:
-        pop_searches = get_popular_searches(15, 3, g.category.cat_id)
+        pop_searches = tag_clouds[g.category.url]
         g.page_description = "%s torrents at %s, the free and fast torrent search engine."%(singular_filter(g.category.title).capitalize(), g.domain_capitalized)
         order, show_order = get_order(CATEGORY_ORDER)
     g.title+=" | " + page_title

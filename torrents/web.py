@@ -143,10 +143,7 @@ def create_app(config=None, debug=False):
     eventmanager.once(torrentsdb.get_blacklists)
 
     # Nubes de tags
-    clouds_params = [ ("home", "popular",20,5,None),
-                      ("footer", "recent",20,5,None),
-                      ("popular_searches", "popular",1,10,None),
-                      ("recent_searches", "recent",1,10,None) ] + [(cat.url, "popular",16,4,cat.cat_id) for cat in app.config["TORRENTS_CATEGORIES"]]
+    clouds_params = app.config["TAG_CLOUDS"] + [(cat.url, "popular",16,4,cat.cat_id) for cat in app.config["TORRENTS_CATEGORIES"]]
     tag_clouds.init_app(clouds_params, torrentsdb, cache, app.config)
     eventmanager.once(tag_clouds.refresh)
     eventmanager.interval(app.config["TAGS_REFRESH_INTERVAL"], tag_clouds.refresh)

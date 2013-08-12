@@ -31,9 +31,7 @@ class TagClouds:
                 # regenera las nubes
                 for cloud_params in self.clouds_params:
                     start = time()
-                    print "reg", cloud_params[0]
                     self.clouds_caches[cloud_params[0]] = self._get_searches(*cloud_params[1:])
-                    print "length", time()-start
 
                 # guarda las nubes y avisa para que el resto actualice
                 self.cache.set(TAG_CLOUDS, dumps(self.clouds_caches, encoding='utf-8'))

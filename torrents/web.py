@@ -22,7 +22,7 @@ from foofind.utils.webassets_filters import JsSlimmer, CssSlimmer
 from foofind.utils import u, logging
 from foofind.utils.bots import is_search_bot, is_full_browser, check_rate_limit
 
-from torrents.blueprints.index import index, get_last_searches
+from torrents.blueprints.index import index
 from torrents.blueprints.files import files
 from torrents.blueprints.downloader import all_blueprints as downloader_blueprints
 from torrents.templates import register_filters
@@ -139,6 +139,17 @@ def create_app(config=None, debug=False):
     configdb.init_app(app)
     entitiesdb.init_app(app)
     torrentsdb.init_app(app)
+
+    eventmanager.once(torrentsdb.get_blacklists)
+
+    # Nubes de tags
+    clouds_params = [ ("home", "popular",20,5,None),
+                      ("footer", "recent",20,5,None),
+                      ("popular_searches", "popular",1,10,None),
+                      ("recent_searches", "recent",1,10,None) ] + [(cat.url, "popular",16,4,cat.cat_id) for cat in app.config["TORRENTS_CATEGORIES"]]
+    tag_clouds.init_app(clouds_params, torrentsdb, cache, app.config)
+    eventmanager.once(tag_clouds.refresh)
+    eventmanager.interval(app.config["TAGS_REFRESH_INTERVAL"], tag_clouds.refresh)
 
     # Servicio de búsqueda
     @app.before_first_request
@@ -269,7 +280,7 @@ def init_g(app):
     g.categories_by_url = {category.url:category for category in app_categories}
 
     # ultimas busquedas
-    g.last_searches = get_last_searches(100,20)
+    g.last_searches = tag_clouds["footer"]
 
     g.featured = []
 

@@ -7,7 +7,7 @@ from foofind.utils import logging
 from foofind.utils.fooprint import Fooprint
 from foofind.services import *
 from torrents.services import *
-from .files import get_rankings, get_popular_searches, get_last_searches
+from .files import get_rankings
 
 index = Fooprint('index', __name__)
 
@@ -21,10 +21,10 @@ def home():
     g.keywords.clear()
     g.keywords.update(["torrents", "search engine", "free download", "music", "online", "movie", "games", "TV", "music", "Anime", "Books", "Adult", "Porn", "Spoken word", "Software", "Mobile", "Pictures"])
 
-    pop_searches = get_popular_searches(50, 10)
+    pop_searches = tag_clouds["home"]
     rankings, featured = get_rankings()
 
-    return render_template('index.html', rankings = rankings, pop_searches = dict(pop_searches), featured=featured)
+    return render_template('index.html', rankings = rankings, pop_searches = pop_searches, featured=featured)
 
 @index.route('/popular_searches')
 def popular_searches():
@@ -37,7 +37,7 @@ def popular_searches():
     g.page_description = "Torrents.com is a free torrent search engine that offers users fast, simple, easy access to every torrent in one place."
     g.title+=" | Popular searches"
     g.h1 = "See up to the minute results for most popular torrent searches ranging from movies to music."
-    pop_searches = get_popular_searches(500, 50)
+    pop_searches = tag_clouds["popular_searches"]
     return render_template('searches.html', subtitle="Popular searches", searches = dict(pop_searches))
 
 @index.route('/recent_searches')
@@ -51,7 +51,7 @@ def recent_searches():
     g.page_description = "Torrents.com is a free torrent search engine that offers users fast, simple, easy access to every torrent in one place."
     g.title+=" | Recent searches"
     g.h1 = "See up to the minute results for most recent torrent searches ranging from movies to music."
-    recent_searches = get_last_searches(500, 50)
+    recent_searches = tag_clouds["recent_searches"]
     return render_template('searches.html', subtitle="Recent searches", searches = dict(recent_searches))
 
 @index.route('/robots.txt')

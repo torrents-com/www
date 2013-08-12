@@ -114,7 +114,8 @@ class TorrentsStore(object):
         self.torrents_conn.end_request()
         return ret
 
-    def get_popular_searches(self, limit, cat_id=None):
+    @cache.memoize(60*60)
+    def find_popular_searches(self, limit, cat_id):
         aggregation_cmd = [
           { "$group" : {"_id" : "$s", "w" : {"$sum":1}}},
           { "$project" : {"key" : {"$toLower":"$_id"}, "w":"$w"}},
@@ -128,6 +129,10 @@ class TorrentsStore(object):
 
         searches = self.torrents_conn.torrents.searches.aggregate(aggregation_cmd)
         self.torrents_conn.end_request()
+        return searches
+
+    def get_popular_searches(self, limit, cat_id=None):
+        searches = self.find_popular_searches(limit, cat_id)
         ret = self.process_searches(searches["result"], limit, True) if searches and searches["ok"] else {}
         return ret
 

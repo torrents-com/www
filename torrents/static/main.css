@@ -406,7 +406,6 @@ img.error {
             color:$red;
         }
     }
-
     text-align:center;margin:20px 0px 50px; overflow-x:hidden;
     a {margin:0px 7px;color:$grayfont;font-weight:400;text-decoration:none;white-space:nowrap;display:inline-block;*display:inline;zoom:1; &:hover, &:focus, &:active { color:$red; outline: none }}
     a.odd {color:$black; &:hover, &:focus, &:active { color:$red; outline: none }}
@@ -565,7 +564,7 @@ img.error {
 
 h1 {text-transform:uppercase;font-size: 1.5em;margin:30px 0px 10px;color:$black;}
 
-h1.extra{text-transform:none; padding:6px; font-size:1.15em; color:#323230; text-align:center; margin-bottom:15px;margin-top:50px;}
+h1.extra{text-transform:none; padding:6px; font-size:1.1em; color:#323230; text-align:center; margin-bottom:15px;margin-top:10px;}
 .title h1{text-transform:none; font-size: 0.9em; margin-bottom:0px;}
 .title h1.category {text-transform:uppercase;font-size: 1.6em;margin:5px 0px}
 h2 {text-transform:uppercase;font-size: 1.5em;margin:30px 0px 10px;color:$black;}

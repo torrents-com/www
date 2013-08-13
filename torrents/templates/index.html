@@ -8,15 +8,12 @@
     <h1 class="extra">A free torrent search engine offering fast, simple, and easy access to torrent downloads in one place.</h1>
 
     {% if pop_searches %}
-    <div class="title ranking big_icon star">
-    <span></span><div><h2><a href='{{url_for("index.popular_searches")}}'>Most popular searches</a></h2></div>
-    </div>
     <div id="popular">
+        <div><span>Most popular searches</span></div>
     {%- for search, weight in pop_searches | dictsort(case_sensitive=False) %}
         <a class="{{ loop.cycle('odd', 'even') }}" style="font-size:{{0.9+weight}}em" href="{{url_for('files.search', query=search|clean_query)}}">{{search}}</a>
     {%- endfor %}
     </div>
-
 
     {%- endif %}
     {%- for (results, search_info), category in rankings %}

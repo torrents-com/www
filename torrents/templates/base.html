@@ -74,7 +74,7 @@
                 </div>
                 <div class="container_24">
                     <div class="grid_6">
-                        <a href="/"><img src="{{g.static_prefix}}/torrents.png" alt="Torrents" title="Torrents" /></a>
+                        <a href="/"><img src="{{g.static_prefix}}/torrents.png" alt="Torrents logo" title="Torrents" /></a>
                     </div>
                     <form method="get" action="{{ url_for('files.search', query='') }}" class="grid_18">
                         <input type="hidden" name="c" value="{{g.category.url if g.category else ""}}" />
@@ -124,13 +124,6 @@
             </div>
         </section>
         <footer>
-            <div id="last_searches">
-                <div class="container_24">
-                    {%- for search, weight in g.last_searches | dictsort(case_sensitive=False) %}
-                        <a class="{{ loop.cycle('odd', 'even') }}" style="font-size:{{0.8+weight}}em" href="{{url_for('files.search', query=search|clean_query)}}">{{search}}</a>
-                    {%- endfor %}
-                </div>
-            </div>
             <div id="family">
                 <div class="container_24">
                     Part of the Torrents.com family of sites:

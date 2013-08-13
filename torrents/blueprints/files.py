@@ -220,9 +220,7 @@ def category(category, query=None):
         order, show_order = get_order(CATEGORY_ORDER)
     g.title+=" | " + page_title
 
-
     results, search_info = single_search(g.clean_query, g.category.tag, order=order, zone=g.category.url, title=(page_title, 2, g.category.tag), last_items=get_last_items(), skip=get_skip(), show_order=show_order or True)
-
 
     if g.query:
         if g.search_bot:
@@ -312,75 +310,21 @@ def download(file_id, file_name=""):
         abort(404)
 
     query = download_search(file_data, file_name, "torrent")
-    related = single_search(query, category=None, title=("Related torrents",3,None), zone="File / Related", last_items=[], limit=25, ignore_ids=[mid2hex(file_id)], show_order=None)
-
-    # metadatos de la página
-    file_info = {"download", "torrent", str(file_data['file']['fs'].year)}
-
-    if "z" in file_data["file"] and file_data["file"]["z"]:
-        file_info.add(number_size_format_filter(file_data["file"]["z"]))
-
-    if "file_type" in file_data["view"] and file_data["view"]["file_type"]:
-        file_info.add(file_data["view"]["file_type"])
-
-    if "providers" in file_data["view"]:
-        file_info.update(provider.split(".")[0] for provider in file_data["view"]["providers"])
-
-    if "trackers" in file_data["view"]["md"]:
-        trackers = file_data["view"]["md"]["trackers"]
-        if not trackers.startswith("dht://"):
-            for tracker in trackers.split("\n"):
-                try:
-                    tracker = tracker[tracker.find("://")+3:]
-                    if ":" in tracker:
-                        tracker = tracker[:tracker.find(":")]
-
-                    if "/" in tracker:
-                        tracker = tracker[:tracker.find("/")]
-
-                    tracker = tracker.split(".")
-
-                    # borra dominio de primer nivel, mirando si es un TLD
-                    posible_double_domain=len(tracker[-1])==2
-                    del tracker[-1]
-
-                    # elimina subdominios tracker
-                    if tracker[0]=="tracker" and len(tracker)>1:
-                        del tracker[0]
-
-                    # si pudiera haber dos sufijos, borra el segundo
-                    if posible_double_domain and len(tracker)>1:
-                        if 1<len(tracker[-1])<4:
-                            del tracker[-1]
-
-                    # se queda con la parte del final, que se supone el nombre del dominio
-                    file_info.add(tracker[-1])
-                except:
-                    pass
+    related = single_search(query, category=None, title=("Related torrents",3,None), zone="File / Related", last_items=[], limit=15, ignore_ids=[mid2hex(file_id)], show_order=None)
 
     # elige el titulo de la página
-    info_list = sorted(file_info)
-    position = int(str(file_data["file"]["_id"])[:4],16)
-    title_info = " - " + info_list.pop(position%len(info_list))
     title = file_data['view']['fn']
-    title_max_length = 70-len(title_info)
 
     # recorta el titulo hasta el proximo separador
-    if len(title)>title_max_length+1:
-        for pos in xrange(title_max_length+1, 30, -1):
+    if len(title)>101:
+        for pos in xrange(101, 30, -1):
             if title[pos] in SEPPER:
                 title = title[:pos].strip()
                 break
         else:
             title = title[:title_max_length]
 
-    # añade información adicional
-    title += title_info
-
-    # añade más información adicional si no hay suficiente
-    while info_list and len(title)<40:
-        title += " " + info_list.pop(position%len(info_list))
-    g.title = title[:75]
+    g.title = title
 
     page_description = ""
     if "description" in file_data["view"]["md"]:
@@ -393,8 +337,6 @@ def download(file_id, file_name=""):
         if page_description:
            page_description += ". "
         page_description += " ".join(text.capitalize()+"." for text in related[1]["files_text"])
-
-
 
     if len(page_description)>180:
         last_stop = page_description[:180].rindex(".") if "." in page_description[:180] else 0
@@ -459,7 +401,7 @@ def get_last_items():
 
     return last_items
 
-def single_search(query, category=None, not_category=None, order=None, title=None, zone="", query_time=800, skip=None, last_items=[], limit=100, ignore_ids=[], show_order=None):
+def single_search(query, category=None, not_category=None, order=None, title=None, zone="", query_time=800, skip=None, last_items=[], limit=20, ignore_ids=[], show_order=None):
     if (query and len(query)>1) or category:
         s = searchd.search((query+u" " if query else u"")+(u"("+category+")" if category else u"")+(u" -("+not_category+")" if not_category else u""), None, order=order, start=not skip, group=not skip, no_group=True)
 
@@ -474,7 +416,7 @@ def multi_search(params, query_time=500, extra_wait_time=500):
         yield process_search_results(s, query, category, not_category, zone=zone, title=title, limit=limit, max_limit=max_limit, show_order=show_order)
 
 
-def process_search_results(s=None, query=None, category=None, not_category=None, title=None, zone="", last_items=[], skip=None, limit=100, max_limit=None, ignore_ids=[], show_order=True):
+def process_search_results(s=None, query=None, category=None, not_category=None, title=None, zone="", last_items=[], skip=None, limit=20, max_limit=None, ignore_ids=[], show_order=True):
     files = []
     files_text = []
     files_dict = None

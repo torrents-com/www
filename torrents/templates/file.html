@@ -23,9 +23,9 @@
     <div id="download">
         <div class="grid_6">
             {%- if 'images_server' in file_data['view'] or 'thumbnail' in file_data['view']%}
-            <img src="http://images.torrents.com/{{ file_data['file']['_id'] }}0" alt="preview" />
+            <img src="http://images.torrents.com/{{ file_data['file']['_id'] }}0" alt="Preview image for {{ file_data["view"]["nfn"] }}" />
             {%- else %}
-            <img src="{{g.static_prefix}}/missing-{{ file_data['view']['icon'].url}}.jpg" alt="preview" />
+            <img src="{{g.static_prefix}}/missing-{{ file_data['view']['icon'].url}}.jpg" alt="We have no preview for {{ file_data["view"]["nfn"] }}" />
             {%- endif %}
         </div>
         <div class="grid_18">

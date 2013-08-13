@@ -35,9 +35,9 @@ def tree_visitor(item):
     else:
         return item[1]["_w"]
 
-CATEGORY_ORDER = ("IDIV(fs,8640000)*(r+5)", "ok DESC, r DESC, fs DESC", "IDIV(fs,8640000)*(r+5)")
+CATEGORY_ORDER = ("IDIV(fs,17280000)*(r+10)", "ok DESC, r DESC, fs DESC", "IDIV(fs,17280000)*(r+10)")
 RECENT_ORDER = ("fs", "ok DESC, r DESC, e DESC", "fs")
-RANKING_ORDER = ("IDIV(fs,172800)*(r+10)", "ok DESC, r DESC, fs DESC", "IDIV(fs,172800)*(r+10)")
+RANKING_ORDER = ("IDIV(fs,1728000)*(r+10)", "ok DESC, r DESC, fs DESC", "IDIV(fs,1728000)*(r+10)")
 POPULAR_ORDER = RANKING_ORDER
 SEARCH_ORDER = ("@weight*(r+10)", "e DESC, ok DESC, r DESC, fs DESC", "@weight*(r+10)")
 
@@ -310,7 +310,7 @@ def download(file_id, file_name=""):
         abort(404)
 
     query = download_search(file_data, file_name, "torrent")
-    related = single_search(query, category=None, title=("Related torrents",3,None), zone="File / Related", last_items=[], limit=15, ignore_ids=[mid2hex(file_id)], show_order=None)
+    related = single_search(query, category=None, title=("Related torrents",3,None), zone="File / Related", last_items=[], limit=30, max_limit=15, ignore_ids=[mid2hex(file_id)], show_order=None)
 
     # elige el titulo de la página
     title = file_data['view']['fn']
@@ -401,13 +401,13 @@ def get_last_items():
 
     return last_items
 
-def single_search(query, category=None, not_category=None, order=None, title=None, zone="", query_time=800, skip=None, last_items=[], limit=20, ignore_ids=[], show_order=None):
+def single_search(query, category=None, not_category=None, order=None, title=None, zone="", query_time=800, skip=None, last_items=[], limit=70, max_limit=50, ignore_ids=[], show_order=None):
     if (query and len(query)>1) or category:
         s = searchd.search((query+u" " if query else u"")+(u"("+category+")" if category else u"")+(u" -("+not_category+")" if not_category else u""), None, order=order, start=not skip, group=not skip, no_group=True)
 
-        return process_search_results(s, query, category, not_category, zone=zone, title=title, last_items=last_items, skip=skip, limit=limit, ignore_ids=ignore_ids, show_order=show_order)
+        return process_search_results(s, query, category, not_category, zone=zone, title=title, last_items=last_items, skip=skip, limit=limit, max_limit=max_limit, ignore_ids=ignore_ids, show_order=show_order)
     else:
-        return process_search_results(None, query, category, zone=zone, title=title, last_items=last_items, skip=skip, limit=limit, ignore_ids=ignore_ids, show_order=show_order)
+        return process_search_results(None, query, category, zone=zone, title=title, last_items=last_items, skip=skip, limit=limit, max_limit=max_limit, ignore_ids=ignore_ids, show_order=show_order)
 
 def multi_search(params, query_time=500, extra_wait_time=500):
     searches = [(searchd.search((query+u" " if query else u"")+(u"("+category+")" if category else u"")+(u" -("+not_category+")" if not_category else u""), None, order=order, start=True, group=True, no_group=True), query, category, not_category, zone, title, limit, max_limit, show_order) for query, category, not_category, order, zone, title, limit, max_limit, show_order in params]
@@ -416,7 +416,7 @@ def multi_search(params, query_time=500, extra_wait_time=500):
         yield process_search_results(s, query, category, not_category, zone=zone, title=title, limit=limit, max_limit=max_limit, show_order=show_order)
 
 
-def process_search_results(s=None, query=None, category=None, not_category=None, title=None, zone="", last_items=[], skip=None, limit=20, max_limit=None, ignore_ids=[], show_order=True):
+def process_search_results(s=None, query=None, category=None, not_category=None, title=None, zone="", last_items=[], skip=None, limit=70, max_limit=50, ignore_ids=[], show_order=True):
     files = []
     files_text = []
     files_dict = None
@@ -683,7 +683,7 @@ def get_rankings():
         multi_search(
             (None, category.tag, "porn", RANKING_ORDER, "Home / " + category.title, ("<a href='%s'>%s torrents</a>"%
                 (url_for("files.category",category=category.url),singular_filter(category.title)), 3, category.url),
-            rs*2, rs, None) for category in g.categories if category.show_in_home),
+            rs*10, rs, None) for category in g.categories if category.show_in_home),
         (category for category in g.categories if category[-1])), get_featured(rs*categories_len,categories_len)
 
 def save_visited(files):

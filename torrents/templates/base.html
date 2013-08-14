@@ -43,6 +43,10 @@
                 s.parentNode.insertBefore(p, s);
             })();
             {% endif %}
+
+            {% if g.blacklisted_content %}
+            _gaq.push(['_trackEvent', "Blacklisted"]);
+            {% endif %}
         </script>
 
     </head>

@@ -177,6 +177,7 @@ def create_app(config=None, debug=False):
             g.must_cache = False
             return
 
+        g.blacklisted_content = False
         init_g(current_app)
 
         # ignora peticiones sin blueprint

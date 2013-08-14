@@ -5,6 +5,7 @@ from datetime import datetime
 from time import time
 from collections import defaultdict
 from foofind.services.extensions import cache
+from torrents.blacklists import Blacklists, prepare_phrase
 
 BLACKLIST_CACHE_NAME = "BLACKLIST_DATE"
 
@@ -51,13 +52,14 @@ class TorrentsStore(object):
         Inicialización de la clase.
         '''
         self.max_pool_size = self.last_blacklist_update = 0
-        self.torrents_conn = self.word_blacklist = self.word_blacklist_set = None
-
+        self.torrents_conn = None
+        self.blacklists = Blacklists({})
 
     def init_app(self, app):
         '''
         Inicializa la clase con la configuración de la aplicación.
         '''
+        self.debug = app.debug
         self.max_pool_size = app.config["DATA_SOURCE_MAX_POOL_SIZE"]
 
         # Inicia conexiones
@@ -80,15 +82,12 @@ class TorrentsStore(object):
         ret_words_sets = []
         for result in data:
             search = u(result["s"])
+
+            # comprueba algun conjunto de terminos no permitidos
+            if prepare_phrase(search) in self.blacklists:
+                continue
+
             words = frozenset(word[:-1] if word[-1]=="s" else word for word in search.lower().split(" ") if word)
-
-            # comprueba lista de palabras no permitidas
-            if any(word in self.word_blacklist for word in words):
-                continue
-
-            # comprueba lista de conjuntos de palabras no permitidas
-            if any(word_set <= words for word_set in self.word_blacklist_set):
-                continue
 
             # comprueba que no esté incluida en otra busqueda
             if any(aset <= words or words <= aset for aset in ret_words_sets):
@@ -136,49 +135,27 @@ class TorrentsStore(object):
         ret = self.process_searches(searches["result"], limit, True) if searches and searches["ok"] else {}
         return ret
 
-    def add_blacklist(self, block):
-        # ignora elementos vacios
-        if not block:
-            return
-
-        if isinstance(block, (str,unicode)):
-            self.torrents_conn.torrents.blacklist.save({"_id":block})
-            self.word_blacklist.add(block)
-        else:
-            multi = sorted(filter(bool,set(block)))
-            self.torrents_conn.torrents.blacklist.save({"_id":"_".join(multi), "m":multi})
-            self.word_blacklist_set.add(frozenset(multi))
-
-        # actualiza fecha de ultima actualizacion
-        cache.set(BLACKLIST_CACHE_NAME, time())
-
-    def del_blacklist(self, block):
-        if isinstance(block, (str,unicode)):
-            self.torrents_conn.torrents.blacklist.remove({"_id":block})
-            self.word_blacklist.remove(block)
-        else:
-            multi = sorted(filter(bool,set(block)))
-            self.torrents_conn.torrents.blacklist.remove({"_id":"_".join(multi)})
-            self.word_blacklist_set.remove(frozenset(multi))
-
-        # actualiza fecha de ultima actualizacion
-        cache.set(BLACKLIST_CACHE_NAME, time())
-
     def get_blacklists(self):
         # obtiene fecha de ultima actualizacion
         last_blacklist_update = cache.get(BLACKLIST_CACHE_NAME)
 
-        # si no tiene cache o este ha caducado, actualiza
-        if not self.word_blacklist or not self.word_blacklist_set or self.last_blacklist_update != last_blacklist_update:
-            words, sets = set(), set()
-            for block in self.torrents_conn.torrents.blacklist.find():
-                if "m" in block:
-                    sets.add(frozenset(block["m"]))
-                else:
-                    words.add(block["_id"])
-
-            # almacena nueva lista
-            self.word_blacklist, self.word_blacklist_set = words, sets
+        if not self.blacklists or self.last_blacklist_update != last_blacklist_update:
+            self.blacklists = Blacklists({row["_id"]:row["entries"] for row in self.torrents_conn.torrents.blacklists.find()}, self.debug)
+            self.torrents_conn.end_request()
             self.last_blacklist_update = last_blacklist_update
 
-        return self.word_blacklist, self.word_blacklist_set
+        return self.blacklists
+
+    def add_blacklist_entry(self, category, entry):
+        self.torrents_conn.torrents.blacklists.update({"_id":category},{"$addToSet":{"entries":entry}}, upsert=True)
+        self.torrents_conn.end_request()
+
+        # actualiza fecha de ultima actualizacion
+        cache.set(BLACKLIST_CACHE_NAME, time())
+
+    def remove_blacklist_entry(self, category, entry):
+        self.torrents_conn.torrents.blacklists.update({"_id":category},{"$pull":{"entries":entry}})
+        self.torrents_conn.end_request()
+
+        # actualiza fecha de ultima actualizacion
+        cache.set(BLACKLIST_CACHE_NAME, time())

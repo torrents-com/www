@@ -321,7 +321,7 @@ def download(file_id, file_name=""):
                 title = title[:pos].strip()
                 break
         else:
-            title = title[:title_max_length]
+            title = title[:101]
 
     g.title = title
 

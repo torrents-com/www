@@ -76,16 +76,12 @@ def register_search(query, category, must_register, has_results=None, canonical_
     if len(safe_query)>=current_app.config["MAX_LENGTH_SAVE"]:
         return
 
+    # no registra busquedas con palabras no permitidas
+    if g.blacklists.prepare_phrase(safe_query) in g.blacklists:
+        return
+
     # conjunto de palabras
     words = frozenset(word[:-1] if word[-1]=="s" else word for word in safe_query.lower().split("_") if word)
-
-    # no registra busquedas con palabras no permitidas
-    if any(word in g.word_blacklist for word in words):
-        return
-
-    # comprueba lista de conjuntos de palabras no permitidas
-    if any(word_set <= words for word_set in g.word_blacklist_set):
-        return
 
     # si no sabe si hay resultados, mira si se ha guardado anteriormente
     if has_results is None:

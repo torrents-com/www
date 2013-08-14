@@ -683,7 +683,7 @@ def get_rankings():
         multi_search(
             (None, category.tag, "porn", RANKING_ORDER, "Home / " + category.title, ("<a href='%s'>%s torrents</a>"%
                 (url_for("files.category",category=category.url),singular_filter(category.title)), 3, category.url),
-            rs*10, rs, None) for category in g.categories if category.show_in_home),
+            rs*2, rs, None) for category in g.categories if category.show_in_home),
         (category for category in g.categories if category[-1])), get_featured(rs*categories_len,categories_len)
 
 def save_visited(files):

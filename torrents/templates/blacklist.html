@@ -2,13 +2,15 @@
 {% block content %}
 <style>
     .block {display:inline-block;width:450px;padding:0px 10px;vertical-align:top}
-    h2 {margin-bottom:10px !important}
-    h3 {margin:5px 0px;}
+    h2 {margin-bottom:0px !important}
+    h3 {margin:15px 0px 0px;}
 </style>
 <h1>Blacklists manager</h1>
-<p>The moderation of content is based on categories. The occurrence of one or various phrases in a torrent metadata (filenames and others) or search query causes the inclusion of that item in a specific blacklist related to a category.</p>
-<p>All torrents that are included in the "forbidden" category or in the "underage" category and also in "adult" or "porn" will be blocked.
-<p>In adition, the website will not link to any search that is included in any of the following categories.</p>
+<p>The moderation of content is based on categories. The occurrence of one or various phrases in a torrent metadata (filenames, titles and others) or search query causes the inclusion of that item in a specific blacklist related to a category.</p>
+<p>For example, a torrent with the word "child" in its title and "porn" in its filename, will be included in the "underage" and "misconduct" blacklists.</p>
+<p>All torrents that are included in the "forbidden" category will be blocked. And so will be those that are both in the category "underage" and "misconduct".</p>
+<p>So the torrent of our example will be blocked (as it is in the "underage" and "misconduct" blacklists).</p>
+<p>In adition, the website will not link to any search that is included in any category. The "spam search" category allows to block search queries from be included in the popular searches without blocking any particular torrent.</p>
 
 <h2>Categories</h2>
 {% for category in blacklists if category.texts or category.groups%}
@@ -34,15 +36,16 @@
 <div class="block">
 <h3>Add entries</h3>
 <p>Enter a phrase and a category and press submit to add a new entry to a blacklist.</p>
-<p>Use + to create groups; these are sets of phrases that must be all present in an item to include it in a category. (e.g "you + know me" would match any item which includes the word you and the phrase "know me").</p>
-<p>Use "_age_" to include all the numbers from 0 to 17 at once (e.g "_age_a" would add the phrases 0a, 1a, ... 17a and "_age_ + a" would add the groups "0 + a", "1 + a", ... "17 + a").</p>
 <form>
     {{ form.text }} {{ form.category }} <input type="submit"/>
     <input type="hidden" name="action" value="add"/>
-</form></div>
+</form>
+<p>Use + to create groups; these are sets of phrases that must be all present in an item to include it in a category. (e.g "you + know me" would match any item which includes the word you and the phrase "know me").</p>
+<p>Use "_age_" to include all the numbers from 0 to 17 at once (e.g "_age_a" would add the phrases 0a, 1a, ... 17a and "_age_ + a" would add the groups "0 + a", "1 + a", ... "17 + a").</p>
+</div>
 <div class="block">
-<h3>Test entries</h3>
-<p></p>
+<h3>Test blacklists</h3>
+<p>Enter a phrase and press submit to test it again all blacklists.</p>
 <form>
     {{ form.test }} <input type="submit"/>
     <input type="hidden" name="action" value="test"/>
@@ -51,7 +54,11 @@
     <p>"{{ form.test.data }}" results:</p>
     <ul>
     {% for category in blacklists if category.texts or category.groups%}
-        <li><strong>{{ category.name }}</strong> {{ "matches" if blacklists.prepare_phrase(form.test.data) in category else "doesn't matches" }}</li>
+        {% if blacklists.prepare_phrase(form.test.data) in category %}
+            <li><strong>{{ category.name }} matches</strong></li>
+        {% else %}
+            <li>{{ category.name }} doesn't match</li>
+        {% endif %}
     {% endfor %}
     </ul>
 {% endif %}</div>

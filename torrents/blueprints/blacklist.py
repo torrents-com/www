@@ -3,52 +3,55 @@
 from flask import render_template, redirect, request, url_for, g, flash, Markup
 from foofind.utils.fooprint import Fooprint
 from torrents.services import *
+import urllib
 
 blacklist = Fooprint('blacklist', __name__)
 
-def op_blacklist(block, add=True):
-    if " " in block:
-        block = block.split(" ")
-    if add:
-        torrentsdb.add_blacklist(block)
+def parse_entry(text):
+    if "+" in text:
+        return [word.strip() for word in text.split("+") if word.strip()]
     else:
-        torrentsdb.del_blacklist(block)
+        return text.strip()
 
 @blacklist.route('/blacklist')
 def home():
     g.section = None
-    add = AddBlacklistForm(request.args)
-    if add.block.data and add.validate():
+    form = BlacklistForm(request.args)
+    blacklists = None
+    if form.action.data=="add" and form.validate():
         try:
-            numeric = False
-            block = add.block.data
-            if "__" in block:
+            text = form.text.data
+            category = form.category.data
+            if "_age_" in text:
                 for i in xrange(18):
-                    op_blacklist(block.replace("__",str(i)), True)
+                    torrentsdb.add_blacklist_entry(category, parse_entry(text.replace("_age_",str(i))))
             else:
-                op_blacklist(block, True)
+                torrentsdb.add_blacklist_entry(category, parse_entry(text))
 
-            add.block.data = ""
-            flash(Markup("Word added: %s. <a href='%s'>Undo</a>" % (block, url_for('blacklist.delete', block=block))))
-        except:
-            flash("Error adding word.")
-    words, sets = torrentsdb.get_blacklists()
-    sets = [sorted(aset) for aset in sets]
-    return render_template('blacklist.html', words=words, sets=sets, form=add)
+            form.text.data = ""
+            flash(Markup("Entry added: %s. <a href='%s'>Undo</a>" % (text, url_for('blacklist.delete', category=category, text=text))))
+        except BaseException as e:
+            flash("Error adding entry.")
 
-@blacklist.route('/blacklist/delete/<block>')
-def delete(block):
+    blacklists = torrentsdb.get_blacklists()
+    return render_template('blacklist.html', blacklists=blacklists, form=form)
+
+@blacklist.route('/blacklist/delete/<category>/<text>')
+def delete(category, text):
     try:
-        if "__" in block:
+        if "_age_" in text:
             for i in xrange(18):
-                op_blacklist(block.replace("__",str(i)), False)
+                torrentsdb.remove_blacklist_entry(category, parse_entry(text.replace("_age_",str(i))))
         else:
-            op_blacklist(block, False)
-        flash(Markup("Word deleted: %s. <a href='%s?block=%s'>Undo</a>" % (block, url_for('blacklist.home'), block)))
-    except:
-        flash("Error deleting word.")
+            torrentsdb.remove_blacklist_entry(category, parse_entry(text))
+        flash(Markup("Entry deleted: %s. <a href='%s?category=%s&text=%s'>Undo</a>" % (text, url_for('blacklist.home'), category, urllib.quote(text))))
+    except BaseException as e:
+        flash("Error deleting entry.")
     return redirect(url_for('blacklist.home'))
 
-from flask.ext.wtf import Form, TextField, Required
-class AddBlacklistForm(Form):
-    block = TextField("Word(s)", [Required("Required field.")])
+from flask.ext.wtf import Form, TextField, Required, SelectField, HiddenField
+class BlacklistForm(Form):
+    action = HiddenField("Action")
+    text = TextField("Word(s)", [Required("Required field.")])
+    test = TextField("Word(s)")
+    category = SelectField("Category", choices=[('forbidden','Forbidden'),('underage','Underage'),('porn','Porn'),('adult','Adult')])

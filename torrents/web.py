@@ -269,7 +269,7 @@ def init_g(app):
 
     g.keywords = {'torrents', 'download', 'files', 'search', 'audio', 'video', 'image', 'document', 'software'}
 
-    g.word_blacklist, g.word_blacklist_set = torrentsdb.get_blacklists()
+    g.blacklists = torrentsdb.get_blacklists()
 
     # informacion de categorias
     g.categories = app_categories = app.config["TORRENTS_CATEGORIES"]

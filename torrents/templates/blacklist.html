@@ -1,27 +1,59 @@
 {% extends "base.html" %}
 {% block content %}
-<h1>Blacklist manager</h1>
-<p>Blacklisted terms will not be included in tag clouds or any other search link in the site.</p>
-<h2>Single words</h2>
-<p>Searches that contain any of these words will be blacklisted. Click on any word to remove it.</p>
-<p>
-{%- for word in words|sort %}
-    <a onclick="return confirm('You will delete the word \'{{word}}\'. Are you sure?')" href="{{url_for('blacklist.delete', block=word)}}">{{word}}</a>,
-{%- endfor %}
-</p>
+<style>
+    .block {display:inline-block;width:450px;padding:0px 10px;vertical-align:top}
+    h2 {margin-bottom:10px !important}
+    h3 {margin:5px 0px;}
+</style>
+<h1>Blacklists manager</h1>
+<p>The moderation of content is based on categories. The occurrence of one or various phrases in a torrent metadata (filenames and others) or search query causes the inclusion of that item in a specific blacklist related to a category.</p>
+<p>All torrents that are included in the "forbidden" category or in the "underage" category and also in "adult" or "porn" will be blocked.
+<p>In adition, the website will not link to any search that is included in any of the following categories.</p>
 
-<h2>Word sets</h2>
-<p>Searches that include any of these word sets will be blacklisted. Click on any word set to remove it.</p>
-{%- for set in sets|sort %}
-    <a onclick="return confirm('You will delete the word set \'{{set|join(', ')}}\'. Are you sure?')" href="{{url_for('blacklist.delete', block=set|join(' '))}}">{{set|join(', ')}}</a> |
-{%- endfor %}
-
-<h2>Add terms</h2>
-<p>Add a single word or a word set (several words separated by spaces).</p>
-<p>"__" means all the numbers from 0 to 17 (e.g "__a" would add the words 0a, 1a, ... 17a and "__ a" would add the word sets 0 a, 1 a, ... 17 a).</p>
+<h2>Categories</h2>
+{% for category in blacklists if category.texts or category.groups%}
+<div class="block">
+    <h3>{{category.name}}</h3>
+    {% if category.texts %}
+    <div>Texts:
+        {% for text in category.texts | sort %}
+        <a onclick="return confirm('You will delete the text \'{{text}}\'. Are you sure?')" href="{{url_for('blacklist.delete', category=category.name, text=text)}}">{{text}}</a>{{", " if not loop.last}}
+        {% endfor %}
+    </div>
+    {% endif %}
+    {% if category.groups %}
+    <div>Groups:
+        {% for texts in category.groups | sort %}
+        <a onclick="return confirm('You will delete the group \'{{texts|join(', ')}}\'. Are you sure?')" href="{{url_for('blacklist.delete', category=category.name, text=texts|join('+'))}}">{{texts|join(' + ')}}</a>{{", " if not loop.last}}
+        {% endfor %}
+    </div>
+    {% endif %}
+</div>
+{% endfor %}
+<h2>Actions</h2>
+<div class="block">
+<h3>Add entries</h3>
+<p>Enter a phrase and a category and press submit to add a new entry to a blacklist.</p>
+<p>Use + to create groups; these are sets of phrases that must be all present in an item to include it in a category. (e.g "you + know me" would match any item which includes the word you and the phrase "know me").</p>
+<p>Use "_age_" to include all the numbers from 0 to 17 at once (e.g "_age_a" would add the phrases 0a, 1a, ... 17a and "_age_ + a" would add the groups "0 + a", "1 + a", ... "17 + a").</p>
 <form>
-    {{ form.block }}
-    <input type="submit"/>
+    {{ form.text }} {{ form.category }} <input type="submit"/>
+    <input type="hidden" name="action" value="add"/>
+</form></div>
+<div class="block">
+<h3>Test entries</h3>
+<p></p>
+<form>
+    {{ form.test }} <input type="submit"/>
+    <input type="hidden" name="action" value="test"/>
 </form>
+{%if form.action.data=="test"%}
+    <p>"{{ form.test.data }}" results:</p>
+    <ul>
+    {% for category in blacklists if category.texts or category.groups%}
+        <li><strong>{{ category.name }}</strong> {{ "matches" if blacklists.prepare_phrase(form.test.data) in category else "doesn't matches" }}</li>
+    {% endfor %}
+    </ul>
+{% endif %}</div>
 {% endblock %}
 

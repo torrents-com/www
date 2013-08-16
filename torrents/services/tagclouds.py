@@ -47,7 +47,7 @@ class TagClouds:
 
     def _get_searches(self, cloud_type, size, bins, cat_id=None):
         if cloud_type=="popular":
-            searches = self.c.get_popular_searches(size, cat_id)
+            searches = self.torrentsdb.get_popular_searches(size, cat_id)
         elif cloud_type=="recent":
             searches = self.torrentsdb.get_last_searches(size)
         bin_size = 1.0*len(searches)/bins

@@ -135,11 +135,11 @@ class TorrentsStore(object):
         ret = self.process_searches(searches["result"], limit, True) if searches and searches["ok"] else {}
         return ret
 
-    def get_blacklists(self):
+    def get_blacklists(self, force_refresh=False):
         # obtiene fecha de ultima actualizacion
         last_blacklist_update = cache.get(BLACKLIST_CACHE_NAME)
 
-        if not self.blacklists or self.last_blacklist_update != last_blacklist_update:
+        if not self.blacklists or self.last_blacklist_update != last_blacklist_update or force_refresh:
             self.blacklists = Blacklists({row["_id"]:row["entries"] for row in self.torrents_conn.torrents.blacklists.find()}, self.debug)
             self.torrents_conn.end_request()
             self.last_blacklist_update = last_blacklist_update

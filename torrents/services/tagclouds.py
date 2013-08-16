@@ -29,7 +29,7 @@ class TagClouds:
                 self.cache.set(TAG_CLOUDS_LAST_UPDATE, time()) # evita que otros empiecen a regenerar tambien
 
                 # fuerza refresco de palabras bloqueadas
-                self.get_blacklists(True)
+                self.torrentsdb.get_blacklists(True)
         
                 # regenera las nubes
                 for cloud_params in self.clouds_params:
@@ -46,7 +46,7 @@ class TagClouds:
 
     def _get_searches(self, cloud_type, size, bins, cat_id=None):
         if cloud_type=="popular":
-            searches = self.torrentsdb.get_popular_searches(size, cat_id)
+            searches = self.c.get_popular_searches(size, cat_id)
         elif cloud_type=="recent":
             searches = self.torrentsdb.get_last_searches(size)
         bin_size = 1.0*len(searches)/bins

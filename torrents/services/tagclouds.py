@@ -2,6 +2,7 @@
 from msgpack import dumps, loads
 from operator import itemgetter
 from time import time
+from foofind.utils import logging
 
 TAG_CLOUDS = "TAG_CLOUDS"
 TAG_CLOUDS_LAST_UPDATE = "TAG_CLOUDS_LAST_UPDATE"

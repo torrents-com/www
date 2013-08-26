@@ -13,6 +13,7 @@ from foofind.utils.fooprint import Fooprint
 from foofind.utils.seo import seoize_text
 from foofind.utils.splitter import SEPPER
 from foofind.services import *
+from foofind.services.search.search import WORD_SEARCH_MIN_LEN, NGRAM_CHARS
 from foofind.templates import number_size_format_filter
 from torrents.services import *
 from foofind.blueprints.files import download_search
@@ -141,7 +142,7 @@ def search_info():
     must_redirect = get_query_info()
     not_category = request.args.get("nc",None)
 
-    final_query = (g.clean_query+u" " if g.clean_query else u"")+(u"("+g.category.tag+")" if g.category.tag else u"")+(u" -("+not_category+")" if not_category else u"")
+    final_query = (g.clean_query+u" " if g.clean_query else u"")+(u"("+g.category.tag+")" if g.category and g.category.tag else u"")+(u" -("+not_category+")" if not_category else u"")
 
     order, show_order = get_order(SEARCH_ORDER)
     return jsonify(searchd.get_search_info(final_query, filters=None, order=order))
@@ -440,7 +441,7 @@ def process_search_results(s=None, query=None, category=None, not_category=None,
             canonical_query_parts = [part for part in canonical_query.split("_") if not ((not_category and part==u"-("+not_category+")")
                                                                                         or (category and part==u"("+category+")"))]
 
-            canonical_query = "_".join(canonical_query_parts) if any(len(part)>1 for part in canonical_query_parts) else ""
+            canonical_query = "_".join(canonical_query_parts) if any(len(part)>=WORD_SEARCH_MIN_LEN or part in NGRAM_CHARS for part in canonical_query_parts) else ""
 
         sure = stats["s"]
         if (not sure) or ("total_sure" in stats and not stats["total_sure"]):

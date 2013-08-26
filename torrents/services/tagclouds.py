@@ -2,6 +2,7 @@
 from msgpack import dumps, loads
 from operator import itemgetter
 from time import time
+from foofind.utils import logging
 
 TAG_CLOUDS = "TAG_CLOUDS"
 TAG_CLOUDS_LAST_UPDATE = "TAG_CLOUDS_LAST_UPDATE"
@@ -28,6 +29,9 @@ class TagClouds:
             if not self.clouds_caches or (time() - self.last_update) >= self.refresh_interval: # debe regenerar las nubes
                 self.cache.set(TAG_CLOUDS_LAST_UPDATE, time()) # evita que otros empiecen a regenerar tambien
 
+                # fuerza refresco de palabras bloqueadas
+                self.torrentsdb.get_blacklists(True)
+        
                 # regenera las nubes
                 for cloud_params in self.clouds_params:
                     self.clouds_caches[cloud_params[0]] = self._get_searches(*cloud_params[1:])

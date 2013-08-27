@@ -311,7 +311,8 @@ def download(file_id, file_name=""):
     prepared_phrase = blacklists.prepare_phrase(file_data['view']['nfn'])
     if prepared_phrase in blacklists["forbidden"] or (prepared_phrase in blacklists["misconduct"] and prepared_phrase in blacklists["underage"]):
         g.blacklisted_content = True
-        abort(410)
+        if not g.show_blacklisted_content:
+            abort(410)
 
     query = download_search(file_data, file_name, "torrent")
     related = single_search(query, category=None, title=("Related torrents",3,None), zone="File / Related", last_items=[], limit=30, max_limit=15, ignore_ids=[mid2hex(file_id)], show_order=None)
@@ -460,7 +461,7 @@ def process_search_results(s=None, query=None, category=None, not_category=None,
             g.blacklisted_content = True
 
     # si la canonical query es vacia, solo interesan resultados para busquedas con query nulo (rankings)
-    if not g.blacklisted_content and (canonical_query or not query):
+    if (g.show_blacklisted_content or not g.blacklisted_content) and (canonical_query or not query):
         if ids:
             files_dict={str(f["_id"]):prepare_data(f,text=query,ntts=ntts) for f in get_files(ids,s)}
             # ordena resultados y añade informacion de la busqueda

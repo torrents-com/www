@@ -3,6 +3,11 @@
     {%- if g.query!=search_info["canonical_query"] %}
         <link rel="canonical" href="{{url_for('files.search', query=search_info['canonical_query'])}}" />
     {%- endif %}
+    {%- if not results %}
+    <script>
+        _gaq.push(['_trackEvent', "No results", "{{g.clean_query}}"]);
+    </script>
+    {%- endif %}
 {%- endblock -%}
 
 {% block content %}

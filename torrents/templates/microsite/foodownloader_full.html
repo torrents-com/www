@@ -21,8 +21,6 @@
                 <script src="{{ ASSET_URL }}"></script>
             {%- endassets -%}
         {%- endblock -%}
-        {%- block head -%}
-        {%- endblock -%}
         <script type="text/javascript">
           var _gaq = _gaq || []; _gaq.push(['_setAccount', 'UA-38333996-1']); _gaq.push(['_setDomainName', 'torrents.com']);
           _gaq.push(['_setAllowLinker', true]); _gaq.push(['_trackPageview']);
@@ -33,6 +31,8 @@
             var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
           })();
         </script>
+        {%- block head -%}
+        {%- endblock -%}
     </head>
     {% set hidden_category = g.category and not g.category in g.categories[:5] -%}
     {% set hidden_categories_start = 5 if hidden_category else 6 -%}
@@ -131,7 +131,7 @@
                                 {%- endif -%}>{{_("foodownloader_download_source")|capitalize}} · {{properties["source_length"]|numbersizeformat}}</a>
                             </div>
                          {% endif %}
-                    
+
                         <h2>Overview</h2>
                         <p><b>Torrents Downloader</b> is a fast client for the <b>Torrent</b> P2P network.</p>
                         <p>Torrents Downloader is designed to be very easy to use, intuitive, and safe. You can pause, resume and find your downloads more easily than ever, check out some of its features:</p>
@@ -147,8 +147,8 @@
                         <p>We take security very seriously. <b>Torrents Downloader</b> uses the award winning libtorrent library, which will make your download experience a safe and secure one.</p>
                         <p>We strongly recomment you use an antivirus, you can download malware from untrusted sources.</p>
                     </div>
-                    
-                
+
+
                 {% endif %}
                 {% endblock %}
 

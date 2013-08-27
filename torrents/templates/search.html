@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 {%- block head -%}
-    {%- if g.query!=search_info["canonical_query"] %}
+    {%- if results and g.query!=search_info["canonical_query"] %}
         <link rel="canonical" href="{{url_for('files.search', query=search_info['canonical_query'])}}" />
     {%- endif %}
     {%- if not results %}

@@ -272,6 +272,8 @@ def init_g(app):
     g.section = "torrents"
 
     g.blacklists = torrentsdb.get_blacklists()
+    
+    g.show_blacklisted_content = app.config["SHOW_BLACKLISTED_CONTENT"]
 
     # informacion de categorias
     g.categories = app_categories = app.config["TORRENTS_CATEGORIES"]

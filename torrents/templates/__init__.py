@@ -46,7 +46,7 @@ def cycle_filter(alist):
     return alist[0]
 
 def blacklist_query(query, text=None, title=None):
-    if g.blacklists.prepare_phrase(query) in g.blacklists:
+    if len(query)==1 or g.blacklists.prepare_phrase(query) in g.blacklists:
         return Markup("<a>"+(text or query)+"</a>")
 
     return Markup("<a href='" + g.url_search_base.replace('___', query)+"' title='"+(title or text or query)+"'>"+(text or query)+"</a>")

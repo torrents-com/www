@@ -455,7 +455,7 @@ def process_search_results(s=None, query=None, category=None, not_category=None,
     if canonical_query:
         blacklists = g.blacklists
         prepared_phrase = blacklists.prepare_phrase(canonical_query.replace("_"," "))
-        if prepared_phrase in blacklists["forbidden"] or (prepared_phrase in blacklists["misconduct"] and prepared_phrase in blacklists["underage"]):
+        if prepared_phrase in blacklists["forbidden"] or prepared_phrase in blacklists["searchblocked"] or (prepared_phrase in blacklists["misconduct"] and prepared_phrase in blacklists["underage"]):
             g.blacklisted_content = True
 
     # si la canonical query es vacia, solo interesan resultados para busquedas con query nulo (rankings)

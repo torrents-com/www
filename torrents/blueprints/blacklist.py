@@ -54,4 +54,4 @@ class BlacklistForm(Form):
     action = HiddenField("Action")
     text = TextField("Word(s)", [Required("Required field.")])
     test = TextField("Word(s)")
-    category = SelectField("Category", choices=[('forbidden','Forbidden'),('underage','Underage'),('misconduct','Misconduct'),('spamsearch','Spam Search')])
+    category = SelectField("Category", choices=[('forbidden','Forbidden'),('underage','Underage'),('misconduct','Misconduct'),('spamsearch','Spam Search'),('searchblocked','Search Blocked')])

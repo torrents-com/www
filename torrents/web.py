@@ -4,6 +4,9 @@
 """
 import foofind.globals
 
+import foofind.services.search.search
+foofind.services.search.search.WORD_SEARCH_MIN_LEN = 1
+
 import os, os.path
 from foofind import defaults
 from collections import OrderedDict
@@ -272,7 +275,7 @@ def init_g(app):
     g.section = "torrents"
 
     g.blacklists = torrentsdb.get_blacklists()
-    
+
     g.show_blacklisted_content = app.config["SHOW_BLACKLISTED_CONTENT"]
 
     # informacion de categorias

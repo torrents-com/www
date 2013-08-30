@@ -3,6 +3,7 @@ import re
 from flask import current_app, url_for, g, Markup
 from foofind.templates import number_format_filter, number_size_format_filter, format_timedelta_filter, urlencode_filter, number_friendly_filter, pformat, numeric_filter, markdown_filter, seoize_filter
 from foofind.utils.htmlcompress import HTMLCompress
+from foofind.services.search.search import WORD_SEARCH_MIN_LEN, NGRAM_CHARS
 
 import foofind.templates
 def _(x): return x
@@ -46,7 +47,7 @@ def cycle_filter(alist):
     return alist[0]
 
 def blacklist_query(query, text=None, title=None):
-    if len(query)==1 or g.blacklists.prepare_phrase(query) in g.blacklists:
+    if (len(query)<WORD_SEARCH_MIN_LEN and query not in NGRAM_CHARS) or g.blacklists.prepare_phrase(query) in g.blacklists:
         return Markup("<a>"+(text or query)+"</a>")
 
     return Markup("<a href='" + g.url_search_base.replace('___', query)+"' title='"+(title or text or query)+"'>"+(text or query)+"</a>")

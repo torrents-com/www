@@ -11,7 +11,6 @@ from .files import get_rankings
 
 index = Fooprint('index', __name__)
 
-
 @index.route('/')
 def home():
     '''

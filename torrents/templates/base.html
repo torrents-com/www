@@ -20,8 +20,6 @@
                 <script src="{{ ASSET_URL }}"></script>
             {%- endassets -%}
         {%- endblock -%}
-        {%- block head -%}
-        {%- endblock -%}
         <script type="text/javascript">
             var _gaq = _gaq || []; _gaq.push(['_setAccount', 'UA-38333996-1']); _gaq.push(['_setDomainName', '{{ g.domain }}']);
             _gaq.push(['_setAllowLinker', true]); _gaq.push(['_trackPageview']);
@@ -45,10 +43,11 @@
             {% endif %}
 
             {% if g.blacklisted_content %}
-            _gaq.push(['_trackEvent', "Blacklisted", "Blacklisted"]);
+            _gaq.push(['_trackEvent', "Blacklisted", "{{g.blacklisted_content}}"]);
             {% endif %}
         </script>
-
+        {%- block head -%}
+        {%- endblock -%}
     </head>
     {% set hidden_category = g.category and not g.category in g.categories[:5] -%}
     {% set hidden_categories_start = 5 if hidden_category else 6 -%}

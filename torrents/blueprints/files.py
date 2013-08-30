@@ -309,9 +309,9 @@ def download(file_id, file_name=""):
     blacklists = g.blacklists
     prepared_phrase = blacklists.prepare_phrase(file_data['view']['nfn'])
     if prepared_phrase in blacklists["forbidden"] or (prepared_phrase in blacklists["misconduct"] and prepared_phrase in blacklists["underage"]):
-        g.blacklisted_content = True
+        g.blacklisted_content = "File"
         if not g.show_blacklisted_content:
-            abort(410)
+            abort(404)
 
     query = download_search(file_data, file_name, "torrent")
     related = single_search(query, category=None, title=("Related torrents",3,None), zone="File / Related", last_items=[], limit=30, max_limit=15, ignore_ids=[mid2hex(file_id)], show_order=None)
@@ -406,7 +406,7 @@ def get_last_items():
     return last_items
 
 def single_search(query, category=None, not_category=None, order=None, title=None, zone="", query_time=800, skip=None, last_items=[], limit=70, max_limit=50, ignore_ids=[], show_order=None):
-    if (query and len(query)>1) or category:
+    if (query and (len(query)>=WORD_SEARCH_MIN_LEN or query in NGRAM_CHARS)) or category:
         s = searchd.search((query+u" " if query else u"")+(u"("+category+")" if category else u"")+(u" -("+not_category+")" if not_category else u""), None, order=order, start=not skip, group=not skip, no_group=True)
 
         return process_search_results(s, query, category, not_category, zone=zone, title=title, last_items=last_items, skip=skip, limit=limit, max_limit=max_limit, ignore_ids=ignore_ids, show_order=show_order)
@@ -457,7 +457,7 @@ def process_search_results(s=None, query=None, category=None, not_category=None,
         blacklists = g.blacklists
         prepared_phrase = blacklists.prepare_phrase(canonical_query.replace("_"," "))
         if prepared_phrase in blacklists["forbidden"] or prepared_phrase in blacklists["searchblocked"] or (prepared_phrase in blacklists["misconduct"] and prepared_phrase in blacklists["underage"]):
-            g.blacklisted_content = True
+            g.blacklisted_content = "Search"
 
     # si la canonical query es vacia, solo interesan resultados para busquedas con query nulo (rankings)
     if (g.show_blacklisted_content or not g.blacklisted_content) and (canonical_query or not query):

@@ -19,7 +19,7 @@
             <li><span class="icon-{{ file['view']['icon'].tag}}"></span></li>
             <li><a title="{{file['view']['fn']}}" href='/filter{{ url_for("files.download", file_name=file["view"]["seo-fn"], file_id=file["view"]["url"])}}'>{{ file["view"]["fnh"] | safe }}</a></li>
             
-            <li></li>
+            <li><a href="/filters/d/{{file['file']['_id']}}"><span class="icon-trailer"></span></a></li>
             <li></li>
             <li></li>
             <li>{{ file['view']['query']}}</li>

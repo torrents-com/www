@@ -1,0 +1,32 @@
+<ul class="results">
+    <li>
+        <ul>
+            <li></li>
+            <li>Name</li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li>Query</li>
+            <li>Blocked</li>
+            <li>Seeds</li>
+            <li>Leechers</li>
+            
+        </ul>
+    </li>
+{% for file in files %}
+    <li class="{{ loop.cycle('odd', 'even') }}">
+        <ul>
+            <li><span class="icon-{{ file['view']['icon'].tag}}"></span></li>
+            <li><a title="{{file['view']['fn']}}" href='/filter{{ url_for("files.download", file_name=file["view"]["seo-fn"], file_id=file["view"]["url"])}}'>{{ file["view"]["fnh"] | safe }}</a></li>
+            
+            <li></li>
+            <li></li>
+            <li></li>
+            <li>{{ file['view']['query']}}</li>
+            <li>{{ file['view']['blocked']}}</li>
+            <li>{{ file['view']['md'].get('seeds',0)|float|int}}</li>
+            <li>{{ file['view']['md'].get('leechs',0)|float|int}}</li>
+        </ul>
+    </li>
+{% endfor %}
+</ul>

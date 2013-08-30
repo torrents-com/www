@@ -69,7 +69,10 @@ COLUMN_ORDERS = {
     "s": ("r", "ok DESC, e DESC, fs DESC", "r"),
     "rs": ("if(r>0,1/r,-1)", "ok DESC, e DESC, fs DESC", "if(r>0,1/r,-1)"),
 }
-
+@filters.route('/filters/d/<file_id>')
+def revised(file_id):
+    revised_filtered(file_id)
+    return search()
 
 @filters.route('/filters/')
 @filters.route('/filters/<query>')
@@ -232,12 +235,22 @@ def multi_search(params, query_time=500, extra_wait_time=500):
     for s, query, category, not_category, zone, title, limit, max_limit, show_order in searches:
         yield process_search_results(s, query, category, not_category, zone=zone, title=title, limit=limit, max_limit=max_limit, show_order=show_order)
 
+
+def revised_filtered(mid):
+    conn_stats = lite.connect("/var/tmp/stats_filter.db")
+    cursor = conn_stats.cursor()
+    
+    cursor.execute('UPDATE stats SET revised = 1 where mid = "%s"'%mid)
+    
+    conn_stats.commit()
+    conn_stats.close()
+    
 def get_data_filtered():
     
     conn_stats = lite.connect("/var/tmp/stats_filter.db")
     cursor = conn_stats.cursor()
     
-    cursor.execute('SELECT * FROM stats ORDER BY date desc')
+    cursor.execute('SELECT * FROM stats WHERE revised = 0 ORDER BY date desc')
     
     rs = cursor.fetchall()
     

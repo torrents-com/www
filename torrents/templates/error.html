@@ -1,4 +1,9 @@
 {% extends "base.html" %}
+{%- block head -%}
+    <script>
+        _gaq.push(['_trackEvent', "Error", "{{code}}"]);
+    </script>
+{%- endblock -%}
 {% block content %}
 <h1><img class="error" src="{{g.static_prefix}}/error.png" alt="Warning"/> {{title}} - ERROR {{code}}</h1>
 <p>Upps! {{description}}</p>

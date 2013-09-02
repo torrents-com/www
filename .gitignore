@@ -18,6 +18,9 @@ torrents/static/gen*
 runserver
 torrents/news
 sitemap/output
+torrents/static/css
+torrents/static/js
+torrents/templates/admin
 
 # C extensions
 *.so

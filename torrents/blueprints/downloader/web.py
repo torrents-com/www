@@ -16,7 +16,6 @@ web = MultidomainBlueprint('web', __name__, domain="torrents.ms")
 @web.route('/')
 @cache.cached(60)
 def home():
-    g.section="downloader"
     g.category=False
     downloader_files = current_app.config["DOWNLOADER_FILES"]
 
@@ -56,7 +55,6 @@ def home():
 @web.route("/success")
 @cache.cached()
 def foodownloader_success():
-    g.section="downloader"
     return render_template(
         "microsite/foodownloader.html",
         mode = "success",

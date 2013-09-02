@@ -256,6 +256,7 @@ def init_g(app):
             g.domain = domain
             break
 
+    g.section = "torrents" if g.domain=="torrents.fm" else "downloader" if g.domain=="torrents.ms" else "news"
     g.domain_capitalized = g.domain.capitalize()
 
     if "RUM_CODES" in app.config:
@@ -272,8 +273,6 @@ def init_g(app):
 
     g.keywords = {'torrents', 'download', 'files', 'search', 'audio', 'video', 'image', 'document', 'software'}
 
-    # seccion por defecto
-    g.section = "torrents"
 
     g.blacklists = torrentsdb.get_blacklists()
 

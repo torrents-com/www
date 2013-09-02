@@ -5,7 +5,7 @@ DOMAIN_SUFFIX = ""
 _MultidomainBlueprint__rule_domains = {}
 _MultidomainBlueprint__endpoint_domain = {}
 
-DOMAIN_REPLACER=re.compile(r"^(https?://)[^\/?\:]*(.*)$")
+DOMAIN_REPLACER=re.compile(r"^(https?://)[^\/?]*(.*)$")
 
 def multidomain_view(*args, **kwargs):
     domains = _MultidomainBlueprint__rule_domains[request.url_rule.rule]

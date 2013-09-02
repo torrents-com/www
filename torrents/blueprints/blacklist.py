@@ -15,7 +15,6 @@ def parse_entry(text):
 
 @blacklist.route('/blacklist')
 def home():
-    g.section = None
     form = BlacklistForm(request.args)
     blacklists = None
     if form.action.data=="add" and form.validate():

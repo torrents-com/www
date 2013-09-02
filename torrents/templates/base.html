@@ -63,7 +63,7 @@
             <div id="header">
                 <div class="container_24">
                     <div class="grid_7">
-                        <a class="logo" href="/"><img src="{{g.static_prefix}}/torrents.png" alt="Torrents" title="Torrents" /><img src="{{g.static_prefix}}/dot-com.png" alt=".com"/></a>
+                        <a class="logo" href="/"><img src="{{g.static_prefix}}/torrents.png" alt="Torrents" title="Torrents" /><img src="{{g.static_prefix}}/dot-{{g.domain.split('.')[-1]}}.png" alt=".com"/></a>
                     </div>
                     <div id="main-nav" class="grid_17">
                         <a href="{{ url_for('news.home') }}"{{' class=active' if g.section=="news" }}><div class="arrow"></div>News</a>

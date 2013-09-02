@@ -3,6 +3,7 @@
     Módulo principal de la aplicación Web
 """
 import foofind.globals
+from torrents import multidomain
 
 import foofind.services.search.search
 foofind.services.search.search.WORD_SEARCH_MIN_LEN = 1

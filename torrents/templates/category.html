@@ -16,7 +16,7 @@
 
 <div class="title big_icon {{g.category.url}}">
 <span></span><div>
-<a href='{{url_for("index.home")}}'>All</a>&nbsp;&nbsp;&gt;&nbsp;&nbsp;
+<a href='{{url_for("files.home")}}'>All</a>&nbsp;&nbsp;&gt;&nbsp;&nbsp;
 {%- if g.query %}<a href='{{url_for("files.category", category=g.category.url)}}'>{{g.category.title}}</a>&nbsp;&nbsp;&gt;&nbsp;&nbsp;{{g.query}}
 <h1 class="category">{{g.query}} {{g.category.title|singular}} torrents</h1>
 {%- else %}

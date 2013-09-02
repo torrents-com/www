@@ -9,21 +9,21 @@ from urlparse import urlparse, parse_qs
 from heapq import heapify, heappop
 
 from foofind.utils import url2mid, u, logging, mid2hex, bin2hex
-from foofind.utils.fooprint import Fooprint
 from foofind.utils.seo import seoize_text
 from foofind.utils.splitter import SEPPER
 from foofind.services import *
 from foofind.services.search.search import WORD_SEARCH_MIN_LEN, NGRAM_CHARS
 from foofind.templates import number_size_format_filter
-from torrents.services import *
 from foofind.blueprints.files import download_search
 from foofind.blueprints.files.helpers import *
 from foofind.blueprints.files.fill_data import secure_fill_data, get_file_metadata
+from torrents.services import *
+from torrents.multidomain import MultidomainBlueprint
 from torrents.templates import clean_query, singular_filter
 from torrents import Category
 from unicodedata import normalize
 
-files = Fooprint('files', __name__)
+files = MultidomainBlueprint('files', __name__, domain="torrents.fm")
 
 referrer_parser = re.compile("^(?:.*\://.+/.+/([^\?]+))|(?:.*\?(?:.*\&)?q=([^\&]+))", re.UNICODE)
 
@@ -135,6 +135,48 @@ def get_query_info(query=None, category=None):
             g.category = g.categories_by_url[category]
 
     return redirect
+
+@files.route('/')
+def home():
+    '''
+    Renderiza la portada.
+    '''
+    g.page_description = "A free torrent search engine providing download results for movies, software and other torrent files."
+    g.keywords.clear()
+    g.keywords.update(["torrents", "search engine", "free download", "music", "online", "movie", "games", "TV", "music", "Anime", "Books", "Adult", "Porn", "Spoken word", "Software", "Mobile", "Pictures"])
+
+    pop_searches = tag_clouds["home"]
+    rankings, featured = get_rankings()
+
+    return render_template('index.html', rankings = rankings, pop_searches = pop_searches, featured=featured)
+
+@files.route('/popular_searches')
+def popular_searches():
+    '''
+    Renderiza la página de búsquedas populares.
+    '''
+    g.category=False
+    g.keywords.clear()
+    g.keywords.update(["popular torrent", "free movie", "full download", "search engine", "largest"])
+    g.page_description = "Torrents.com is a free torrent search engine that offers users fast, simple, easy access to every torrent in one place."
+    g.title+=" | Popular searches"
+    g.h1 = "See up to the minute results for most popular torrent searches ranging from movies to music."
+    pop_searches = tag_clouds["popular_searches"]
+    return render_template('searches.html', subtitle="Popular searches", searches = dict(pop_searches))
+
+@files.route('/recent_searches')
+def recent_searches():
+    '''
+    Renderiza la página de búsquedas populares.
+    '''
+    g.category=False
+    g.keywords.clear()
+    g.keywords.update(["recent torrent", "free movie", "full download", "search engine", "largest"])
+    g.page_description = "Torrents.com is a free torrent search engine that offers users fast, simple, easy access to every torrent in one place."
+    g.title+=" | Recent searches"
+    g.h1 = "See up to the minute results for most recent torrent searches ranging from movies to music."
+    recent_searches = tag_clouds["recent_searches"]
+    return render_template('searches.html', subtitle="Recent searches", searches = dict(recent_searches))
 
 @files.route('/search_info')
 def search_info():

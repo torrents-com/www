@@ -4,6 +4,7 @@ from flask import current_app, url_for, g, Markup
 from foofind.templates import number_format_filter, number_size_format_filter, format_timedelta_filter, urlencode_filter, number_friendly_filter, pformat, numeric_filter, markdown_filter, seoize_filter
 from foofind.utils.htmlcompress import HTMLCompress
 from foofind.services.search.search import WORD_SEARCH_MIN_LEN, NGRAM_CHARS
+from torrents.multidomain import url_for
 
 import foofind.templates
 def _(x): return x
@@ -26,6 +27,8 @@ def register_filters(app):
     app.jinja_env.filters['blacklist_query'] = blacklist_query
     app.jinja_env.filters['singular'] = singular_filter
     app.jinja_env.filters['cycle'] = cycle_filter
+    app.jinja_env.globals['url_for'] = url_for
+
     app.jinja_env.add_extension(HTMLCompress)
 
 whitespaces = re.compile(r'[\s\/]+')

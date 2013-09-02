@@ -66,9 +66,9 @@
                         <a class="logo" href="/"><img src="{{g.static_prefix}}/torrents.png" alt="Torrents" title="Torrents" /><img src="{{g.static_prefix}}/dot-com.png" alt=".com"/></a>
                     </div>
                     <div id="main-nav" class="grid_17">
-                        <a href="/news"{{' class=active' if g.section=="news" }}><div class="arrow"></div>News</a>
-                        <a href="/downloader"{{' class=active' if g.section=="downloader" }}><div class="arrow"></div>Downloader</a>
-                        <a href="/"{{' class=active' if g.section=="torrents" }}><div class="arrow"></div>Torrents</a>
+                        <a href="{{ url_for('news.home') }}"{{' class=active' if g.section=="news" }}><div class="arrow"></div>News</a>
+                        <a href="{{ url_for('web.home') }}"{{' class=active' if g.section=="downloader" }}><div class="arrow"></div>Downloader</a>
+                        <a href="{{ url_for('files.home') }}"{{' class=active' if g.section=="torrents" }}><div class="arrow"></div>Torrents</a>
                     </div>
                 </div>
                 <div id="search-banner">
@@ -80,7 +80,7 @@
                             <div class="grid_6 omega"><button type="submit">Search files&nbsp;&nbsp;&nbsp;<span class="icon-search"></span></button></div>
                         </form>
                         <ul class="grid_24">
-                            <li{{ ' class=active' if g.category==None and g.section=="torrents" }}><a href="{{ url_for('files.search', query=g.clean_query ) if g.category and g.clean_query else url_for('index.home')}}"><div class="arrow"></div>all torrents</a></li>
+                            <li{{ ' class=active' if g.category==None and g.section=="torrents" }}><a href="{{ url_for('files.search', query=g.clean_query ) if g.category and g.clean_query else url_for('files.home')}}"><div class="arrow"></div>all torrents</a></li>
                             {% for category in g.categories %}
                             <li{{' class=active' if g.category == category and g.section=="torrents" }}><a href="{{ url_for('files.category', category=category.url, query=None if g.category == category else g.clean_query )}}"><div class="arrow"></div>{{category.title|lower}}</a></li>
                             {% endfor %}
@@ -115,8 +115,8 @@
                             <li><a href="http://{{ domain }}">torrents<img src="{{g.static_prefix}}/{{domain|replace('torrents.','dot-')}}.png" alt=".com"/></a></li>
                         {%- endfor %}
                         </ul>
-                        <ul><li><a href="/about">About</a></li><li><a href="/contact">Contact</a></li><li><a href="/legal">Terms &amp; Privacy</a></li><li><a href="/copyright">Copyright</a></li></ul>
-                        <ul><li><a href="/recent">Recent</a></li><li><a href="/recent_searches">Recent searches</a></li><li><a href="/popular">Popular</a></li><li><a href="/popular_searches">Popular searches</a></li></ul>
+                        <ul><li><a href="{{ url_for('index.about') }}">About</a></li><li><a href="{{ url_for('index.contact') }}">Contact</a></li><li><a href="{{ url_for('index.legal') }}">Terms &amp; Privacy</a></li><li><a href="{{ url_for('files.copyright') }}">Copyright</a></li></ul>
+                        <ul><li><a href="{{ url_for('files.recent') }}">Recent</a></li><li><a href="{{ url_for('files.recent_searches') }}">Recent searches</a></li><li><a href="{{ url_for('files.popular') }}">Popular</a></li><li><a href="{{ url_for('files.popular_searches') }}">Popular searches</a></li></ul>
                     </div>
                 </div>
             </div>

@@ -2,10 +2,11 @@
 
 import os.path
 from flask import render_template, current_app, g, send_from_directory, abort
+from torrents.multidomain import MultidomainBlueprint
 from foofind.utils.fooprint import Fooprint
 from foofind.services import *
 
-news = Fooprint('news', __name__)
+news = MultidomainBlueprint('news', __name__, domain="torrents.com")
 
 @cache.memoize(timeout=60*60)
 def load_html_parts(filename):
@@ -33,9 +34,9 @@ def load_html_parts(filename):
 
     return parts
 
-@news.route('/news')
+@news.route('/')
 @news.route('/news/<path:path>')
-def main(path=""):
+def home(path=""):
     g.section = "news"
     g.override_header = True
     path_parts = load_html_parts(path)

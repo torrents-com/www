@@ -7,14 +7,15 @@ from foofind.services.extensions import cache
 
 from flask import Blueprint, render_template, g, current_app, request, send_file
 from flask.ext.babelex import gettext as _
+from torrents.multidomain import MultidomainBlueprint
 
 from foofind.utils.downloader import get_file_metadata
 
-web = Blueprint("web", __name__)
+web = MultidomainBlueprint('web', __name__, domain="torrents.ms")
 
-@web.route('/downloader')
+@web.route('/')
 @cache.cached(60)
-def index():
+def home():
     g.section="downloader"
     g.category=False
     downloader_files = current_app.config["DOWNLOADER_FILES"]

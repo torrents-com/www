@@ -10,7 +10,6 @@ DOMAIN_REPLACER=re.compile(r"^(https?://)[^\/?\:]*(.*)$")
 def multidomain_view(*args, **kwargs):
     domains = _MultidomainBlueprint__rule_domains[request.url_rule.rule]
     view_func = domains.get(g.domain, None)
-    print view_func, domains, request.url_rule.rule, g.domain
     if view_func:
         return view_func(*args, **kwargs)
     else:
@@ -18,7 +17,6 @@ def multidomain_view(*args, **kwargs):
 
 def url_for(endpoint, **values):
     domain = _MultidomainBlueprint__endpoint_domain.get(endpoint, None)
-    print domain, endpoint, repr(values)
     if domain and domain != g.domain:
         values["_external"]=False # Remove external parameter for flask
         return "http://"+ domain + DOMAIN_SUFFIX + flask_url_for(endpoint, **values)

@@ -632,9 +632,9 @@ def torrents_data(data, details=False):
 
         if long_desc and short_desc!=desc:
             if len(desc)>400:
-                data["view"]["md"]["long_desc"] = URL_DETECTOR.sub(r'<a rel="nofollow" href="\1">\1</a>', desc)
+                data["view"]["md"]["long_desc"] = desc
             else:
-                data["view"]["md"]["description"] = URL_DETECTOR.sub(r'<a rel="nofollow" href="\1">\1</a>', desc)
+                data["view"]["md"]["description"] = desc
 
     # preview
     if "torrent:thumbnail" in data["file"]["md"]:

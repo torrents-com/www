@@ -73,6 +73,7 @@ PIXEL = b64decode("R0lGODlhAQABAPAAAAAAAAAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw=="
 @files.route("/res/pixel.gif")
 @nocache
 def pixel():
+    g.must_cache = 0
     try:
         if not g.search_bot:
             parts = urllib2.unquote(request.referrer).decode("utf-8").split("?")[0].split("/")
@@ -81,11 +82,11 @@ def pixel():
             if g.query and g.safe_query:
                 # no registra busquedas muy largas
                 if len(g.safe_query)>=current_app.config["MAX_LENGTH_SAVE"]:
-                    return
+                    return PIXEL
 
                 # no registra busquedas con palabras no permitidas
                 if g.blacklists.prepare_phrase(g.safe_query) in g.blacklists:
-                    return
+                    return PIXEL
 
                 # si toca registrar y hay resultados, registra busqueda para nubes de tags
                 ip = request.headers.getlist("X-Forwarded-For")[0] if request.headers.getlist("X-Forwarded-For") else request.remote_addr
@@ -93,7 +94,6 @@ def pixel():
     except BaseException as e:
         logging.warn("Error registering search.")
 
-    g.must_cache = 0
     return PIXEL
 
 def get_featured(results_shown=100, headers=1):

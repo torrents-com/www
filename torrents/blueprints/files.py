@@ -75,7 +75,7 @@ PIXEL = b64decode("R0lGODlhAQABAPAAAAAAAAAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw=="
 def pixel():
     try:
         if not g.search_bot:
-            parts = urllib2.unquote(request.referrer).decode("utf-8").split("/")
+            parts = urllib2.unquote(request.referrer).decode("utf-8").split("?")[0].split("/")
             get_query_info(parts[-1], parts[-2] if parts[-2]!="search" else None, check_qs=False)
 
             if g.query and g.safe_query:

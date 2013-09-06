@@ -1,14 +1,14 @@
 # -*- coding: utf-8 -*-
 
-import datetime, time, itertools, re, math, urllib, hashlib
+import datetime, time, itertools, re, math, urllib2, hashlib
 from flask import flash, request, render_template, redirect, url_for, g, current_app, abort, escape, jsonify
 from struct import pack, unpack
-from base64 import urlsafe_b64encode, urlsafe_b64decode
+from base64 import b64decode, urlsafe_b64encode, urlsafe_b64decode
 from urlparse import urlparse, parse_qs
 
 from heapq import heapify, heappop
 
-from foofind.utils import url2mid, u, logging, mid2hex, bin2hex
+from foofind.utils import url2mid, u, logging, mid2hex, bin2hex, nocache
 from foofind.utils.fooprint import Fooprint
 from foofind.utils.seo import seoize_text
 from foofind.utils.splitter import SEPPER
@@ -69,42 +69,33 @@ def get_skip(x=None):
     except:
         return 0
 
-def register_search(query, category, must_register, has_results=None, canonical_query=None):
+PIXEL = b64decode("R0lGODlhAQABAPAAAAAAAAAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==")
+@files.route("/res/pixel.gif")
+@nocache
+def pixel():
+    try:
+        if not g.search_bot:
+            parts = urllib2.unquote(request.referrer).decode("utf-8").split("/")
+            get_query_info(parts[-1], parts[-2] if parts[-2]!="search" else None, check_qs=False)
 
-    safe_query = query.replace(" ","_")
+            if g.query and g.safe_query:
+                # no registra busquedas muy largas
+                if len(g.safe_query)>=current_app.config["MAX_LENGTH_SAVE"]:
+                    return
 
-    # no registra busquedas muy largas
-    if len(safe_query)>=current_app.config["MAX_LENGTH_SAVE"]:
-        return
+                # no registra busquedas con palabras no permitidas
+                print g.safe_query
+                if blacklists.prepare_phrase(g.safe_query) in blacklists:
+                    return
 
-    # no registra busquedas con palabras no permitidas
-    if g.blacklists.prepare_phrase(safe_query) in g.blacklists:
-        return
+                # si toca registrar y hay resultados, registra busqueda para nubes de tags
+                ip = request.headers.getlist("X-Forwarded-For")[0] if request.headers.getlist("X-Forwarded-For") else request.remote_addr
+                torrentsdb.save_search(g.query, hashlib.md5((g.safe_query+"_"+ip).encode("utf-8")).digest(), g.category.cat_id if g.category else 0)
+    except BaseException as e:
+        logging.warn("Error registering search.")
 
-    # conjunto de palabras
-    words = frozenset(word[:-1] if word[-1]=="s" else word for word in safe_query.lower().split("_") if word)
-
-    # si no sabe si hay resultados, mira si se ha guardado anteriormente
-    if has_results is None:
-        canonical_query = cache.get("TS-"+safe_query)
-        has_results = bool(canonical_query)
-    else: # si sabe que hay resultados, lo guarda para próximos usos
-        cache.set("TS-"+safe_query, canonical_query if has_results else False)
-
-    # si no sabe si hay resultados, lo registrará la próxima vez
-    if must_register and not has_results:
-        cache.set("TNS-"+safe_query, True)
-
-    # si no toca registrar, mira si no hay pendiente hacerlo
-    if not must_register:
-        if cache.get("TNS-"+safe_query):
-            cache.delete("TNS-"+safe_query)
-            must_register = True
-
-    # si toca registrar y hay resultados, registra busqueda para nubes de tags
-    if must_register and has_results and canonical_query:
-        ip = request.headers.getlist("X-Forwarded-For")[0] if request.headers.getlist("X-Forwarded-For") else request.remote_addr
-        torrentsdb.save_search(query, hashlib.md5((canonical_query+"_"+ip).encode("utf-8")).digest(), category.cat_id if category else 0)
+    g.must_cache = 0
+    return PIXEL
 
 def get_featured(results_shown=100, headers=1):
     feat = g.featured[:]
@@ -114,14 +105,14 @@ def get_featured(results_shown=100, headers=1):
     count = min(len(feat), int(math.ceil((results_shown)/7.)))
     return render_template('featured.html', files=[heappop(feat) for i in xrange(count)])
 
-def get_query_info(query=None, category=None):
+def get_query_info(query=None, category=None, check_qs=True):
     redirect = False
-    if not query:
+    if not query and check_qs:
         query = request.args.get("q",None)
         if query:
             redirect = True
 
-    if not category:
+    if not category and check_qs:
         category = request.args.get("c",None)
         if category:
             redirect = True
@@ -161,8 +152,6 @@ def search(query=None):
         return redirect(url_for("index.home"))
 
     if must_redirect:
-        register_search(g.query, g.category, not search_bot)
-
         if g.category:
             return redirect(url_for("files.category", category=g.category.url, query=g.clean_query))
         else:
@@ -172,7 +161,7 @@ def search(query=None):
 
     skip = get_skip()
 
-    results, search_info = single_search(g.clean_query, None, zone="Search", order=order, title=("%s torrents"%escape(g.query), 2, None), last_items=get_last_items(), skip=skip, show_order=show_order or True)
+    results, search_info = single_search(g.query, None, zone="Search", order=order, title=("%s torrents"%escape(g.query), 2, None), last_items=get_last_items(), skip=skip, show_order=show_order or True)
 
     if search_info['count'] == 0:
         _query = normalize('NFC', g.query)
@@ -189,7 +178,7 @@ def search(query=None):
     if search_bot:
         searchd.log_bot_event(search_bot, (search_info["total_found"]>0 or search_info["sure"]))
     else:
-        register_search(g.query, g.category, False, bool(results), search_info["canonical_query"])
+        g.track = bool(results)
 
     return render_template('search.html', results=results, search_info=search_info, show_order=show_order, featured=get_featured(search_info["count"]))
 
@@ -217,13 +206,13 @@ def category(category, query=None):
         order, show_order = get_order(CATEGORY_ORDER)
     g.title+=" | " + page_title
 
-    results, search_info = single_search(g.clean_query, g.category.tag, order=order, zone=g.category.url, title=(page_title, 2, g.category.tag), last_items=get_last_items(), skip=get_skip(), show_order=show_order or True)
+    results, search_info = single_search(g.query, g.category.tag, order=order, zone=g.category.url, title=(page_title, 2, g.category.tag), last_items=get_last_items(), skip=get_skip(), show_order=show_order or True)
 
     if g.query:
         if g.search_bot:
             searchd.log_bot_event(g.search_bot, (search_info["total_found"]>0 or search_info["sure"]))
         else:
-            register_search(g.query, g.category, False, bool(results), search_info["canonical_query"])
+            g.track = bool(results)
 
     return render_template('category.html', results=results, search_info=search_info, show_order=show_order, featured=get_featured(search_info["count"]), pop_searches=pop_searches)
 
@@ -258,7 +247,7 @@ def download(file_id, file_name=""):
             if posibles_queries:
                 query = posibles_queries.group(1) or posibles_queries.group(2) or ""
                 if query:
-                    get_query_info(u(urllib.unquote_plus(query).decode("utf-8")))
+                    get_query_info(u(urllib2.unquote_plus(query).decode("utf-8")))
         except:
             pass
 

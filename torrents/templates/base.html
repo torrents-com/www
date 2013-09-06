@@ -21,6 +21,8 @@
             {%- endassets -%}
         {%- endblock -%}
         <script type="text/javascript">
+            {%-if g.track%}$('<img src="{{url_for("files.pixel")}}"/>');{%-endif%}
+
             var _gaq = _gaq || []; _gaq.push(['_setAccount', 'UA-38333996-1']); _gaq.push(['_setDomainName', '{{ g.domain }}']);
             _gaq.push(['_setAllowLinker', true]); _gaq.push(['_trackPageview']);
 

@@ -84,7 +84,7 @@ def pixel():
                     return
 
                 # no registra busquedas con palabras no permitidas
-                if blacklists.prepare_phrase(g.safe_query) in blacklists:
+                if g.blacklists.prepare_phrase(g.safe_query) in g.blacklists:
                     return
 
                 # si toca registrar y hay resultados, registra busqueda para nubes de tags
@@ -133,7 +133,7 @@ def search_info():
     must_redirect = get_query_info()
     not_category = request.args.get("nc",None)
 
-    final_query = (g.clean_query+u" " if g.clean_query else u"")+(u"("+g.category.tag+")" if g.category and g.category.tag else u"")+(u" -("+not_category+")" if not_category else u"")
+    final_query = (g.query+u" " if g.query else u"")+(u"("+g.category.tag+")" if g.category and g.category.tag else u"")+(u" -("+not_category+")" if not_category else u"")
 
     order, show_order = get_order(SEARCH_ORDER)
     return jsonify(searchd.get_search_info(final_query, filters=None, order=order))

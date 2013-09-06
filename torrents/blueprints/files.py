@@ -84,7 +84,6 @@ def pixel():
                     return
 
                 # no registra busquedas con palabras no permitidas
-                print g.safe_query
                 if blacklists.prepare_phrase(g.safe_query) in blacklists:
                     return
 
@@ -118,9 +117,9 @@ def get_query_info(query=None, category=None, check_qs=True):
             redirect = True
 
     if query:
-        cquery = clean_query(query)
-        g.clean_query = cquery.lower()
-        g.query = cquery.replace("_"," ")
+        g.clean_query = clean_query(query)
+        g.query = g.clean_query.replace("_"," ")
+        g.safe_query = seoize_text(query, " ").lower()
 
     if category:
         if category in g.categories_by_url:

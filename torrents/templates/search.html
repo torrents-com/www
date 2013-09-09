@@ -5,7 +5,7 @@
     {%- endif %}
     {%- if not results %}
     <script>
-        _gaq.push(['_trackEvent', "No results", "{{g.clean_query}}"]);
+    	_gaq.push(['_trackEvent', "No results", {{g.clean_query|tojson|safe}}]);
     </script>
     {%- endif %}
 {%- endblock -%}

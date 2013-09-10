@@ -5,8 +5,6 @@ from datetime import datetime
 from time import time
 from collections import defaultdict
 from foofind.services import feedbackdb
-from torrents.blacklists import Blacklists, prepare_phrase
-
 
 def levenshtein(a,b,threshold):
     "Calculates the Levenshtein distance between a and b."

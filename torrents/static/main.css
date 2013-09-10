@@ -836,13 +836,12 @@ form {
 
 /* NEWS ------------------------------------------ */
 
-.top-stories{width:94em;margin:0 auto;}
 .container{width:94em;margin:0 auto;overflow:hidden;float:none;}
 #sidebar{width:22em;margin:0 4em 0 0;float:left;}
 section#content{width:68em;margin:0 auto 2em;float:right;}
 article#content{width:94em;margin:4em auto 2em;float:none;}
 
-.top-stories{float:none;display:block;clear:both;overflow:hidden;margin:0 auto 4em;}
+.top-stories{width:94em;float:none;display:block;clear:both;overflow:hidden}
 .featured-news-item{width:30em;float:left;margin:0 2em 0 0;}
 .featured-news-item:last-child, .last-newsfeed-item{margin-right:0;}
 

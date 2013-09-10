@@ -34,7 +34,6 @@ def load_html_parts(filename):
                     block_content.append(line)
             else:
                 if line.startswith("<!--{ "):
-                    print line
                     open_block = line[6:-3]
 
     return parts
@@ -56,10 +55,6 @@ def home(path=""):
     if not path_parts:
         return abort(404)
 
-    if "top-stories" in path_parts:
-        path_parts["top_stories"] = path_parts["top-stories"]
-        del path_parts["top-stories"]
-    print path_parts.keys()
     return render_template('news.html', **path_parts)
 
 @news.route('/news/wp-content/<path:path>')

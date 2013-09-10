@@ -77,9 +77,9 @@ def revised(file_id):
 @filters.route('/filters/')
 @filters.route('/filters/<query>')
 def search(query=None):
-    
+
     order, show_order = get_order(SEARCH_ORDER)
-    
+
     skip = get_skip()
 
     results, search_info = single_search(g.clean_query, None, zone="Search", order=order, title=("%s torrents"%escape(g.query), 2, None), last_items=get_last_items(), skip=skip, show_order=show_order or True)
@@ -148,7 +148,6 @@ def download(file_id, file_name=""):
         abort(404)
 
     # no permite acceder ficheros que deberian ser bloqueados
-    blacklists = g.blacklists
     prepared_phrase = blacklists.prepare_phrase(file_data['view']['nfn'])
     if prepared_phrase in blacklists["forbidden"] or (prepared_phrase in blacklists["misconduct"] and prepared_phrase in blacklists["underage"]):
         g.blacklisted_content = True
@@ -239,21 +238,21 @@ def multi_search(params, query_time=500, extra_wait_time=500):
 def revised_filtered(mid):
     conn_stats = lite.connect("/var/tmp/stats_filter.db")
     cursor = conn_stats.cursor()
-    
+
     cursor.execute('UPDATE stats SET revised = 1 where mid = "%s"'%mid)
-    
+
     conn_stats.commit()
     conn_stats.close()
-    
+
 def get_data_filtered():
-    
+
     conn_stats = lite.connect("/var/tmp/stats_filter.db")
     cursor = conn_stats.cursor()
-    
+
     cursor.execute('SELECT * FROM stats WHERE revised = 0 ORDER BY date desc')
-    
+
     rs = cursor.fetchall()
-    
+
     data = []
     last_days = 10
     last_date = None
@@ -265,7 +264,7 @@ def get_data_filtered():
         data.append(item)
 
     conn_stats.close()
-    
+
     return data
 
 def process_search_results(s=None, query=None, category=None, not_category=None, title=None, zone="", last_items=[], skip=None, limit=70, max_limit=50, ignore_ids=[], show_order=True):
@@ -276,7 +275,7 @@ def process_search_results(s=None, query=None, category=None, not_category=None,
     must_cache = True
     if not title:
         title = (None, 2, False)
-    
+
     if s:
         ids = [result for result in ((bin2hex(fileid), server, sphinxid, weight, sg) for (fileid, server, sphinxid, weight, sg) in s.get_results((3.0, 0.1), last_items=last_items, skip=skip*100 if skip else None, min_results=limit, max_results=limit, extra_browse=limit, weight_processor=weight_processor, tree_visitor=tree_visitor)) if result[0] not in ignore_ids]
 
@@ -299,21 +298,20 @@ def process_search_results(s=None, query=None, category=None, not_category=None,
     else:
         sure = True
         canonical_query = ""
-        
+
     #~ ids= [("2a6a52f7ad943af97f57ee79","1",0,0,0),("fd83615ca1e57647491b3744","1",0,0,0)]
     #~ ids= ["2a6a52f7ad943af97f57ee79", "fd83615ca1e57647491b3744"]
     data_filtered = get_data_filtered()
     ids = [ item[0] for item in data_filtered ]
-    
-    
-    
+
+
+
     filtered = { item[0]:{ "query" : item[1], "blocked": item[2] } for item in data_filtered }
     stats = {"cs" : 133}
     ntts = {}
-    
+
     # no realiza busquedas bloqueadas
     if canonical_query:
-        blacklists = g.blacklists
         prepared_phrase = blacklists.prepare_phrase(canonical_query.replace("_"," "))
         if prepared_phrase in blacklists["forbidden"] or prepared_phrase in blacklists["searchblocked"] or (prepared_phrase in blacklists["misconduct"] and prepared_phrase in blacklists["underage"]):
             g.blacklisted_content = True
@@ -322,8 +320,8 @@ def process_search_results(s=None, query=None, category=None, not_category=None,
     if (g.show_blacklisted_content or not g.blacklisted_content) and (canonical_query or not query):
         if ids:
             files_dict={str(f["_id"]):prepare_data(f,text=query,ntts=ntts) for f in filesdb.get_files(ids,s,1)}
-            
-            
+
+
             # ordena resultados y añade informacion de la busqueda
             position = 0
             for search_result in ids:
@@ -333,8 +331,8 @@ def process_search_results(s=None, query=None, category=None, not_category=None,
                     afile["search"] = search_result
                     files.append(afile)
                     files_text.append(afile["view"]["nfn"])
-                    
-                    
+
+
                     afile["view"]['blocked'] = filtered[str(afile['file']['_id'])]['blocked']
                     afile["view"]['query'] = filtered[str(afile['file']['_id'])]['query']
 
@@ -345,7 +343,7 @@ def process_search_results(s=None, query=None, category=None, not_category=None,
                     g.featured.append((-featured_weight, position, afile))
 
                     position-=1
-                    
+
 
             results = render_template('filters_results.html', files=files, list_title=title[0] or query or category, title_level=title[1], title_class=title[2], zone=zone, show_order=show_order)
 

@@ -1,11 +1,7 @@
 {% extends "base.html" %}
-{% block head %}
+{% block cookies %}
 {% if mode == "success" %}
-<script type="text/javascript">
-    $(function(){
-        _gaq.push(['_trackEvent', "TD", "installed"]);
-    });
-</script>
+    _gaq.push(['_trackEvent', "TD", "installed"]);
 {% endif %}
 {% endblock %}
 

@@ -3,7 +3,21 @@
 {{ head | safe }}
 {% endblock %}
 {% block content %}
-<div style="float:right">{{ sidebar | safe }}</div>
+{%- if top_stories %}
+<!-- top_stories -->
+{{ top_stories | safe }}
+<!-- end_top_stories -->
+<div>Downloader!!</div>
+{%- elif news_top %}
+<!-- news_top -->
+{{ news_top | safe }}
+<!-- end_news_top -->
+<div>Downloader!!</div>
+{%- endif %}
+<!-- sidebar -->
+{{ sidebar | safe }}
+<!-- end_sidebar -->
+<!-- content -->
 {{ content | safe }}
-
+<!-- end_content -->
 {% endblock %}

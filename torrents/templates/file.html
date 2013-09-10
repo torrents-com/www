@@ -85,7 +85,7 @@
 {%- if "filepaths" in file_data['view']['md'] %}
 <article>
     <div id="files">
-        <h2><span>Torrent files</span></h2>
+        <h3>Torrent files</h3>
         {%- if 'torrent:partial_filepaths' in file_data['file']['md'] and file_data['file']['md']['torrent:partial_filepaths']: %}
             <span>(showing only first 100 files)</span>
         {%- endif %}
@@ -96,7 +96,7 @@
 
 <article>
     <div id="metadata" class="grid_18 alpha omega">
-        <h2>Torrent information</h2>
+        <h3>Torrent information</h3>
         {% set rowcycle = ['even', 'odd'] %}
         <ul>
             <li class="grid_18 alpha omega {{ rowcycle|cycle }}"><div class="grid_6 alpha">Name</div>
@@ -152,8 +152,10 @@
 {%- if "long_desc" in file_data['view']['md'] %}
 <article>
     <div id="long_desc" class="grid_18 alpha omega">
-        <h2>Torrent description</h2>
+        <h3>Torrent description</h3>
+        <p>
         {{ (file_data['view']['md']['long_desc']|string)[:100000].replace("\n","<br />") | safe }}
+        </p>
     </div>
 </article>
 {%- endif %}
@@ -161,7 +163,7 @@
 {%- if related_files[1] and related_files[1]["count"]>0%}
 <article>
     <div id="related" class="grid_18 alpha omega">
-        <h2>Related torrents</h2>
+        <h3>Related torrents</h3>
     {{ related_files[0]|safe}}
     </div>
 </article>

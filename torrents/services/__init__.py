@@ -3,9 +3,11 @@
     Servicios utilizados por la aplicación web de Torrents
 """
 from .torrentsstore import TorrentsStore
-from .tagclouds import TagClouds
+from .ip_ranges import IPRanges
+from .blacklists import Blacklists
 
-__all__=['torrentsdb', 'tag_clouds']
+__all__=['torrentsdb', 'spanish_ips', 'blacklists']
 
 torrentsdb = TorrentsStore()
-tag_clouds = TagClouds()
+spanish_ips = IPRanges()
+blacklists = Blacklists()

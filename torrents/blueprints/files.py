@@ -1,14 +1,14 @@
 # -*- coding: utf-8 -*-
 
-import datetime, time, itertools, re, math, urllib, hashlib
+import datetime, time, itertools, re, math, urllib2, hashlib
 from flask import flash, request, render_template, redirect, url_for, g, current_app, abort, escape, jsonify
 from struct import pack, unpack
-from base64 import urlsafe_b64encode, urlsafe_b64decode
+from base64 import b64decode, urlsafe_b64encode, urlsafe_b64decode
 from urlparse import urlparse, parse_qs
 
 from heapq import heapify, heappop
 
-from foofind.utils import url2mid, u, logging, mid2hex, bin2hex
+from foofind.utils import url2mid, u, logging, mid2hex, bin2hex, nocache
 from foofind.utils.seo import seoize_text
 from foofind.utils.splitter import SEPPER
 from foofind.services import *
@@ -68,6 +68,7 @@ def get_skip(x=None):
     except:
         return 0
 
+'''
 def register_search(query, category, must_register, has_results=None, canonical_query=None):
 
     safe_query = query.replace(" ","_")
@@ -77,7 +78,7 @@ def register_search(query, category, must_register, has_results=None, canonical_
         return
 
     # no registra busquedas con palabras no permitidas
-    if g.blacklists.prepare_phrase(safe_query) in g.blacklists:
+    if blacklists.prepare_phrase(safe_query) in blacklists:
         return
 
     # conjunto de palabras
@@ -104,6 +105,30 @@ def register_search(query, category, must_register, has_results=None, canonical_
     if must_register and has_results and canonical_query:
         ip = request.headers.getlist("X-Forwarded-For")[0] if request.headers.getlist("X-Forwarded-For") else request.remote_addr
         torrentsdb.save_search(query, hashlib.md5((canonical_query+"_"+ip).encode("utf-8")).digest(), category.cat_id if category else 0)
+'''
+
+def get_query_info(query=None, category=None, check_qs=True):
+    redirect = False
+    if not query and check_qs:
+        query = request.args.get("q",None)
+        if query:
+            redirect = True
+
+    if not category and check_qs:
+        category = request.args.get("c",None)
+        if category:
+            redirect = True
+
+    if query:
+        g.clean_query = clean_query(query)
+        g.query = g.clean_query.replace("_"," ")
+        g.safe_query = seoize_text(query, " ").lower()
+
+    if category:
+        if category in g.categories_by_url:
+            g.category = g.categories_by_url[category]
+
+    return redirect
 
 def get_featured(results_shown=100, headers=1):
     feat = g.featured[:]
@@ -113,28 +138,53 @@ def get_featured(results_shown=100, headers=1):
     count = min(len(feat), int(math.ceil((results_shown)/7.)))
     return render_template('featured.html', files=[heappop(feat) for i in xrange(count)])
 
-def get_query_info(query=None, category=None):
-    redirect = False
-    if not query:
-        query = request.args.get("q",None)
-        if query:
-            redirect = True
+PIXEL = b64decode("R0lGODlhAQABAPAAAAAAAAAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==")
+@files.route("/res/pixel.gif")
+@nocache
+def pixel():
+    g.must_cache = 0
+    try:
+        if not g.search_bot:
+            parts = urllib2.unquote(request.referrer).decode("utf-8").split("?")[0].split("/")
+            get_query_info(parts[-1], parts[-2] if parts[-2]!="search" else None, check_qs=False)
 
-    if not category:
-        category = request.args.get("c",None)
-        if category:
-            redirect = True
+            if g.query and g.safe_query:
+                # no registra busquedas muy largas
+                if len(g.safe_query)>=current_app.config["MAX_LENGTH_SAVE"]:
+                    return PIXEL
 
-    if query:
-        cquery = clean_query(query)
-        g.clean_query = cquery.lower()
-        g.query = cquery.replace("_"," ")
+                # no registra busquedas con palabras no permitidas
+                print g.safe_query
+                if blacklists.prepare_phrase(g.safe_query) in blacklists:
+                    return PIXEL
 
-    if category:
-        if category in g.categories_by_url:
-            g.category = g.categories_by_url[category]
+                # si toca registrar y hay resultados, registra busqueda para nubes de tags
+                ip = request.headers.getlist("X-Forwarded-For")[0] if request.headers.getlist("X-Forwarded-For") else request.remote_addr
+                torrentsdb.save_search(g.query, hashlib.md5((g.safe_query+"_"+ip).encode("utf-8")).digest(), g.category.cat_id if g.category else 0)
+    except BaseException as e:
+        logging.warn("Error registering search.")
 
-    return redirect
+    return PIXEL
+
+CHAR_SIZE=12
+WORD_SIZE=10
+def create_cloud(data, width, lines):
+    ranking = data["final_ranking"]
+    ret=[]
+    acum = 0
+    limit = lines*width*.95
+    size = 20
+    last_weight = ranking[0][1]
+    for search, weight, trend in ranking:
+        size -= (10-math.ceil(weight/last_weight/0.1))/2
+
+        ret.append((search.lower(), search, size))
+
+        last_weight = weight
+        acum += len(search)*CHAR_SIZE+WORD_SIZE
+        if acum>limit or size<10:
+            break
+    return sorted(ret)
 
 @files.route('/')
 def home():
@@ -145,12 +195,17 @@ def home():
     g.keywords.clear()
     g.keywords.update(["torrents", "search engine", "free download", "music", "online", "movie", "games", "TV", "music", "Anime", "Books", "Adult", "Porn", "Spoken word", "Software", "Mobile", "Pictures"])
 
-    pop_searches = tag_clouds["home"]
     rankings, featured = get_rankings()
+    pop_searches = create_cloud(torrentsdb.get_ranking("daily"), 700, 4)
 
     return render_template('index.html', rankings = rankings, pop_searches = pop_searches, featured=featured)
 
+
 @files.route('/popular_searches')
+def old_popular_searches():
+    return redirect(301, url_for(".popular_searches"))
+
+@files.route('/popular/today')
 def popular_searches():
     '''
     Renderiza la página de búsquedas populares.
@@ -161,22 +216,25 @@ def popular_searches():
     g.page_description = "Torrents.com is a free torrent search engine that offers users fast, simple, easy access to every torrent in one place."
     g.title+=" | Popular searches"
     g.h1 = "See up to the minute results for most popular torrent searches ranging from movies to music."
-    pop_searches = tag_clouds["popular_searches"]
-    return render_template('searches.html', subtitle="Popular searches", searches = dict(pop_searches))
 
-@files.route('/recent_searches')
+    ranking = torrentsdb.get_ranking("daily")
+
+    return render_template('searches.html', subtitle="Popular searches for today", ranking = ranking)
+
+@files.route('/popular/now')
 def recent_searches():
     '''
     Renderiza la página de búsquedas populares.
     '''
     g.category=False
     g.keywords.clear()
-    g.keywords.update(["recent torrent", "free movie", "full download", "search engine", "largest"])
+    g.keywords.update(["popular torrent", "free movie", "full download", "search engine", "largest"])
     g.page_description = "Torrents.com is a free torrent search engine that offers users fast, simple, easy access to every torrent in one place."
-    g.title+=" | Recent searches"
-    g.h1 = "See up to the minute results for most recent torrent searches ranging from movies to music."
-    recent_searches = tag_clouds["recent_searches"]
-    return render_template('searches.html', subtitle="Recent searches", searches = dict(recent_searches))
+    g.title+=" | Popular searches"
+    g.h1 = "See up to the minute results for most popular torrent searches ranging from movies to music."
+
+    ranking = torrentsdb.get_ranking("recent")
+    return render_template('searches.html', subtitle="Popular searches at this moment", ranking = ranking)
 
 @files.route('/search_info')
 def search_info():
@@ -184,7 +242,7 @@ def search_info():
     must_redirect = get_query_info()
     not_category = request.args.get("nc",None)
 
-    final_query = (g.clean_query+u" " if g.clean_query else u"")+(u"("+g.category.tag+")" if g.category and g.category.tag else u"")+(u" -("+not_category+")" if not_category else u"")
+    final_query = (g.query+u" " if g.query else u"")+(u"("+g.category.tag+")" if g.category and g.category.tag else u"")+(u" -("+not_category+")" if not_category else u"")
 
     order, show_order = get_order(SEARCH_ORDER)
     return jsonify(searchd.get_search_info(final_query, filters=None, order=order))
@@ -202,8 +260,6 @@ def search(query=None):
         return redirect(url_for("index.home"))
 
     if must_redirect:
-        register_search(g.query, g.category, not search_bot)
-
         if g.category:
             return redirect(url_for("files.category", category=g.category.url, query=g.clean_query))
         else:
@@ -213,7 +269,7 @@ def search(query=None):
 
     skip = get_skip()
 
-    results, search_info = single_search(g.clean_query, None, zone="Search", order=order, title=("%s torrents"%escape(g.query), 2, None), last_items=get_last_items(), skip=skip, show_order=show_order or True)
+    results, search_info = single_search(g.query, None, zone="Search", order=order, title=("%s torrents"%escape(g.query), 2, None), last_items=get_last_items(), skip=skip, show_order=show_order or True)
 
     if search_info['count'] == 0:
         _query = normalize('NFC', g.query)
@@ -230,7 +286,8 @@ def search(query=None):
     if search_bot:
         searchd.log_bot_event(search_bot, (search_info["total_found"]>0 or search_info["sure"]))
     else:
-        register_search(g.query, g.category, False, bool(results), search_info["canonical_query"])
+        g.track = bool(results)
+        #register_search(g.query, g.category, False, bool(results), search_info["canonical_query"])
 
     return render_template('search.html', results=results, search_info=search_info, show_order=show_order, featured=get_featured(search_info["count"]))
 
@@ -253,18 +310,18 @@ def category(category, query=None):
         g.page_description = "%s %s torrents at %s, the free and fast torrent search engine."%(g.query.capitalize(), singular_filter(g.category.title).lower(), g.domain_capitalized)
         order, show_order = get_order(SEARCH_ORDER)
     else:
-        pop_searches = tag_clouds[g.category.url]
+        pop_searches = create_cloud(torrentsdb.get_ranking(category), 650, 2)
         g.page_description = "%s torrents at %s, the free and fast torrent search engine."%(singular_filter(g.category.title).capitalize(), g.domain_capitalized)
         order, show_order = get_order(CATEGORY_ORDER)
     g.title+=" | " + page_title
 
-    results, search_info = single_search(g.clean_query, g.category.tag, order=order, zone=g.category.url, title=(page_title, 2, g.category.tag), last_items=get_last_items(), skip=get_skip(), show_order=show_order or True)
+    results, search_info = single_search(g.query, g.category.tag, order=order, zone=g.category.url, title=(page_title, 2, g.category.tag), last_items=get_last_items(), skip=get_skip(), show_order=show_order or True)
 
     if g.query:
         if g.search_bot:
             searchd.log_bot_event(g.search_bot, (search_info["total_found"]>0 or search_info["sure"]))
         else:
-            register_search(g.query, g.category, False, bool(results), search_info["canonical_query"])
+            g.track = bool(results)
 
     return render_template('category.html', results=results, search_info=search_info, show_order=show_order, featured=get_featured(search_info["count"]), pop_searches=pop_searches)
 
@@ -299,7 +356,7 @@ def download(file_id, file_name=""):
             if posibles_queries:
                 query = posibles_queries.group(1) or posibles_queries.group(2) or ""
                 if query:
-                    get_query_info(u(urllib.unquote_plus(query).decode("utf-8")))
+                    get_query_info(u(urllib2.unquote_plus(query).decode("utf-8")))
         except:
             pass
 
@@ -348,7 +405,6 @@ def download(file_id, file_name=""):
         abort(404)
 
     # no permite acceder ficheros que deberian ser bloqueados
-    blacklists = g.blacklists
     prepared_phrase = blacklists.prepare_phrase(file_data['view']['nfn'])
     if prepared_phrase in blacklists["forbidden"] or (prepared_phrase in blacklists["misconduct"] and prepared_phrase in blacklists["underage"]):
         g.blacklisted_content = "File"
@@ -496,7 +552,6 @@ def process_search_results(s=None, query=None, category=None, not_category=None,
 
     # no realiza busquedas bloqueadas
     if canonical_query:
-        blacklists = g.blacklists
         prepared_phrase = blacklists.prepare_phrase(canonical_query.replace("_"," "))
         if prepared_phrase in blacklists["forbidden"] or prepared_phrase in blacklists["searchblocked"] or (prepared_phrase in blacklists["misconduct"] and prepared_phrase in blacklists["underage"]):
             g.blacklisted_content = "Search"
@@ -673,9 +728,9 @@ def torrents_data(data, details=False):
 
         if long_desc and short_desc!=desc:
             if len(desc)>400:
-                data["view"]["md"]["long_desc"] = URL_DETECTOR.sub(r'<a rel="nofollow" href="\1">\1</a>', desc)
+                data["view"]["md"]["long_desc"] = desc
             else:
-                data["view"]["md"]["description"] = URL_DETECTOR.sub(r'<a rel="nofollow" href="\1">\1</a>', desc)
+                data["view"]["md"]["description"] = desc
 
     # preview
     if "torrent:thumbnail" in data["file"]["md"]:

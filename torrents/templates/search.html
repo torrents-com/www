@@ -3,16 +3,15 @@
     {%- if results and g.query!=search_info["canonical_query"] %}
         <link rel="canonical" href="{{url_for('files.search', query=search_info['canonical_query'])}}" />
     {%- endif %}
+{%- endblock -%}
+{%- block cookies -%}
     {%- if not results %}
-    <script>
-        _gaq.push(['_trackEvent', "No results", "{{g.clean_query}}"]);
-    </script>
+    _gaq.push(['_trackEvent', "No results", {{g.clean_query|tojson|safe}}]);
     {%- endif %}
 {%- endblock -%}
 
 {% block content %}
-<div class="title">
-<span></span><div>
+<div class="title"><span></span><div>
 <a href='{{url_for("files.home")}}'>All</a>&nbsp;&nbsp;&gt;&nbsp;&nbsp;{{g.query}}
 <h1 class="category">{{g.query}} torrents</h1>
 </div></div>
@@ -27,7 +26,7 @@
     {%- endif %}
     {{ results |safe }}
     {%- if search_info["next"] %}
-    <a class="more_results" href="{{url_for('files.search', query=g.clean_query)}}?s={{search_info['next']}}{{'&o='+show_order if show_order}}">more torrents...</a>
+    <a class="more_results" href="{{url_for('files.search', query=g.query)}}?s={{search_info['next']}}{{'&o='+show_order if show_order}}">more torrents...</a>
     {%- endif %}
     </div>
 {%- else %}

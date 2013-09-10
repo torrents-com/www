@@ -116,10 +116,9 @@ def create_app(config=None, debug=False):
     register_filter(CssSlimmer)
 
     assets.register('css_torrents', Bundle('main.css', 'jquery.treeview.css', 'torrentsdownloader.css', filters='pyscss', output='gen/main.css', debug=False), '960_24_col.css', filters='css_slimmer', output='gen/torrent.css')
-    assets.register('js_torrents', Bundle('jquery.js', 'jquery.treeview.js', 'torrents.js', "jquery.colorbox-min.js", filters='rjsmin', output='gen/torrents.js'), )
+    assets.register('js_torrents', Bundle('jquery.js', 'jquery.treeview.js', 'torrents.js', "jquery.colorbox-min.js", "cookies.js", filters='rjsmin', output='gen/torrents.js'), )
 
-
-    # proteccion CSRF
+    # CSRF protection
     csrf.init_app(app)
 
     # Traducciones
@@ -144,13 +143,21 @@ def create_app(config=None, debug=False):
     entitiesdb.init_app(app)
     torrentsdb.init_app(app)
 
-    eventmanager.once(torrentsdb.get_blacklists)
+    # Blacklists
+    if app.debug:
+        blacklists.debug=True
+    blacklists.load_data(torrentsdb.get_blacklists())
 
-    # Nubes de tags
-    clouds_params = app.config["TAG_CLOUDS"] + [(cat.url, "popular",15,4,cat.cat_id) for cat in app.config["TORRENTS_CATEGORIES"]]
-    tag_clouds.init_app(clouds_params, torrentsdb, cache, app.config)
-    eventmanager.once(tag_clouds.refresh)
-    eventmanager.interval(app.config["TAGS_REFRESH_INTERVAL"], tag_clouds.refresh)
+    def refresh_blacklists():
+        '''
+        Refresh blacklists.
+        '''
+        blacklists.load_data(torrentsdb.get_blacklists())
+
+    configdb.register_action("refresh_blacklists", refresh_blacklists)
+
+    # IPs españolas
+    spanish_ips.load(os.path.join(os.path.dirname(app.root_path),app.config["SPANISH_IPS_FILENAME"]))
 
     # Servicio de búsqueda
     @app.before_first_request
@@ -273,9 +280,6 @@ def init_g(app):
 
     g.keywords = {'torrents', 'download', 'files', 'search', 'audio', 'video', 'image', 'document', 'software'}
 
-
-    g.blacklists = torrentsdb.get_blacklists()
-
     g.show_blacklisted_content = app.config["SHOW_BLACKLISTED_CONTENT"]
 
     # informacion de categorias
@@ -285,5 +289,9 @@ def init_g(app):
     g.featured = []
 
     # busqueda actual
+    g.track = False
     g.query = g.clean_query = None
     g.category = None
+
+    # cookie control
+    g.must_accept_cookies = request.remote_addr in spanish_ips

@@ -159,12 +159,14 @@ img {
     img {
         margin:0px;
 
-        &.error {
-            vertical-align:middle;
-            margin:-1px 5px 0px 0px;
-            display:inline-block;*display:inline;zoom:1;
-        }
+
     }
+}
+
+img.error {
+    vertical-align:middle;
+    margin:-1px 5px 0px 0px;
+    display:inline-block;*display:inline;zoom:1;
 }
 
 @mixin button()

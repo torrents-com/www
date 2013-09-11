@@ -468,6 +468,7 @@ def copyright():
     '''
     Muestra el formulario para reportar enlaces
     '''
+    g.extra_container_classes="text_page"
     g.category = False
     g.page_description = "%s is a free torrent search engine that offers users fast, simple, easy access to every torrent in one place." % g.domain_capitalized
     g.keywords.clear()

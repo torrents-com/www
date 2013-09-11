@@ -26,6 +26,7 @@ def opensearch():
 
 @index.route('/about')
 def about():
+    g.extra_container_classes="text_page"
     g.category=False
     g.page_description = "Torrents.com is a free torrent search engine that offers users fast, simple, easy access to every torrent in one place."
     g.keywords.clear()
@@ -35,6 +36,7 @@ def about():
 
 @index.route('/legal')
 def legal():
+    g.extra_container_classes="text_page"
     g.category=False
     g.title+=" | Terms & privacy"
     g.keywords.clear()
@@ -47,6 +49,7 @@ def contact():
     '''
     Muestra el formulario para reportar enlaces
     '''
+    g.extra_container_classes="text_page"
     g.category=False
     g.page_description = "Torrents.com is a free torrent search engine that offers users fast, simple, easy access to every torrent in one place."
     g.keywords.clear()

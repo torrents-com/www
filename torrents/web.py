@@ -293,5 +293,7 @@ def init_g(app):
     g.query = g.clean_query = None
     g.category = None
 
+    g.extra_container_classes = None
+
     # cookie control
     g.must_accept_cookies = request.remote_addr in spanish_ips

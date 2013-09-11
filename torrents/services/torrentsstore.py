@@ -6,6 +6,7 @@ from time import time
 from collections import defaultdict
 from foofind.services.extensions import cache
 from torrents.blacklists import Blacklists, prepare_phrase
+from foofind.services import feedbackdb
 
 BLACKLIST_CACHE_NAME = "BLACKLIST_DATE"
 
@@ -64,18 +65,19 @@ class TorrentsStore(object):
 
         # Inicia conexiones
         self.torrents_conn = pymongo.Connection(app.config["DATA_SOURCE_TORRENTS"], slave_okay=True, max_pool_size=self.max_pool_size)
+        self.searches_conn = feedbackdb.feedback_conn # uses feedback database for searches
 
         # Crea las colecciones capadas si no existen
-        check_capped_collections(self.torrents_conn.torrents, self._capped)
+        check_capped_collections(self.searches_conn.torrents, self._capped)
 
         # Comprueba índices
-        check_collection_indexes(self.torrents_conn.torrents, self._indexes)
+        check_collection_indexes(self.searches_conn.torrents, self._indexes)
 
         self.torrents_conn.end_request()
 
     def save_search(self, search, rowid, cat_id):
-        self.torrents_conn.torrents.searches.insert({"_id":bson.objectid.ObjectId(rowid[:12]), "t":time(), "s":search, "c":cat_id})
-        self.torrents_conn.end_request()
+        self.searches_conn.torrents.searches.insert({"_id":bson.objectid.ObjectId(rowid[:12]), "t":time(), "s":search, "c":cat_id})
+        self.searches_conn.end_request()
 
     def process_searches(self, data, limit, use_weights):
         ret = {}
@@ -108,8 +110,8 @@ class TorrentsStore(object):
         return ret
 
     def get_last_searches(self, limit):
-        searches = self.torrents_conn.torrents.searches.find().sort([("$natural",-1)]).limit(int(limit*1.3))
-        ret = self.process_searches(searches, limit, False)
+        searches = self.searches_conn.torrents.searches.find().sort([("$natural",-1)]).limit(int(limit*1.3))
+        ret = self.searches_conn(searches, limit, False)
         self.torrents_conn.end_request()
         return ret
 
@@ -126,8 +128,8 @@ class TorrentsStore(object):
         if cat_id!=None:
             aggregation_cmd.insert(0,{ "$match": { "c": cat_id} })
 
-        searches = self.torrents_conn.torrents.searches.aggregate(aggregation_cmd)
-        self.torrents_conn.end_request()
+        searches = self.searches_conn.torrents.searches.aggregate(aggregation_cmd)
+        self.searches_conn.end_request()
         return searches
 
     def get_popular_searches(self, limit, cat_id=None):

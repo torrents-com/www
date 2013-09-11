@@ -854,7 +854,7 @@ form {
 section#content{width:68em;margin:0 auto;float:right;}
 
 .top-stories{float:none;display:block;clear:both;overflow:hidden;margin:0 auto 4em;}
-.featured-news-item{width:30em;float:left;margin:0 2em 0 0;}
+.featured-news-item{width:30em;float:left;margin:0 2.8em 0 0;}
 .featured-news-item:last-child, .last-newsfeed-item{margin-right:0;}
 
 .newsfeed-item{width:68em;overflow:hidden;padding-bottom:4em;margin-bottom:4em;border-bottom:1px solid #aaa;}

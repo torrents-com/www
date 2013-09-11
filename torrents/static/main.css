@@ -877,23 +877,38 @@ section#content{width:68em;margin:0 auto;float:right;}
 .categories li{font-size:1.6em;text-transform:uppercase;}
 .tags li{font-size:1.4em;text-transform:lowercase;}
 
-.networks{
-    overflow:hidden;margin-left:12em;
+.news-top-left .networks{
+    margin-left:12em;
     li{
-        float:left;margin-right:0.3em;
         &.gplus {margin-left:4em;}
         &.twitter {margin-left:4em;}
     }
-    li a{display:block;height:20px;}
 }
+.networks{overflow:hidden}
+.networks li{float:left;margin-right:0.3em;}
+.networks li a{display:block;height:20px;}
 
 
-.featured-news-item .networks li.gplus a{background:url(/static/ico.gplus-20-off.png) 0 0 no-repeat;width:20px;}
-.featured-news-item .networks li.twitter a{background:url(/static/ico.twitter-20-off.png) 0 0 no-repeat;width:24px;}
-.featured-news-item .networks li.facebook a{background:url(/static/ico.facebook-20-off.png) 0 0 no-repeat;width:20px;}
-.featured-news-item .networks li.gplus a:hover{background:url(/static/ico.gplus-20-on.png) 0 0 no-repeat;width:20px;}
-.featured-news-item .networks li.twitter a:hover{background:url(/static/ico.twitter-20-on.png) 0 0 no-repeat;width:24px;}
-.featured-news-item .networks li.facebook a:hover{background:url(/static/ico.facebook-20-on.png) 0 0 no-repeat;width:20px;}
+.featured-news-item .networks {
+    li.gplus{
+        a {
+            background:url(/static/ico.gplus-20-off.png) 0 0 no-repeat;width:20px;
+            &:hover{background:url(/static/ico.gplus-20-on.png) 0 0 no-repeat}
+        }
+    }
+    li.twitter{
+        a {
+            background:url(/static/ico.twitter-20-off.png) 0 0 no-repeat;width:24px;
+            &:hover{background:url(/static/ico.twitter-20-on.png) 0 0 no-repeat}
+        }
+    }
+    li.facebook{
+        a{
+            background:url(/static/ico.facebook-20-off.png) 0 0 no-repeat;width:20px;
+            &:hover{background:url(/static/ico.facebook-20-on.png) 0 0 no-repeat}
+        }
+    }
+}
 .newsfeed-item-photo .networks li.gplus a{background:url(/static/ico.gplus-15-off.png) 0 0 no-repeat;width:15px;}
 .newsfeed-item-photo .networks li.twitter a{background:url(/static/ico.twitter-15-off.png) 0 0 no-repeat;width:18px;}
 .newsfeed-item-photo .networks li.facebook a{background:url(/static/ico.facebook-15-off.png) 0 0 no-repeat;width:15px;}

@@ -101,7 +101,7 @@
                 </div>
             </div>
         </header>
-        <section>
+        <article>
             {%- with messages = get_flashed_messages(with_categories=true) %}
                 {%- if messages %}
                     <div id="messages">
@@ -115,8 +115,7 @@
                 {%- block content %}{%- endblock %}
             </div>
             {%- block lower_content %}{%- endblock %}
-            </section>
-        </section>
+        </article>
         <footer>
             <div id="footer">
               <div class="footer-top">

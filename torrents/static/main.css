@@ -134,12 +134,7 @@ img {
     h2 {margin-bottom:10px}
 }
 
-#file_page {
-    margin-bottom:5em;
-}
-
 .text_page {
-    margin-bottom:5em;
 
     h2 { font-size: 1.6em; margin-top:2em; }
 
@@ -338,16 +333,16 @@ img {
 }
 
 .results {
-    margin:0px;padding:0px;font-size:1.2em;
+    margin:0px;padding:0px;font-size:1.1em;
     >li {
         display:block;margin:0px;padding:0px;border-bottom:1px $green solid;
         >ul {
             vertical-align:top;margin:0px;padding:0px;
-            >li {white-space:nowrap;padding:6px 0px 11px;height:7px;text-align:center;
+            >li {white-space:nowrap;padding:8px 0px;height:7px;text-align:center;
                 display:inline-block;*display:inline;zoom:1;
                 span {margin-top: -4px;vertical-align:middle;}
                 &:first-child{width:28px}
-                &:first-child + li {width:336px;text-align:left;
+                &:first-child + li {width:300px;text-align:left;
                     a {color:$grayfont;width:100%;overflow: hidden;text-overflow:ellipsis;font-weight:bold;text-decoration:none;    display:inline-block;*display:inline;zoom:1;
                         strong{color:$black};
                         span{vertical-align:inherit}
@@ -357,7 +352,7 @@ img {
                 &:first-child + li + li + li + li + li{text-align:right;color:$grayfont;width:70px}
                 &:first-child + li + li + li + li + li + li{color:$grayfont;width:90px}
                 &:first-child + li + li + li + li + li + li + li{width:50px;color:$greenfont;}
-                &:first-child + li + li + li + li + li + li + li + li{width:56px;color:$redfont;}
+                &:first-child + li + li + li + li + li + li + li + li{width:52px;color:$redfont;}
             }
         }
         &:first-child {border-top: 1px $gray solid;padding-top: 2px;border-bottom:1px $gray solid;font-weight:bold;color:$black;
@@ -368,7 +363,7 @@ img {
             }
             &:hover, &:active, &:focus {background:inherit}
         }
-        &.even {background:$lightgreen;>ul>li{padding:5px 0px 10px;}}
+        &.even {background:$lightgreen;>ul>li{padding:8px 0px;}}
         &:hover, &:active, &:focus {background:$darkgreen;>ul>li:first-child + li + li{visibility:visible;}}
     }
 
@@ -377,7 +372,7 @@ img {
 #featured {
     padding-left:0px; margin-top:-20px;
     .icon-stars {
-        margin:10px 0px 10px;height:12px;
+        margin:10px 0px 10px 5px;height:12px;
         span {background:url(/static/star_small.png) left center repeat-x;height:12px}
         .nostars {background-image:url(/static/star_no_small.png)}
         .stars-1 {width:12px*1}
@@ -411,6 +406,7 @@ img {
             overflow: hidden;
             max-height: 5em;
             margin-bottom:30px;
+            margin-left:5px;
         }
 
         .download {
@@ -468,7 +464,7 @@ img {
             text-transform:uppercase;
             background-color: #FFF;
             padding: 0px 10px;
-            font-size:1.4em;
+            font-size:1.3em;
             color:$red;
         }
     }
@@ -478,7 +474,7 @@ img {
 }
 
 #popular.category {
-    font-size:0.9em;float:right;margin:10px 5px;width:650px;
+    font-size:0.9em;float:right;margin:10px 5px;width:630px;
 }
 
 #ranking {
@@ -658,7 +654,7 @@ h1.extra{text-transform:none; padding:6px; font-size:1.3em; color:#323230; text-
 }
 
 .more_results {
-    text-align:right; text-decoration:none;font-size:1.3em;display:block;margin:3px;
+    text-align:right; text-decoration:none;font-size:1.1em;display:block;margin:3px;
 }
 
 form {
@@ -860,8 +856,7 @@ form {
 
 .container{width:94em;margin:0 auto;overflow:hidden;float:none;}
 #sidebar{width:22em;margin:0 4em 0 0;float:left;}
-section#content{width:68em;margin:0 auto 2em;float:right;}
-article#content{width:94em;margin:4em auto 2em;float:none;}
+section#content{width:68em;margin:0 auto;float:right;}
 
 .top-stories{float:none;display:block;clear:both;overflow:hidden;margin:0 auto 4em;}
 .featured-news-item{width:30em;float:left;margin:0 2em 0 0;}
@@ -882,9 +877,17 @@ article#content{width:94em;margin:4em auto 2em;float:none;}
 .categories li{font-size:1.6em;text-transform:uppercase;}
 .tags li{font-size:1.4em;text-transform:lowercase;}
 
-.networks{overflow:hidden;}
-.networks li{float:left;margin-right:0.3em;}
-.networks li a{display:block;height:20px;}
+.networks{
+    overflow:hidden;margin-left:12em;
+    li{
+        float:left;margin-right:0.3em;
+        &.gplus {margin-left:4em;}
+        &.twitter {margin-left:4em;}
+    }
+    li a{display:block;height:20px;}
+}
+
+
 .featured-news-item .networks li.gplus a{background:url(/static/ico.gplus-20-off.png) 0 0 no-repeat;width:20px;}
 .featured-news-item .networks li.twitter a{background:url(/static/ico.twitter-20-off.png) 0 0 no-repeat;width:24px;}
 .featured-news-item .networks li.facebook a{background:url(/static/ico.facebook-20-off.png) 0 0 no-repeat;width:20px;}
@@ -899,9 +902,9 @@ article#content{width:94em;margin:4em auto 2em;float:none;}
 .newsfeed-item-photo .networks li.facebook a:hover{background:url(/static/ico.facebook-15-on.png) 0 0 no-repeat;width:15px;}
 .networks li span{display:none;}
 
-.news-top{width:94em;overflow:hidden;}
-.news-top-left{width:22em;margin-right:4em;float:left;text-align:right;overflow:hidden;}
-.news-top-right{width:68em;margin:0;float:left;overflow:hidden;}
+.news-top{margin-top:4em;width:96em;overflow:hidden;}
+.news-top-left{width:22em;margin-right:6em;float:left;text-align:right;overflow:hidden;}
+.news-top-right{width:67.5em;margin:0;padding:0px 1px;float:left;overflow:hidden;}
 .single .author-date, .single .category-tags, .single .share{width:22em;float:none;overflow:hidden;margin-bottom:4em;}
 .single .author-date, .single .category-tags{margin-bottom:4em;}
 .author-date p{font-size:1.4em;}
@@ -940,7 +943,7 @@ article#content{width:94em;margin:4em auto 2em;float:none;}
 
 .more-link {text-decoration:none}
 
-footer{background-color:#f1f2ec;width:100%;overflow:hidden;}
+footer{margin-top:5em; background-color:#f1f2ec;width:100%;overflow:hidden;}
 #footer{display:block;width:96em;margin:3em auto;overflow:hidden;}
 .footer-top, .footer-bottom{width:96em;overflow:hidden;}
 .footer-top{padding-bottom:1em;margin-bottom:3em;border-bottom:1px solid #cecfc7;}

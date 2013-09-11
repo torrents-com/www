@@ -1,19 +1,38 @@
 # -*- coding: utf-8 -*-
 
-import os.path
-from flask import render_template, current_app, g, send_from_directory, abort, make_response, request
+import os.path, re, urllib2
+from flask import render_template, current_app, g, send_from_directory, abort, make_response, request, url_for
 from torrents.multidomain import MultidomainBlueprint
 from foofind.utils.fooprint import Fooprint
 from foofind.services import *
 
 news = MultidomainBlueprint('news', __name__, domain="torrents.com")
 
-@cache.memoize(timeout=60*60)
+def fix_urls(content, external=False):
+    home_url = url_for("news.home", _external=external).rstrip("/")
+    inner_url = url_for("news.home", path="_", _external=external)[:-1] + r"\1"
+    inner_url_on_url = urllib2.quote(url_for("news.home", path="_", _external=True)[:-1], "") + r"\1"
+
+    original_url = current_app.config["NEWS_ORIGINAL_URLS"].rstrip("/")
+    original_url_on_url = urllib2.quote(original_url, "")
+
+    inner_re=re.compile(re.escape(original_url)+r"/([a-zA-Z0-9\-]+)")
+    inner_on_url_re=re.compile(re.escape(original_url_on_url)+r"%2F([a-zA-Z0-9\-]+)")
+
+    return inner_re.sub(inner_url, inner_on_url_re.sub(inner_url_on_url, content)).replace(original_url, home_url)
+
+def fix_response(filename):
+    full_filename = os.path.join(current_app.root_path, "news", filename)
+
+    with open(full_filename) as input_file:
+        return fix_urls(input_file.read(), True)
+
 def load_html_parts(filename):
     parts = {}
     open_block = None
     block_content = []
-    full_filename = os.path.join(current_app.root_path, 'news', filename, "index.html")
+
+    full_filename = os.path.join(current_app.root_path, "news", filename, "index.html")
 
     # chequea que exista el fichero pedido
     if not os.path.exists(full_filename):
@@ -24,10 +43,10 @@ def load_html_parts(filename):
             line = line.strip()
             if line.startswith("<!--= "):
                 var_name, var_content = line[6:-3].split(" ",1)
-                parts[var_name] = var_content
+                parts[var_name] = fix_urls(var_content)
             elif open_block:
                 if line.startswith("<!--}-->"):
-                    parts[open_block] = "".join(block_content).decode("UTF-8")
+                    parts[open_block] = fix_urls("\n".join(block_content).decode("UTF-8"))
                     block_content = []
                     open_block = None
                 else:
@@ -59,21 +78,16 @@ def home(path=""):
 
 @news.route('/news/wp-content/<path:path>')
 def wp_content(path):
-    return send_from_directory(os.path.join(current_app.root_path, 'news/wp-content'), path)
+    return send_from_directory(os.path.join(current_app.root_path, 'news', 'wp-content'), path)
 
 @news.route('/news/sitemap.xml')
 def main_sitemap():
-    return send_from_directory(os.path.join(current_app.root_path, 'news'), 'sitemap_index.xml')
+    return fix_response('sitemap_index.xml')
 
-@news.route('/news/post-sitemap.xml')
-def post_sitemap():
-    return send_from_directory(os.path.join(current_app.root_path, 'news'), 'post-sitemap.xml')
+@news.route('/news/<name>-sitemap.xml')
+def inner_sitemap(name):
+    return fix_response(name+'-sitemap.xml')
 
-@news.route('/news/category-sitemap.xml')
-def category_sitemap():
-    return send_from_directory(os.path.join(current_app.root_path, 'news'), 'category-sitemap.xml')
-
-@news.route('/news/author-sitemap.xml')
-def author_sitemap():
-    return send_from_directory(os.path.join(current_app.root_path, 'news'), 'author-sitemap.xml')
-
+@news.route('/news/rss')
+def rss():
+    return fix_response('feed/rss')

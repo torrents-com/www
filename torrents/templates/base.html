@@ -118,21 +118,58 @@
             </section>
         </section>
         <footer>
-            <div id="footer_links">
-                <div class="container_24">
-                    <div class="grid_6">
-                        <a class="logo" href="/"><img src="{{g.static_prefix}}/torrents_g.png" alt="Torrents" title="Torrents" /></a>
-                    </div>
-                    <div class="grid_18">
-                        <ul id="domains">
-                        {%- for domain in g.domains_family  %}
-                            <li><a href="http://{{ domain }}">torrents<img src="{{g.static_prefix}}/{{domain|replace('torrents.','dot-')}}.png" alt=".com"/></a></li>
-                        {%- endfor %}
-                        </ul>
-                        <ul><li><a href="{{ url_for('index.about') }}">About</a></li><li><a href="{{ url_for('index.contact') }}">Contact</a></li><li><a href="{{ url_for('index.legal') }}">Terms &amp; Privacy</a></li><li><a href="{{ url_for('files.copyright') }}">Copyright</a></li></ul>
-                        <ul><li><a href="{{ url_for('files.recent') }}">Recent</a></li><li><a href="{{ url_for('files.recent_searches') }}">Recent searches</a></li><li><a href="{{ url_for('files.popular') }}">Popular</a></li><li><a href="{{ url_for('files.popular_searches') }}">Popular searches</a></li></ul>
-                    </div>
+            <div id="footer">
+              <div class="footer-top">
+                <div class="logo">
+                  <a href="/">
+                    <img src="{{g.static_prefix}}/logo.torrents-220-khaki.png" alt="Torrents" title="Torrents"/>
+                  </a>
                 </div>
+                <div class="general-links">
+                   <ul>
+                       <li><a href="{{ url_for('index.about') }}">About</a></li><li><a href="{{ url_for('index.contact') }}">Contact</a></li><li><a href="{{ url_for('index.legal') }}">Terms &amp; Privacy</a></li><li><a href="{{ url_for('files.copyright') }}">Copyright</a></li>
+                   </ul>
+                </div>
+                <div class="networks">
+                  <ul>
+                    <li>
+                      <a href="{{ url_for('news.rss') }}">
+                        <img src="{{g.static_prefix}}/ico.rss-30-self.png" alt="Follow us via RSS"/>
+                      </a>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+              <div class="footer-bottom">
+                <div class="family">
+                  <p>the Torrents.com family of sites:</p>
+                </div>
+                <ul class="tree">
+                  <li class="domain"><a href="http://www.torrents.com">Torrents<span>.com</span></a>
+                    <ul>
+                      <li><a href="/">Latest news</a></li>
+                      <li><a href="/">Top stories</a></li>
+                    </ul>
+                  </li>
+                  <li class="domain"><a href="http://www.torrents.ms">Torrents<span>.ms</span></a>
+                    <ul>
+                      <li><a href="/">App Download</a></li>
+                      <li><a href="/">'Find' features</a></li>
+                      <li><a href="/">'Download' features</a></li>
+                      <li><a href="/">'Play' features</a></li>
+                      <li><a href="/">Downloader extras</a></li>
+                    </ul>
+                  </li>
+                  <li class="domain"><a href="http://www.torrents.fm">Torrents<span>.fm</span></a>
+                    <ul>
+                      <li><a href="{{ url_for('files.popular') }}">Popular torrents</a></li>
+                      <li><a href="{{ url_for('files.recent') }}">Recent torrents</a></li>
+                      <li><a href="{{ url_for('files.popular_searches') }}">Popular searches</a></li>
+                      <li><a href="{{ url_for('files.recent_searches') }}">Recent searches</a></li>
+                    </ul>
+                  </li>
+                </ul>
+              </div>
             </div>
         </footer>
     </body>

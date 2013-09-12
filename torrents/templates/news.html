@@ -3,8 +3,6 @@
 {{ head | safe }}
 {% endblock %}
 
-
-
 {% block content %}
 {%- if top_stories or news_top %}
 {{ (top_stories or news_top)|safe }}
@@ -15,9 +13,43 @@
 {% endblock %}
 
 {% block lower_content %}
+{%- if top_stories %}
+<section id="carrusel" class="carrusel">
+    <div class="container-carrusel">
+        <div class="margin-carrusel">
+            <img src="{{g.static_prefix}}/adam.png" width="300" height="245" />
+            <div class="float-carrusel">
+                <p class="downloader-features">find, download & play!</p>
+                <h2 class="carrusel-title">INSTALL OUR FREE 'TORRENTS DOWNLOADER'</h2>
+                <p>texto texto textotexto texto textotexto texto textotexto texto textotexto texto textotexto texto textotexto texto textotexto texto textotexto texto textotexto texto textotexto texto textotexto texto texto</p>
+                <a href="{{ url_for('web.home') }}">more info »</a>
+                <div class="clear-floats"></div>
+                <a href="{{ url_for('web.home') }}" class="downloader-download-button">DOWNLOAD</a>
+                <div class="download-info">
+                    <p>for Windows</p>
+                    <p class="downloader-mb">1.7 MB</p>
+                </div>
+            </div>
+            <div class="clear-floats"></div>
+        </div>
+    </div>
+</section>
+{%- elif news_top %}
+<section id="carrusel-mini" class="carrusel">
+    <div class="container-carrusel">
+        <div class="margin-carrusel">
+            <img src="{{g.static_prefix}}/adam.png" width="200" height="163" />
+            <p class="downloader-features">find, download & play!</p>
+            <div class="download-text">
+                <h2 class="carrusel-title">INSTALL OUR FREE 'TORRENTS DOWNLOADER'</h2>
+                <p>for Windows</p>
+            </div>
+            <a href="{{ url_for('web.home') }}" class="downloader-download-button">DOWNLOAD</a>
+        </div>
+    </div>
+</section>
+{%- endif %}
 {%- if top_stories or news_top %}
-<div style="padding:20px;background:#dcecc5;margin:0px 0px 30px;">
-<div class="container_24">Download the downloader!!</div></div>
 <div class="container_24">
 {{ sidebar | safe }}
 {{ content | safe }}

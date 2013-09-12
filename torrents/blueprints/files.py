@@ -210,6 +210,7 @@ def popular_searches():
     '''
     Renderiza la página de búsquedas populares.
     '''
+    g.extra_container_classes="text_page"
     g.category=False
     g.keywords.clear()
     g.keywords.update(["popular torrent", "free movie", "full download", "search engine", "largest"])
@@ -226,6 +227,7 @@ def recent_searches():
     '''
     Renderiza la página de búsquedas populares.
     '''
+    g.extra_container_classes="text_page"
     g.category=False
     g.keywords.clear()
     g.keywords.update(["popular torrent", "free movie", "full download", "search engine", "largest"])

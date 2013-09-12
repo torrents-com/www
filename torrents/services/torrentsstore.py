@@ -73,9 +73,7 @@ class TorrentsStore(object):
 
         self.torrents_conn.end_request()
 
-    def save_search(self, search, rowid, cat_id):
-        self.searches_conn.torrents.searches.insert({"_id":bson.objectid.ObjectId(rowid[:12]), "t":time(), "s":search, "c":cat_id})
-        self.searches_conn.end_request()
+        self.trend_map = bson.Code("function(){emit(this._id,{'t':this.value.w})}")
 
     def get_blacklists(self):
         ret = {row["_id"]:row["entries"] for row in self.torrents_conn.torrents.blacklists.find()}
@@ -93,4 +91,55 @@ class TorrentsStore(object):
     def get_ranking(self, name):
         ret = self.torrents_conn.torrents.rankings.find_one({"_id":name})
         self.torrents_conn.end_request()
+        return ret
+
+    def get_rankings(self):
+        ret = {r["_id"]:r for r in self.torrents_conn.torrents.rankings.find()}
+        self.torrents_conn.end_request()
+        return ret
+
+    def save_ranking(self, ranking):
+        self.torrents_conn.torrents.rankings.save(ranking)
+        self.torrents_conn.end_request()
+
+    def verify_ranking_searches(self, ranking):
+        self.torrents_conn.torrents["rankings."+ranking].ensure_index([("value.w", 1)])
+        self.torrents_conn.end_request()
+
+    def batch_ranking_searches(self, ranking, ranking_trends, generate_trends, multiplier):
+        # get searches to generate trends (and reduce weights in the same process)
+        if generate_trends:
+            trend_reduce = bson.Code("function(k,v){if('t' in v[1])v.reverse();for(var p in v[1])v[0][p]=v[1][p];v[0].w*=%f;return v[0]}"%multiplier)
+            self.torrents_conn.torrents["rankings."+ranking_trends].map_reduce(self.trend_map, trend_reduce, {"reduce":"rankings."+ranking})
+        else:
+            # reduce weights
+            self.torrents_conn.torrents.eval(bson.Code("db.rankings.%s.find().forEach(function(d){d.value.w*=%f;db.rankings.%s.save(d)})"%(ranking, multiplier, ranking)))
+
+    def update_ranking_searches(self, ranking, search, weight):
+        self.torrents_conn.torrents["rankings."+ranking].update({"_id":search},{"$inc": {"value.w": weight}}, upsert=True)
+        self.torrents_conn.end_request()
+
+    def clean_ranking_searches(self, ranking, weight_threshold):
+        ranking_searches = self.torrents_conn.torrents["rankings."+ranking]
+        ranking_searches.remove({"value.w":{"$exists":False}})
+        ranking_searches.remove({"value.w":{"$lt":weight_threshold}})
+
+        norm_sum = ranking_searches.aggregate([{"$sort":{"value.w":-1}}, {"$limit":max_size}, {"$group":{"_id":{}, "norm":{"$sum" : "$value.w"}}}, {"$project":{"_id":0, "norm": "$norm"}}])
+        self.torrents_conn.end_request()
+
+        if norm_sum["ok"] and norm_sum["result"]:
+            return norm_sum["result"][0]["norm"]
+        else:
+            return None
+
+    def get_ranking_searches(self, ranking):
+        return self.torrents_conn.torrents["rankings."+ranking].find().sort("value.w", -1)
+
+    def save_search(self, search, rowid, cat_id):
+        self.searches_conn.torrents.searches.insert({"_id":bson.objectid.ObjectId(rowid[:12]), "t":time(), "s":search, "c":cat_id})
+        self.searches_conn.end_request()
+
+    def get_searches(self, start_date):
+        ret = list(self.searches_conn.torrents.searches.find({"t":{"$gt": start_date}}))
+        self.searches_conn.end_request()
         return ret

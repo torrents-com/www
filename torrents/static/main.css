@@ -138,19 +138,20 @@ img {
 
     h2 { font-size: 1.6em; margin-top:2em; }
 
-    ul {
+    ul, ol {
         padding-left:1.5em;
         li {
-            list-style-type:circle;
+            list-style-type:inherit;
         }
     }
-    p, ul, label, input, textarea {
+    ul > li { list-style-type:circle}
+    p, li, label, input, textarea {
         font-size: 1.4em;
     }
-    p, ul, label, input, textarea, #recaptcha_widget_div {
+    p, li, label, input, textarea, #recaptcha_widget_div {
         margin: 5px 5px 5px 0px;
     }
-    p, ul, label {
+    p, ol, ul, label, fieldset {
         margin-top:15px;
     }
     input, textarea {
@@ -158,7 +159,6 @@ img {
     }
     img {
         margin:0px;
-
 
     }
 }
@@ -473,7 +473,10 @@ img.error {
 }
 
 #ranking {
-    span {font-size:0.7em; display:inline-block; width:30px; text-align:center}
+    span {
+        padding:0.3em 0px;margin:0em 1em; font-size:0.7em; display:inline-block; text-align:center
+        &:first-child {width:30px}
+    }
 }
 
 #download {
@@ -933,6 +936,10 @@ section#content{width:68em;margin:0 auto;float:right;}
 .single-post section#content p, .single-post section#content ul li{font-size:1.5em;line-height:1.3em;margin-bottom:1em;}
 .single-post section#content p:first-child{font-size:1.8em;font-weight:600;}
 
+section#sidebar li li, #newsticker p {
+    margin: 0 0 0.5em 0.5em;
+    font-size: 1.4em;
+}
 #sidebar h3{font-size:1.8em;margin-bottom:0.5em;}
 #sidebar ul{margin-bottom:1em;}
 #sidebar li li{font-size:1.4em;}
@@ -993,7 +1000,7 @@ footer{margin-top:5em; background-color:#f1f2ec;width:100%;overflow:hidden;}
 .footer-top, .footer-bottom{width:96em;overflow:hidden;}
 .footer-top{padding-bottom:1em;margin-bottom:3em;border-bottom:1px solid #cecfc7;}
 #footer .logo, #footer .family{width:22em;margin-right:4em;float:left;}
-#footer .general-links{width:42em;margin-right:4em;float:left;}
+#footer .general-links{width:42em;margin-right:4em;float:left;margin-top:1.5em;}
 #footer .general-links li{width:auto;margin-right:2em;float:left;}
 #footer .general-links li a{font-size:1.4em;}
 #footer .networks{width:22em;margin-right:0;float:right;overflow:hidden;}

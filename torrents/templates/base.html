@@ -146,17 +146,13 @@
                 <ul class="tree">
                   <li class="domain"><a href="http://www.torrents.com">Torrents<span>.com</span></a>
                     <ul>
-                      <li><a href="/">Latest news</a></li>
-                      <li><a href="/">Top stories</a></li>
+                      <li><a href="{{ url_for('news.home', path='category/movies') }}">Movies</a></li>
+                      <li><a href="{{ url_for('news.home', path='category/music') }}">Music</a></li>
+                      <li><a href="{{ url_for('news.home', path='category/tv') }}">TV</a></li>
                     </ul>
                   </li>
                   <li class="domain"><a href="http://www.torrents.ms">Torrents<span>.ms</span></a>
                     <ul>
-                      <li><a href="/">App Download</a></li>
-                      <li><a href="/">'Find' features</a></li>
-                      <li><a href="/">'Download' features</a></li>
-                      <li><a href="/">'Play' features</a></li>
-                      <li><a href="/">Downloader extras</a></li>
                     </ul>
                   </li>
                   <li class="domain"><a href="http://www.torrents.fm">Torrents<span>.fm</span></a>

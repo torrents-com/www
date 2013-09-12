@@ -5,7 +5,7 @@ from foofind.utils.fooprint import Fooprint
 from torrents.services import *
 import urllib
 
-blacklist = Fooprint('blacklist', __name__)
+blacklist = Fooprint('blacklist', __name__, domain="torrents.fm")
 
 def parse_entry(text):
     if "+" in text:

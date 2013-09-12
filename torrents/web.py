@@ -130,7 +130,6 @@ def create_app(config=None, debug=False):
 
     # Cache
     cache.init_app(app)
-    configdb.register_action("flush_cache", cache.clear, _unique=True)
 
     # Mail
     mail.init_app(app)
@@ -142,6 +141,8 @@ def create_app(config=None, debug=False):
     configdb.init_app(app)
     entitiesdb.init_app(app)
     torrentsdb.init_app(app)
+
+    configdb.register_action("flush_cache", cache.clear, _unique=True)
 
     # Blacklists
     if app.debug:

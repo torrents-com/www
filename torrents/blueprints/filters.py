@@ -305,8 +305,6 @@ def process_search_results(s=None, query=None, category=None, not_category=None,
     data_filtered = get_data_filtered()
     ids = [ item[0] for item in data_filtered ]
     
-    
-    
     filtered = { item[0]:{ "query" : item[1], "blocked": item[2] } for item in data_filtered }
     stats = {"cs" : 133}
     ntts = {}

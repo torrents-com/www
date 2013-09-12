@@ -20,7 +20,7 @@ def fix_urls(content, external=False):
     inner_re=re.compile(re.escape(original_url)+r"/([a-zA-Z0-9\-]+)")
     inner_on_url_re=re.compile(re.escape(original_url_on_url)+r"%2F([a-zA-Z0-9\-]+)")
 
-    return inner_re.sub(inner_url, inner_on_url_re.sub(inner_url_on_url, content)).replace(original_template_url, home_url).replace(original_url, home_url)
+    return inner_re.sub(inner_url, inner_on_url_re.sub(inner_url_on_url, content.replace(original_template_url, home_url))).replace(original_url, home_url)
 
 def fix_response(filename):
     full_filename = os.path.join(current_app.root_path, "news", filename)

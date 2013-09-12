@@ -14,8 +14,8 @@ from foofind.utils.downloader import get_file_metadata
 web = MultidomainBlueprint('web', __name__, domain="torrents.ms")
 
 @web.route('/')
-@cache.cached(60)
 def home():
+    g.extra_container_classes="text_page"
     g.category=False
     downloader_files = current_app.config["DOWNLOADER_FILES"]
 

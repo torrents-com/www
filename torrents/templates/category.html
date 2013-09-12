@@ -5,13 +5,13 @@
     {%- endif %}
 {%- endblock -%}
 {% block content %}
-
-{% if pop_searches %}
-<div id="popular" class="category">
-{%- for search, weight in pop_searches | dictsort(case_sensitive=False) %}
-    <a class="{{ loop.cycle('odd', 'even') }}" style="font-size:{{0.9+weight}}em" href="{{url_for('files.category', category=g.category.url, query=search|clean_query)}}">{{search}}</a>
-{%- endfor %}
-</div>
+{% if pop_searches%}
+    <div id="popular" class="category">
+        <div><span>Most popular searches</span></div>
+        {%- for key, search, size in pop_searches %}
+            <a class="{{ loop.cycle('odd', 'even') }}" style="font-size:{{size}}px" href="{{url_for('files.category', category=g.category.url, query=key|clean_query)}}">{{search}}</a>
+        {%- endfor %}
+    </div>
 {%- endif %}
 
 <div class="title big_icon {{g.category.url}}">
@@ -28,9 +28,9 @@
     <div class="grid_6">
         {{featured|safe}}
     </div>
-    <div class="grid_18">
+    <div class="grid_17 prefix_1 alpha">
     {%- else %}
-    <div class="prefix_6 grid_18">
+    <div class="prefix_7 grid_17 alpha">
 {%- endif %}
 
 {%- if results %}

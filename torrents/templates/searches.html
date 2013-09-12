@@ -1,12 +1,21 @@
 {% extends "base.html" %}
+{%- macro trend(val) %}
+    {%- if val==None%}<span style="color:gray">new!</span>
+    {%- elif val>1.2 %}<span style="color:green">&Delta;</span>
+    {%- elif val>0.9 %}<span>=</span>
+    {%- else %}<span style="color:red">&nabla;</span>
+    {%- endif%}
+{%- endmacro %}
 {% block content %}
 <div class="title">
     <h1>{{g.h1}}</h1>
     <h2>{{subtitle}}</h2>
 </div>
-    <div id="popular">
-    {%- for search, weight in searches | dictsort(case_sensitive=False) %}
-        <a class="{{ loop.cycle('odd', 'even') }}" style="font-size:{{0.9+weight}}em" href="{{url_for('files.search', query=search|clean_query)}}">{{search}}</a>
+<div id="ranking">
+    <ol>
+    {%- for search in ranking["final_ranking"] %}
+        <li>{{trend(search[2])}}&nbsp;<a class="{{ loop.cycle('odd', 'even') }}" href="{{url_for('files.search', query=search[0]|clean_query)}}">{{search[0]}}</a> <span>{{(search[1]*100)|round(2)}} %</span></li>
     {%- endfor %}
-    </div>
+    </ol>
+</div>
 {% endblock %}

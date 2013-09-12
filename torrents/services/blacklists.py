@@ -1,11 +1,14 @@
+# -*- coding: utf-8 -*-
 
 def prepare_phrase(phrase):
     return " "+phrase.lower().strip()+" "
 
 class Blacklists:
-    def __init__(self, data, debug=False):
-        self.categories = {category:BlacklistCategory(category, entries, debug) for category, entries in data.iteritems()}
-        self.debug = debug
+    def __init__(self):
+        self.debug = False
+
+    def load_data(self, data):
+        self.categories = {category:BlacklistCategory(category, entries, self.debug) for category, entries in data.iteritems()}
 
     def __iter__(self):
         return self.categories.itervalues()

@@ -2,8 +2,25 @@
 {% block head %}
 {{ head | safe }}
 {% endblock %}
-{% block content %}
-<div style="float:right">{{ sidebar | safe }}</div>
-{{ content | safe }}
 
+
+
+{% block content %}
+{%- if top_stories or news_top %}
+{{ (top_stories or news_top)|safe }}
+{%- else %}
+{{ sidebar | safe }}
+{{ content | safe }}
+{%- endif %}
+{% endblock %}
+
+{% block lower_content %}
+{%- if top_stories or news_top %}
+<div style="padding:20px;background:#dcecc5;margin:0px 0px 30px;">
+<div class="container_24">Download the downloader!!</div></div>
+<div class="container_24">
+{{ sidebar | safe }}
+{{ content | safe }}
+</div>
+{%- endif %}
 {% endblock %}

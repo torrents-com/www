@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import re, flask
 from flask import g, url_for as flask_url_for, redirect, Blueprint, request, current_app
 

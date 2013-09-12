@@ -21,31 +21,43 @@
             {%- endassets -%}
         {%- endblock -%}
         <script type="text/javascript">
-            var _gaq = _gaq || []; _gaq.push(['_setAccount', 'UA-38333996-1']); _gaq.push(['_setDomainName', '{{ g.domain }}']);
-            _gaq.push(['_setAllowLinker', true]); _gaq.push(['_trackPageview']);
+            {%-if g.track%}$('<img src="{{url_for("files.pixel")}}"/>');{%-endif%}
+            var _gaq, _prum;
+            function cookiesScripts(){
+                _gaq = _gaq || []; _gaq.push(['_setAccount', 'UA-38333996-1']); _gaq.push(['_setDomainName', '{{ g.domain }}']);
+                _gaq.push(['_setAllowLinker', true]); _gaq.push(['_trackPageview']);
 
-            (function() {
-            var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-            ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-            var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-            })();
+                (function() {
+                var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+                ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+                var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+                })();
 
-            {% if g.RUM_code %}
-            var _prum = [['id', '{{g.RUM_code}}'],
-                         ['mark', 'firstbyte', (new Date()).getTime()]];
-            (function() {
-                var s = document.getElementsByTagName('script')[0]
-                  , p = document.createElement('script');
-                p.async = 'async';
-                p.src = '//rum-static.pingdom.net/prum.min.js';
-                s.parentNode.insertBefore(p, s);
-            })();
-            {% endif %}
+                {% if g.blacklisted_content %}
+                _gaq.push(['_trackEvent', "Blacklisted", "{{g.blacklisted_content}}"]);
+                {% endif %}
 
-            {% if g.blacklisted_content %}
-            _gaq.push(['_trackEvent', "Blacklisted", "{{g.blacklisted_content}}"]);
-            {% endif %}
+                {% if g.RUM_code %}
+                _prum = [['id', '{{g.RUM_code}}'],
+                             ['mark', 'firstbyte', (new Date()).getTime()]];
+                (function() {
+                    var s = document.getElementsByTagName('script')[0]
+                      , p = document.createElement('script');
+                    p.async = 'async';
+                    p.src = '//rum-static.pingdom.net/prum.min.js';
+                    s.parentNode.insertBefore(p, s);
+                })();
+                {% endif %}
+                {%- block cookies -%}
+                {%- endblock -%}
+            }
+        {% if g.must_accept_cookies %}
         </script>
+        <script type="application/javascript" src="{{url_for('news.cookies')}}"></script>
+        {% else %}
+            $(function(){cookiesScripts()});
+        </script>
+        {% endif %}
         {%- block head -%}
         {%- endblock -%}
     </head>
@@ -57,6 +69,7 @@
         data-downloader_href="{{'http://torrents.com/downloader'|forceescape}}"
         data-downloader_yes="<p>Yes, download</p>Torrents Downloader"
         data-downloader_no="<p>No, thanks</p>I already have a torrent client"
+        {{ body_class|safe if body_class }}
         >
         <div id="dialog" data-dialog_ok="{{'ok'}}" data-dialog_no="{{'no'}}" data-dialog_yes="{{'yes'}}"></div>
         <header>
@@ -75,8 +88,7 @@
                     <div class="container_24">
                         <form method="get" action="{{ url_for('files.search', query='') }}" class="grid_24">
                             <input type="hidden" name="c" value="{{g.category.url if g.category else ""}}" />
-                            <div class="legend grid_4 alpha">find torrents</div>
-                            <div class="grid_14"><input type="text" id="q" name="q" autocomplete="off" value="{{g.query or ""}}"/></div>
+                            <div class="grid_18 alpha"><input placeholder="find torrents" type="text" id="q" name="q" autocomplete="off" value="{{g.query or ""}}"/></div>
                             <div class="grid_6 omega"><button type="submit">Search files&nbsp;&nbsp;&nbsp;<span class="icon-search"></span></button></div>
                         </form>
                         <ul class="grid_24">
@@ -89,7 +101,7 @@
                 </div>
             </div>
         </header>
-        <section>
+        <article>
             {%- with messages = get_flashed_messages(with_categories=true) %}
                 {%- if messages %}
                     <div id="messages">
@@ -99,26 +111,64 @@
                     </div>
                 {%- endif %}
             {%- endwith %}
-            <div class="container_24">
+            <div class="container_24 {{g.extra_container_classes if g.extra_container_classes}}">
                 {%- block content %}{%- endblock %}
             </div>
-        </section>
+            {%- block lower_content %}{%- endblock %}
+        </article>
         <footer>
-            <div id="footer_links">
-                <div class="container_24">
-                    <div class="grid_6">
-                        <a class="logo" href="/"><img src="{{g.static_prefix}}/torrents_g.png" alt="Torrents" title="Torrents" /></a>
-                    </div>
-                    <div class="grid_18">
-                        <ul id="domains">
-                        {%- for domain in g.domains_family  %}
-                            <li><a href="http://{{ domain }}">torrents<img src="{{g.static_prefix}}/{{domain|replace('torrents.','dot-')}}.png" alt=".com"/></a></li>
-                        {%- endfor %}
-                        </ul>
-                        <ul><li><a href="{{ url_for('index.about') }}">About</a></li><li><a href="{{ url_for('index.contact') }}">Contact</a></li><li><a href="{{ url_for('index.legal') }}">Terms &amp; Privacy</a></li><li><a href="{{ url_for('files.copyright') }}">Copyright</a></li></ul>
-                        <ul><li><a href="{{ url_for('files.recent') }}">Recent</a></li><li><a href="{{ url_for('files.recent_searches') }}">Recent searches</a></li><li><a href="{{ url_for('files.popular') }}">Popular</a></li><li><a href="{{ url_for('files.popular_searches') }}">Popular searches</a></li></ul>
-                    </div>
+            <div id="footer">
+              <div class="footer-top">
+                <div class="logo">
+                  <a href="/">
+                    <img src="{{g.static_prefix}}/logo.torrents-220-khaki.png" alt="Torrents" title="Torrents"/>
+                  </a>
                 </div>
+                <div class="general-links">
+                   <ul>
+                       <li><a href="{{ url_for('index.about') }}">About</a></li><li><a href="{{ url_for('index.contact') }}">Contact</a></li><li><a href="{{ url_for('index.legal') }}">Terms &amp; Privacy</a></li><li><a href="{{ url_for('files.copyright') }}">Copyright</a></li>
+                   </ul>
+                </div>
+                <div class="networks">
+                  <ul>
+                    <li>
+                      <a href="{{ url_for('news.rss') }}">
+                        <img src="{{g.static_prefix}}/ico.rss-30-self.png" alt="Follow us via RSS"/>
+                      </a>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+              <div class="footer-bottom">
+                <div class="family">
+                  <p>the Torrents.com family of sites:</p>
+                </div>
+                <ul class="tree">
+                  <li class="domain"><a href="http://www.torrents.com">Torrents<span>.com</span></a>
+                    <ul>
+                      <li><a href="/">Latest news</a></li>
+                      <li><a href="/">Top stories</a></li>
+                    </ul>
+                  </li>
+                  <li class="domain"><a href="http://www.torrents.ms">Torrents<span>.ms</span></a>
+                    <ul>
+                      <li><a href="/">App Download</a></li>
+                      <li><a href="/">'Find' features</a></li>
+                      <li><a href="/">'Download' features</a></li>
+                      <li><a href="/">'Play' features</a></li>
+                      <li><a href="/">Downloader extras</a></li>
+                    </ul>
+                  </li>
+                  <li class="domain"><a href="http://www.torrents.fm">Torrents<span>.fm</span></a>
+                    <ul>
+                      <li><a href="{{ url_for('files.popular') }}">Popular torrents</a></li>
+                      <li><a href="{{ url_for('files.recent') }}">Recent torrents</a></li>
+                      <li><a href="{{ url_for('files.popular_searches') }}">Popular searches</a></li>
+                      <li><a href="{{ url_for('files.recent_searches') }}">Recent searches</a></li>
+                    </ul>
+                  </li>
+                </ul>
+              </div>
             </div>
         </footer>
     </body>

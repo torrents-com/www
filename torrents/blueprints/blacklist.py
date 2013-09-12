@@ -1,11 +1,14 @@
 # -*- coding: utf-8 -*-
 
 from flask import render_template, redirect, request, url_for, g, flash, Markup
-from foofind.utils.fooprint import Fooprint
+
+from foofind.utils import logging
+from torrents.multidomain import MultidomainBlueprint
+from foofind.services import *
 from torrents.services import *
 import urllib
 
-blacklist = Fooprint('blacklist', __name__)
+blacklist = MultidomainBlueprint('blacklist', __name__, domain="torrents.fm")
 
 def parse_entry(text):
     if "+" in text:
@@ -16,7 +19,6 @@ def parse_entry(text):
 @blacklist.route('/blacklist')
 def home():
     form = BlacklistForm(request.args)
-    blacklists = None
     if form.action.data=="add" and form.validate():
         try:
             text = form.text.data
@@ -27,12 +29,16 @@ def home():
             else:
                 torrentsdb.add_blacklist_entry(category, parse_entry(text))
 
+            # Avisa para que se refresque las blacklist en la web y fuerza a que se haga en este hilo antes de mostrar la lista actualizada
+            configdb.run_action("refresh_blacklists")
+            configdb.pull_actions()
+
             form.text.data = ""
             flash(Markup("Entry added: %s. <a href='%s'>Undo</a>" % (text, url_for('blacklist.delete', category=category, text=text))))
         except BaseException as e:
+            logging.exception(e)
             flash("Error adding entry.")
 
-    blacklists = torrentsdb.get_blacklists()
     return render_template('blacklist.html', blacklists=blacklists, form=form)
 
 @blacklist.route('/blacklist/delete/<category>/<text>')
@@ -43,8 +49,14 @@ def delete(category, text):
                 torrentsdb.remove_blacklist_entry(category, parse_entry(text.replace("_age_",str(i))))
         else:
             torrentsdb.remove_blacklist_entry(category, parse_entry(text))
+
+        # Avisa para que se refresque las blacklist en la web y fuerza a que se haga en este hilo antes de mostrar la lista actualizada
+        configdb.run_action("refresh_blacklists")
+        configdb.pull_actions()
+
         flash(Markup("Entry deleted: %s. <a href='%s?category=%s&text=%s'>Undo</a>" % (text, url_for('blacklist.home'), category, urllib.quote(text))))
     except BaseException as e:
+        logging.exception(e)
         flash("Error deleting entry.")
     return redirect(url_for('blacklist.home'))
 

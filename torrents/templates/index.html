@@ -3,16 +3,15 @@
 <div class="grid_6 home">
 {{featured|safe}}
 </div>
-<div class="grid_18">
-
+<div class="grid_17 prefix_1">
     <h1 class="extra">A free torrent search engine offering fast, simple, and easy access to torrent downloads in one place.</h1>
 
     {% if pop_searches %}
     <div id="popular">
         <div><span>Most popular searches</span></div>
-    {%- for search, weight in pop_searches | dictsort(case_sensitive=False) %}
-        <a class="{{ loop.cycle('odd', 'even') }}" style="font-size:{{0.9+weight}}em" href="{{url_for('files.search', query=search|clean_query)}}">{{search}}</a>
-    {%- endfor %}
+        {%- for key, search, size in pop_searches %}
+            <a class="{{ loop.cycle('odd', 'even') }}" style="font-size:{{size}}px" href="{{url_for('files.search', query=key|clean_query)}}">{{search}}</a>
+        {%- endfor %}
     </div>
 
     {%- endif %}

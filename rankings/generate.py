@@ -151,9 +151,3 @@ def update_rankings(app):
             except BaseException as e:
                 print "Error updating ranking '%s':"%ranking_name
                 print type(e), e
-
-    rankings_conn.end_request()
-    torrents_conn.end_request()
-
-main()
-

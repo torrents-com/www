@@ -1,11 +1,11 @@
 # -*- coding: utf-8 -*-
 
 from flask import render_template, redirect, request, url_for, g, flash, Markup
-from foofind.utils.fooprint import Fooprint
+from torrents.multidomain import MultidomainBlueprint
 from torrents.services import *
 import urllib
 
-blacklist = Fooprint('blacklist', __name__, domain="torrents.fm")
+blacklist = MultidomainBlueprint('blacklist', __name__, domain="torrents.fm")
 
 def parse_entry(text):
     if "+" in text:

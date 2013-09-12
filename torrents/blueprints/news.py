@@ -15,11 +15,12 @@ def fix_urls(content, external=False):
 
     original_url = current_app.config["NEWS_ORIGINAL_URLS"].rstrip("/")
     original_url_on_url = urllib2.quote(original_url, "")
+    original_template_url = original_url+"/template"
 
     inner_re=re.compile(re.escape(original_url)+r"/([a-zA-Z0-9\-]+)")
     inner_on_url_re=re.compile(re.escape(original_url_on_url)+r"%2F([a-zA-Z0-9\-]+)")
 
-    return inner_re.sub(inner_url, inner_on_url_re.sub(inner_url_on_url, content)).replace(original_url, home_url)
+    return inner_re.sub(inner_url, inner_on_url_re.sub(inner_url_on_url, content)).replace(original_template_url, home_url).replace(original_url, home_url)
 
 def fix_response(filename):
     full_filename = os.path.join(current_app.root_path, "news", filename)

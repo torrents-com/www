@@ -4,6 +4,7 @@ from flask import render_template, redirect, request, url_for, g, flash, Markup
 
 from foofind.utils import logging
 from torrents.multidomain import MultidomainBlueprint
+from foofind.services import *
 from torrents.services import *
 import urllib
 

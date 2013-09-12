@@ -962,7 +962,7 @@ section.carrusel {
 }
 section.carrusel div.container-carrusel { width:94em; margin:0 auto 0 auto; }
 section.carrusel p { color:#666666 }
-section.carrusel p.downloader-features { font-family: Journal; color:#b43f48; transform:rotate(-5deg); -moz-transform:rotate(-5deg); -webkit-transform:rotate(-5deg); }
+section.carrusel p.downloader-features { font-family: 'Journal'; color:#b43f48; transform:rotate(-5deg); -moz-transform:rotate(-5deg); -webkit-transform:rotate(-5deg); }
 section.carrusel a.downloader-download-button { display:block;float:left;background-color:#5ab55a;color:#fff;text-decoration:none; border-radius:0.5em; padding:0.7em 3em 0.7em 3em; text-align:center; font-size:1.5em; }
 div.clear-floats { clear:both; }
 
@@ -1003,7 +1003,7 @@ footer{margin-top:5em; background-color:#f1f2ec;width:100%;overflow:hidden;}
 #footer .tree{width:68em;margin-right:0;float:left;text-transform:lowercase;overflow:hidden;}
 #footer .tree .domain{width:18em;margin-right:2;padding-left:2em;float:left;background:url(/static/ico.arrow-khaki-down.png) 0 1em no-repeat;}
 #footer .tree .domain a{color:#aaa;font-size:2.2em;line-height:1em;}
-#footer .tree .domain a span{font-family:Journal,Arial,sans-serif;color:#333;font-size:1.1em;margin-left:0.05em;}
+#footer .tree .domain a span{font-family:'Journal',Arial,sans-serif;color:#333;font-size:1.1em;margin-left:0.05em;}
 #footer .tree .domain ul{margin-top:1em;}
 #footer .tree .domain li{width:18em;margin-right:2em;margin-bottom:0.5em;float:none;}
 #footer .tree .domain li a{color:#b23633;font-size:1.4em;}

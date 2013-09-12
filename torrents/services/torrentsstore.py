@@ -53,7 +53,7 @@ class TorrentsStore(object):
         Inicialización de la clase.
         '''
         self.max_pool_size = self.last_blacklist_update = 0
-        self.torrents_conn = None
+        self.torrents_conn = self.searches_conn = None
         self.blacklists = Blacklists({})
 
     def init_app(self, app):
@@ -63,11 +63,8 @@ class TorrentsStore(object):
         self.debug = app.debug
         self.max_pool_size = app.config["DATA_SOURCE_MAX_POOL_SIZE"]
 
-        # soporte para ReplicaSet
-        self.options = {"replicaSet": app.config["DATA_SOURCE_TORRENTS_RS"], "read_preference":pymongo.read_preferences.ReadPreference.SECONDARY_PREFERRED, "secondary_acceptable_latency_ms":app.config.get("SECONDARY_ACCEPTABLE_LATENCY_MS",15)} if "DATA_SOURCE_TORRENTS_RS" in app.config else {"slave_okay":True}
-
         # Inicia conexiones
-        self.torrents_conn = pymongo.MongoClient(app.config["DATA_SOURCE_TORRENTS"], max_pool_size=self.max_pool_size, **self.options)
+        self.torrents_conn = pymongo.Connection(app.config["DATA_SOURCE_TORRENTS"], slave_okay=True, max_pool_size=self.max_pool_size)
         self.searches_conn = feedbackdb.feedback_conn # uses feedback database for searches
 
         # Crea las colecciones capadas si no existen
@@ -76,7 +73,7 @@ class TorrentsStore(object):
         # Comprueba índices
         check_collection_indexes(self.searches_conn.torrents, self._indexes)
 
-        self.torrents_conn.end_request()
+        self.searches_conn.end_request()
 
     def save_search(self, search, rowid, cat_id):
         self.searches_conn.torrents.searches.insert({"_id":bson.objectid.ObjectId(rowid[:12]), "t":time(), "s":search, "c":cat_id})
@@ -114,8 +111,8 @@ class TorrentsStore(object):
 
     def get_last_searches(self, limit):
         searches = self.searches_conn.torrents.searches.find().sort([("$natural",-1)]).limit(int(limit*1.3))
-        ret = self.searches_conn(searches, limit, False)
-        self.torrents_conn.end_request()
+        ret = self.process_searches(searches, limit, False)
+        self.searches_conn.end_request()
         return ret
 
     @cache.memoize(60*60)

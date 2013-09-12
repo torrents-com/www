@@ -1,10 +1,10 @@
 @font-face {
     font-family: 'Journal';
-    src: url('/static/journal-webfont.eot');
-    src: url('/static/journal-webfont.eot?#iefix') format('embedded-opentype'),
-         url('/static/journal-webfont.woff') format('woff'),
-         url('/static/journal-webfont.ttf') format('truetype'),
-         url('/static/journal-webfont.svg#journalregular') format('svg');
+    src: url(/static/journal-webfont.eot);
+    src: url(/static/journal-webfont.eot?#iefix) format('embedded-opentype'),
+         url(/static/journal-webfont.woff) format('woff'),
+         url(/static/journal-webfont.ttf) format('truetype'),
+         url(/static/journal-webfont.svg#journalregular) format('svg');
     font-weight: normal;
     font-style: normal;
 }

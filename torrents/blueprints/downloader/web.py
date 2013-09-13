@@ -15,7 +15,6 @@ web = MultidomainBlueprint('web', __name__, domain="torrents.ms")
 
 @web.route('/')
 def home():
-    g.extra_container_classes="text_page"
     g.category=False
     downloader_files = current_app.config["DOWNLOADER_FILES"]
 

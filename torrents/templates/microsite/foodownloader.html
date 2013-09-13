@@ -5,7 +5,7 @@
 {% endif %}
 {% endblock %}
 
-{% block content %}
+{% block lower_content %}
 {% if mode == "success" %}
 <div class="grid_6">&nbsp;</div>
     <div class="grid_18" id="downloader">
@@ -13,36 +13,104 @@
     <p>Thanks for installing Torrents Downloader, we hope you enjoy it. </p>
 </div>
 {% elif mode == "download" %}
-    <div class="grid_6">&nbsp;</div>
-    <div class="grid_18" id="downloader">
+<div id="downloader-page">
+  <section class="downloader-top">
+    <aside class="download-box">
+      <h2>A little big P2P downloader</h2>
         {% if properties["available"] -%}
-            <a class="download" id="downloader_button" href="{{url_for('downloads.download', instfile=properties['filename'])}}">
-             <span>Download Torrents Downloader</span>
-             <span class="info">Windows · {{properties["version_code"].split("-")[0]}} · {{properties["length"]|numbersizeformat}}</span>
-            </a>
-         {% endif %}
-         {% if properties["source_available"] -%}
-            <div class="source-panel">
-                <a class="source" href="{{url_for('downloads.download', instfile=properties['source_filename'])}}">{{"Download Source"|capitalize}} · {{properties["source_length"]|numbersizeformat}}</a>
-            </div>
-         {% endif %}
+          <a href="{{url_for('downloads.download', instfile=properties['filename'])}}" class="downloader-download-button">Download</a>
+          <p><strong class="free">FREE</strong> <span>for Windows | <strong>{{properties["length"]|numbersizeformat}}</strong> (v. {{properties["version_code"].split("-")[0]}})</span></p>
+        {% endif %}
+    </aside>
+  </section>  <!--.downloader-top-->
 
-        <h1><b>Torrents Downloader</b> is a fast download client for the <b>Torrent</b> P2P network.</h1>
-        <p>Our downloader is user friendly, intuitive, and safe. Now users can pause, resume and find downloads easier than ever before.</p>
-        <p>These are the features that Torrents Downloader has to offer:</p>
-        <ul>
-            <li>Rock solid torrent client.</li>
-            <li>Simplified interface.</li>
-            <li>DHT, uPnP and uTorrent protocol extensions.</li>
-        </ul>
-        <h2>Download and share files</h2>
-        <p>Now, with <b>Torrents Downloader</b> you can download faster than ever before. Thanks to the torrent network, the fastest P2P solution ever made, your downloads will fly.</p>
-        <p>Give it a try! <b>The future of downloading is only one click away.</b></p>
-        <h2>Get your files in a safe way</h2>
-        <p>We take security very seriously. <b>Torrents Downloader</b> uses the award winning libtorrent library, which will make your download experience a safe and secure one.</p>
-        <p>We strongly recommend you use an antivirus, you can download malware from untrusted sources.</p>
+     {% if properties["source_available"] -%}
+        <!--<div class="source-panel">
+            <a class="source" href="{{url_for('downloads.download', instfile=properties['source_filename'])}}">{{"Download Source"|capitalize}} · {{properties["source_length"]|numbersizeformat}}</a>
+        </div>-->
+     {% endif %}
+
+  <section class="downloader-medium">
+    <div class="downloader-main-features">
+
+      <section class="downloader-main-feature-1">
+        <img src="{{g.static_prefix}}/downloader/feature-main-1-ss.png" class="feat-ss" alt="Easy to use">
+        <img src="{{g.static_prefix}}/downloader/feature-main-1-ico.png" class="feat-ico" alt="Easy to use">
+        <h2>Easy to use</h2>
+        <p>Start your experience with all you need at your fingertips. No need to learn about any complex configurations.</p>
+      </section><!--.downloader-main-feature-1-->
+
+      <section class="downloader-main-feature-2">
+        <img src="{{g.static_prefix}}/downloader/feature-main-2-ss.png" class="feat-ss" alt="Fast finder">
+        <img src="{{g.static_prefix}}/downloader/feature-main-2-ico.png" class="feat-ico" alt="Fast finder">
+        <h2>Fast finder</h2>
+        <p>Find instantly anything you are looking for: videos, music, software...</p>
+      </section><!--.downloader-main-feature-2-->
+
+      <section class="downloader-main-feature-3">
+        <img src="{{g.static_prefix}}/downloader/feature-main-3-ss.png" class="feat-ss" alt="Library and Player">
+        <img src="{{g.static_prefix}}/downloader/feature-main-3-ico.png" class="feat-ico" alt="Library and Player">
+        <h2>Library and Player</h2>
+        <p>All your downloads are automatically organized. Browse and play anything you download!</p>
+      </section><!--.downloader-main-feature-3-->
+
     </div>
+  </section> <!--.downloader-medium-->
 
+
+  <section class="downloader-bottom">
+
+      <section id="find" class="downloader-feature odd">
+        <img src="{{g.static_prefix}}/downloader/feature-1-ss.png" class="feat-ss" alt="Find">
+        <div class="text">
+          <h2>Find</h2>
+          <p>Torrents Downloader is designed to be user friendly, intuitive, and
+            safe. You can search for any kind of content in a direct way. See the
+            progress of your downloads, control them in any way you want. View
+            your completed downloads quickly from the app.</p>
+
+          <p>We know you want to enjoy your videos, music and everything else, and
+            spend minimal time to learn about all the boring details. That's fine,
+            we'll take care of them! Our simplified interface will get you to the
+            point.</p>
+        </div>
+      </section><!--.downloader-feature-->
+
+    <section id="downloads" class="downloader-feature even">
+      <img src="{{g.static_prefix}}/downloader/feature-2-ss.png" class="feat-ss" alt="Downloads">
+      <div class="text">
+        <h2>Downloads</h2>
+        <p>With Torrents Downloader you can now download faster than ever before.
+          Thanks to the torrent network, the fastest P2P solution ever made,
+          your downloads will fly.</p>
+
+        <p>We take security very seriously. Torrents Downloader uses the
+          award-winning libtorrent library, which will make your download
+          experience safe and secure.</p>
+      </div>
+    </section><!--.downloader-feature-->
+
+    <section id="play" class="downloader-feature odd last">
+      <img src="{{g.static_prefix}}/downloader/feature-3-ss.png" class="feat-ss" alt="Play">
+      <div class="text">
+        <h2>Play</h2>
+        <p>You need to look no further, all your downloads are classified and
+          ready to play from the app.</p>
+
+        <p>We want you safe. In all cases we recommend you use an antivirus to
+          defend yourself against any kind of malware downloaded from untrusted
+          sources.</p>
+
+        <p>Browse your downloads, choose from your fine collection and "Play"!</p>
+      </div>
+    </section><!--.downloader-feature-->
+
+    </div>
+  </section> <!--.downloader-bottom-->
+
+</div> <!--.container_24-->
+
+</div> <!--#downloader-page-->
 
 {% endif %}
 {% endblock %}

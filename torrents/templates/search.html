@@ -11,7 +11,7 @@
 {%- endblock -%}
 
 {% block content %}
-<div class="title"><span></span><div>
+<div class="title grid_24"><span></span><div>
 <a href='{{url_for("files.home")}}'>All</a>&nbsp;&nbsp;&gt;&nbsp;&nbsp;{{g.query}}
 <h1 class="category">{{g.query}} torrents</h1>
 </div></div>
@@ -30,7 +30,9 @@
     {%- endif %}
     </div>
 {%- else %}
+    <div class="text_page grid_24">
     <p>No results found for <strong>{{g.query}}</strong>.</p>
     <p>Sorry, we don't have any result that matches your query. Please, try another search.</p>
+    </div>
 {%- endif %}
 {% endblock %}

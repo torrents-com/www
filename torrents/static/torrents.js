@@ -93,7 +93,7 @@ window.downloader = {
     initialized:false,
     skip:false,
     initialize:function(){
-        var is_windows = navigator.appVersion.indexOf("Win")!=-1 
+        var is_windows = navigator.appVersion.indexOf("Win")!=-1;
         this.skip = (document.cookie.indexOf("skip_downloader=1") > -1) || !is_windows;
         this.initialized = true;
         },
@@ -144,9 +144,11 @@ window.downloader = {
             }
         }
     };
-    
+
 $(function(){
     window.suggestmeyes_loaded = true;
+
+    ['aside', 'article', 'footer', 'header', 'nav', 'section'].forEach(function(e){document.createElement(e)});
 
     if ($("div >.filepaths li").length>1){
         $("div >.filepaths >li").addClass("open");
@@ -187,7 +189,7 @@ $(function(){
                 }
             });
         });
-        
+
     /*
     window.downloader.link_lookup("#download");
     window.downloader.link_lookup("#featured");
@@ -229,7 +231,7 @@ $(function(){
             $(this).colorbox({iframe:true, innerWidth:560, innerHeight:360, transition:'none'});
         }
     });
-    
+
      $("#downloader_button").click(function(e){
             _gaq.push(['_trackEvent','TD', "Download"]);
             e.preventDefault();

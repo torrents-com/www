@@ -14,7 +14,7 @@
     </div>
 {%- endif %}
 
-<div class="title big_icon {{g.category.url}}">
+<div class="title big_icon grid_24 {{g.category.url}}">
 <span></span><div>
 <a href='{{url_for("files.home")}}'>All</a>&nbsp;&nbsp;&gt;&nbsp;&nbsp;
 {%- if g.query %}<a href='{{url_for("files.category", category=g.category.url)}}'>{{g.category.title}}</a>&nbsp;&nbsp;&gt;&nbsp;&nbsp;{{g.query}}
@@ -24,23 +24,25 @@
 <h1 class="category">{{g.category.title|singular}} torrents</h1>
 {%- endif %}
 </div></div>
-{%- if featured %}
-    <div class="grid_6">
-        {{featured|safe}}
-    </div>
-    <div class="grid_17 prefix_1 alpha">
-    {%- else %}
-    <div class="prefix_7 grid_17 alpha">
-{%- endif %}
 
 {%- if results %}
+    {%- if featured %}
+        <div class="grid_6">
+            {{featured|safe}}
+        </div>
+        <div class="grid_17 prefix_1 alpha">
+        {%- else %}
+        <div class="prefix_7 grid_17 alpha">
+    {%- endif %}
     {{ results |safe }}
     {%- if search_info["next"] %}
         <a class='more_results' href='{{url_for("files.category", category=g.category.url, query=g.clean_query)}}?s={{search_info["next"]}}{{'&o='+show_order if show_order}}'>more {{g.category.title|lower}} torrents...</a>
     {%- endif %}
-{%- else %}
-    <p>No <strong>{{g.category.title|singular}}</strong> torrents found for <strong>{{g.query}}</strong>.</p>
-    <p>Sorry, we don't have any result that matches your query in this category. Please, try another search or another category.</p>
-{%- endif %}
     </div>
+{%- else %}
+    <div class="text_page grid_24">
+        <p>No <strong>{{g.category.title|singular}}</strong> torrents found for <strong>{{g.query}}</strong>.</p>
+        <p>Sorry, we don't have any result that matches your query in this category. Please, try another search or another category.</p>
+    </div>
+{%- endif %}
 {% endblock %}

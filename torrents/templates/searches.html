@@ -7,11 +7,11 @@
     {%- endif%}
 {%- endmacro %}
 {% block content %}
-<div class="title">
+<div class="title grid_24">
     <h1>{{g.h1}}</h1>
     <h2>{{subtitle}}</h2>
 </div>
-<div id="ranking">
+<div id="ranking" class="grid_24">
     <ol>
     {%- for search in ranking["final_ranking"] %}
         <li>{{trend(search[2])}}<a href="{{url_for('files.search', query=search[0]|clean_query)}}">{{search[0]}}</a><span>{{(search[1]*100)|round(2)}} %</span></li>

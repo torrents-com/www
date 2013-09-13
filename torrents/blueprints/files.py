@@ -68,45 +68,6 @@ def get_skip(x=None):
     except:
         return 0
 
-'''
-def register_search(query, category, must_register, has_results=None, canonical_query=None):
-
-    safe_query = query.replace(" ","_")
-
-    # no registra busquedas muy largas
-    if len(safe_query)>=current_app.config["MAX_LENGTH_SAVE"]:
-        return
-
-    # no registra busquedas con palabras no permitidas
-    if blacklists.prepare_phrase(safe_query) in blacklists:
-        return
-
-    # conjunto de palabras
-    words = frozenset(word[:-1] if word[-1]=="s" else word for word in safe_query.lower().split("_") if word)
-
-    # si no sabe si hay resultados, mira si se ha guardado anteriormente
-    if has_results is None:
-        canonical_query = cache.get("TS-"+safe_query)
-        has_results = bool(canonical_query)
-    else: # si sabe que hay resultados, lo guarda para próximos usos
-        cache.set("TS-"+safe_query, canonical_query if has_results else False)
-
-    # si no sabe si hay resultados, lo registrará la próxima vez
-    if must_register and not has_results:
-        cache.set("TNS-"+safe_query, True)
-
-    # si no toca registrar, mira si no hay pendiente hacerlo
-    if not must_register:
-        if cache.get("TNS-"+safe_query):
-            cache.delete("TNS-"+safe_query)
-            must_register = True
-
-    # si toca registrar y hay resultados, registra busqueda para nubes de tags
-    if must_register and has_results and canonical_query:
-        ip = request.headers.getlist("X-Forwarded-For")[0] if request.headers.getlist("X-Forwarded-For") else request.remote_addr
-        torrentsdb.save_search(query, hashlib.md5((canonical_query+"_"+ip).encode("utf-8")).digest(), category.cat_id if category else 0)
-'''
-
 def get_query_info(query=None, category=None, check_qs=True):
     redirect = False
     if not query and check_qs:
@@ -169,7 +130,11 @@ def pixel():
 CHAR_SIZE=12
 WORD_SIZE=10
 def create_cloud(data, width, lines):
-    ranking = data["final_ranking"]
+    ranking = data["final_ranking"] if "final_ranking" in data else None
+
+    if not ranking:
+        return []
+
     ret=[]
     acum = 0
     limit = lines*width*.95

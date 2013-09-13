@@ -138,11 +138,12 @@ img {
 }
 
 .text_page {
+    .title { margin:0px 0px;}
 
     h2 { font-size: 1.6em; margin-top:2em; }
 
     ul, ol {
-        padding-left:1.5em;
+        padding-left:3em;
         li {
             list-style-type:inherit;
         }

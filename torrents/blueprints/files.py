@@ -557,7 +557,7 @@ def process_search_results(s=None, query=None, category=None, not_category=None,
     if canonical_query:
         prepared_phrase = blacklists.prepare_phrase(canonical_query.replace("_"," "))
         #si la query exacta está en underage no se muestra nada
-        if query in blacklists["underage"].texts:
+        if blacklists["underage"].exact(query):
             g.blacklisted_content = "Search"
         else:
             #Si solo la incluye ya tiene que completar con misconduct

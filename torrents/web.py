@@ -140,7 +140,7 @@ def create_app(config=None, debug=False):
     feedbackdb.init_app(app)
     configdb.init_app(app)
     entitiesdb.init_app(app)
-    torrentsdb.init_app(app)
+    torrentsdb.init_app(app, feedbackdb)
 
     configdb.register_action("flush_cache", cache.clear, _unique=True)
 

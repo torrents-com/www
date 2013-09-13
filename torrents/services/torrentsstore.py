@@ -4,7 +4,6 @@ from foofind.utils import check_capped_collections, u, check_collection_indexes
 from datetime import datetime
 from time import time
 from collections import defaultdict
-from foofind.services import feedbackdb
 
 def levenshtein(a,b,threshold):
     "Calculates the Levenshtein distance between a and b."
@@ -52,7 +51,7 @@ class TorrentsStore(object):
         self.max_pool_size = 0
         self.torrents_conn = None
 
-    def init_app(self, app):
+    def init_app(self, app, feedbackdb):
         '''
         Inicializa la clase con la configuración de la aplicación.
         '''
@@ -119,7 +118,7 @@ class TorrentsStore(object):
         self.torrents_conn.torrents["rankings."+ranking].update({"_id":search},{"$inc": {"value.w": weight}}, upsert=True)
         self.torrents_conn.end_request()
 
-    def clean_ranking_searches(self, ranking, weight_threshold):
+    def clean_ranking_searches(self, ranking, max_size, weight_threshold):
         ranking_searches = self.torrents_conn.torrents["rankings."+ranking]
         ranking_searches.remove({"value.w":{"$exists":False}})
         ranking_searches.remove({"value.w":{"$lt":weight_threshold}})

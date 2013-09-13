@@ -5,6 +5,9 @@ from heapq import nlargest
 from operator import itemgetter
 from collections import defaultdict
 from time import time
+
+from foofind.services.db.feedbackstore import FeedbackStore
+from torrents.services.torrentsstore import TorrentsStore
 from torrents.services.blacklists import Blacklists
 
 def levenshtein(a,b,threshold):
@@ -35,8 +38,11 @@ RELEVANCE_FACTOR = 0.32
 
 def update_rankings(app):
 
+    feedbackdb = FeedbackStore()
+    feedbackdb.init_app(app)
+
     torrentsdb = TorrentsStore()
-    torrentsdb.init_app(app)
+    torrentsdb.init_app(app, feedbackdb)
 
     blacklists = Blacklists()
     blacklists.load_data(torrentsdb.get_blacklists())
@@ -77,7 +83,7 @@ def update_rankings(app):
                 print "RANKING %s: i = %d, lu = %.2f, wt = %.6f, te = %.2f alpha = %.6f, beta=%.6f"%(ranking_name, ranking["interval"], new_last_update, weight_threshold, ellapsed_time, alpha, beta)
 
                 # reduce weights (and add trends info if needed)
-                torrentsdb.batch_ranking_searches(ranking_name, ranking_trends, generate_trends, alpha):
+                torrentsdb.batch_ranking_searches(ranking_name, ranking_trends, generate_trends, alpha)
 
                 # update weights
                 for search in searches:
@@ -94,10 +100,10 @@ def update_rankings(app):
                     text = search["s"].lower().replace(".", " ")
 
                     # increase weight for this search
-                    torrentsdb.update_ranking_searches(self, ranking_name, text, beta)
+                    torrentsdb.update_ranking_searches(ranking_name, text, beta)
 
                 # discard less popular searches and calculates normalization factor
-                norm_factor = torrentsdb.clean_ranking_searches(ranking_name, weight_threshold)
+                norm_factor = torrentsdb.clean_ranking_searches(ranking_name, max_size, weight_threshold)
 
                 if norm_factor:
                     ranking["norm_factor"] = norm_factor

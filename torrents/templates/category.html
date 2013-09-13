@@ -6,28 +6,36 @@
 {%- endblock -%}
 {% block content %}
 {% if pop_searches%}
-    <div id="popular" class="category">
-        <div><span>Most popular searches</span></div>
-        {%- for key, search, size in pop_searches %}
-            <a class="{{ loop.cycle('odd', 'even') }}" style="font-size:{{size}}px" href="{{url_for('files.category', category=g.category.url, query=key|clean_query)}}">{{search}}</a>
-        {%- endfor %}
-    </div>
+
 {%- endif %}
 
+{%- if g.query %}
 <div class="title big_icon grid_24 {{g.category.url}}">
-<span></span><div>
-<a href='{{url_for("files.home")}}'>All</a>&nbsp;&nbsp;&gt;&nbsp;&nbsp;
-{%- if g.query %}<a href='{{url_for("files.category", category=g.category.url)}}'>{{g.category.title}}</a>&nbsp;&nbsp;&gt;&nbsp;&nbsp;{{g.query}}
-<h1 class="category">{{g.query}} {{g.category.title|singular}} torrents</h1>
+    <span></span>
+    <div>
+        <a href='{{url_for("files.home")}}'>All</a>&nbsp;&nbsp;&gt;&nbsp;&nbsp;<a href='{{url_for("files.category", category=g.category.url)}}'>{{g.category.title}}</a>&nbsp;&nbsp;&gt;&nbsp;&nbsp;{{g.query}}
+        <h1 class="category">{{g.query}} {{g.category.title|singular}} torrents</h1>
+    </div>
+</div>
 {%- else %}
-{{g.category.title}}
-<h1 class="category">{{g.category.title|singular}} torrents</h1>
+<div class="title big_icon grid_8 {{g.category.url}}">
+    <span></span>
+    <div>
+        <a href='{{url_for("files.home")}}'>All</a>&nbsp;&nbsp;&gt;&nbsp;&nbsp;{{g.category.title}}
+        <h1 class="category">{{g.category.title|singular}} torrents</h1>
+    </div>
+</div>
+<div id="popular" class="grid_16 category">
+    <div><span>Most popular searches</span></div>
+    {%- for key, search, size in pop_searches %}
+        <a class="{{ loop.cycle('odd', 'even') }}" style="font-size:{{size}}px" href="{{url_for('files.category', category=g.category.url, query=key|clean_query)}}">{{search}}</a>
+    {%- endfor %}
+</div>
 {%- endif %}
-</div></div>
 
 {%- if results %}
     {%- if featured %}
-        <div class="grid_6">
+        <div id="featured_col" class="grid_6">
             {{featured|safe}}
         </div>
         <div class="grid_17 prefix_1 alpha">

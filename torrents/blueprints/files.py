@@ -139,7 +139,7 @@ def create_cloud(data, width, lines):
     limit = lines*width*.95
     size = 20
     last_weight = ranking[0][1]
-    for search, weight, trend in ranking:
+    for search, weight, trend, trend_pos in ranking:
         size -= (10-math.ceil(weight/last_weight/0.1))/2
 
         ret.append((search.lower(), search, size))

@@ -183,6 +183,7 @@ def create_app(config=None, debug=False):
 
     @app.before_request
     def before_request():
+        g.cache_code = ""
 
         # No preprocesamos la peticiones a static
         if request.path.startswith("/static/"):
@@ -208,7 +209,8 @@ def create_app(config=None, debug=False):
         if request.user_agent.browser == "msie": response.headers["X-UA-Compatible"] = "IE-edge"
         if g.must_cache:
             response.headers["X-Cache-Control"] = "max-age=%d"%g.must_cache
-
+        if g.cache_code:
+            response.headers["Cache-Code"] = g.cache_code
         return response
 
     # Páginas de error

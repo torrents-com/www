@@ -5,6 +5,7 @@ from flask import render_template, current_app, g, send_from_directory, abort, m
 from torrents.multidomain import MultidomainBlueprint
 from foofind.utils.fooprint import Fooprint
 from foofind.services import *
+from .downloader.web import get_downloader_properties
 
 news = MultidomainBlueprint('news', __name__, domain="torrents.com")
 
@@ -58,37 +59,34 @@ def load_html_parts(filename):
 
     return parts
 
-
-@news.route('/res/cookies.js')
-def cookies():
-    response = make_response("$(function(){cookies("+request.cookies.get("cookies_accept","0")+")})")
-    response.headers['content-type']='application/javascript'
-    response.set_cookie('cookies_accept',value='1')
-    return response
-
 @news.route('/')
 @news.route('/news/<path:path>')
 def home(path=""):
+    g.cache_code += "N"
     g.override_header = True
     path_parts = load_html_parts(path)
 
     if not path_parts:
         return abort(404)
 
-    return render_template('news.html', **path_parts)
+    return render_template('news.html', properties=get_downloader_properties() if not path else None, **path_parts)
 
 @news.route('/news/wp-content/<path:path>')
 def wp_content(path):
+    g.cache_code += "N"
     return send_from_directory(os.path.join(current_app.root_path, 'news', 'wp-content'), path)
 
 @news.route('/news/sitemap.xml')
 def main_sitemap():
+    g.cache_code += "N"
     return fix_response('sitemap_index.xml')
 
 @news.route('/news/<name>-sitemap.xml')
 def inner_sitemap(name):
+    g.cache_code += "N"
     return fix_response(name+'-sitemap.xml')
 
 @news.route('/news/rss')
 def rss():
+    g.cache_code += "N"
     return fix_response('feed/rss')

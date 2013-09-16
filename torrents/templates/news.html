@@ -21,13 +21,13 @@
             <div class="float-carrusel">
                 <p class="downloader-features">find, download & play!</p>
                 <h2 class="carrusel-title">INSTALL OUR FREE 'TORRENTS DOWNLOADER'</h2>
-                <p>texto texto textotexto texto textotexto texto textotexto texto textotexto texto textotexto texto textotexto texto textotexto texto textotexto texto textotexto texto textotexto texto textotexto texto texto</p>
+                <p>Torrents Downloader is designed to be user friendly, intuitive, and safe. You can search for any kind of content in a direct way. See the progress of your downloads, control them in any way you want. View your completed downloads quickly from the app.</p>
                 <a href="{{ url_for('web.home') }}">more info »</a>
                 <div class="clear-floats"></div>
-                <a href="{{ url_for('web.home') }}" class="downloader-download-button">DOWNLOAD</a>
+                <a href="{{url_for('downloads.download', instfile=properties['filename'])}}" class="downloader-download-button">DOWNLOAD</a>
                 <div class="download-info">
                     <p>for Windows</p>
-                    <p class="downloader-mb">1.7 MB</p>
+                    <p class="downloader-mb">{{properties["length"]|numbersizeformat}}</p>
                 </div>
             </div>
             <div class="clear-floats"></div>
@@ -44,7 +44,7 @@
                 <h2 class="carrusel-title">INSTALL OUR FREE 'TORRENTS DOWNLOADER'</h2>
                 <p>for Windows</p>
             </div>
-            <a href="{{ url_for('web.home') }}" class="downloader-download-button">DOWNLOAD</a>
+            <a href="{{ url_for('web.home') }}" class="downloader-download-button">MORE INFO</a>
         </div>
     </div>
 </section>

@@ -13,11 +13,9 @@ from foofind.utils.downloader import get_file_metadata
 
 web = MultidomainBlueprint('web', __name__, domain="torrents.ms")
 
-@web.route('/')
-def home():
-    g.category=False
+def get_downloader_properties():
+    g.cache_code += "D"
     downloader_files = current_app.config["DOWNLOADER_FILES"]
-
     installer_metadata = get_file_metadata(downloader_files["installer.exe"])
     setup_metadata = get_file_metadata(downloader_files["setup.exe"])
     source_metadata = get_file_metadata(downloader_files["source.zip"])
@@ -41,12 +39,17 @@ def home():
             properties["source_filename"] = "source.zip"
     except KeyError:
         properties["source_available"] = False
+    return properties
 
+@web.route('/')
+def home():
+    g.category=False
     g.title = "Torrents.com | Torrents Downloader"
     g.page_description = "Torrents Downloader is a fast client for the Torrent P2P network"
+
     return render_template(
         "microsite/foodownloader.html",
-        properties = properties,
+        properties = get_downloader_properties(),
         mode = "download",
         style_alternative = request.args.get("a", 2, int)
         )

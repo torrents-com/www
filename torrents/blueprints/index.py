@@ -10,6 +10,13 @@ from torrents.services import *
 
 index = MultidomainBlueprint('index', __name__, domain="torrents.com")
 
+@index.route('/res/cookies.js')
+def cookies():
+    response = make_response("$(function(){cookies("+request.cookies.get("cookies_accept","0")+")})")
+    response.headers['content-type']='application/javascript'
+    response.set_cookie('cookies_accept',value='1')
+    return response
+
 @index.route('/robots.txt')
 def robots():
     return send_from_directory(os.path.join(current_app.root_path, 'static'), 'robots.txt')

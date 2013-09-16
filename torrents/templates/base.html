@@ -53,7 +53,7 @@
             }
         {% if g.must_accept_cookies %}
         </script>
-        <script type="application/javascript" src="{{url_for('news.cookies')}}"></script>
+        <script type="application/javascript" src="{{url_for('index.cookies')}}"></script>
         {% else %}
             $(function(){cookiesScripts()});
         </script>

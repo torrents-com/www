@@ -856,6 +856,8 @@ form {
 
 
 /* NEWS ------------------------------------------ */
+.widget-title a img {display:none;}
+.widget-title a {color:#333;}
 .widget_rss_multi_importer_widget .title {
     font-weight: inherit;
     text-align: inherit;

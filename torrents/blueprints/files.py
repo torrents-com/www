@@ -115,7 +115,6 @@ def pixel():
                     return PIXEL
 
                 # no registra busquedas con palabras no permitidas
-                print g.safe_query
                 if blacklists.prepare_phrase(g.safe_query) in blacklists:
                     return PIXEL
 
@@ -161,7 +160,7 @@ def home():
     g.keywords.update(["torrents", "search engine", "free download", "music", "online", "movie", "games", "TV", "music", "Anime", "Books", "Adult", "Porn", "Spoken word", "Software", "Mobile", "Pictures"])
 
     rankings, featured = get_rankings()
-    pop_searches = create_cloud(torrentsdb.get_ranking("daily"), 700, 4)
+    pop_searches = create_cloud(torrentsdb.get_ranking("weekly"), 700, 4)
 
     return render_template('index.html', rankings = rankings, pop_searches = pop_searches, featured=featured)
 

@@ -20,10 +20,10 @@
         {% if properties["available"] -%}
             <a href="{{url_for('downloads.download', instfile=properties['filename'])}}" class="downloader-download-button">Download</a>
             <p><strong class="free">FREE</strong> <span>for Windows | <strong>{{properties["length"]|numbersizeformat}}</strong> (v. {{properties["version_code"].split("-")[0]}})</span></p>
+            <p class="soon">for OSX & linux: coming soon...</p>
             {% if properties["source_available"] -%}
                 <p class="source"><a href="{{url_for('downloads.download', instfile=properties['source_filename'])}}">Download source · {{properties["source_length"]|numbersizeformat}}</a></p>
             {% endif %}
-            <p>for OSX & linux: cooming soon...</p>
         {% endif %}
     </aside>
   </section>  <!--.downloader-top-->

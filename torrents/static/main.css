@@ -1029,15 +1029,24 @@ footer{margin-top:5em; background-color:#f1f2ec;width:100%;overflow:hidden;}
 
 
 /* DOWNLOADER ------------------------------------------ */
+
+Añadir:
+
+Modificar:
+
 #downloader-page{margin-top:-2em;background:url(/static/downloader/downloader-girl.png) 50% -12em no-repeat;text-align:center;}
 
 .downloader-top{width:96em;margin:0 auto;height:60em;display:block;}
   .download-box{
     width:auto;margin:4em 0 0 0;float:right;text-align:center;-webkit-border-radius:4px;-moz-border-radius:4px;border-radius:4px;
     h2{font-family: Journal,Arial,sans-serif;text-transform:lowercase;font-size:3.9em;font-weight:normal;margin:0 auto 0.5em;text-align:center;color:#333;}
-    p{font-size:1.2em;color:#333;}
+    p{font-size: 1.3em;color: #333;margin-bottom: 0.5em;}
     .free{display:inline-block;padding:2px 5px;margin-right:4px;color:#fff;background:#b23633;}
-    .source a{color:#fff;text-decoration:underline;}
+    .source {
+        font-size:1.2em;display:inline-block;padding:3px 7px;
+        a{color:#ab2933;text-decoration:underline;}
+    }
+    .soon{font-style:italic;color:#666;font-size:1.2em;}
   }
 a.downloader-download-button {display:inline-block;font-size:3em;background:#5ab55a;text-transform:uppercase;color:#fff;text-decoration: none;margin:0 auto 0.5em;-webkit-border-radius:4px;-moz-border-radius:4px;border-radius:4px;padding: 0.5em 1.7em;text-align: center;}
 a.downloader-download-button:hover {background:#48aa48;}

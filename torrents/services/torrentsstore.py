@@ -120,6 +120,7 @@ class TorrentsStore(object):
 
     def clean_ranking_searches(self, ranking, max_size, weight_threshold):
         ranking_searches = self.torrents_conn.torrents["rankings."+ranking]
+        ranking_searches.remove({"value.w":float("nan")})
         ranking_searches.remove({"value.w":{"$exists":False}})
         ranking_searches.remove({"value.w":{"$lt":weight_threshold}})
 

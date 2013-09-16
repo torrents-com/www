@@ -1,9 +1,9 @@
 {% extends "base.html" %}
-{%- macro trend(val) %}
+{%- macro trend(val, val2) %}
     {%- if val==None%}<span style="color:gray">new!</span>
-    {%- elif val>1.2 %}<span style="color:green">&Delta;</span>
-    {%- elif val>0.9 %}<span>=</span>
-    {%- else %}<span style="color:red">&nabla;</span>
+    {%- elif val>val2 %}<span style="color:green">&Delta;{{val-val2}}</span>
+    {%- elif val==val2 %}<span>=</span>
+    {%- else %}<span style="color:red">&nabla;{{val2-val}}</span>
     {%- endif%}
 {%- endmacro %}
 {% block content %}
@@ -14,7 +14,7 @@
 <div id="ranking" class="grid_24">
     <ol>
     {%- for search in ranking["final_ranking"] %}
-        <li>{{trend(search[2])}}<a href="{{url_for('files.search', query=search[0]|clean_query)}}">{{search[0]}}</a><span>{{(search[1]*100)|round(2)}} %</span></li>
+        <li>{{trend(search[3], loop.index0)}}<a href="{{url_for('files.search', query=search[0]|clean_query)}}">{{search[0]}}</a><span>{{(search[1]*100)|round(2)}} %</span></li>
     {%- endfor %}
     </ol>
 </div>

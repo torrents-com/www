@@ -68,9 +68,11 @@ def update_rankings(app):
                 category = ranking.get("category", None)
 
                 # ranking used to compare and create trends
-                ranking_trends = ranking.get("trends", None)
+                ranking_trends_name = ranking.get("trends", None)
+                ranking_trends = rankings.get(ranking_trends_name, None)
                 if ranking_trends:
-                    ranking_trends_norm_factor = rankings[ranking_trends].get("norm_factor", None)
+                    ranking_trends_final_ranking = ranking_trends.get("final_ranking", None)
+                    ranking_trends_norm_factor = ranking_trends.get("norm_factor", None)
 
                 generate_trends = ranking_trends and ranking_trends_norm_factor
 
@@ -78,12 +80,12 @@ def update_rankings(app):
                 ellapsed_time = new_last_update - ranking["last_update"]
                 alpha = RELEVANCE_FACTOR ** (ellapsed_time/ranking["interval"])
                 beta = (1 - alpha)/(ellapsed_time/60.)
-                weight_threshold = beta * RELEVANCE_FACTOR
+                weight_threshold = beta * RELEVANCE_FACTOR * ranking["threshold_interval"]
 
                 print "RANKING %s: i = %d, lu = %.2f, wt = %.6f, te = %.2f alpha = %.6f, beta=%.6f"%(ranking_name, ranking["interval"], new_last_update, weight_threshold, ellapsed_time, alpha, beta)
 
                 # reduce weights (and add trends info if needed)
-                torrentsdb.batch_ranking_searches(ranking_name, ranking_trends, generate_trends, alpha)
+                torrentsdb.batch_ranking_searches(ranking_name, ranking_trends_name, generate_trends, alpha)
 
                 # update weights
                 for search in searches:
@@ -119,18 +121,20 @@ def update_rankings(app):
                     search = search_row["_id"]
                     weight = search_row["value"]["w"]
 
-                    # split search in words
-                    words = frozenset(word[:-1] if word[-1]=="s" else word for word in search.lower().split(" ") if word)
-
                     # calculate trend for this search
                     if generate_trends:
                         weight_trend = search_row["value"].get("t", None)
                         trend = (weight*ranking_trends_norm_factor/norm_factor/weight_trend) if weight_trend else None
+                        trend_pos = next((i for i,x in enumerate(ranking_trends_final_ranking) if x[0]==search), None)
                     else:
-                        trend = None
+                        trend = trend_pos = None
+
+                    '''
+                    # split search in words
+                    words = frozenset(word[:-1] if word[-1]=="s" else word for word in search.lower().split(" ") if word)
 
                     # ignore searches similar, included or that includes another searches
-                    '''for prev_search, info in final_ranking.iteritems():
+                    for prev_search, info in final_ranking.iteritems():
                         if info[2] <= words or words <= info[2] or levenshtein(prev_search, search, 1)<2:
                             ignore = True
                             final_ranking[prev_search][0] += weight/norm_factor*alpha #  *alpha = similar searches is worst than exact same search
@@ -142,13 +146,13 @@ def update_rankings(app):
                     else:'''
 
                     # adds word to set for checks in next iterations
-                    final_ranking[search] = [weight/norm_factor, trend, words]
+                    final_ranking[search] = [weight/norm_factor, trend, trend_pos]
 
                     # stops when the list has the right size
                     if len(final_ranking)>=max_size:
                         break
 
-                ranking["final_ranking"] = [(search, info[0], info[1]) for search, info in sorted(final_ranking.iteritems(), key=itemgetter(1,1), reverse=True)[:size]]
+                ranking["final_ranking"] = [(search, info[0], info[1], info[2]) for search, info in sorted(final_ranking.iteritems(), key=itemgetter(1,1), reverse=True)[:size]]
 
                 # update ranking
                 ranking["last_update"] = new_last_update

@@ -93,7 +93,7 @@ class TorrentsStore(object):
         return ret
 
     def get_rankings(self):
-        ret = {r["_id"]:r for r in self.torrents_conn.torrents.rankings.find()}
+        ret = {r["_id"]:r for r in self.torrents_conn.torrents.rankings.find().sort("order",1)}
         self.torrents_conn.end_request()
         return ret
 

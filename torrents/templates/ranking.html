@@ -3,7 +3,13 @@
 <div class="grid_24">
 <div class="title">
     <h1>{{g.h1}}</h1>
-    <h2>{{title}}</h2>
+    <h2>Popular torrents {{interval_info[1]}}</h2>
+<p>You can also browse popular torrents
+    {%- for torrents_interval, torrents in links.iteritems() if torrents_interval!=interval %}
+        {{- " or " if loop.last}}{{- ", " if not (loop.last or loop.first)}}
+        <a href="{{url_for('files.popular_torrents', interval=torrents_interval)}}">{{torrents[1]}}</a>
+    {%- endfor %}.
+</p>
 </div>
 </div>
 <div class="grid_6">

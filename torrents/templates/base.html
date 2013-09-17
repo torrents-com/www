@@ -158,10 +158,8 @@
                   </li>
                   <li class="domain"><a href="{{ url_for('files.home') }}">Torrents<span>.fm</span></a>
                     <ul>
-                      <li><a href="{{ url_for('files.popular') }}">Popular torrents</a></li>
-                      <li><a href="{{ url_for('files.recent') }}">Recent torrents</a></li>
-                      <li><a href="{{ url_for('files.popular_searches') }}">Popular searches</a></li>
-                      <li><a href="{{ url_for('files.recent_searches') }}">Recent searches</a></li>
+                      <li><a href="{{ url_for('files.popular_torrents', interval='week') }}">Popular torrents</a></li>
+                      <li><a href="{{ url_for('files.popular_searches', interval='week') }}">Favorite Torrent Searches</a></li>
                     </ul>
                   </li>
                 </ul>

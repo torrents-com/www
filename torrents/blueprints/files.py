@@ -5,7 +5,7 @@ from flask import flash, request, render_template, redirect, url_for, g, current
 from struct import pack, unpack
 from base64 import b64decode, urlsafe_b64encode, urlsafe_b64decode
 from urlparse import urlparse, parse_qs
-
+from collections import OrderedDict
 from heapq import heapify, heappop
 
 from foofind.utils import url2mid, u, logging, mid2hex, bin2hex, nocache
@@ -37,9 +37,7 @@ def tree_visitor(item):
         return item[1]["_w"]
 
 CATEGORY_ORDER = ("IDIV(fs,17280000)*(r+10)", "ok DESC, r DESC, fs DESC", "IDIV(fs,17280000)*(r+10)")
-RECENT_ORDER = ("fs", "ok DESC, r DESC, e DESC", "fs")
 RANKING_ORDER = ("IDIV(fs,1728000)*(r+10)", "ok DESC, r DESC, fs DESC", "IDIV(fs,1728000)*(r+10)")
-POPULAR_ORDER = RANKING_ORDER
 SEARCH_ORDER = ("@weight*(r+10)", "e DESC, ok DESC, r DESC, fs DESC", "@weight*(r+10)")
 
 CATEGORY_UNKNOWN = Category(cat_id=11, url="unknown", title='Unknown', tag=u'unknown', content='unknown', content_main=True, show_in_home=False)
@@ -164,43 +162,72 @@ def home():
 
     return render_template('index.html', rankings = rankings, pop_searches = pop_searches, featured=featured)
 
+@files.route('/popular')
+def old_popular_torrents():
+    return redirect(301, url_for(".popular_torrents", ranking="today"))
+
+@files.route('/recent')
+def old_recent_torrents():
+    return redirect(301, url_for(".popular_torrents", ranking="now"))
 
 @files.route('/popular_searches')
 def old_popular_searches():
-    return redirect(301, url_for(".popular_searches"))
+    return redirect(301, url_for(".popular_searches", ranking="today"))
 
-@files.route('/popular/today')
-def popular_searches():
+popular_searches_intervals = OrderedDict([
+                        ("now", ("recent", "at this moment")),
+                        ("today", ("daily", "for today")),
+                        ("week", ("weekly", "for this week")),
+                        ])
+@files.route('/popular/searches/<interval>')
+def popular_searches(interval):
     '''
     Renderiza la página de búsquedas populares.
     '''
+
+    interval_info = popular_searches_intervals.get(interval, None)
+    if not interval_info:
+        abort(404)
+
     g.extra_container_classes="text_page"
     g.category=False
     g.keywords.clear()
     g.keywords.update(["popular torrent", "free movie", "full download", "search engine", "largest"])
     g.page_description = "Torrents.com is a free torrent search engine that offers users fast, simple, easy access to every torrent in one place."
-    g.title+=" | Popular searches"
+    g.title+=" | Popular searches "+interval_info[1]
     g.h1 = "See up to the minute results for most popular torrent searches ranging from movies to music."
 
-    ranking = torrentsdb.get_ranking("daily")
+    ranking = torrentsdb.get_ranking(interval_info[0])
 
-    return render_template('searches.html', subtitle="Popular searches for today", ranking = ranking)
+    return render_template('searches.html', interval=interval, interval_info=interval_info, ranking = ranking, links=popular_searches_intervals)
 
-@files.route('/popular/now')
-def recent_searches():
-    '''
-    Renderiza la página de búsquedas populares.
-    '''
-    g.extra_container_classes="text_page"
-    g.category=False
+
+#RECENT_ORDER = ("fs", "ok DESC, r DESC, e DESC", "fs")
+#RANKING_ORDER = ("IDIV(fs,1728000)*(r+10)", "ok DESC, r DESC, fs DESC", "IDIV(fs,1728000)*(r+10)")
+
+popular_torrents_intervals = OrderedDict([
+                        ("today", (("if(now()-fs<86400,1,0)*(r+10)", "ok DESC, r DESC, fs DESC", "if(now()-fs<86400,1,0)*(r+10)"), "at this moment")),
+                        ("week", (("if(now()-fs<604800,1,0)*(r+10)", "ok DESC, r DESC, fs DESC", "if(now()-fs<604800,1,0)*(r+10)"), "for this week")),
+                        ("month", (("if(now()-fs<2592000,1,0)*(r+10)", "ok DESC, r DESC, fs DESC", "if(now()-fs<2592000,1,0)*(r+10)"), "for this month")),
+                        ("all", (("r+10", "ok DESC, r DESC, fs DESC", "r+10"), "of all times")),
+                        ])
+@files.route('/popular/torrents/<interval>')
+def popular_torrents(interval):
+
+    interval_info = popular_torrents_intervals.get(interval, None)
+    if not interval_info:
+        abort(404)
+
+
+    g.category = False
+    g.title+=" | Popular torrents "+interval_info[1]
+    results, search_info = single_search(None, "torrent", "porn", order=interval_info[0], zone="Popular", title=("Popular torrents", 2, None), last_items=get_last_items(), skip=get_skip(), show_order=None)
     g.keywords.clear()
-    g.keywords.update(["popular torrent", "free movie", "full download", "search engine", "largest"])
-    g.page_description = "Torrents.com is a free torrent search engine that offers users fast, simple, easy access to every torrent in one place."
-    g.title+=" | Popular searches"
-    g.h1 = "See up to the minute results for most popular torrent searches ranging from movies to music."
+    g.keywords.update(["torrent", "torrents", "search engine", "popular downloads", "online movies"])
+    g.page_description = "%s is a free torrent search engine that offers users fast, simple, easy access to every torrent in one place." % g.domain_capitalized
+    g.h1 = " These are the most popular torrents %s."%interval_info[1]
+    return render_template('ranking.html',  interval=interval, interval_info=interval_info, results=results, search_info=search_info, featured=get_featured(search_info["count"]), links=popular_torrents_intervals)
 
-    ranking = torrentsdb.get_ranking("recent")
-    return render_template('searches.html', subtitle="Popular searches at this moment", ranking = ranking)
 
 @files.route('/search_info')
 def search_info():
@@ -291,27 +318,6 @@ def category(category, query=None):
 
     return render_template('category.html', results=results, search_info=search_info, show_order=show_order, featured=get_featured(search_info["count"]), pop_searches=pop_searches)
 
-@files.route('/recent')
-def recent():
-    g.category = False
-    g.title+=" | Recent torrents"
-    results, search_info = single_search(None, "torrent", "porn", order=RECENT_ORDER, zone="Recent", title=("Recent torrents", 2, None), last_items=get_last_items(), skip=get_skip(), show_order=None)
-    g.keywords.clear()
-    g.keywords.update(["recent", "torrents", "search", "search engine", "free", "full movie", "2013"])
-    g.page_description = "%s is a free torrent search engine that offers users fast, simple, easy access to every torrent in one place."%g.domain_capitalized
-    g.h1 = "Find recently created torrents on this page. For specific category torrents, click the tab above and sort by creation date."
-    return render_template('ranking.html', title="Recent torrents", results=results, search_info=search_info, featured=get_featured(search_info["count"]))
-
-@files.route('/popular')
-def popular():
-    g.category = False
-    g.title+=" | Popular torrents"
-    results, search_info = single_search(None, "torrent", "porn", order=POPULAR_ORDER, zone="Popular", title=("Popular torrents", 2, None), last_items=get_last_items(), skip=get_skip(), show_order=None)
-    g.keywords.clear()
-    g.keywords.update(["torrent", "torrents", "search engine", "popular downloads", "online movies"])
-    g.page_description = "%s is a free torrent search engine that offers users fast, simple, easy access to every torrent in one place." % g.domain_capitalized
-    g.h1 = " These are the most popular torrents."
-    return render_template('ranking.html', title="Popular torrents", results=results, search_info=search_info, featured=get_featured(search_info["count"]))
 
 @files.route('/-<file_id>')
 @files.route('/<file_name>-<file_id>')

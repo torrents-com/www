@@ -62,7 +62,6 @@ def update_rankings(app):
 
                 # ranking info
                 size = int(ranking["size"])
-                max_size = int(ranking["max_size"])
                 category = ranking.get("category", None)
                 relevance_factor = ranking["relevance_factor"]
 
@@ -73,7 +72,7 @@ def update_rankings(app):
                     ranking_trends_final_ranking = ranking_trends.get("final_ranking", None)
                     ranking_trends_norm_factor = ranking_trends.get("norm_factor", None)
 
-                generate_trends = ranking_trends and ranking_trends_norm_factor
+                generate_trends = ranking_trends and ranking_trends_final_ranking and ranking_trends_norm_factor
 
                 # calculate parameters for weights update
                 ellapsed_time = new_last_update - ranking["last_update"]
@@ -105,7 +104,7 @@ def update_rankings(app):
                     torrentsdb.update_ranking_searches(ranking_name, text, beta)
 
                 # discard less popular searches and calculates normalization factor
-                norm_factor = torrentsdb.clean_ranking_searches(ranking_name, max_size, weight_threshold)
+                norm_factor = torrentsdb.clean_ranking_searches(ranking_name, size, weight_threshold)
 
                 if norm_factor:
                     ranking["norm_factor"] = norm_factor
@@ -114,12 +113,16 @@ def update_rankings(app):
                     print "WARNING: can't calculate normalization factor."
 
                 # filter and regenerate new ranking
-                final_ranking = {}
+                ranking["final_ranking"] = final_ranking = []
 
                 for search_row in torrentsdb.get_ranking_searches(ranking_name):
 
                     search = search_row["_id"]
                     weight = search_row["value"]["w"]
+
+                    # double-check blacklists
+                    if blacklists.prepare_phrase(search) in blacklists:
+                        continue
 
                     # calculate trend for this search
                     if generate_trends:
@@ -129,30 +132,12 @@ def update_rankings(app):
                     else:
                         trend = trend_pos = None
 
-                    '''
-                    # split search in words
-                    words = frozenset(word[:-1] if word[-1]=="s" else word for word in search.lower().split(" ") if word)
-
-                    # ignore searches similar, included or that includes another searches
-                    for prev_search, info in final_ranking.iteritems():
-                        if info[2] <= words or words <= info[2] or levenshtein(prev_search, search, 1)<2:
-                            ignore = True
-                            final_ranking[prev_search][0] += weight/norm_factor*alpha #  *alpha = similar searches is worst than exact same search
-                            if final_ranking[prev_search][1] or trend:
-                                final_ranking[prev_search][1] = (final_ranking[prev_search][1] or 0) + (trend or 0)
-                            break
-
-                    # no break, add the new search
-                    else:'''
-
                     # adds word to set for checks in next iterations
-                    final_ranking[search] = [weight/norm_factor, trend, trend_pos]
+                    final_ranking.append((search, weight/norm_factor, trend, trend_pos))
 
                     # stops when the list has the right size
-                    if len(final_ranking)>=max_size:
+                    if len(final_ranking)>=size:
                         break
-
-                ranking["final_ranking"] = [(search, info[0], info[1], info[2]) for search, info in sorted(final_ranking.iteritems(), key=itemgetter(1,1), reverse=True)[:size]]
 
                 # update ranking
                 ranking["last_update"] = new_last_update

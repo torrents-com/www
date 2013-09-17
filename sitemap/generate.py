@@ -113,7 +113,7 @@ def generate(server, part, afilter, batch_size, output):
             file_name = seoize_text(filename_info["n"]+("."+filename_info["x"] if "x" in filename_info and not filename_info["n"].endswith("."+filename_info["x"]) else ""), "-", True)
 
             fs = afile["fs"]
-            get_writer(fs, count, output, suffix).write("<url><loc>http://torrents.com/%s-%s</loc></url>\n"%(file_name, file_id))
+            get_writer(fs, count, output, suffix).write("<url><loc>http://torrents.fm/%s-%s</loc></url>\n"%(file_name, file_id))
 
         except BaseException as e:
             error_count += 1

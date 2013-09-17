@@ -3,7 +3,7 @@ import pymongo, bson
 from foofind.utils import check_capped_collections, u, check_collection_indexes
 from datetime import datetime
 from time import time
-from collections import defaultdict
+from collections import defaultdict, OrderedDict
 
 def levenshtein(a,b,threshold):
     "Calculates the Levenshtein distance between a and b."
@@ -75,7 +75,7 @@ class TorrentsStore(object):
         self.trend_map = bson.Code("function(){emit(this._id,{'t':this.value.w})}")
 
     def get_blacklists(self):
-        ret = {row["_id"]:row["entries"] for row in self.torrents_conn.torrents.blacklists.find()}
+        ret = OrderedDict((row["_id"],row["entries"]) for row in self.torrents_conn.torrents.blacklists.find())
         self.torrents_conn.end_request()
         return ret
 

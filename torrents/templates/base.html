@@ -34,7 +34,7 @@
                 })();
 
                 {% if g.blacklisted_content %}
-                _gaq.push(['_trackEvent', "Blacklisted", "{{g.blacklisted_content}}"]);
+                trackGAEvent("Blacklisted", "{{g.blacklisted_content}}");
                 {% endif %}
 
                 {% if g.RUM_code %}
@@ -52,10 +52,15 @@
                 {%- endblock -%}
             }
         {% if g.must_accept_cookies %}
+            function trackGAEvent(){
+            }
         </script>
         <script type="application/javascript" src="{{url_for('index.cookies')}}"></script>
         {% else %}
-            $(function(){cookiesScripts()});
+            function trackGAEvent(){
+                _gaq.push(['_trackEvent'].concat(Array.prototype.slice.call(arguments, 0)));
+            }
+            cookiesScripts();
         </script>
         {% endif %}
         {%- block head -%}

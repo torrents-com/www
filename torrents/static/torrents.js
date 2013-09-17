@@ -107,7 +107,7 @@ window.downloader = {
         },
     proxy:function(url, target){
         var me=this, downloader=$("body").data("downloader_href");
-        _gaq.push(['_trackEvent', "TD", "offer"]);
+        trackGAEvent("TD", "offer");
         window.modal_dialog.show({
             mode: "downloader",
             title: $("body").data("downloader_title"),
@@ -115,12 +115,12 @@ window.downloader = {
             yes: $("body").data("downloader_yes"),
             no: $("body").data("downloader_no"),
             yes_callback: function(){
-                _gaq.push(['_trackEvent', "TD", "offer accepted"]);
+                trackGAEvent("TD", "offer accepted");
                 me.disable();
                 setTimeout(function(){window.location.href = downloader}, 100);
                 },
             no_callback: function(){
-                _gaq.push(['_trackEvent', "TD", "offer rejected"]);
+                trackGAEvent("TD", "offer rejected");
                 me.disable();
                 if(target=="_blank") window.open(url);
                 else setTimeout(function(){window.location.href = url}, 100);
@@ -180,7 +180,7 @@ $(function(){
         var elm=$(this), link_href=this.href, target=this.target;
         var data=elm.data("track").split(","), wait=elm.attr("_target");
         elm.click(function(event){
-            _gaq.push(['_trackEvent', data[0], data[1], data[2]]);
+            trackGAEvent(data[0], data[1], data[2]);
             if(!target){
                 setTimeout(function(){
                     if(!event.stop_redirection) window.location = link_href;
@@ -233,7 +233,7 @@ $(function(){
     });
 
      $("#downloader_button").click(function(e){
-            _gaq.push(['_trackEvent','TD', "Download"]);
+            trackGAEvent('TD', "Download");
             e.preventDefault();
             setTimeout('document.location = "'+this.href+'"',100);
     });

@@ -299,4 +299,4 @@ def init_g(app):
     g.extra_container_classes = None
 
     # cookie control
-    g.must_accept_cookies = request.remote_addr in spanish_ips
+    g.must_accept_cookies = False #request.remote_addr in spanish_ips

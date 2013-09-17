@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% block cookies %}
 {% if mode == "success" %}
-    _gaq.push(['_trackEvent', "TD", "installed"]);
+    trackGAEvent("TD", "installed");
 {% endif %}
 {% endblock %}
 

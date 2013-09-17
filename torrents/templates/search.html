@@ -6,7 +6,7 @@
 {%- endblock -%}
 {%- block cookies -%}
     {%- if not results %}
-    _gaq.push(['_trackEvent', "No results", {{g.clean_query|tojson|safe}}]);
+    trackGAEvent("No results", {{g.clean_query|tojson|safe}});
     {%- endif %}
 {%- endblock -%}
 

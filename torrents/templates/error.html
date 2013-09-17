@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 {%- block cookies -%}
-    _gaq.push(['_trackEvent', "Error", "{{code}}"]);
+    trackGAEvent("Error", "{{code}}");
 {%- endblock -%}
 {% block content %}
 <h1><img class="error" src="{{g.static_prefix}}/error.png" alt="Warning"/> {{title}} - ERROR {{code}}</h1>

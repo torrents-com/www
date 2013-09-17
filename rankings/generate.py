@@ -34,8 +34,6 @@ def levenshtein(a,b,threshold):
             return threshold+1
     return current[n]
 
-RELEVANCE_FACTOR = 0.32
-
 def update_rankings(app):
 
     feedbackdb = FeedbackStore()
@@ -66,6 +64,7 @@ def update_rankings(app):
                 size = int(ranking["size"])
                 max_size = int(ranking["max_size"])
                 category = ranking.get("category", None)
+                relevance_factor = ranking["relevance_factor"]
 
                 # ranking used to compare and create trends
                 ranking_trends_name = ranking.get("trends", None)
@@ -78,9 +77,10 @@ def update_rankings(app):
 
                 # calculate parameters for weights update
                 ellapsed_time = new_last_update - ranking["last_update"]
-                alpha = RELEVANCE_FACTOR ** (ellapsed_time/ranking["interval"])
+                alpha = relevance_factor**(ellapsed_time/ranking["interval"])
                 beta = (1 - alpha)/(ellapsed_time/60.)
-                weight_threshold = beta * RELEVANCE_FACTOR * ranking["threshold_interval"]
+
+                weight_threshold = beta * relevance_factor**(ranking["threshold_interval"]/float(ranking["interval"]))
 
                 print "RANKING %s: i = %d, lu = %.2f, wt = %.6f, te = %.2f alpha = %.6f, beta=%.6f"%(ranking_name, ranking["interval"], new_last_update, weight_threshold, ellapsed_time, alpha, beta)
 

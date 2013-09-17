@@ -106,6 +106,8 @@ class FilesFetcher(Thread):
             hard_limit = -100 - int(count_limit/1000.) # limite duro: 1 borrado cada mil ficheros más 100 fijos
 
         for f in cursor:
+            if not 's' in f:
+                f['s'] = 9
             if self.stop_set_len:
                 # construye el nuevo stop set
                 if add_to_stop_set:

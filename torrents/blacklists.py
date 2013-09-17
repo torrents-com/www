@@ -39,9 +39,6 @@ class BlacklistCategory:
         if self.debug:
             assert phrase == prepare_phrase(phrase)
         return sum(1 for text in self.search_texts if text in phrase) + sum(1 for texts in self.search_groups if all(text in phrase for text in texts))
-        
+
     def exact(self, phrase):
-        def only_alfanum(str):
-            return "".join([char if char.isalnum() else " " for char in str])
-        print only_alfanum(phrase.lower()).strip()
-        return only_alfanum(phrase.lower()).strip() in self.texts
+        return phrase in self.texts

@@ -18,6 +18,7 @@ sys.path.insert(0,dirname( abspath(__file__)))
 import xmlpipe2
 from foofind.utils.splitter import split_phrase, SEPPER
 from foofind.utils import u, hex2mid, logging
+from foofind.utils.seo import seoize_text
 from foofind.utils.content_types import *
 from foofind.utils.filepredictor import guess_doc_content_type
 from foofind.datafixes import content_fixes
@@ -178,33 +179,19 @@ def init_file(afile):
 
     # valores dependientes de tipos
     torrent_ct = None
-    if isP2P:
-        if 1 in types: # gnutella
-            afile["_r"] = float((log(int(s["m"]+1)) if "m" in s and 0<s["m"]<10000 else False for s in src.itervalues() if s["t"]==1).next())
-            main_type = 1
-        elif 2 in types: # ed2k
-            afile["_r"] = float((log(int(s["m"]+1)) if "m" in s and 0<s["m"]<10000 else False for s in src.itervalues() if s["t"]==2).next())
-            main_type = 2
-        else: #torrent
-            trackers = md["torrent:trackers"] if "torrent:trackers" in md else 1 if "torrent:tracker" in md else 0
-            if isinstance(trackers, basestring): trackers = trackers.count(" ")
+    if not isP2P:
+        return False
 
-            # mira si es fichero Torrent o Torrent Hash
-            main_type = 7 if 7 in types and len(types)==1 else 3
+    trackers = md["torrent:trackers"] if "torrent:trackers" in md else 1 if "torrent:tracker" in md else 0
+    if isinstance(trackers, basestring): trackers = trackers.count(" ")
 
-            seeds = int(md["torrent:seeds"]) if "torrent:seeds" in md and 0<=md["torrent:seeds"]<500000 else False
-            leechs = int(md["torrent:leechs"]) if "torrent:leechs" in md and 0<=md["torrent:leechs"]<500000 else False
+    # mira si es fichero Torrent o Torrent Hash
+    main_type = 7 if 7 in types and len(types)==1 else 3
 
-            afile["_r"] = 2/(leechs+1.) if seeds==0 else min(10,int(seeds/(leechs+1.)*5))+(seeds/500000.) if seeds!=False else False
-        inner_group = 0
-    else:
-        main_type = (t for t in types).next()
-        inner_group = sources_innergroups[main_type](afile) if sources_innergroups[main_type] else 0
-
-        rating_md = float(md["special:rating"]) if "special:rating" in md else False
-        count = int(float(md["special:count"])) if "special:count" in md else int(float(md["video:viewCount"])) if "video:viewCount" in md else False
-        metadata = any(key in md for key in extra_rating_md)
-        afile["_r"] = rating_md if rating_md!=False and rating_md>=0 else log(count+2) if count!=False and count>=0 else -2 if metadata else False
+    seeds = int(md["torrent:seeds"]) if "torrent:seeds" in md and 0<=md["torrent:seeds"]<500000 else False
+    leechs = int(md["torrent:leechs"]) if "torrent:leechs" in md and 0<=md["torrent:leechs"]<500000 else False
+    afile["_r"] = 2/(leechs+1.) if seeds==0 else (min(10,int(seeds/(leechs+1.)*5))+(seeds/500000.)) if seeds!=False else False
+    inner_group = 0
 
     # rating secundario
     r2 = False
@@ -246,11 +233,7 @@ def init_file(afile):
     fns = nlargest(5, ((sum(sfn["fn"][crc]["m"] if "fn" in sfn and crc in sfn["fn"] else 0 for sfn in src.itervalues()), fn) for crc,fn in afile["fn"].iteritems()))
     afile["_fns"] = separator_join(f[1]["n"]+("."+(f[1].get("x",None) or "")) for f in fns)
 
-    # si no tiene origenes P2P, indexa las urls parseadas, si no usa los nombres de archivo
-    if isP2P:
-        res = [split_phrase(f[1]["n"], True) for f in fns]
-    else:
-        res = [split_phrase(get_url_part(s["url"], s["t"]), True) for s in src.itervalues() if int(s["t"]) in sources]
+    res = [[seoize_text(f[1]["n"], separator=" ", is_url=False, max_length=100, min_length=20)] for f in fns]
 
     # informacion del contenido
     ct, file_tags, file_format = guess_doc_content_type(afile, sources)

@@ -75,7 +75,7 @@ class TorrentsStore(object):
         self.trend_map = bson.Code("function(){emit(this._id,{'t':this.value.w})}")
 
     def get_blacklists(self):
-        ret = OrderedDict((row["_id"],row["entries"]) for row in self.torrents_conn.torrents.blacklists.find())
+        ret = {row["_id"]:row["entries"] for row in self.torrents_conn.torrents.blacklists.find()}
         self.torrents_conn.end_request()
         return ret
 
@@ -93,7 +93,7 @@ class TorrentsStore(object):
         return ret
 
     def get_rankings(self):
-        ret = {r["_id"]:r for r in self.torrents_conn.torrents.rankings.find().sort("order",1)}
+        ret = OrderedDict((r["_id"],r) for r in self.torrents_conn.torrents.rankings.find().sort("order",1))
         self.torrents_conn.end_request()
         return ret
 

@@ -525,14 +525,13 @@ def process_search_results(s=None, query=None, category=None, not_category=None,
 
     # no realiza busquedas bloqueadas
     if canonical_query:
-        prepared_phrase = blacklists.prepare_phrase(canonical_query.replace("_"," "))
         #si la query exacta está en underage no se muestra nada
-        if blacklists["underage"].exact(query):
+        safe_phrase = canonical_query.replace("_"," ").strip()
+        #Si solo la incluye ya tiene que completar con misconduct
+        prepared_phrase = blacklists.prepare_phrase(safe_phrase)
+
+        if blacklists["underage"].exact(safe_phrase) or prepared_phrase in blacklists["forbidden"] or prepared_phrase in blacklists["searchblocked"] or (prepared_phrase in blacklists["misconduct"] and prepared_phrase in blacklists["underage"]):
             g.blacklisted_content = "Search"
-        else:
-            #Si solo la incluye ya tiene que completar con misconduct
-            if prepared_phrase in blacklists["forbidden"] or prepared_phrase in blacklists["searchblocked"] or (prepared_phrase in blacklists["misconduct"] and prepared_phrase in blacklists["underage"]):
-                g.blacklisted_content = "Search"
 
     # si la canonical query es vacia, solo interesan resultados para busquedas con query nulo (rankings)
     if (g.show_blacklisted_content or not g.blacklisted_content) and (canonical_query or not query):

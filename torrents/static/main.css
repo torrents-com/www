@@ -946,7 +946,7 @@ section#content{width:68em;margin:0 auto;float:right;}
 .single .category-tags li{float:right;}
 
 .single-post section#content p, .single-post section#content ul li{font-size:1.5em;line-height:1.3em;margin-bottom:1em;}
-.single-post section#content p:first-child{font-size:1.8em;font-weight:600;}
+.single-post section#content p:first-child{font-size:1.8em;font-weight:400;}
 
 section#sidebar li li, #newsticker p {
     margin: 0 0 0.5em 0.5em;
@@ -956,8 +956,8 @@ section#sidebar li li, #newsticker p {
 #sidebar ul{margin-bottom:1em;}
 #sidebar li li{font-size:1.4em;}
 
-.post-image{position:relative;overflow:hidden;margin-bottom:1em;}
-.post-image img{margin:0 !important;}
+.post-image{position:relative;overflow:hidden;margin-bottom:1em;max-height:300px}
+.post-image img{margin:0 !important;width:680px;height:auto;}
 .post-image div.featured-image-caption{width:27em;background:url(/static/bg.image-caption.png) 0 0 repeat-y;padding:0.5em;position:absolute;bottom:0;z-index:2;}
 .post-image div.featured-image-caption a{color:#fff;}
 

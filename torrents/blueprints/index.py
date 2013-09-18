@@ -19,7 +19,12 @@ def cookies():
 
 @index.route('/robots.txt')
 def robots():
-    return send_from_directory(os.path.join(current_app.root_path, 'static'), 'robots.txt')
+    full_filename = os.path.join(os.path.join(current_app.root_path, 'static'), 'robots.txt')
+
+    with open(full_filename) as input_file:
+        response = make_response(input_file.read() +  "\nSitemap: "+ url_for("news.main_sitemap", _external=True))
+        response.mimetype='text/plain'
+    return response
 
 @index.route('/favicon.ico')
 def favicon():

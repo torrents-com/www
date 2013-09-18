@@ -5,7 +5,7 @@ import os.path
 
 from foofind.services.extensions import cache
 
-from flask import Blueprint, render_template, g, current_app, request, send_file
+from flask import Blueprint, render_template, g, current_app, request, send_file, send_from_directory
 from flask.ext.babelex import gettext as _
 from torrents.multidomain import MultidomainBlueprint
 
@@ -40,6 +40,10 @@ def get_downloader_properties():
     except KeyError:
         properties["source_available"] = False
     return properties
+
+@web.route('/robots.txt')
+def favicon():
+    return send_from_directory(os.path.join(current_app.root_path, 'static'), 'robots.txt', mimetype='text/plain')
 
 @web.route('/')
 def home():

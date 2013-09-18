@@ -10,6 +10,11 @@ from .downloader.web import get_downloader_properties
 news = MultidomainBlueprint('news', __name__, domain="torrents.com")
 
 def fix_urls(content, external=False):
+
+    # remove xsl references from xml sitemaps first line
+    if content.startswith('<?xml version="1.0" encoding="UTF-8"?>'):
+        content = '<?xml version="1.0" encoding="UTF-8"?>\n'+content.split("\n",1)[1]
+
     home_url = url_for("news.home", _external=external).rstrip("/")
     inner_url = url_for("news.home", path="_", _external=external)[:-1] + r"\1"
     inner_url_on_url = urllib2.quote(url_for("news.home", path="_", _external=True)[:-1], "") + r"\1"
@@ -23,11 +28,15 @@ def fix_urls(content, external=False):
 
     return inner_re.sub(inner_url, inner_on_url_re.sub(inner_url_on_url, content.replace(original_template_url, home_url))).replace(original_url, home_url)
 
-def fix_response(filename):
+def fix_response(filename, mimetype=None):
     full_filename = os.path.join(current_app.root_path, "news", filename)
 
     with open(full_filename) as input_file:
-        return fix_urls(input_file.read(), True)
+        response = make_response(fix_urls(input_file.read(), True))
+        if mimetype:
+            response.mimetype = mimetype
+
+    return response
 
 def load_html_parts(filename):
     parts = {}
@@ -79,14 +88,14 @@ def wp_content(path):
 @news.route('/news/sitemap.xml')
 def main_sitemap():
     g.cache_code += "N"
-    return fix_response('sitemap_index.xml')
+    return fix_response('sitemap_index.xml', "text/xml")
 
 @news.route('/news/<name>-sitemap.xml')
 def inner_sitemap(name):
     g.cache_code += "N"
-    return fix_response(name+'-sitemap.xml')
+    return fix_response(name+'-sitemap.xml', "text/xml")
 
 @news.route('/news/rss')
 def rss():
     g.cache_code += "N"
-    return fix_response('feed/rss')
+    return fix_response('feed/rss', "application/rss+xml")

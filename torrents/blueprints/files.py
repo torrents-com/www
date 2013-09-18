@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
-import datetime, time, itertools, re, math, urllib2, hashlib
-from flask import flash, request, render_template, redirect, url_for, g, current_app, abort, escape, jsonify
+import datetime, time, itertools, re, math, urllib2, hashlib, os.path
+from flask import flash, request, render_template, redirect, url_for, g, current_app, abort, escape, jsonify, make_response
 from struct import pack, unpack
 from base64 import b64decode, urlsafe_b64encode, urlsafe_b64decode
 from urlparse import urlparse, parse_qs
@@ -50,6 +50,18 @@ COLUMN_ORDERS = {
     "s": ("r", "ok DESC, e DESC, fs DESC", "r"),
     "rs": ("if(r>0,1/r,-1)", "ok DESC, e DESC, fs DESC", "if(r>0,1/r,-1)"),
 }
+
+POPULAR_SEARCHES_INTERVALS = OrderedDict([
+                        ("now", ("recent", "at this moment")),
+                        ("today", ("daily", "for today")),
+                        ("week", ("weekly", "for this week")),
+                        ])
+POPULAR_TORRENTS_INTERVALS = OrderedDict([
+                        ("today", (("if(now()-fs<86400,1,0)*(r+10)", "ok DESC, r DESC, fs DESC", "if(now()-fs<86400,1,0)*(r+10)"), "at this moment")),
+                        ("week", (("if(now()-fs<604800,1,0)*(r+10)", "ok DESC, r DESC, fs DESC", "if(now()-fs<604800,1,0)*(r+10)"), "for this week")),
+                        ("month", (("if(now()-fs<2592000,1,0)*(r+10)", "ok DESC, r DESC, fs DESC", "if(now()-fs<2592000,1,0)*(r+10)"), "for this month")),
+                        ("all", (("r+10", "ok DESC, r DESC, fs DESC", "r+10"), "of all times")),
+                        ])
 
 def get_order(default_order):
     try:
@@ -162,6 +174,29 @@ def home():
 
     return render_template('index.html', rankings = rankings, pop_searches = pop_searches, featured=featured)
 
+@files.route('/st_sitemap.xml')
+def static_sitemap():
+    pages = [url_for(".home", _external=True)]
+    pages.extend(url_for(".category", category=category.url, _external=True) for category in g.categories)
+    pages.extend(url_for(".popular_searches", interval=interval, _external=True) for interval in POPULAR_SEARCHES_INTERVALS.iterkeys())
+    pages.extend(url_for(".popular_torrents", interval=interval, _external=True) for interval in POPULAR_TORRENTS_INTERVALS.iterkeys())
+    response = make_response(render_template('sitemap.xml', pages = pages))
+    response.mimetype='text/xml'
+    return response
+
+@files.route('/sitemap/sitemap0.xml.gz')
+def dynamic_sitemap():
+    pass
+
+@files.route('/robots.txt')
+def robots():
+    full_filename = os.path.join(os.path.join(current_app.root_path, 'static'), 'robots.txt')
+
+    with open(full_filename) as input_file:
+        response = make_response(input_file.read() + "\nSitemap: " + url_for("files.dynamic_sitemap", _external=True) + "\nSitemap: "+ url_for("files.static_sitemap", _external=True))
+        response.mimetype='text/plain'
+    return response
+
 @files.route('/popular')
 def old_popular_torrents():
     return redirect(301, url_for(".popular_torrents", ranking="today"))
@@ -174,18 +209,13 @@ def old_recent_torrents():
 def old_popular_searches():
     return redirect(301, url_for(".popular_searches", ranking="today"))
 
-popular_searches_intervals = OrderedDict([
-                        ("now", ("recent", "at this moment")),
-                        ("today", ("daily", "for today")),
-                        ("week", ("weekly", "for this week")),
-                        ])
 @files.route('/popular/searches/<interval>')
 def popular_searches(interval):
     '''
     Renderiza la página de búsquedas populares.
     '''
 
-    interval_info = popular_searches_intervals.get(interval, None)
+    interval_info = POPULAR_SEARCHES_INTERVALS.get(interval, None)
     if not interval_info:
         abort(404)
 
@@ -199,22 +229,12 @@ def popular_searches(interval):
 
     ranking = torrentsdb.get_ranking(interval_info[0])
 
-    return render_template('searches.html', interval=interval, interval_info=interval_info, ranking = ranking, links=popular_searches_intervals)
+    return render_template('searches.html', interval=interval, interval_info=interval_info, ranking = ranking, links=POPULAR_SEARCHES_INTERVALS)
 
-
-#RECENT_ORDER = ("fs", "ok DESC, r DESC, e DESC", "fs")
-#RANKING_ORDER = ("IDIV(fs,1728000)*(r+10)", "ok DESC, r DESC, fs DESC", "IDIV(fs,1728000)*(r+10)")
-
-popular_torrents_intervals = OrderedDict([
-                        ("today", (("if(now()-fs<86400,1,0)*(r+10)", "ok DESC, r DESC, fs DESC", "if(now()-fs<86400,1,0)*(r+10)"), "at this moment")),
-                        ("week", (("if(now()-fs<604800,1,0)*(r+10)", "ok DESC, r DESC, fs DESC", "if(now()-fs<604800,1,0)*(r+10)"), "for this week")),
-                        ("month", (("if(now()-fs<2592000,1,0)*(r+10)", "ok DESC, r DESC, fs DESC", "if(now()-fs<2592000,1,0)*(r+10)"), "for this month")),
-                        ("all", (("r+10", "ok DESC, r DESC, fs DESC", "r+10"), "of all times")),
-                        ])
 @files.route('/popular/torrents/<interval>')
 def popular_torrents(interval):
 
-    interval_info = popular_torrents_intervals.get(interval, None)
+    interval_info = POPULAR_TORRENTS_INTERVALS.get(interval, None)
     if not interval_info:
         abort(404)
 
@@ -226,8 +246,7 @@ def popular_torrents(interval):
     g.keywords.update(["torrent", "torrents", "search engine", "popular downloads", "online movies"])
     g.page_description = "%s is a free torrent search engine that offers users fast, simple, easy access to every torrent in one place." % g.domain_capitalized
     g.h1 = " These are the most popular torrents %s."%interval_info[1]
-    return render_template('ranking.html',  interval=interval, interval_info=interval_info, results=results, search_info=search_info, featured=get_featured(search_info["count"]), links=popular_torrents_intervals)
-
+    return render_template('ranking.html',  interval=interval, interval_info=interval_info, results=results, search_info=search_info, featured=get_featured(search_info["count"]), links=POPULAR_TORRENTS_INTERVALS)
 
 @files.route('/search_info')
 def search_info():
@@ -756,7 +775,7 @@ def torrents_data(data, details=False):
 
     data["view"]["icon"] = file_category or file_category_type or CATEGORY_UNKNOWN
     data["view"]["providers"] = providers
-    data["view"]["seo-fn"] = seoize_text(data["view"]["fn"], "-", True)
+    data["view"]["seo-fn"] = data["view"]["nfn"].replace(" ","-")
 
     return data
 

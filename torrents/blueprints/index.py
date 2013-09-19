@@ -73,7 +73,7 @@ def contact():
             try:
                 mail.send(Message("contact",sender=form.email.data, recipients=[to], html="<p>%s, %s</p><p>%s</p>"%(request.remote_addr, request.user_agent, form.message.data)))
                 flash("The message has been sent successfully.")
-                return redirect(url_for('index.home'))
+                return redirect(url_for('.home'))
 
             except BaseException as e:
                 flash("The message has not been sent. Try again later or send mail to %s."%to)

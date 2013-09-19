@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
     <head>
-        <title>{{ g.title | replace("Torrents.com", g.domain_capitalized, 1)}}</title>
         {% if not g.override_header %}
+            <title>{{ g.title | replace("Torrents.com", g.domain_capitalized, 1)}}</title>
             <meta http-equiv="content-language" content="en" />
             {% if g.page_description %}
             <meta name="description" content="{{g.page_description}}" />
@@ -14,10 +14,10 @@
         <link rel="shortcut icon" href="{{ url_for('index.favicon') }}" />
         {%- block assets -%}
             {%- assets "css_torrents" -%}
-                <link type="text/css" href="{{ ASSET_URL }}" rel="stylesheet" />
+                <link type="text/css" href="{{ASSET_URL.rstrip(' \n.')}}" rel="stylesheet" />
             {%- endassets -%}
             {%- assets "js_torrents" -%}
-                <script src="{{ ASSET_URL }}"></script>
+                <script src="{{ ASSET_URL.rstrip(' \n.') }}"></script>
             {%- endassets -%}
         {%- endblock -%}
         <script type="text/javascript">

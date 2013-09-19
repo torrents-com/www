@@ -57,9 +57,9 @@ POPULAR_SEARCHES_INTERVALS = OrderedDict([
                         ("week", ("weekly", "for this week")),
                         ])
 POPULAR_TORRENTS_INTERVALS = OrderedDict([
-                        ("today", (("if(now()-fs<86400,1,0)*(r+10)", "ok DESC, r DESC, fs DESC", "if(now()-fs<86400,1,0)*(r+10)"), "at this moment")),
-                        ("week", (("if(now()-fs<604800,1,0)*(r+10)", "ok DESC, r DESC, fs DESC", "if(now()-fs<604800,1,0)*(r+10)"), "for this week")),
-                        ("month", (("if(now()-fs<2592000,1,0)*(r+10)", "ok DESC, r DESC, fs DESC", "if(now()-fs<2592000,1,0)*(r+10)"), "for this month")),
+                        ("today", (("if(now()-fs<86400,r+10,0)", "ok DESC, r DESC, fs DESC", "if(now()-fs<86400,r+10,0)"), "at this moment")),
+                        ("week", (("if(now()-fs<604800,r+10,0)", "ok DESC, r DESC, fs DESC", "if(now()-fs<604800,r+10,0)"), "for this week")),
+                        ("month", (("if(now()-fs<2592000,r+10,0)", "ok DESC, r DESC, fs DESC", "if(now()-fs<2592000,r+10,0)"), "for this month")),
                         ("all", (("r+10", "ok DESC, r DESC, fs DESC", "r+10"), "of all times")),
                         ])
 
@@ -269,7 +269,7 @@ def search(query=None):
 
     if not g.query:
         flash("Write something!")
-        return redirect(url_for("index.home"))
+        return redirect(url_for(".home"))
 
     if must_redirect:
         if g.category:
@@ -480,7 +480,7 @@ def copyright():
         elif form.validate():
             pagesdb.create_complaint(dict([("ip",request.remote_addr)]+[(field.name,field.data) for field in form]))
             flash("Message sent successfully!")
-            return redirect(url_for('index.home'))
+            return redirect(url_for('.home'))
     return render_template('copyright.html',form=form)
 
 def get_last_items():

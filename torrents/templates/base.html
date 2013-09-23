@@ -89,6 +89,7 @@
                         <a href="{{ url_for('files.home') }}"{{' class=active' if g.section=="torrents" }}><div class="arrow"></div>Torrents</a>
                     </div>
                 </div>
+                {% if g.section!="downloader" %}
                 <div id="search-banner">
                     <div class="container_24">
                         <form method="get" action="{{ url_for('files.search', query='') }}" class="grid_24">
@@ -104,23 +105,19 @@
                         </ul>
                     </div>
                 </div>
+                {%- endif %}
             </div>
         </header>
-        <article>
-            {%- with messages = get_flashed_messages(with_categories=true) %}
-                {%- if messages %}
-                    <div id="messages">
-                        {%- for category, message in messages %}
-                        <div class="{{ category }}"><div class="container_24"><p class="grid_24">{{ message }}</p></div></div>
-                        {%- endfor %}
-                    </div>
-                {%- endif %}
-            {%- endwith %}
-            <div class="container_24 {{g.extra_container_classes if g.extra_container_classes}}">
-                {%- block content %}{%- endblock %}
-            </div>
-            {%- block lower_content %}{%- endblock %}
-        </article>
+        {%- with messages = get_flashed_messages(with_categories=true) %}
+            {%- if messages %}
+                <div id="messages">
+                    {%- for category, message in messages %}
+                    <div class="{{ category }}"><div class="container_24"><p class="grid_24">{{ message }}</p></div></div>
+                    {%- endfor %}
+                </div>
+            {%- endif %}
+        {%- endwith %}
+        {%- block content %}{%- endblock %}
         <footer>
             <div id="footer">
               <div class="footer-top">

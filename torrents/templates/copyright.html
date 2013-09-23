@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 {% from "helpers.html" import render_field -%}
 {% block content %}
+<section class="container_24" id="text_page">
 <h1>Copyright</h1>
 <p>{{ g.domain_capitalized }} is a search engine, we do not host any copyrighted content and therefore we can't remove the content itself. If you are looking for content removal, you should contact the provider of that content. Nevertheless, if you believe any of the linked works are being disseminated without the appropriate authorisation from the rights holders, or that they infringe the rights of third parties, you may request that we remove them using this copyright claim form or sending a copyright claim by email. Please read this important information before doing so.</p>
 <p>If you knowingly misrepresent that material or activity is infringing, you may be subject to liability for damages. Accordingly, if you are not sure whether material available online infringes your copyright, we suggest that you first contact a lawyer. Please also note that your message to us may be forwarded to the party involved in the activity.</p>
@@ -32,4 +33,5 @@
         {{ form.submit }}
     </fieldset>
 </form>
+</section>
 {% endblock %}

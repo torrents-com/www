@@ -6,53 +6,25 @@
 {% block content %}
 {%- if top_stories or news_top %}
 {{ (top_stories or news_top)|safe }}
-{%- else %}
-{{ sidebar | safe }}
-{{ content | safe }}
+<section id="carrusel">
+    <div class="container_24">
+        <div class="grid_3">
+            <img src="{{g.static_prefix}}/downloader/feature-logo-120.png" width="120" height="120" alt="Adam" />
+        </div>
+        <div class="grid_10"><span class="tagline">Find. Download. Play!</span></div>
+        <div class="grid_6">
+            <h2>INSTALL OUR FREE 'TORRENTS DOWNLOADER'</h2>
+            <p>for Windows</p>
+        </div>
+        <div class="grid_4 prefix_1"><a href="{{ url_for('web.home') }}">Get it Now!</a>
+        </div>
+    </div>
+</section>
 {%- endif %}
-{% endblock %}
 
-{% block lower_content %}
-{%- if top_stories %}
-<section id="carrusel" class="carrusel">
-    <div class="container-carrusel">
-        <div class="margin-carrusel">
-            <img src="{{g.static_prefix}}/adam.png" width="300" height="245" alt="Adam" />
-            <div class="float-carrusel">
-                <p class="downloader-features">find, download & play!</p>
-                <h2 class="carrusel-title">INSTALL OUR FREE 'TORRENTS DOWNLOADER'</h2>
-                <p>Torrents Downloader is designed to be user friendly, intuitive, and safe. You can search for any kind of content in a direct way. See the progress of your downloads, control them in any way you want. View your completed downloads quickly from the app.</p>
-                <a href="{{ url_for('web.home') }}">more info »</a>
-                <div class="clear-floats"></div>
-                <a href="{{url_for('downloads.download', instfile=properties['filename'])}}" class="downloader-download-button">DOWNLOAD</a>
-                <div class="download-info">
-                    <p>for Windows</p>
-                    <p class="downloader-mb">{{properties["length"]|numbersizeformat}}</p>
-                </div>
-            </div>
-            <div class="clear-floats"></div>
-        </div>
-    </div>
-</section>
-{%- elif news_top %}
-<section id="carrusel-mini" class="carrusel">
-    <div class="container-carrusel">
-        <div class="margin-carrusel">
-            <img src="{{g.static_prefix}}/adam.png" width="200" height="163" alt="Adam" />
-            <p class="downloader-features">find, download & play!</p>
-            <div class="download-text">
-                <h2 class="carrusel-title">INSTALL OUR FREE 'TORRENTS DOWNLOADER'</h2>
-                <p>for Windows</p>
-            </div>
-            <a href="{{ url_for('web.home') }}" class="downloader-download-button">Get it Now!</a>
-        </div>
-    </div>
-</section>
-{%- endif %}
-{%- if top_stories or news_top %}
-<div class="container_24">
+<div class="container_24" id="news_page">
 {{ sidebar | safe }}
 {{ content | safe }}
 </div>
-{%- endif %}
+
 {% endblock %}

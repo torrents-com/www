@@ -5,10 +5,7 @@
     {%- endif %}
 {%- endblock -%}
 {% block content %}
-{% if pop_searches%}
-
-{%- endif %}
-
+<section id="files_page" class="container_24">
 {%- if g.query %}
 <div class="title big_icon grid_24 {{g.category.url}}">
     <span></span>
@@ -55,4 +52,5 @@
         <p>Sorry, we don't have any result that matches your query in this category. Please, try another search or another category.</p>
     </div>
 {%- endif %}
+</section>
 {% endblock %}

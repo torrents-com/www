@@ -78,7 +78,7 @@ def home(path=""):
     if not path_parts:
         return abort(404)
 
-    return render_template('news.html', properties=get_downloader_properties() if not path else None, **path_parts)
+    return render_template('news.html', **path_parts)
 
 @news.route('/news/wp-content/<path:path>')
 def wp_content(path):

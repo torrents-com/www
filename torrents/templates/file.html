@@ -19,16 +19,17 @@
     </ul>
 {% endmacro -%}
 {% block content %}
-<div id="download">
-    <div class="grid_6">
+<div class="container_24">
+<section id="download" class="grid_24">
+    <div class="grid_6 alpha">
         {%- if 'images_server' in file_data['view'] or 'thumbnail' in file_data['view']%}
         <img src="http://images.torrents.com/{{ file_data['file']['_id'] }}0" alt="Preview {{ file_data['view']['nfn'] }}" />
         {%- else %}
         <img src="{{g.static_prefix}}/missing-{{ file_data['view']['icon'].url}}.jpg" alt="No preview" />
         {%- endif %}
     </div>
-    <div class="grid_18">
-        <div class="grid_12 alpha">
+    <div class="grid_17 prefix_1 omega">
+        <div class="grid_11 alpha">
             <div class="icon-stars"><span class="stars-{{file_data['view']['rating']}}"></span><span class="nostars stars-{{5-file_data['view']['rating']}}"></span></div>
         </div>
         <div class="grid_6 omega share_report">
@@ -40,10 +41,10 @@
             <input type="submit" value="Report link"/>
             </form>
         </div>
-        <div class="grid_18 alpha omega">
+        <div class="grid_17 alpha omega">
             <h1>{{ file_data['view']['fn'] | seoize(" ",True,0) }}.torrent</h1>
         </div>
-        <div class="grid_12 alpha">
+        <div class="grid_11 alpha">
             <div class="big_icon {{file_data['view']['icon'].url}}"><span></span>
             {%- if 'imdb_link' in file_data['view'] %}
             <div class="imdb"><a href="{{ file_data['view']['imdb_link'] }}">IMDb</a></div>
@@ -75,96 +76,90 @@
             <a class="download" data-track="Download,{{'Torrent' if 'download' in file_data['view']['sources'] else 'Magnet' if 'tmagnet' in file_data['view']['sources'] else 'HTML'}},File / Big Button" data-downloader="1" href="{{file_data['view']['sources']['tmagnet']['urls'][0] if 'tmagnet' in file_data['view']['sources'] else file_data['view']['sources']['download']['urls'][0] if 'download' in file_data['view']['sources'] else file_data['view']['sources']['download_ind']['urls'][0]}}"{{ ' target="_blank"' if not 'tmagnet' in file_data['view']['sources'] and not 'download' in file_data['view']['sources']}}><span class="icon-download_button"></span> Download</a></div>
         </div>
     </div>
+</section>
 </div>
-<div id="featured_col" class="grid_6">
-{{featured|safe}}
-</div>
-<div class="grid_18" id="file_page">
+<div class="container_24">
+<aside id="featured_col" class="grid_6">
+{{(featured or "&nbsp;")|safe}}
+</aside>
+<div class="grid_17 prefix_1">
 {%- if "filepaths" in file_data['view']['md'] %}
-<article>
-    <div id="files">
-        <h3>Torrent files</h3>
-        {%- if 'torrent:partial_filepaths' in file_data['file']['md'] and file_data['file']['md']['torrent:partial_filepaths']: %}
-            <span>(showing only first 100 files)</span>
-        {%- endif %}
-        {{print_filepaths(file_data['view']['md']['filepaths'])}}
-    </div>
-</article>
+<section id="files" class="grid_17">
+    <h3>Torrent files</h3>
+    {%- if 'torrent:partial_filepaths' in file_data['file']['md'] and file_data['file']['md']['torrent:partial_filepaths']: %}
+        <span>(showing only first 100 files)</span>
+    {%- endif %}
+    {{print_filepaths(file_data['view']['md']['filepaths'])}}
+</section>
 {%- endif %}
 
-<article>
-    <div id="metadata" class="grid_18 alpha omega">
-        <h3>Torrent information</h3>
-        {% set rowcycle = ['even', 'odd'] %}
-        <ul>
-            <li class="grid_18 alpha omega {{ rowcycle|cycle }}"><div class="grid_6 alpha">Name</div>
-            <div class="grid_12 omega">{{ file_data['view']['nfn'] }}</div>
-            </li>
-            {%- if file_data['view']['file_type'] %}
-            <li class="grid_18 alpha omega {{ rowcycle|cycle }}"><div class="grid_6 alpha">Type</div>
-            <div class="grid_12 omega">{{ file_data['view']['file_type']|capitalize}}</div>
-            </li>
-            {% endif %}
-            {%- if file_data['view']["categories"] %}
-            <li class="grid_18 alpha omega {{ rowcycle|cycle }}"><div class="grid_6 alpha">{{"Category" if file_data['view']["categories"]|length==1 else "Categories"}}</div>
-            <div class="grid_12 omega">
-                {%- for category in file_data['view']["categories"] %}
-                <a href="{{ url_for("files.category",category=category.url) }}">{{ category.title }}</a>
-                {{ ", " if not loop.last }}
-                {%- endfor %}</div>
-            </li>
-            {% endif %}
-            {%- for metadata, value in file_data['view']['md'].iteritems() if metadata not in ("long_desc", "short_desc", "filepaths", "seeds","leechs") %}
-            <li class="grid_18 alpha omega {{ rowcycle|cycle }}">
-            <div class="grid_6 alpha">{{metadata|replace("_"," ")|capitalize}}</div>
-            <div class="grid_12 omega">
-                {%-if metadata in file_data['view']['searches'] %}
-                    {%-if file_data['view']['searches'][metadata] == [] %}
-                        {% for avalue in value.split(",") %}
-                            {{avalue|clean_query|blacklist_query(avalue|trim)}}{{", " if not loop.last}}
-                        {% endfor %}
-                    {%-elif file_data['view']['searches'][metadata] == {} %}
-                        {{print_filepaths(value)}}
-                    {%-else %}
-                        {{file_data['view']['searches'][metadata]|clean_query|blacklist_query((value|string)[:100000].replace("\n","<br />"))}}
-                    {%-endif %}
+<section id="metadata" class="grid_17">
+    <h3>Torrent information</h3>
+    {% set rowcycle = ['even', 'odd'] %}
+    <ul>
+        <li class="grid_17 alpha omega {{ rowcycle|cycle }}"><div class="grid_6 alpha">Name</div>
+            <div class="grid_11 omega">{{ file_data['view']['nfn'] }}</div>
+        </li>
+        {%- if file_data['view']['file_type'] %}
+        <li class="grid_17 alpha omega {{ rowcycle|cycle }}"><div class="grid_6 alpha">Type</div>
+            <div class="grid_11 omega">{{ file_data['view']['file_type']|capitalize}}</div>
+        </li>
+        {% endif %}
+        {%- if file_data['view']["categories"] %}
+        <li class="grid_17 alpha omega {{ rowcycle|cycle }}"><div class="grid_6 alpha">{{"Category" if file_data['view']["categories"]|length==1 else "Categories"}}</div>
+            <div class="grid_112 omega">{%- for category in file_data['view']["categories"] %}
+            <a href="{{ url_for("files.category",category=category.url) }}">{{ category.title }}</a>
+            {{ ", " if not loop.last }}
+            {%- endfor %}</div>
+        </li>
+        {%- endif %}
+        {%- for metadata, value in file_data['view']['md'].iteritems() if metadata not in ("long_desc", "short_desc", "filepaths", "seeds","leechs") %}
+        <li class="grid_17 alpha omega {{ rowcycle|cycle }}">
+        <div class="grid_6 alpha">{{metadata|replace("_"," ")|capitalize}}</div>
+        <div class="grid_11 omega">
+            {%-if metadata in file_data['view']['searches'] %}
+                {%-if file_data['view']['searches'][metadata] == [] %}
+                    {% for avalue in value.split(",") %}
+                        {{avalue|clean_query|blacklist_query(avalue|trim)}}{{", " if not loop.last}}
+                    {% endfor %}
+                {%-elif file_data['view']['searches'][metadata] == {} %}
+                    {{print_filepaths(value)}}
                 {%-else %}
-                    {{ (value|string)[:100000].replace("\n","<br />") | safe }}
+                    {{file_data['view']['searches'][metadata]|clean_query|blacklist_query((value|string)[:100000].replace("\n","<br />"))}}
                 {%-endif %}
+            {%-else %}
+                {{ (value|string)[:100000].replace("\n","<br />") | safe }}
+            {%-endif %}
+        </div>
+        </li>
+        {%- endfor %}
+        {%- if file_data['view']['providers'] %}
+        <li class="grid_17 alpha omega {{ rowcycle|cycle }}">
+            <div class="grid_6 alpha">Providers</div>
+            <div class="grid_11 omega">
+                {%- for provider in file_data['view']['providers'] %}
+                     <a target='_blank' href='http://{{provider}}'>{{provider}}</a>{{ "," if not loop.last }}
+                {%- endfor %}
             </div>
-            </li>
-            {%- endfor %}
-            {%- if file_data['view']['providers'] %}
-                <li class="grid_18 alpha omega {{ rowcycle|cycle }}"><div class="grid_6 alpha">Providers</div>
-                <div class="grid_12 omega">
-                    {%- for provider in file_data['view']['providers'] %}
-                         <a target='_blank' href='http://{{provider}}'>{{provider}}</a>{{ "," if not loop.last }}
-                    {%- endfor %}
-                </div>
-                </li>
-            {%- endif %}
-        </ul>
-    </div>
-</article>
+        </li>
+        {%- endif %}
+    </ul>
+</section>
 
 {%- if "long_desc" in file_data['view']['md'] %}
-<article>
-    <div id="long_desc" class="grid_18 alpha omega">
-        <h3>Torrent description</h3>
-        <p>
-        {{ (file_data['view']['md']['long_desc']|string)[:100000].replace("\n","<br />") | safe }}
-        </p>
-    </div>
-</article>
+<section id="long_desc" class="grid_17">
+    <h3>Torrent description</h3>
+    <p>
+    {{ (file_data['view']['md']['long_desc']|string)[:100000].replace("\n","<br />") | safe }}
+    </p>
+</section>
 {%- endif %}
 
 {%- if related_files[1] and related_files[1]["count"]>0%}
-<article>
-    <div id="related" class="grid_18 alpha omega">
-        <h3>Related torrents</h3>
+<section id="related" class="grid_17">
+    <h3>Related torrents</h3>
     {{ related_files[0]|safe}}
-    </div>
-</article>
+</section>
 {%- endif %}
-</div>
+</div></div>
 {% endblock %}

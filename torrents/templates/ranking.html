@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% block content %}
+<section class="container_24" id="files_page">
 <div class="grid_24">
 <div class="title">
     <h1>{{g.h1}}</h1>
@@ -21,4 +22,5 @@
 <a class='more_results' href='?s={{search_info["next"]}}'>more torrents...</a>
 {%- endif %}
 </div>
+  </section>
 {% endblock %}

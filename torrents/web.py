@@ -210,7 +210,7 @@ def create_app(config=None, debug=False):
         if g.must_cache:
             response.headers["X-Cache-Control"] = "max-age=%d"%g.must_cache
         if g.cache_code:
-            response.headers["Cache-Code"] = g.cache_code
+            response.headers["X-Cache-Code"] = g.cache_code
         return response
 
     # Páginas de error
@@ -295,8 +295,6 @@ def init_g(app):
     g.track = False
     g.query = g.clean_query = None
     g.category = None
-
-    g.extra_container_classes = None
 
     # cookie control
     g.must_accept_cookies = False #request.remote_addr in spanish_ips

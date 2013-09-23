@@ -5,18 +5,24 @@
 {% endif %}
 {% endblock %}
 
-{% block lower_content %}
+{% block content %}
 {% if mode == "success" %}
+<section class="container_24">
 <div class="grid_6">&nbsp;</div>
     <div class="grid_18" id="downloader">
     <h1>Happy downloading!</h1>
     <p>Thanks for installing Torrents Downloader, we hope you enjoy it. </p>
 </div>
+  </section>
 {% elif mode == "download" %}
 <div id="downloader-page">
-  <section class="downloader-top">
-    <aside class="download-box">
-      <h2>A little big P2P downloader</h2>
+  <section class="downloader-top container_24">
+    <div class="grid_12">
+        <img src="{{g.static_prefix}}/downloader/downloader-computer.png" width="358" height="295" />
+    </div>
+    <aside class="download-box grid_12">
+        <h1>Torrents Downloader</h1>
+        <h2>Find. Download. Play!</h2>
         {% if properties["available"] -%}
             <a href="{{url_for('downloads.download', instfile=properties['filename'])}}" class="downloader-download-button">Download</a>
             <p><strong class="free">FREE</strong> <span>for Windows | <strong>{{properties["length"]|numbersizeformat}}</strong> (v. {{properties["version_code"].split("-")[0]}})</span></p>
@@ -29,21 +35,18 @@
   </section>
 
   <section class="downloader-medium">
-    <div class="downloader-main-features">
-      <section class="downloader-main-feature-1">
-        <img src="{{g.static_prefix}}/downloader/feature-main-1-ss.png" class="feat-ss" alt="Easy to use" />
+    <div class="downloader-main-features container_24">
+      <section class="grid_6 suffix_2 downloader-main-feature-1">
         <img src="{{g.static_prefix}}/downloader/feature-main-1-ico.png" class="feat-ico" alt="Easy to use" />
         <h2>Easy to use</h2>
         <p>Start your experience with all you need at your fingertips. No need to learn about any complex configurations.</p>
       </section>
-      <section class="downloader-main-feature-2">
-        <img src="{{g.static_prefix}}/downloader/feature-main-2-ss.png" class="feat-ss" alt="Fast finder" />
+      <section class="prefix_1 grid_6 suffix_1 downloader-main-feature-2">
         <img src="{{g.static_prefix}}/downloader/feature-main-2-ico.png" class="feat-ico" alt="Fast finder" />
         <h2>Fast finder</h2>
         <p>Find instantly anything you are looking for: videos, music, software...</p>
       </section>
-      <section class="downloader-main-feature-3">
-        <img src="{{g.static_prefix}}/downloader/feature-main-3-ss.png" class="feat-ss" alt="Library and Player" />
+      <section class="prefix_2 grid_6 downloader-main-feature-3">
         <img src="{{g.static_prefix}}/downloader/feature-main-3-ico.png" class="feat-ico" alt="Library and Player" />
         <h2>Library and Player</h2>
         <p>All your downloads are automatically organized. Browse and play anything you download!</p>
@@ -52,9 +55,11 @@
   </section>
 
   <section class="downloader-bottom">
-    <section id="find" class="downloader-feature odd">
-        <img src="{{g.static_prefix}}/downloader/feature-1-ss.png" class="feat-ss" alt="Find" />
-        <div class="text">
+    <section id="find" class="container_24">
+        <div class="suffix_1 prefix_2 grid_6">
+            <img src="{{g.static_prefix}}/downloader/feature-1-ss.png" class="feat-ss" alt="Find" />
+        </div>
+        <div class="grid_13 suffix_2">
           <h2>Find</h2>
           <p>Torrents Downloader is designed to be user friendly, intuitive, and
             safe. You can search for any kind of content in a direct way. See the
@@ -67,9 +72,8 @@
             point.</p>
         </div>
     </section>
-    <section id="downloads" class="downloader-feature even">
-      <img src="{{g.static_prefix}}/downloader/feature-2-ss.png" class="feat-ss" alt="Downloads" />
-      <div class="text">
+    <section id="downloads" class="container_24">
+        <div class="grid_13 prefix_2">
         <h2>Downloads</h2>
         <p>With Torrents Downloader you can now download faster than ever before.
           Thanks to the torrent network, the fastest P2P solution ever made,
@@ -79,10 +83,15 @@
           award-winning libtorrent library, which will make your download
           experience safe and secure.</p>
       </div>
+        <div class="prefix_1 grid_6 suffix_2">
+            <img src="{{g.static_prefix}}/downloader/feature-2-ss.png" class="feat-ss" alt="Downloads" />
+        </div>
     </section>
-    <section id="play" class="downloader-feature odd last">
-      <img src="{{g.static_prefix}}/downloader/feature-3-ss.png" class="feat-ss" alt="Play" />
-      <div class="text">
+    <section id="play" class="container_24">
+        <div class="suffix_1 grid_6 prefix_2">
+            <img src="{{g.static_prefix}}/downloader/feature-3-ss.png" class="feat-ss" alt="Play" />
+        </div>
+        <div class="grid_13 suffix_2">
         <h2>Play</h2>
         <p>You need to look no further, all your downloads are classified and
           ready to play from the app.</p>
@@ -96,6 +105,7 @@
     </section>
   </section>
 </div>
+</section>
 {% endif %}
 {% endblock %}
 

@@ -31,7 +31,7 @@ class TagClouds:
 
                 # fuerza refresco de palabras bloqueadas
                 self.torrentsdb.get_blacklists(True)
-        
+
                 # regenera las nubes
                 for cloud_params in self.clouds_params:
                     self.clouds_caches[cloud_params[0]] = self._get_searches(*cloud_params[1:])
@@ -40,6 +40,7 @@ class TagClouds:
                 self.cache.set(TAG_CLOUDS, dumps(self.clouds_caches, encoding='utf-8'))
                 self.cache.set(TAG_CLOUDS_LAST_UPDATE, time())
         except BaseException as e:
+            print e
             logging.error("Error refreshing tag clouds")
 
     def __getitem__(self, name):

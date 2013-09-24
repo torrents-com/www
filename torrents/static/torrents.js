@@ -150,9 +150,9 @@ $(function(){
 
     ['aside', 'article', 'footer', 'header', 'nav', 'section'].forEach(function(e){document.createElement(e)});
 
-    if ($("div >.filepaths li").length>1){
-        $("div >.filepaths >li").addClass("open");
-        $("div >.filepaths").treeview({"collapsed":true});
+    if ($("#files >.filepaths li").length>1){
+        $("#files >.filepaths >li").addClass("open");
+        $("#files >.filepaths").treeview({"collapsed":true});
     }
 
     var featured_images = $("#featured img");

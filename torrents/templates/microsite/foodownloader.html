@@ -26,7 +26,7 @@
         {% if properties["available"] -%}
             <a href="{{url_for('downloads.download', instfile=properties['filename'])}}" class="downloader-download-button">Download</a>
             <p><strong class="free">FREE</strong> <span>for Windows | <strong>{{properties["length"]|numbersizeformat}}</strong> (v. {{properties["version_code"].split("-")[0]}})</span></p>
-            <p class="soon">for OSX & linux: coming soon...</p>
+            <p class="soon">for OSX & Linux: coming soon...</p>
             {% if properties["source_available"] -%}
                 <p class="source"><a href="{{url_for('downloads.download', instfile=properties['source_filename'])}}">Download source · {{properties["source_length"]|numbersizeformat}}</a></p>
             {% endif %}
@@ -74,7 +74,7 @@
     </section>
     <section id="downloads" class="container_24">
         <div class="grid_13 prefix_2">
-        <h2>Downloads</h2>
+        <h2>Download</h2>
         <p>With Torrents Downloader you can now download faster than ever before.
           Thanks to the torrent network, the fastest P2P solution ever made,
           your downloads will fly.</p>

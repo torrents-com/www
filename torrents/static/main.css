@@ -997,7 +997,7 @@ footer{background-color:#f1f2ec;width:100%;overflow:hidden;}
 /* DOWNLOADER ------------------------------------------ */
 #downloader-page{text-align:center;}
 
-.downloader-top{padding-top:5em}
+.downloader-top{margin-top:6em}
   .download-box{
     width:auto;margin:0em;float:right;text-align:center;
     h1 {font-size:4.7em;color:$redfont;text-transform:none;font-weight:100;margin-top:0;}

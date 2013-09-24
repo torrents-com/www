@@ -456,6 +456,10 @@ def process_search_results(s=None, query=None, category=None, not_category=None,
     if (g.show_blacklisted_content or not g.blacklisted_content) and (canonical_query or not query):
         if ids:
             files_dict={str(f["_id"]):prepare_data(f,text=query,ntts=ntts) for f in get_files(ids,s)}
+
+            if not g.search_bot:
+                save_visited(files_dict.values())
+
             # ordena resultados y añade informacion de la busqueda
             position = 0
             for search_result in ids:

@@ -790,15 +790,7 @@ def get_rankings():
 
 def save_visited(files):
     if not g.search_bot:
-        result=[{"_id": afile['view']['sources']["download"]['urls'][0] if "download" in afile['view']['sources'] else
-                        afile['view']['sources']["download_ind"]['urls'][0]}
-                    for afile in files
-                        if "download" in afile['view']['sources'] or "download_ind" in afile['view']['sources']]
-        if result:
-            try:
-                feedbackdb.visited_links(result)
-            except:
-                pass
+        torrentsdb.save_visited(files)
 
 from flask.ext.wtf import Form, BooleanField, PasswordField, TextField, TextAreaField, SelectField, FileField, FieldList, SubmitField, ValidationError, Regexp, Required, URL, Email, RecaptchaField
 class ComplaintForm(Form):

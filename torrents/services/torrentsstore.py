@@ -1,33 +1,11 @@
 # -*- coding: utf-8 -*-
-import pymongo, bson
-from foofind.utils import check_capped_collections, u, check_collection_indexes
+import pymongo, bson, msgpack, redis
+from foofind.utils import mid2hex, check_capped_collections, u, check_collection_indexes
 from datetime import datetime
 from time import time
 from collections import defaultdict, OrderedDict
 
-def levenshtein(a,b,threshold):
-    "Calculates the Levenshtein distance between a and b."
-    n, m = len(a), len(b)
-    if n > m:
-        # Make sure n <= m, to use O(min(n,m)) space
-        a,b = b,a
-        n,m = m,n
-
-    if m-n>threshold:
-        return threshold+1
-
-    current = range(n+1)
-    for i in xrange(1,m+1):
-        previous, current = current, [i]+[0]*n
-        for j in xrange(1,n+1):
-            add, delete = previous[j]+1, current[j-1]+1
-            change = previous[j-1]
-            if a[j-1] != b[i-1]:
-                change = change + 1
-            current[j] = min(add, delete, change)
-        if threshold and min(current)>threshold:
-            return threshold+1
-    return current[n]
+VISITED_LINKS_CHANNEL = "VL"
 
 class TorrentsStore(object):
     '''
@@ -63,6 +41,10 @@ class TorrentsStore(object):
         # Inicia conexiones
         self.torrents_conn = pymongo.MongoClient(app.config["DATA_SOURCE_TORRENTS"], max_pool_size=self.max_pool_size, **self.options)
         self.searches_conn = feedbackdb.feedback_conn # uses feedback database for searches
+
+        # Inicia conexion al redis para avisar de files visitados
+        self.redis_server = app.config["SPHINX_REDIS_SERVER"]
+        self.redis_conn = redis.StrictRedis(host=self.redis_server[0], port=self.redis_server[1])
 
         # Crea las colecciones capadas si no existen
         check_capped_collections(self.searches_conn.torrents, self._capped)
@@ -143,3 +125,6 @@ class TorrentsStore(object):
         ret = list(self.searches_conn.torrents.searches.find({"t":{"$gt": start_date}}))
         self.searches_conn.end_request()
         return ret
+
+    def save_visited(self, files):
+        self.redis_conn.publish(VISITED_LINKS_CHANNEL, msgpack.packb([mid2hex(f["file"]["_id"]) for f in files]))

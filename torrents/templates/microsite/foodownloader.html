@@ -8,17 +8,17 @@
 {% block content %}
 {% if mode == "success" %}
 <section class="container_24">
-<div class="grid_6">&nbsp;</div>
-    <div class="grid_18" id="downloader">
-    <h1>Happy downloading!</h1>
-    <p>Thanks for installing Torrents Downloader, we hope you enjoy it. </p>
-</div>
-  </section>
+    <div class="grid_6">&nbsp;</div>
+        <div class="grid_18" id="downloader">
+        <h1>Happy downloading!</h1>
+        <p>Thanks for installing Torrents Downloader, we hope you enjoy it. </p>
+    </div>
+</section>
 {% elif mode == "download" %}
 <div id="downloader-page">
   <section class="downloader-top container_24">
     <div class="grid_12">
-        <img src="{{g.static_prefix}}/downloader/downloader-computer.png" width="358" height="295" />
+        <img src="{{g.static_prefix}}/downloader/downloader-computer.png" width="358" height="295" alt="Torrents Downloader screenshoot" />
     </div>
     <aside class="download-box grid_12">
         <h1>Torrents Downloader</h1>
@@ -74,15 +74,15 @@
     </section>
     <section id="downloads" class="container_24">
         <div class="grid_13 prefix_2">
-        <h2>Download</h2>
-        <p>With Torrents Downloader you can now download faster than ever before.
-          Thanks to the torrent network, the fastest P2P solution ever made,
-          your downloads will fly.</p>
+            <h2>Download</h2>
+            <p>With Torrents Downloader you can now download faster than ever before.
+            Thanks to the torrent network, the fastest P2P solution ever made,
+            your downloads will fly.</p>
 
-        <p>We take security very seriously. Torrents Downloader uses the
-          award-winning libtorrent library, which will make your download
-          experience safe and secure.</p>
-      </div>
+            <p>We take security very seriously. Torrents Downloader uses the
+            award-winning libtorrent library, which will make your download
+            experience safe and secure.</p>
+        </div>
         <div class="prefix_1 grid_6 suffix_2">
             <img src="{{g.static_prefix}}/downloader/feature-2-ss.png" class="feat-ss" alt="Downloads" />
         </div>
@@ -92,20 +92,19 @@
             <img src="{{g.static_prefix}}/downloader/feature-3-ss.png" class="feat-ss" alt="Play" />
         </div>
         <div class="grid_13 suffix_2">
-        <h2>Play</h2>
-        <p>You need to look no further, all your downloads are classified and
-          ready to play from the app.</p>
+            <h2>Play</h2>
+            <p>You need to look no further, all your downloads are classified and
+            ready to play from the app.</p>
 
-        <p>We want you safe. In all cases we recommend you use an antivirus to
-          defend yourself against any kind of malware downloaded from untrusted
-          sources.</p>
+            <p>We want you safe. In all cases we recommend you use an antivirus to
+            defend yourself against any kind of malware downloaded from untrusted
+            sources.</p>
 
-        <p>Browse your downloads, choose from your fine collection and "Play"!</p>
-      </div>
+            <p>Browse your downloads, choose from your fine collection and "Play"!</p>
+        </div>
     </section>
   </section>
 </div>
-</section>
 {% endif %}
 {% endblock %}
 

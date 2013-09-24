@@ -79,16 +79,16 @@ def get_skip(x=None):
         return 0
 
 def get_query_info(query=None, category=None, check_qs=True):
-    redirect = False
+    must_redirect = False
     if not query and check_qs:
         query = request.args.get("q",None)
         if query:
-            redirect = True
+            must_redirect = True
 
     if not category and check_qs:
         category = request.args.get("c",None)
         if category:
-            redirect = True
+            must_redirect = True
 
     if query:
         g.clean_query = clean_query(query)
@@ -99,7 +99,7 @@ def get_query_info(query=None, category=None, check_qs=True):
         if category in g.categories_by_url:
             g.category = g.categories_by_url[category]
 
-    return redirect
+    return must_redirect
 
 def get_featured(results_shown=100, headers=1):
     feat = g.featured[:]
@@ -150,13 +150,14 @@ def create_cloud(data, width, lines):
     size = 20
     last_weight = ranking[0][1]
     for search, weight, trend, trend_pos in ranking:
-        size -= (10-math.ceil(weight/last_weight/0.1))/2
+        if last_weight*.99>weight:
+            last_weight = weight
+            size -= 0.75
 
         ret.append((search.lower(), search, size))
 
-        last_weight = weight
         acum += len(search)*CHAR_SIZE+WORD_SIZE
-        if acum>limit or size<10:
+        if acum>limit or size<15:
             break
     return sorted(ret)
 
@@ -199,15 +200,15 @@ def robots():
 
 @files.route('/popular')
 def old_popular_torrents():
-    return redirect(301, url_for(".popular_torrents", ranking="today"))
+    return redirect(url_for(".popular_torrents", interval="month"), 301)
 
 @files.route('/recent')
 def old_recent_torrents():
-    return redirect(301, url_for(".popular_torrents", ranking="now"))
+    return redirect(url_for(".popular_torrents", interval="today"), 301)
 
 @files.route('/popular_searches')
 def old_popular_searches():
-    return redirect(301, url_for(".popular_searches", ranking="today"))
+    return redirect(url_for(".popular_searches", interval="today"), 301)
 
 @files.route('/popular/searches/<interval>')
 def popular_searches(interval):
@@ -554,6 +555,10 @@ def process_search_results(s=None, query=None, category=None, not_category=None,
     if (g.show_blacklisted_content or not g.blacklisted_content) and (canonical_query or not query):
         if ids:
             files_dict={str(f["_id"]):prepare_data(f,text=query,ntts=ntts) for f in get_files(ids,s)}
+
+            if not g.search_bot:
+                save_visited(files_dict.values())
+
             # ordena resultados y añade informacion de la busqueda
             position = 0
             for search_result in ids:

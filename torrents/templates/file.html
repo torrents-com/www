@@ -107,7 +107,7 @@
         {% endif %}
         {%- if file_data['view']["categories"] %}
         <li class="grid_17 alpha omega {{ rowcycle|cycle }}"><div class="grid_6 alpha">{{"Category" if file_data['view']["categories"]|length==1 else "Categories"}}</div>
-            <div class="grid_112 omega">{%- for category in file_data['view']["categories"] %}
+            <div class="grid_11 omega">{%- for category in file_data['view']["categories"] %}
             <a href="{{ url_for("files.category",category=category.url) }}">{{ category.title }}</a>
             {{ ", " if not loop.last }}
             {%- endfor %}</div>

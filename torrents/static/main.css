@@ -114,8 +114,8 @@ a:visited{color:#b23633;}
 hr{clear:both;width:100%;color:#fff;border:none;background:#fff;font-size:0.1em;line-height:0.1em;}
 abbr{border:0;text-decoration:none;}
 li a {text-decoration:none;}
-h2{font-size:2.8em;line-height:1.3em;margin-bottom:0.7em;text-transform:uppercase;}
-.single h2{font-size:3.6em;line-height:1.3em;margin-bottom:0.7em;text-transform:none;}
+h2{font-size:2.5em;margin-bottom:0.7em;text-transform:uppercase;}
+.single h2{margin-bottom:2em;}
 h3{font-size:2.4em;line-height:1.3em;font-weight:normal;margin-bottom:0.5em}
 h3 a {text-decoration:none;}
 h4{font-size:2.4em;margin-bottom:1em;}
@@ -593,7 +593,7 @@ img.error {
 
 }
 
-h1 {text-transform:uppercase;font-size:1.9em;color:$black}
+h1 {text-transform:uppercase;font-size:2.5em;color:$black}
 h1.extra{text-transform:none; padding:0em 1em 0em; margin:0em; font-size:1.3em; color:#323230; text-align:center}
 
 .title {
@@ -604,7 +604,7 @@ h1.extra{text-transform:none; padding:0em 1em 0em; margin:0em; font-size:1.3em; 
         span:first-child {margin-right:-60px}
         span:first-child + div {padding-left:70px}
     }
-    h2 {text-transform:uppercase;font-size:1.9em;margin:5px 0px}
+    h2 {text-transform:uppercase;font-size:2.5em;margin:0.9em 0 0}
     h2 a {text-decoration:none;color:$black}
 }
 
@@ -613,8 +613,8 @@ h1.extra{text-transform:none; padding:0em 1em 0em; margin:0em; font-size:1.3em; 
     h2 {margin-bottom:10px}
 }
 
-.title h1{text-transform:none; font-size: 1.2em; margin:0}
-.title h1.category {text-transform:uppercase;font-size: 2.1em}
+.title h1{text-transform:none; font-size: 2.5em; margin:0}
+.title h1.category {text-transform:uppercase;font-size: 2.5em}
 
 
 #featured_col {clear:left}
@@ -963,7 +963,7 @@ h1.extra{text-transform:none; padding:0em 1em 0em; margin:0em; font-size:1.3em; 
     .tagline { font-size: 3em; display:block;padding: 0.5em; color: #fff; font-weight:400 }
     p {font-size: 1.3em; text-align:right}
     h2 {font-size:1.7em; margin:0.2em 0em; text-align:right}
-    a { @include redbutton(); display:inline-block; margin:0.7em 0em;padding:0.8em 1.8em;font-size:1.5em;border-radius: 0.5em;}
+    a { @include redbutton(); display:inline-block; margin:1em 0em;padding:0.8em 1.8em;font-size:1.5em;border-radius: 0.5em;}
     img { margin:-2.5em 0}
 }
 

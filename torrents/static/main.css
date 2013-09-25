@@ -5,7 +5,7 @@ $gray:#afb0aa;
 
 $red:#B23633;
 $lightred:#C9817F;
-$verylightred:#E7B8B7;
+$verylightred:#fef;
 
 /* colores */
 $halfblack: rgba(50,50,48,0.3);
@@ -16,6 +16,7 @@ $tabgray:#e3e5d7;
 $lightgrayfont:#8F8F8D;
 $grayfont:#7D7E74;
 $redfont:#ab2933;
+$lightredfont:#E7B8B7;
 $greenfont:#869e3b;
 $lightgreen:#eef6e1;
 $green:#dcecc5;
@@ -239,7 +240,7 @@ img.error {
             position:relative;
             .arrow {
                 position:absolute;
-                top:-1.1em;
+                top:-1.15em;
                 width: 0;
                 height: 0;
                 border-left: 15px solid transparent;
@@ -288,10 +289,10 @@ img.error {
         }
 
         ul {
-            font-size:1.6em;margin:3px 0px 0px;padding:0px;width:100%;text-shadow: 0px 0px 1px $verylightred;
+            font-size:1.6em;margin:3px 0px 0px;padding:0px;width:100%;text-shadow: 0px 0px 1px $lightredfont;
             li {
                 list-style:none;margin: 0px 0px 0px 2.4em;padding:0px;display:inline;
-                a { color:$verylightred; text-decoration:none;position:relative;
+                a { color:$lightredfont; text-decoration:none;position:relative;
                     .arrow {
                         position:absolute;
                         top:2em;
@@ -315,9 +316,9 @@ img.error {
 }
 
 #alert {
-    font-size:1.4em;border-bottom:1px solid #B23633; text-align:center;padding:10px 0px;display:none;
+    font-size:1.4em;text-align:center;border-bottom:1px solid $redfont; padding:0.5em 0em;display:none;
 
-    &.error {background:$verylightred;display:block;color:white}
+    &.error {background:$verylightred;display:block;color:$redfont}
     &.info {background:$lightgreen;display:block;color:$greenfont}
 }
 
@@ -861,7 +862,7 @@ h1.extra{text-transform:none; padding:0em 1em 0em; margin:0em; font-size:1.3em; 
 
 .top-stories{
     margin:6em auto 4em;
-    h3 {font-size:2em auto}
+    h3 {font-size:1.9em}
 }
 
 .categories, .tags{width:54em;display:block;float:none;overflow:hidden;}
@@ -878,7 +879,12 @@ h1.extra{text-transform:none; padding:0em 1em 0em; margin:0em; font-size:1.3em; 
 
 #news-list {
     article {
-        margin: 1em 0em;
+        border-top: 1px solid #ccc;
+        padding: 2em 0em;
+    }
+    h2 + article {
+            padding-top: 0em;
+            border-top: none;
     }
     p {
         font-size: 1.4em; display: inline;
@@ -924,13 +930,17 @@ h1.extra{text-transform:none; padding:0em 1em 0em; margin:0em; font-size:1.3em; 
 .single-post section#content p, .single-post section#content ul li{font-size:1.5em;line-height:1.3em;margin-bottom:1em;}
 .single-post section#content p:first-child{font-size:1.8em;font-weight:400;}
 
-section#sidebar li li, #newsticker p {
-    margin: 0 0 0.5em 0.5em;
-    font-size: 1.4em;
+#sidebar {
+    h3{font-size:1.8em;font-weight:bold;color:$redfont}
+    a {color:$grayfont}
+    li {
+        margin-bottom:4em;
+        li, p {
+            margin: 0 0 0.5em 0;
+            font-size: 1.4em;
+        }
+    }
 }
-#sidebar h3{font-size:1.8em}
-#sidebar ul{margin-bottom:1em;}
-#sidebar li li{font-size:1.4em;}
 
 .post-image{position:relative;overflow:hidden;margin-bottom:1em;max-height:300px}
 .post-image img{margin:0 !important;width:680px;height:auto;}

@@ -444,23 +444,24 @@ img.error {
 }
 
 #popular {
+    font-size:1.8em;
     div {
         margin:10px 0px;line-height:0;height:0;border-bottom:1px solid $gray;vertical-align:middle;text-align:center;
         span {
             text-transform:uppercase;
             background-color: #FFF;
             padding: 0px 10px;
-            font-size:1.3em;
+            font-size:13px;
             color:$red;
         }
     }
     text-align:center;margin:20px 0px 50px; overflow-x:hidden;
-    a {margin:1px 7px;color:$grayfont;font-weight:400;text-decoration:none;white-space:nowrap;display:inline-block;*display:inline;zoom:1; &:hover, &:focus, &:active { color:$red; outline: none }}
+    a {margin:1px 7px;color:$grayfont;text-decoration:none;white-space:nowrap;display:inline-block;*display:inline;zoom:1; &:hover, &:focus, &:active { color:$red; outline: none }}
     a.odd {color:$black; &:hover, &:focus, &:active { color:$red; outline: none }}
 }
 
 #popular.category {
-    font-size:0.9em;margin:0px 0.5em 2em;
+    font-size:1.5em;margin-top:0;
 }
 
 #ranking {

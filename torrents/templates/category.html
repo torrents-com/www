@@ -15,7 +15,7 @@
     </div>
 </div>
 {%- else %}
-<div class="title big_icon grid_8 {{g.category.url}}">
+<div class="title big_icon grid_10 {{g.category.url}}">
     <span></span>
     <div>
         <a href='{{url_for("files.home")}}'>All</a>&nbsp;&nbsp;&gt;&nbsp;&nbsp;{{g.category.title}}
@@ -23,10 +23,10 @@
     </div>
 </div>
     {%- if pop_searches %}
-    <div id="popular" class="grid_16 category">
+    <div id="popular" class="grid_14 category">
         <div><span>Most popular searches</span></div>
         {%- for key, search, size in pop_searches %}
-            <a class="{{ loop.cycle('odd', 'even') }}" style="font-size:{{size}}px" href="{{url_for('files.category', category=g.category.url, query=key|clean_query)}}">{{search}}</a>
+            <a class="{{ loop.cycle('odd', 'even') }}" style="font-size:{{size}}em" href="{{url_for('files.category', category=g.category.url, query=key|clean_query)}}">{{search}}</a>
         {%- endfor %}
     </div>
     {%- endif %}

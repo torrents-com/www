@@ -148,17 +148,17 @@ def create_cloud(data, width, lines):
     ret=[]
     acum = 0
     limit = lines*width*.95
-    size = 20
+    size = 1.25
     last_weight = ranking[0][1]
     for search, weight, trend, trend_pos in ranking:
         if last_weight*.99>weight:
             last_weight = weight
-            size -= 0.75
+            size -= 0.05
 
         ret.append((search.lower(), search, size))
 
         acum += len(search)*CHAR_SIZE+WORD_SIZE
-        if acum>limit or size<15:
+        if acum>limit or size<0.75:
             break
     return sorted(ret)
 
@@ -323,7 +323,7 @@ def category(category, query=None):
         g.page_description = "%s %s torrents at %s, the free and fast torrent search engine."%(g.query.capitalize(), singular_filter(g.category.title).lower(), g.domain_capitalized)
         order, show_order = get_order(SEARCH_ORDER)
     else:
-        pop_searches = create_cloud(torrentsdb.get_ranking(category), 650, 2)
+        pop_searches = create_cloud(torrentsdb.get_ranking(category), 500, 2)
         g.page_description = "%s torrents at %s, the free and fast torrent search engine."%(singular_filter(g.category.title).capitalize(), g.domain_capitalized)
         order, show_order = get_order(CATEGORY_ORDER)
     g.title+=" | " + page_title

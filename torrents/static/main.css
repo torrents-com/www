@@ -865,7 +865,7 @@ h1.extra{text-transform:none; padding:0em 1em 0em; margin:0em; font-size:1.3em; 
     h3 {font-size:1.9em}
 }
 
-.categories, .tags{width:54em;display:block;float:none;overflow:hidden;}
+.categories, .tags{display:block;float:none;overflow:hidden;}
 .categories{margin-bottom:0.25em;}
 .tags{margin-bottom:0.5em;}
 .categories li, .tags li{width:auto;float:left;margin-right:0.5em;}
@@ -882,9 +882,12 @@ h1.extra{text-transform:none; padding:0em 1em 0em; margin:0em; font-size:1.3em; 
         border-top: 1px solid #ccc;
         padding: 2em 0em;
     }
-    h2 + article {
+    h2 {
+        line-height:inherit;
+        & + article {
             padding-top: 0em;
             border-top: none;
+        }
     }
     p {
         font-size: 1.4em; display: inline;
@@ -909,23 +912,19 @@ h1.extra{text-transform:none; padding:0em 1em 0em; margin:0em; font-size:1.3em; 
 
 #news-top{
     margin-top:6em;overflow:hidden;
-    aside{text-align:right}
 }
 
 .single .author-date, .single .category-tags, .single .share{margin-bottom:4em;}
 .single .author-date, .single .category-tags{margin-bottom:4em;}
 .author-date p{font-size:1.4em;}
 .author-date p span.hour{font-size:0.7em;color:#666;}
-.single .share .networks{float:right;width:10em;/*padding-left:2em;border-left:1px solid #aaa;*/overflow:hidden;}
-.single .share .networks li{margin-bottom:1em;}
+.single .share .networks li{float:none;margin-bottom:1em;}
 
-.single .category-tags{overflow:hidden;}
-.single .category-tags ul{width:19em;padding-right:3em;}
-.single .category-tags ul.categories{background:url(/static/ico.folder-15.png) right 0.3em no-repeat;}
+.single .category-tags ul{padding-left:3em;}
+.single .category-tags ul.categories{background:url(/static/ico.folder-15.png) left 0.3em no-repeat;}
 .single .category-tags ul.categories a{color:#b23633;}
-.single .category-tags ul.tags{background:url(/static/ico.tag-15.png) right 0.3em no-repeat;}
+.single .category-tags ul.tags{background:url(/static/ico.tag-15.png) left 0.3em no-repeat;}
 .single .category-tags ul.tags a{color:#b23633;}
-.single .category-tags li{float:right;}
 
 .single-post section#content p, .single-post section#content ul li{font-size:1.5em;line-height:1.3em;margin-bottom:1em;}
 .single-post section#content p:first-child{font-size:1.8em;font-weight:400;}

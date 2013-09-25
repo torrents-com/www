@@ -145,6 +145,14 @@ window.downloader = {
         }
     };
 
+PAGE_MESSAGES = {"sent": ["The message has been sent successfully.", "info"],
+                 "write": ["Write something!", "error"]};
+
+function show_alert(html, type) {
+    $("#alert p").html(html);
+    $("#alert").attr('class', type);
+}
+
 $(function(){
     window.suggestmeyes_loaded = true;
 
@@ -232,10 +240,15 @@ $(function(){
         }
     });
 
-     $("#downloader_button").click(function(e){
+    $("#downloader_button").click(function(e){
             trackGAEvent('TD', "Download");
             e.preventDefault();
             setTimeout('document.location = "'+this.href+'"',100);
     });
 
+    var message = window.location.hash.substring(1);
+    if (message in PAGE_MESSAGES) {
+        var msg = PAGE_MESSAGES[message];
+        show_alert(msg[0], msg[1]);
+    }
 });

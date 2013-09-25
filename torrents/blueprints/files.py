@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import datetime, time, itertools, re, math, urllib2, hashlib, os.path
-from flask import flash, request, render_template, redirect, url_for, g, current_app, abort, escape, jsonify, make_response
+from flask import request, render_template, redirect, url_for, g, current_app, abort, escape, jsonify, make_response
 from struct import pack, unpack
 from base64 import b64decode, urlsafe_b64encode, urlsafe_b64decode
 from urlparse import urlparse, parse_qs
@@ -139,6 +139,7 @@ def pixel():
 CHAR_SIZE=12
 WORD_SIZE=10
 def create_cloud(data, width, lines):
+    g.cache_code = "B"
     ranking = data["final_ranking"] if "final_ranking" in data else None
 
     if not ranking:
@@ -268,8 +269,8 @@ def search(query=None):
     must_redirect = get_query_info(query)
 
     if not g.query:
-        flash("Write something!")
-        return redirect(url_for(".home"))
+        return redirect(url_for(".category", category=g.category.url, _anchor="write") if g.category else
+                        url_for(".home", _anchor="write"))
 
     if must_redirect:
         if g.category:
@@ -478,8 +479,7 @@ def copyright():
                 logging.exception(e)
         elif form.validate():
             pagesdb.create_complaint(dict([("ip",request.remote_addr)]+[(field.name,field.data) for field in form]))
-            flash("Message sent successfully!")
-            return redirect(url_for('.home'))
+            return redirect(url_for('.home', _anchor="sent"))
     return render_template('copyright.html',form=form)
 
 def get_last_items():

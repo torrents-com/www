@@ -78,6 +78,11 @@
         >
         <div id="dialog" data-dialog_ok="{{'ok'}}" data-dialog_no="{{'no'}}" data-dialog_yes="{{'yes'}}"></div>
         <header>
+            <div id="alert"{{ " class='%s'"|safe%g.alert[0] if g.alert }}>
+                <div class="container_24">
+                    <p class="grid_22">{{ g.alert[1] if g.alert }}</p>
+                </div>
+            </div>
             <div id="header">
                 <div class="container_24">
                     <div class="grid_7">
@@ -89,6 +94,7 @@
                         <a href="{{ url_for('files.home') }}"{{' class=active' if g.section=="torrents" }}><div class="arrow"></div>Torrents</a>
                     </div>
                 </div>
+
                 {% if g.section!="downloader" %}
                 <div id="search-banner">
                     <div class="container_24">
@@ -108,15 +114,6 @@
                 {%- endif %}
             </div>
         </header>
-        {%- with messages = get_flashed_messages(with_categories=true) %}
-            {%- if messages %}
-                <div id="messages">
-                    {%- for category, message in messages %}
-                    <div class="{{ category }}"><div class="container_24"><p class="grid_24">{{ message }}</p></div></div>
-                    {%- endfor %}
-                </div>
-            {%- endif %}
-        {%- endwith %}
         {%- block content %}{%- endblock %}
         <footer>
             <div id="footer">

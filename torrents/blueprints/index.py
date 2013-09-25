@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 import os, re
-from flask import flash, redirect, url_for, render_template, send_from_directory, current_app, make_response, request, g
+from flask import redirect, url_for, render_template, send_from_directory, current_app, make_response, request, g
 from flask.ext.mail import Message
 
 from foofind.utils import logging
@@ -59,7 +59,7 @@ def contact():
     '''
     Muestra el formulario para reportar enlaces
     '''
-    g.category=False
+    sent_error = g.category=False
     g.page_description = "Torrents.com is a free torrent search engine that offers users fast, simple, easy access to every torrent in one place."
     g.keywords.clear()
     g.keywords.update(["torrent search engine", "torrents", "free", "download", "popular", "torrents.com"])
@@ -68,16 +68,15 @@ def contact():
         if form.validate():
             to = current_app.config["CONTACT_EMAIL"]
             try:
-                mail.send(Message("contact",sender=form.email.data, recipients=[to], html="<p>%s, %s</p><p>%s</p>"%(request.remote_addr, request.user_agent, form.message.data)))
-                flash("The message has been sent successfully.")
-                return redirect(url_for('.home'))
+                mail.send(Message("contact", sender=form.email.data, recipients=[to], html="<p>%s, %s</p><p>%s</p>"%(request.remote_addr, request.user_agent, form.message.data)))
+                return redirect(url_for('.home', _anchor="sent"))
 
             except BaseException as e:
-                flash("The message has not been sent. Try again later or send mail to %s."%to)
-                logging.warn("%d: %s"%e[0].values()[0]) # se extrae el código y el mensaje de error
+                g.alert = ("error", "The message has not been sent. Try again later or send mail to %s."%to)
+                logging.exception(e)
 
     g.title+=" | Contact"
-    return render_template('contact.html',form=form)
+    return render_template('contact.html',form=form, sent_error=sent_error)
 
 from flask.ext.wtf import Form, BooleanField, TextField, TextAreaField, SubmitField, Required, Email, RecaptchaField
 class ContactForm(Form):

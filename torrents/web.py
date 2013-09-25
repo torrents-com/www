@@ -12,6 +12,7 @@ import os, os.path
 from foofind import defaults
 from collections import OrderedDict
 from flask import Flask, g, request, render_template, redirect, abort, url_for, make_response, get_flashed_messages, current_app
+from flask.sessions import SessionInterface
 from flask.ext.assets import Environment, Bundle
 from flask.ext.babelex import gettext as _
 from babel import support, localedata, Locale
@@ -32,6 +33,13 @@ from torrents.blueprints.downloader import all_blueprints as downloader_blueprin
 from torrents.templates import register_filters
 from torrents.services import *
 
+class NoSessionInterface(SessionInterface):
+    def open_session(self, app, request):
+        return None
+
+    def save_session(self, app, session, response):
+        pass
+
 def create_app(config=None, debug=False):
     '''
     Inicializa la aplicación Flask. Carga los siguientes módulos:
@@ -51,6 +59,7 @@ def create_app(config=None, debug=False):
     app = Flask(__name__)
     app.config.from_object(defaults)
     app.debug = debug
+    app.session_interface = NoSessionInterface()
 
     # Configuración
     if config:
@@ -257,6 +266,9 @@ def init_g(app):
 
     # permite sobreescribir practicamente todo el <head> si es necesario
     g.override_header = False
+
+    # alerts system
+    g.alert = None
 
     # dominio de la web
     g.domain = "torrents.com"

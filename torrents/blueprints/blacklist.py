@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from flask import render_template, redirect, request, url_for, g, flash, Markup
+from flask import render_template, redirect, request, url_for, g, Markup
 
 from foofind.utils import logging
 from torrents.multidomain import MultidomainBlueprint
@@ -34,10 +34,10 @@ def home():
             configdb.pull_actions()
 
             form.text.data = ""
-            flash(Markup("Entry added: %s. <a href='%s'>Undo</a>" % (text, url_for('blacklist.delete', category=category, text=text))))
+            g.alert = ("info", Markup("Entry added: %s. <a href='%s'>Undo</a>" % (text, url_for('blacklist.delete', category=category, text=text))))
         except BaseException as e:
             logging.exception(e)
-            flash("Error adding entry.")
+            g.alert = ("error", "Error adding entry.")
 
     return render_template('blacklist.html', blacklists=blacklists, form=form)
 
@@ -54,10 +54,11 @@ def delete(category, text):
         configdb.run_action("refresh_blacklists")
         configdb.pull_actions()
 
-        flash(Markup("Entry deleted: %s. <a href='%s?category=%s&text=%s'>Undo</a>" % (text, url_for('blacklist.home'), category, urllib.quote(text))))
+        g.alert = ("info",Markup("Entry deleted: %s. <a href='%s?category=%s&text=%s'>Undo</a>" % (text, url_for('blacklist.home'), category, urllib.quote(text))))
     except BaseException as e:
         logging.exception(e)
-        flash("Error deleting entry.")
+        g.alert = ("error", "Error deleting entry.")
+
     return redirect(url_for('blacklist.home'))
 
 from flask.ext.wtf import Form, TextField, Required, SelectField, HiddenField

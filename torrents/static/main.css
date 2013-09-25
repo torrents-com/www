@@ -314,26 +314,11 @@ img.error {
     }
 }
 
-#messages {
-    margin-top:-17px;
-    > div {
-        margin-bottom:3px;
-        > div > p {
-            margin: 8px 5px;
-            text-transform:uppercase;
-            font-size:1.2em;
-            font-weight:bold;
-        }
+#alert {
+    font-size:1.4em;border-bottom:1px solid #B23633; text-align:center;padding:10px 0px;display:none;
 
-        &.message {
-            background:$lightgreen;
-            color:$greenfont;
-        }
-        &.error {
-            background:$lightred;
-            color:$redfont;
-        }
-    }
+    &.error {background:$verylightred;display:block;color:white}
+    &.info {background:$lightgreen;display:block;color:$greenfont}
 }
 
 .results {

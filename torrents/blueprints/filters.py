@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import datetime, time, itertools, re, math, urllib, hashlib
-from flask import flash, request, render_template, redirect, url_for, g, current_app, abort, escape, jsonify
+from flask import request, render_template, redirect, url_for, g, current_app, abort, escape, jsonify
 from struct import pack, unpack
 from base64 import urlsafe_b64encode, urlsafe_b64decode
 from urlparse import urlparse, parse_qs

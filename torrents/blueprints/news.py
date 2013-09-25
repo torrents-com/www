@@ -72,6 +72,7 @@ def load_html_parts(filename):
 @news.route('/news/<path:path>')
 def home(path=""):
     g.cache_code += "N"
+    g.must_cache = 86400
     g.override_header = True
     path_parts = load_html_parts(path)
 

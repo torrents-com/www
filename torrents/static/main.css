@@ -2,7 +2,7 @@
 $black: #323230;
 $darkgray:lighten($black,10%);
 $gray:lighten($black,50%);
-$lightgray:#f1f2ec;
+$lightgray:#F4F5EF;
 $white:#fff;
 
 $red:#B23633;
@@ -13,7 +13,7 @@ $darkgreen:#dcecc5;
 $green:#dcecc5;
 $lightgreen:#eef6e1;
 
-$lightgrayfont:#cecfc7; /*#8F8F8D;*/
+$lightgrayfont:#cecfc7;
 $grayfont:#7D7E74;
 $redfont:#ab2933;
 $lightredfont:#E7B8B7;
@@ -286,7 +286,7 @@ img.error {
                 a { color:$lightredfont; text-decoration:none;position:relative;
                     .arrow {
                         position:absolute;
-                        top:2em;
+                        top:1.9em;
                         width: 0;
                         height: 0;
                         border-left: 15px solid transparent;
@@ -982,8 +982,8 @@ footer{
             > li {
                 text-transform:lowercase;background:url(/static/ico.arrow-khaki-down.png) 0 1em no-repeat;
                 > a {
-                    margin-left:1em; line-height:1em; font-size:2.2em;color:$lightgrayfont;
-                    span {font-family:'Journal',Arial,sans-serif;color:$black;font-size:1.1em;margin-left:0.05em;}
+                    text-decoration:none; margin-left:1em; line-height:1em; font-size:2.2em;color:$grayfont;
+                    span {font-family:'Journal',Arial,sans-serif;font-size:1.1em;margin-left:0.05em;}
                 }
                 ul {
                     margin:1em 0em 0em 2em;
@@ -993,23 +993,6 @@ footer{
         }
     }
 }
-/*.footer-top{padding-bottom:1em;margin-bottom:3em;border-bottom:1px solid $lightgrayfont;}
-#footer .logo, #footer .family{width:22em;margin-right:4em;float:left;}
-#footer .general-links{width:42em;margin-right:4em;float:left;margin-top:1.5em;}
-#footer .general-links li{width:auto;margin-right:2em;float:left;}
-#footer .general-links li a{font-size:1.4em;}
-#footer .networks{width:22em;margin-right:0;float:right;overflow:hidden;}
-#footer .networks ul{width:22em;float:right;overflow:hidden;}
-#footer .networks li{width:3em;height:3em;margin-left:1em;float:right;}
-#footer .family p{font-size:1.4em;text-align:right;color:$lightgrayfont;font-style:italic;}
-#footer .tree{width:68em;margin-right:0;float:left;text-transform:lowercase;overflow:hidden;}
-#footer .tree .domain{width:18em;margin-right:2;padding-left:2em;float:left;background:url(/static/ico.arrow-khaki-down.png) 0 1em no-repeat;}
-#footer .tree .domain a{color:$gray;font-size:2.2em;line-height:1em;}
-#footer .tree .domain a span{font-family:'Journal',Arial,sans-serif;color:$black;font-size:1.1em;margin-left:0.05em;}
-#footer .tree .domain ul{margin-top:1em;}
-#footer .tree .domain li{width:18em;margin-right:2em;margin-bottom:0.5em;float:none;}
-#footer .tree .domain li a{color:$redfont;font-size:1.4em;}*/
-
 
 /* DOWNLOADER ------------------------------------------ */
 #downloader-page{text-align:center;}

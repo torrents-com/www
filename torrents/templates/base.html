@@ -116,54 +116,46 @@
         </header>
         {%- block content %}{%- endblock %}
         <footer>
-            <div id="footer">
-              <div class="footer-top">
-                <div class="logo">
-                  <a href="/">
-                    <img src="{{g.static_prefix}}/logo.torrents-220-khaki.png" alt="Torrents" title="Torrents"/>
-                  </a>
+            <div id="footer-top" class="container_24">
+                <div class="grid_6">
+                    <a href="/"><img src="{{g.static_prefix}}/logo.torrents-220-khaki.png" alt="Torrents" title="Torrents"/></a>
                 </div>
-                <div class="general-links">
-                   <ul>
-                       <li><a href="{{ url_for('index.about') }}">About</a></li><li><a href="{{ url_for('index.contact') }}">Contact</a></li><li><a href="{{ url_for('index.legal') }}">Terms &amp; Privacy</a></li><li><a href="{{ url_for('files.copyright') }}">Copyright</a></li>
-                   </ul>
+                <div class="grid_11 prefix_1">
+                    <ul>
+                        <li><a href="{{ url_for('index.about') }}">About</a></li><li><a href="{{ url_for('index.contact') }}">Contact</a></li><li><a href="{{ url_for('index.legal') }}">Terms &amp; Privacy</a></li><li><a href="{{ url_for('files.copyright') }}">Copyright</a></li>
+                    </ul>
                 </div>
-                <div class="networks">
-                  <ul>
-                    <li>
-                      <a href="{{ url_for('news.rss') }}">
-                        <img src="{{g.static_prefix}}/ico.rss-30-self.png" alt="Follow us via RSS"/>
-                      </a>
+                <div class="networks grid_6">
+                    <ul>
+                        <li><a href="{{ url_for('news.rss') }}"><img src="{{g.static_prefix}}/ico.rss-30-self.png" alt="Follow us via RSS"/></a></li>
+                    </ul>
+                </div>
+            </div>
+            <div id="footer-bottom" class="container_24">
+                <div class="grid_6">
+                    <p>the Torrents.com family of sites:</p>
+                </div>
+                <ul class="grid_17 prefix_1">
+                    <li class="grid_5 alpha"><a href="{{ url_for('news.home') }}">Torrents<span>.com</span></a>
+                        <ul>
+                            <li><a href="{{ url_for('news.home', path='category/movies') }}">Movies</a></li>
+                            <li><a href="{{ url_for('news.home', path='category/music') }}">Music</a></li>
+                            <li><a href="{{ url_for('news.home', path='category/tv') }}">TV</a></li>
+                        </ul>
                     </li>
-                  </ul>
-                </div>
-              </div>
-              <div class="footer-bottom">
-                <div class="family">
-                  <p>the Torrents.com family of sites:</p>
-                </div>
-                <ul class="tree">
-                  <li class="domain"><a href="{{ url_for('news.home') }}">Torrents<span>.com</span></a>
-                    <ul>
-                      <li><a href="{{ url_for('news.home', path='category/movies') }}">Movies</a></li>
-                      <li><a href="{{ url_for('news.home', path='category/music') }}">Music</a></li>
-                      <li><a href="{{ url_for('news.home', path='category/tv') }}">TV</a></li>
-                    </ul>
-                  </li>
-                  <li class="domain"><a href="{{ url_for('web.home') }}">Torrents<span>.ms</span></a>
-                    <ul>
-                      <li><a href="{{ url_for('web.home') }}">Torrents downloader</a></li>
-                    </ul>
-                  </li>
-                  <li class="domain"><a href="{{ url_for('files.home') }}">Torrents<span>.fm</span></a>
-                    <ul>
-                      <li><a href="{{ url_for('files.category', category='movies') }}">Popular Movies</a></li>
-                      <li><a href="{{ url_for('files.popular_torrents', interval='week') }}">Popular torrents</a></li>
-                      <li><a href="{{ url_for('files.popular_searches', interval='week') }}">Favorite Torrent Searches</a></li>
-                    </ul>
-                  </li>
+                    <li class="grid_5"><a href="{{ url_for('web.home') }}">Torrents<span>.ms</span></a>
+                        <ul>
+                            <li><a href="{{ url_for('web.home') }}">Torrents downloader</a></li>
+                        </ul>
+                    </li>
+                    <li class="grid_5 suffix_2 omega"><a href="{{ url_for('files.home') }}">Torrents<span>.fm</span></a>
+                        <ul>
+                            <li><a href="{{ url_for('files.category', category='movies') }}">Popular Movies</a></li>
+                            <li><a href="{{ url_for('files.popular_torrents', interval='week') }}">Popular torrents</a></li>
+                            <li><a href="{{ url_for('files.popular_searches', interval='week') }}">Favorite Torrent Searches</a></li>
+                        </ul>
+                    </li>
                 </ul>
-              </div>
             </div>
         </footer>
     </body>

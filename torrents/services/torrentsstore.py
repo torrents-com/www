@@ -127,4 +127,4 @@ class TorrentsStore(object):
         return ret
 
     def save_visited(self, files):
-        self.redis_conn.publish(VISITED_LINKS_CHANNEL, msgpack.packb([mid2hex(f["file"]["_id"]) for f in files]))
+        self.redis_conn.publish(VISITED_LINKS_CHANNEL, msgpack.packb([mid2hex(f["file"]["_id"]) for f in files if f]))

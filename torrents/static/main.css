@@ -19,10 +19,10 @@ $redfont:#ab2933;
 $lightredfont:#E7B8B7;
 $greenfont:#869e3b;
 
-$imdb:#f7e67a; /*#F2DD5C;*/
-$greenhealth:#4BF22E; /*#4EE738;*/
+$imdb:#f7e67a;
+$greenhealth:#4BF22E;
 $yellowhealth:#F1F22E;
-$redhealth:#F2602E; /*#E94200;*/
+$redhealth:#F2602E;
 
 @font-face {
     font-family: 'Journal';
@@ -81,9 +81,9 @@ $redhealth:#F2602E; /*#E94200;*/
     &.disable{
         cursor:default;
         box-shadow:none;
-        background:$halfblack;
+        background:$darkgray;
         &:focus, &:hover, &:active {
-            background:$halfblack;
+            background:$darkgray;
         }
     }
 }
@@ -100,7 +100,7 @@ html {
     background-color:$lightgray;
 }
 body {
-    color:$black;background:$white;font-size:62.5%
+    color:$black;background:$white;font-size:62.5%;
 }
 
 ul{margin:0;list-style:none;}
@@ -556,7 +556,7 @@ img.error {
         height:14px;padding:0px;width:140px;border-radius:5px;border:1px solid $black;background-color:$lightgray;
 
         span {text-align:center;display:block}
-        span:first-child + span {color:white;text-shadow: 1px 1px 0px $halfblack, -1px 1px 0px $halfblack, 1px -1px 0px $halfblack, -1px -1px 0px $halfblack;margin-top:-15px;letter-spacing:1px}
+        span:first-child + span {color:white;text-shadow: 1px 1px 0px $darkgray, -1px 1px 0px $darkgray, 1px -1px 0px $darkgray, -1px -1px 0px $darkgray;margin-top:-15px;letter-spacing:1px}
         &.v0 {@include innerspan($redhealth, 0)}
         &.v1 {@include innerspan(mix($redhealth, $yellowhealth, 25%), 0.1)}
         &.v2 {@include innerspan(mix($redhealth, $yellowhealth, 50%), 0.2)}
@@ -684,7 +684,7 @@ h1.extra{text-transform:none; padding:0em 1em 0em; margin:0em; font-size:1.3em; 
     Change the following styles to modify the appearance of Colorbox.  They are
     ordered & tabbed in a way that represents the nesting of the generated HTML.
 */
-#cboxOverlay{background:$halfblack}
+#cboxOverlay{background:$darkgray}
 #colorbox{outline:0;padding:8px}
     #cboxWrapper{padding:8px;background-color:white;border-radius:7px}
     #cboxContent{background:url(/static/loading.gif) center center no-repeat;overflow:hidden}

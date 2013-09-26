@@ -1,7 +1,7 @@
 /* colores v2 */
 $black: #323230;
 $darkgray:lighten($black,10%);
-$gray:lighten($black,50%);
+$gray:#cecfc7;
 $lightgray:#F4F5EF;
 $white:#fff;
 
@@ -861,7 +861,7 @@ h1.extra{text-transform:none; padding:0em 1em 0em; margin:0em; font-size:1.3em; 
 .categories{margin-bottom:0.25em;}
 .tags{margin-bottom:0.5em;}
 .categories li, .tags li{width:auto;float:left;margin-right:0.5em;}
-.categories li a, .tags li a{text-decoration:none;color:$gray;}
+.categories li a, .tags li a{text-decoration:none;color:$grayfont;}
 .categories li{font-size:1.6em;text-transform:uppercase;}
 .tags li{font-size:1.4em;text-transform:lowercase;}
 
@@ -883,7 +883,7 @@ h1.extra{text-transform:none; padding:0em 1em 0em; margin:0em; font-size:1.3em; 
     }
     p {
         font-size: 1.4em; display: inline;line-height:1.3em;
-        &.date {color: $gray}
+        &.date {color: $grayfont}
     }
     .networks {
         li a {height:15px}
@@ -909,7 +909,7 @@ h1.extra{text-transform:none; padding:0em 1em 0em; margin:0em; font-size:1.3em; 
 }
 
 .author-date p{font-size:1.4em;}
-.author-date p span.hour{font-size:0.7em;color:$darkgray;}
+.author-date p span.hour{font-size:0.7em;color:$grayfont;}
 .single .share .networks li{float:none;margin-bottom:1em;}
 
 .single .category-tags ul{padding-left:3em;}

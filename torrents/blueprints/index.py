@@ -42,13 +42,13 @@ def about():
     g.page_description = "Torrents.com is a free torrent search engine that offers users fast, simple, easy access to every torrent in one place."
     g.keywords.clear()
     g.keywords.update(["torrents", "torrents.com", "search engine", "download", "free", "movie", "software", "popular largest"])
-    g.title+=" | About"
+    g.title.append("About")
     return render_template('about.html')
 
 @index.route('/legal')
 def legal():
     g.category=False
-    g.title+=" | Terms & privacy"
+    g.title.append("Terms & privacy")
     g.keywords.clear()
     g.keywords.update(["torrents search engine privacy terms of use"])
     g.page_description = "Torrents.com is a free torrent search engine that offers users fast, simple, easy access to every torrent in one place."
@@ -75,7 +75,7 @@ def contact():
                 g.alert = ("error", "The message has not been sent. Try again later or send mail to %s."%to)
                 logging.exception(e)
 
-    g.title+=" | Contact"
+    g.title.append("Contact form")
     return render_template('contact.html',form=form, sent_error=sent_error)
 
 from flask.ext.wtf import Form, BooleanField, TextField, TextAreaField, SubmitField, Required, Email, RecaptchaField

@@ -178,7 +178,7 @@ def home():
 
 @files.route('/st_sitemap.xml')
 def static_sitemap():
-    pages = [url_for(".home", _external=True)]
+    pages = [url_for(page, _external=True) for page in (".home", ".about", ".contact", ".copyright")]
     pages.extend(url_for(".category", category=category.url, _external=True) for category in g.categories)
     pages.extend(url_for(".popular_searches", interval=interval, _external=True) for interval in POPULAR_SEARCHES_INTERVALS.iterkeys())
     pages.extend(url_for(".popular_torrents", interval=interval, _external=True) for interval in POPULAR_TORRENTS_INTERVALS.iterkeys())
@@ -225,7 +225,7 @@ def popular_searches(interval):
     g.keywords.clear()
     g.keywords.update(["popular torrent", "free movie", "full download", "search engine", "largest"])
     g.page_description = "Torrents.com is a free torrent search engine that offers users fast, simple, easy access to every torrent in one place."
-    g.title+=" | Popular searches "+interval_info[1]
+    g.title.append("Popular searches "+interval_info[1])
     g.h1 = "See up to the minute results for most popular torrent searches ranging from movies to music."
 
     ranking = torrentsdb.get_ranking(interval_info[0])
@@ -241,7 +241,7 @@ def popular_torrents(interval):
 
 
     g.category = False
-    g.title+=" | Popular torrents "+interval_info[1]
+    g.title.append("Popular torrents "+interval_info[1])
     results, search_info = single_search(None, "torrent", "porn", order=interval_info[0], zone="Popular", title=("Popular torrents", 2, None), last_items=get_last_items(), skip=get_skip(), show_order=None)
     g.keywords.clear()
     g.keywords.update(["torrent", "torrents", "search engine", "popular downloads", "online movies"])
@@ -289,10 +289,10 @@ def search(query=None):
         if g.query != _query:
             results, search_info = single_search(_query, None, zone="Search", order=order, title=("%s torrents"%escape(g.query), 2, None), last_items=get_last_items(), skip=skip, show_order=show_order or True)
 
-    #g.title+=" | " + g.query
-    g.title = "Torrents.com | " + g.query
+    if skip>0:
+        g.title.append("Page %d" % (int(skip) + 1))
 
-    g.title += " | Page %d" % (int(skip) + 1) if skip > 0 else ""
+    g.title.append(g.query)
 
     g.page_description = "Download %s torrent from %s search engine with free, fast downloads." % (g.query, g.domain_capitalized)
 
@@ -314,8 +314,6 @@ def category(category, query=None):
     if not g.category:
         return abort(404)
 
-    g.title = "Torrents.com"
-
     page_title = singular_filter(g.category.title)+" torrents"
     pop_searches = None
     if g.query:
@@ -326,7 +324,8 @@ def category(category, query=None):
         pop_searches = create_cloud(torrentsdb.get_ranking(category), 500, 2)
         g.page_description = "%s torrents at %s, the free and fast torrent search engine."%(singular_filter(g.category.title).capitalize(), g.domain_capitalized)
         order, show_order = get_order(CATEGORY_ORDER)
-    g.title+=" | " + page_title
+
+    g.title.append(page_title)
 
     results, search_info = single_search(g.query, g.category.tag, order=order, zone=g.category.url, title=(page_title, 2, g.category.tag), last_items=get_last_items(), skip=get_skip(), show_order=show_order or True)
 
@@ -418,7 +417,7 @@ def download(file_id, file_name=""):
         else:
             title = title[:101]
 
-    g.title = title
+    g.title = [title]
 
     page_description = ""
     if "description" in file_data["view"]["md"]:
@@ -464,7 +463,7 @@ def copyright():
     g.page_description = "%s is a free torrent search engine that offers users fast, simple, easy access to every torrent in one place." % g.domain_capitalized
     g.keywords.clear()
     g.keywords.update(["torrents search engine popular largest copyright"])
-    g.title+=" | Copyright"
+    g.title.append("Copyright form")
     form = ComplaintForm(request.form)
     if request.method=='POST':
         if "file_id" in request.form:

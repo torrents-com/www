@@ -238,7 +238,7 @@ def create_app(config=None, debug=False):
         title, description = errors[error if error in errors else 500]
 
         init_g(current_app)
-        g.title = "Torrents.com | The Torrent Search Engine | " + title
+        g.title.append(title)
 
         return render_template('error.html', code=str(error), title=title, description=description), error
 
@@ -293,7 +293,7 @@ def init_g(app):
     g.url_search_base = url_for("files.search", query="___")
 
     # título de la página por defecto
-    g.title = "Torrents.com | The Torrent Search Engine"
+    g.title = [g.domain_capitalized]
 
     g.keywords = {'torrents', 'download', 'files', 'search', 'audio', 'video', 'image', 'document', 'software'}
 

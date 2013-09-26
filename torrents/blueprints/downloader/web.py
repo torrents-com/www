@@ -48,7 +48,7 @@ def favicon():
 @web.route('/')
 def home():
     g.category=False
-    g.title = "Torrents.com | Torrents Downloader"
+    g.title.append("Torrents Downloader")
     g.page_description = "Torrents Downloader is a fast client for the Torrent P2P network"
 
     return render_template(

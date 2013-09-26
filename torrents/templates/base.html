@@ -2,7 +2,7 @@
 <html lang="en">
     <head>
         {% if not g.override_header %}
-            <title>{{ g.title | replace("Torrents.com", g.domain_capitalized, 1)}}</title>
+            <title>{{ g.title|reverse|join(" | ")}}</title>
             <meta http-equiv="content-language" content="en" />
             {% if g.page_description %}
             <meta name="description" content="{{g.page_description}}" />

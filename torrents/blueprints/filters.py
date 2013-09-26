@@ -84,7 +84,7 @@ def search(query=None):
 
     results, search_info = single_search(g.clean_query, None, zone="Search", order=order, title=("%s torrents"%escape(g.query), 2, None), last_items=get_last_items(), skip=skip, show_order=show_order or True)
 
-    g.title = "Torrents.com | Filter"
+    g.title.append("Filter")
 
     return render_template('search.html', results=results, search_info=search_info, show_order=show_order)
 

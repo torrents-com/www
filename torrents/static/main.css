@@ -96,9 +96,11 @@ $redhealth:#F2602E; /*#E94200;*/
 }
 
 *,html{margin:0;padding:0;font-family:'helvetica neue',helvetica,arial,sans-serif;}
+html {
+    background-color:$lightgray;
+}
 body {
-    color:$black;
-    background:$white;font-size:62.5%;
+    color:$black;background:$white;font-size:62.5%
 }
 
 ul{margin:0;list-style:none;}
@@ -155,6 +157,7 @@ img {
 
 #files_page, #text_page, #news_page {
     margin:6em auto;
+    min-height:20em;
 }
 
 #text_page {
@@ -211,7 +214,7 @@ img.error {
 }
 
 #header {
-    margin:20px 0px 0px;
+    padding-top:2em;
 
     .logo {
         display:block;
@@ -857,13 +860,18 @@ h1.extra{text-transform:none; padding:0em 1em 0em; margin:0em; font-size:1.3em; 
     h3 {font-size:1.9em}
 }
 
-.categories, .tags{display:block;float:none;overflow:hidden;}
-.categories{margin-bottom:0.25em;}
+.categories, .tags{
+    display:inline-block;
+    li{
+        font-size:1.6em;width:auto;display:inline-block;margin-right:0.5em
+        a{text-decoration:none;color:$grayfont;
+            &:hover {color:$redfont}
+        }
+    }
+
+}
+.categories{margin-bottom:1em;text-transform:uppercase}
 .tags{margin-bottom:0.5em;}
-.categories li, .tags li{width:auto;float:left;margin-right:0.5em;}
-.categories li a, .tags li a{text-decoration:none;color:$grayfont;}
-.categories li{font-size:1.6em;text-transform:uppercase;}
-.tags li{font-size:1.4em;text-transform:lowercase;}
 
 .networks{overflow:hidden}
 .networks li{float:left;margin-right:0.3em;}
@@ -912,11 +920,9 @@ h1.extra{text-transform:none; padding:0em 1em 0em; margin:0em; font-size:1.3em; 
 .author-date p span.hour{font-size:0.7em;color:$grayfont;}
 .single .share .networks li{float:none;margin-bottom:1em;}
 
-.single .category-tags ul{padding-left:3em;}
+.single .category-tags ul{padding-left:3em;display:block}
 .single .category-tags ul.categories{background:url(/static/ico.folder-15.png) left 0.3em no-repeat;}
-.single .category-tags ul.categories a{color:$redfont;}
 .single .category-tags ul.tags{background:url(/static/ico.tag-15.png) left 0.3em no-repeat;}
-.single .category-tags ul.tags a{color:$redfont;}
 
 .single-post section#content p, .single-post section#content ul li{font-size:1.4em;line-height:1.3em;margin-bottom:1em;}
 .single-post section#content p:first-child{font-size:1.8em;font-weight:400;}
@@ -969,6 +975,7 @@ footer{
 
     #footer-top {
         font-size:1.4em;margin-bottom:2em;border-bottom:1px solid $lightgrayfont;
+        div:first-child {text-align:right}
         li{margin-right:2em;float:left;margin:1em 2em 0em 0em;}
         .networks li{height:3em;margin:0em 0em 0em 1em;float:right;}
     }
@@ -977,13 +984,13 @@ footer{
             font-size:1.4em;
         }
         p {
-            font-size:1.4em;text-align:right;color:$lightgrayfont;font-style:italic;
+            font-size:1.4em;text-align:right;color:$grayfont;font-style:italic;
         }
         > ul {
             > li {
-                text-transform:lowercase;background:url(/static/ico.arrow-khaki-down.png) 0 1em no-repeat;
+                background:url(/static/ico.arrow-khaki-down.png) 0 1em no-repeat;
                 > a {
-                    text-decoration:none; margin-left:1em; line-height:1em; font-size:2.2em;color:$grayfont;
+                    text-decoration:none; margin-left:0.9em; line-height:1em; font-size:2.2em;color:$grayfont;
                     span {font-family:'Journal',Arial,sans-serif;font-size:1.1em;margin-left:0.05em;}
                 }
                 ul {

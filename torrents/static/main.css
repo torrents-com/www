@@ -853,6 +853,7 @@ h1.extra{text-transform:none; padding:0em 1em 0em; margin:0em; font-size:1.3em; 
 
 .top-stories{
     margin:6em auto 4em;
+    h2 {margin-top:0}
     h3 {font-size:1.9em}
 }
 
@@ -864,8 +865,8 @@ h1.extra{text-transform:none; padding:0em 1em 0em; margin:0em; font-size:1.3em; 
             &:hover {color:$redfont}
         }
     }
-
 }
+
 .categories{margin-bottom:1em;text-transform:uppercase}
 .tags{margin-bottom:0.5em;text-transform:lowercase}
 
@@ -879,6 +880,7 @@ h1.extra{text-transform:none; padding:0em 1em 0em; margin:0em; font-size:1.3em; 
         padding: 4em 0em;
     }
     h2 {
+        margin-top:0;
         line-height:inherit;
         & + article {
             padding-top: 0em;
@@ -910,6 +912,7 @@ h1.extra{text-transform:none; padding:0em 1em 0em; margin:0em; font-size:1.3em; 
 #news-top{
     margin:6em auto;overflow:hidden;
     section {margin:0em auto 4em}
+    h2 {margin-top:0}
 }
 
 .author-date p{font-size:1.4em;}
@@ -999,7 +1002,7 @@ footer{
 }
 
 /* DOWNLOADER ------------------------------------------ */
-#downloader-page{text-align:center;}
+#downloader-page{text-align:center;h2{margin-top:0}}
 
 .downloader-top{margin-top:6em}
   .download-box{

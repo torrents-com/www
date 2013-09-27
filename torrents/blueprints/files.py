@@ -178,7 +178,7 @@ def home():
 
 @files.route('/st_sitemap.xml')
 def static_sitemap():
-    pages = [url_for(page, _external=True) for page in (".home", ".about", ".contact", ".copyright")]
+    pages = [url_for(page, _external=True) for page in (".home", ".copyright")]
     pages.extend(url_for(".category", category=category.url, _external=True) for category in g.categories)
     pages.extend(url_for(".popular_searches", interval=interval, _external=True) for interval in POPULAR_SEARCHES_INTERVALS.iterkeys())
     pages.extend(url_for(".popular_torrents", interval=interval, _external=True) for interval in POPULAR_TORRENTS_INTERVALS.iterkeys())

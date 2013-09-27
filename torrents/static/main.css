@@ -913,6 +913,7 @@ h1.extra{text-transform:none; padding:0em 1em 0em; margin:0em; font-size:1.3em; 
     margin:6em auto;overflow:hidden;
     section {margin:0em auto 4em}
     h2 {margin-top:0}
+    .share {margin-bottom:0}
 }
 
 .author-date p{font-size:1.4em;}
@@ -1002,7 +1003,10 @@ footer{
 }
 
 /* DOWNLOADER ------------------------------------------ */
-#downloader-page{text-align:center;h2{margin-top:0}}
+#downloader-page{
+    text-align:center;
+    h2 {margin-top:0}
+}
 
 .downloader-top{margin-top:6em}
   .download-box{

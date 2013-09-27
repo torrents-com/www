@@ -9,15 +9,15 @@
 {% block content %}
 <section class="container_24" id="text_page">
     <div class="title grid_24">
-        <h1>{{g.h1}}</h1>
-        <h2>Popular searches {{interval_info[1]}}</h2>
+        <h1 class="tagline">{{g.h1}}</h1>
+        <h2 class="main">Popular searches {{interval_info[1]}}</h2>
+        <p>You can also browse favorite torrent searches
+            {%- for search_interval, search in links.iteritems() if search_interval!=interval %}
+                {{- " or " if loop.last}}{{- ", " if not (loop.last or loop.first)}}
+                <a href="{{url_for('files.popular_searches', interval=search_interval)}}">{{search[1]}}</a>
+            {%- endfor %}.
+        </p>
     </div>
-    <p>You can also browse favorite torrent searches
-        {%- for search_interval, search in links.iteritems() if search_interval!=interval %}
-            {{- " or " if loop.last}}{{- ", " if not (loop.last or loop.first)}}
-            <a href="{{url_for('files.popular_searches', interval=search_interval)}}">{{search[1]}}</a>
-        {%- endfor %}.
-    </p>
     <div id="ranking" class="grid_24">
         <ol>
         {%- for search in ranking["final_ranking"] %}

@@ -18,7 +18,7 @@
     {%- endif %}
     {%- for (results, search_info), category in rankings %}
     <div class="title ranking big_icon {{category.url}}">
-    <span></span><div><h2><a href='{{url_for("files.category", category=category.url)}}'>{{category.title|singular}} torrents</a></h2></div>
+    <span></span><div><h2 class="main"><a href='{{url_for("files.category", category=category.url)}}'>{{category.title|singular}} torrents</a></h2></div>
     </div>
         {%- if results %}
             {{ results | safe }}

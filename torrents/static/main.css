@@ -109,7 +109,7 @@ li,dt,dd{list-style:none;}
 a img{border:none;}
 hr{clear:both;width:100%;color:$white;border:none;background:$white;font-size:0.1em;line-height:0.1em;}
 abbr{border:0;text-decoration:none;}
-h2{font-size:2.5em;margin-bottom:0.7em;text-transform:uppercase;}
+h2{font-size:2.5em;margin:2em 0 0.7em;text-transform:uppercase;}
 h3{font-size:2.4em;line-height:1.3em;font-weight:normal;margin-bottom:0.5em}
 h4{font-size:2.4em;margin-bottom:1em;}
 
@@ -162,7 +162,7 @@ img {
 
 #text_page {
 
-    h2 { font-size: 1.6em; margin-top:2em; }
+    h2 { font-size: 1.6em}
 
     ul, ol {
         padding-left:3em;vertical-align: top;
@@ -438,7 +438,7 @@ img.error {
 }
 
 #popular {
-    font-size:1.8em;
+    text-align:center;margin:2em 0 2em; overflow-x:hidden;font-size:1.8em;
     div {
         margin:10px 0px;line-height:0;height:0;border-bottom:1px solid $gray;vertical-align:middle;text-align:center;
         span {
@@ -449,7 +449,6 @@ img.error {
             color:$redfont;
         }
     }
-    text-align:center;margin:20px 0px 50px; overflow-x:hidden;
     a {margin:1px 7px;color:$grayfont;text-decoration:none;white-space:nowrap;display:inline-block;*display:inline;zoom:1; &:hover, &:focus, &:active { color:$redfont; outline: none }}
     a.odd {color:$black; &:hover, &:focus, &:active { color:$redfont; outline: none }}
 }
@@ -592,25 +591,22 @@ h1 {text-transform:uppercase;font-size:2.5em;color:$black}
 h1.extra{text-transform:none; padding:0em 1em 0em; margin:0em; font-size:1.3em; color:$black; text-align:center}
 
 .title {
-    font-weight:bold;margin:0em;text-align: justify; white-space: nowrap; margin-bottom:2em;
+    font-weight:bold;margin:0em 0em 2em;text-align: justify; white-space: nowrap;
     >* {vertical-align:middle}
-    span:first-child + div {display:inline-block;*display:inline;zoom:1;white-space:normal;margin-top:1em}
+    span:first-child + div {
+        display:inline-block;*display:inline;zoom:1;white-space:normal;margin-top:1em
+        .main {margin-top:0.9em}
+    }
     &.big_icon {
         span:first-child {margin-right:-60px}
         span:first-child + div {padding-left:70px}
     }
-    h2 {text-transform:uppercase;font-size:2.5em;margin:0.9em 0 0}
-    h2 a {text-decoration:none;color:$black}
+
+    .tagline {font-size: 1.4em; margin:0; font-weight:normal; color:$grayfont}
+    .main {text-transform:uppercase;font-size:2.5em !important; margin: 0.1em 0 0.5em}
+    .main a {text-decoration:none;color:$black}
+    p {font-size: 1.4em;font-weight:normal;}
 }
-
-.ranking.title {
-    margin-bottom:5px;
-    h2 {margin-bottom:10px}
-}
-
-.title h1{text-transform:none; font-size: 2.5em; margin:0}
-.title h1.category {text-transform:uppercase;font-size: 2.5em}
-
 
 #featured_col {clear:left}
 

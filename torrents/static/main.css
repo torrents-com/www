@@ -595,11 +595,14 @@ h1.extra{text-transform:none; padding:0em 1em 0em; margin:0em; font-size:1.3em; 
     >* {vertical-align:middle}
     span:first-child + div {
         display:inline-block;*display:inline;zoom:1;white-space:normal;margin-top:1em
-        .main {margin-top:0.9em}
+
     }
     &.big_icon {
         span:first-child {margin-right:-60px}
-        span:first-child + div {padding-left:70px}
+        span:first-child + div {
+            padding-left:70px;
+            .main {margin-top:0.9em}
+        }
     }
 
     .tagline {font-size: 1.4em; margin:0; font-weight:normal; color:$grayfont}
@@ -924,11 +927,15 @@ h1.extra{text-transform:none; padding:0em 1em 0em; margin:0em; font-size:1.3em; 
 .single .category-tags ul.tags{background:url(/static/ico.tag-15.png) left 0.3em no-repeat;}
 
 .single-post section#content p, .single-post section#content ul li{font-size:1.4em;line-height:1.3em;margin-bottom:1em;}
-.single-post section#content p:first-child{font-size:1.8em;font-weight:400;}
 
 #sidebar {
     h3{font-size:1.8em;font-weight:bold;color:$black;text-transform:uppercase}
-    a {color:$grayfont}
+    a {
+        color:$grayfont;
+        &:hover {
+            text-decoration:none;color:$redfont;
+        }
+    }
     li {
         margin-bottom: 4em;
         li, p {

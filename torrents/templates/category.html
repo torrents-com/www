@@ -13,6 +13,11 @@
         <a href='{{url_for("files.home")}}'>All</a>&nbsp;&nbsp;&gt;&nbsp;&nbsp;<a href='{{url_for("files.category", category=g.category.url)}}'>{{g.category.title}}</a>&nbsp;&nbsp;&gt;&nbsp;&nbsp;{{g.query}}
         <h1 class="category">{{g.query}} {{g.category.title|singular}} torrents</h1>
     </div>
+
+    {%- if not results %}
+        <p>No <strong>{{g.category.title|singular}}</strong> torrents found for <strong>{{g.query}}</strong>.</p>
+        <p>Sorry, we don't have any result that matches your query in this category. Please, try another search or another category.</p>
+    {%- endif %}
 </div>
 {%- else %}
 <div class="title big_icon grid_10 {{g.category.url}}">
@@ -45,11 +50,6 @@
     {%- if search_info["next"] %}
         <a class='more_results' href='{{url_for("files.category", category=g.category.url, query=g.clean_query)}}?s={{search_info["next"]}}{{'&o='+show_order if show_order}}'>more {{g.category.title|lower}} torrents...</a>
     {%- endif %}
-    </div>
-{%- else %}
-    <div class="text_page grid_24">
-        <p>No <strong>{{g.category.title|singular}}</strong> torrents found for <strong>{{g.query}}</strong>.</p>
-        <p>Sorry, we don't have any result that matches your query in this category. Please, try another search or another category.</p>
     </div>
 {%- endif %}
 </section>

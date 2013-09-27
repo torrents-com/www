@@ -14,7 +14,7 @@ def multidomain_view(*args, **kwargs):
     if view_func:
         return view_func(*args, **kwargs)
     else:
-        return redirect(DOMAIN_REPLACER.sub(r"\1"+domains.iterkeys().next() + DOMAIN_SUFFIX + r"\2", request.url.decode("utf-8")), 301)
+        return redirect(DOMAIN_REPLACER.sub(r"\1"+domains.iterkeys().next() + DOMAIN_SUFFIX + r"\2", request.url), 301)
 
 def url_for(endpoint, **values):
     domain = _MultidomainBlueprint__endpoint_domain.get(endpoint, None)

@@ -24,7 +24,7 @@
         <h1>Torrents Downloader</h1>
         <h2>Find. Download. Play!</h2>
         {% if properties["available"] -%}
-            <a href="{{url_for('downloads.download', instfile=properties['filename'])}}" class="downloader-download-button">Download</a>
+            <a href="{{url_for('downloads.download', instfile=properties['filename'])}}" id="downloader_button" class="downloader-download-button">Download</a>
             <p><strong class="free">FREE</strong> <span>for Windows | <strong>{{properties["length"]|numbersizeformat}}</strong> (v. {{properties["version_code"].split("-")[0]}})</span></p>
             <p class="soon">for OSX & Linux: coming soon...</p>
             {% if properties["source_available"] -%}

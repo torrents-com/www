@@ -770,9 +770,8 @@ h1.extra{text-transform:none; padding:0em 1em 0em; margin:0em; font-size:1.3em; 
         line-height:1.2em;
         p{
             padding:10px 0;
-            }
-
         }
+    }
     footer{
         text-align:center;
         white-space:nowrap;

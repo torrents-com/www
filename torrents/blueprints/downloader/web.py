@@ -5,7 +5,7 @@ import os.path
 
 from foofind.services.extensions import cache
 
-from flask import Blueprint, render_template, g, current_app, request, send_file, send_from_directory
+from flask import Blueprint, render_template, g, current_app, request, send_file, send_from_directory, redirect
 from flask.ext.babelex import gettext as _
 from torrents.multidomain import MultidomainBlueprint
 

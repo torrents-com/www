@@ -310,10 +310,10 @@ img.error {
 }
 
 #alert {
-    font-size:1.4em;text-align:center;border-bottom:1px solid $redfont; padding:0.5em 0em;display:none;
+    font-size:1.4em;text-align:center;border-bottom:1px solid $red; background:$lightgray; padding:0.5em 0em;display:none;
 
-    &.error {background:$verylightred;display:block;color:$redfont}
-    &.info {background:$lightgreen;display:block;color:$greenfont}
+    &.error {display:block;color:$redfont}
+    &.info {display:block;color:$greenfont}
 }
 
 .results {
@@ -861,7 +861,7 @@ h1.extra{text-transform:none; padding:0em 1em 0em; margin:0em; font-size:1.3em; 
 }
 
 .categories, .tags{
-    display:inline-block;
+    display:inline;
     li{
         font-size:1.6em;width:auto;display:inline-block;margin-right:0.5em
         a{text-decoration:none;color:$grayfont;
@@ -871,7 +871,7 @@ h1.extra{text-transform:none; padding:0em 1em 0em; margin:0em; font-size:1.3em; 
 
 }
 .categories{margin-bottom:1em;text-transform:uppercase}
-.tags{margin-bottom:0.5em;}
+.tags{margin-bottom:0.5em;text-transform:lowercase}
 
 .networks{overflow:hidden}
 .networks li{float:left;margin-right:0.3em;}

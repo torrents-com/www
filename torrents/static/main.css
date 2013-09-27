@@ -1,6 +1,6 @@
 /* colores v2 */
 $black: #323230;
-$darkgray:lighten($black,10%);
+$darkgray:#4c4c49;
 $gray:#cecfc7;
 $lightgray:#F4F5EF;
 $white:#fff;
@@ -797,7 +797,7 @@ h1.extra{text-transform:none; padding:0em 1em 0em; margin:0em; font-size:1.3em; 
         padding: 10px 12px 7px 8px;
         border-radius: 9px;
 
-        box-shadow:inset 0px 17px lighten($black, 15%);
+        box-shadow:inset 0px 17px $darkgray;
         text-decoration:none;
         cursor:pointer;
         span {vertical-align:-7px}
@@ -805,7 +805,7 @@ h1.extra{text-transform:none; padding:0em 1em 0em; margin:0em; font-size:1.3em; 
         &:focus, &:hover, &:active {
             outline:none;
             box-shadow:inset 0px 17px $redfont;
-            background:darken($redfont, 15%);
+            background:$red;
         }
     }
     .dialog_ok {
@@ -818,7 +818,7 @@ h1.extra{text-transform:none; padding:0em 1em 0em; margin:0em; font-size:1.3em; 
     .dialog_yes {
         margin-left:2.5%;
         background:$red;
-        box-shadow:inset 0px 17px lighten($redfont, 15%);
+        box-shadow:inset 0px 17px $red;
         }
     }
 

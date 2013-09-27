@@ -182,7 +182,7 @@ img {
         display:block;
     }
     input[type=text], textarea {
-        diplay:inline-block;
+        display:inline-block;
         border:1px solid $gray;
         padding: 3px 6px;
         width: 400px;

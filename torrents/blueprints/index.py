@@ -10,6 +10,22 @@ from torrents.services import *
 
 index = MultidomainBlueprint('index', __name__, domain="torrents.com")
 
+@index.route('/downloader')
+def old_downloader():
+    return redirect(url_for("web.home"), 301)
+
+@index.route('/popular')
+def old_popular_torrents():
+    return redirect(url_for("files.popular_torrents", interval="month"), 301)
+
+@index.route('/recent')
+def old_recent_torrents():
+    return redirect(url_for("files.popular_torrents", interval="today"), 301)
+
+@index.route('/popular_searches')
+def old_popular_searches():
+    return redirect(url_for("files.popular_searches", interval="today"), 301)
+
 @index.route('/res/cookies.js')
 def cookies():
     response = make_response("$(function(){cookies("+request.cookies.get("cookies_accept","0")+")})")

@@ -45,10 +45,6 @@ def get_downloader_properties():
 def favicon():
     return send_from_directory(os.path.join(current_app.root_path, 'static'), 'robots.txt', mimetype='text/plain')
 
-@web.route('/downloader')
-def old_downloader():
-    return redirect(url_for(".home"), 301)
-
 @web.route('/')
 def home():
     g.category=False

@@ -199,18 +199,6 @@ def robots():
         response.mimetype='text/plain'
     return response
 
-@files.route('/popular')
-def old_popular_torrents():
-    return redirect(url_for(".popular_torrents", interval="month"), 301)
-
-@files.route('/recent')
-def old_recent_torrents():
-    return redirect(url_for(".popular_torrents", interval="today"), 301)
-
-@files.route('/popular_searches')
-def old_popular_searches():
-    return redirect(url_for(".popular_searches", interval="today"), 301)
-
 @files.route('/popular/searches/<interval>')
 def popular_searches(interval):
     '''

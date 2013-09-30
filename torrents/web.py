@@ -29,7 +29,7 @@ from foofind.utils.bots import is_search_bot, is_full_browser, check_rate_limit
 
 from torrents.blueprints.index import index
 from torrents.blueprints.news import news
-from torrents.blueprints.files import files
+from torrents.blueprints.files import files, register_files_converters
 from torrents.blueprints.downloader import all_blueprints as downloader_blueprints
 from torrents.templates import register_filters
 from torrents.services import *
@@ -108,10 +108,12 @@ def create_app(config=None, debug=False):
 
     # Blueprints
     app.register_blueprint(index)
+    register_files_converters(app)
     app.register_blueprint(files)
     app.register_blueprint(news)
     for blueprint in downloader_blueprints:
         app.register_blueprint(blueprint)
+
 
     # Registra filtros de plantillas
     register_filters(app)

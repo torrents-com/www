@@ -109,6 +109,7 @@ def get_featured(results_shown=100, headers=1):
     count = min(len(feat), int(math.ceil((results_shown)/7.)))
     return render_template('featured.html', files=[heappop(feat) for i in xrange(count)])
 
+
 PIXEL = b64decode("R0lGODlhAQABAPAAAAAAAAAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==")
 @files.route("/res/pixel.gif")
 @nocache
@@ -302,8 +303,8 @@ def search(query=None):
 
     return render_template('search.html', results=results, search_info=search_info, show_order=show_order, featured=get_featured(search_info["count"]))
 
-@files.route('/<category>')
-@files.route('/<category>/<query>')
+@files.route('/<category:category>')
+@files.route('/<category:category>/<query>')
 def category(category, query=None):
 
     get_query_info(query, category)
@@ -336,8 +337,8 @@ def category(category, query=None):
     return render_template('category.html', results=results, search_info=search_info, show_order=show_order, featured=get_featured(search_info["count"]), pop_searches=pop_searches)
 
 
-@files.route('/-<file_id>')
-@files.route('/<file_name>-<file_id>')
+@files.route('/-<fileid:file_id>')
+@files.route('/<file_name>-<fileid:file_id>')
 def download(file_id, file_name=""):
     if request.referrer:
         try:
@@ -794,6 +795,7 @@ def save_visited(files):
     if not g.search_bot:
         torrentsdb.save_visited(files)
 
+
 from flask.ext.wtf import Form, BooleanField, PasswordField, TextField, TextAreaField, SelectField, FileField, FieldList, SubmitField, ValidationError, Regexp, Required, URL, Email, RecaptchaField
 class ComplaintForm(Form):
     '''
@@ -811,3 +813,23 @@ class ComplaintForm(Form):
     captcha = RecaptchaField()
     accept_tos = BooleanField(validators=[Required("Required field.")])
     submit = SubmitField("Submit")
+
+
+from werkzeug.routing import BaseConverter
+class FileIdConverter(BaseConverter):
+    def __init__(self, url_map, *args, **kwargs):
+        super(FileIdConverter, self).__init__(url_map)
+        self.regex = "[a-zA-Z2-7]{20}"
+
+CATEGORIES_REGEX = ""
+class CategoryConverter(BaseConverter):
+    def __init__(self, url_map):
+        super(CategoryConverter, self).__init__(url_map)
+        self.regex = CATEGORIES_REGEX
+
+def register_files_converters(app):
+    global CATEGORIES_REGEX
+    CATEGORIES_REGEX = "|".join("("+cat.url+")" for cat in app.config["TORRENTS_CATEGORIES"])
+    app.url_map.converters['fileid'] = FileIdConverter
+    app.url_map.converters['category'] = CategoryConverter
+

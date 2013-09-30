@@ -11,10 +11,6 @@ news = MultidomainBlueprint('news', __name__, domain="torrents.com")
 
 def fix_urls(content, external=False):
 
-    # remove xsl references from xml sitemaps first line
-    if content.startswith('<?xml version="1.0" encoding="UTF-8"?>'):
-        content = '<?xml version="1.0" encoding="UTF-8"?>\n'+content.split("\n",1)[1]
-
     home_url = url_for("news.home", _external=external).rstrip("/")
     inner_url = url_for("news.home", path="_", _external=external)[:-1] + r"\1"
     inner_url_on_url = urllib2.quote(url_for("news.home", path="_", _external=True)[:-1], "") + r"\1"

@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 {% block head %}
 {{ head | safe }}
+<link rel="alternate"  href="{{ url_for('news.rss', _external=True) }}" type="application/rss+xml" title="Torrents.com" />
 {% endblock %}
 
 {% block content %}

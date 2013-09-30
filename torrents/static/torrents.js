@@ -1,3 +1,4 @@
+
 //muestra cuadro de dialogo
 window.modal_dialog = {
     initialized:false,
@@ -155,8 +156,6 @@ function show_alert(html, type) {
 
 $(function(){
     window.suggestmeyes_loaded = true;
-
-    ['aside', 'article', 'footer', 'header', 'nav', 'section'].forEach(function(e){document.createElement(e)});
 
     if ($("#files >.filepaths li").length>1){
         $("#files >.filepaths >li").addClass("open");

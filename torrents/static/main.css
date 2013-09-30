@@ -102,7 +102,6 @@ html {
 body {
     color:$black;background:$white;font-size:62.5%;
 }
-
 ul{margin:0;list-style:none;}
 ol,dl{margin:0;}
 li,dt,dd{list-style:none;}
@@ -112,6 +111,7 @@ abbr{border:0;text-decoration:none;}
 h2{font-size:2.5em;margin:2em 0 0.7em;text-transform:uppercase;}
 h3{font-size:2.4em;line-height:1.3em;font-weight:normal;margin-bottom:0.5em}
 h4{font-size:2.4em;margin-bottom:1em;}
+aside,article,footer,header,nav,section {display:block}
 
 input, button {
     font-family: 'Open Sans', Arial, Verdana, sans-serif;
@@ -182,10 +182,10 @@ img {
         display:block;
     }
     input[type=text], textarea {
-        display:inline-block;
         border:1px solid $gray;
         padding: 3px 6px;
         width: 400px;
+        display:inline-block;*display:inline; zoom:1
     }
     img {
         margin:0px;
@@ -384,13 +384,13 @@ img.error {
             word-wrap:break-word;
             width:97%;
             font-weight:700;
-            display:inline-block;
             font-size:1.4em;
             line-height:1em;
             overflow: hidden;
             max-height: 5em;
             margin-bottom:30px;
             margin-left:5px;
+            display:inline-block;*display:inline; zoom:1
         }
 
         .download {
@@ -459,7 +459,7 @@ img.error {
 
 #ranking {
     span {
-        padding:0.3em 0px;margin:0em 1em; font-size:0.7em; display:inline-block; text-align:center
+        padding:0.3em 0px;margin:0em 1em; font-size:0.7em; text-align:center; display:inline-block;*display:inline; zoom:1
         &:first-child {width:30px}
     }
 }
@@ -571,7 +571,7 @@ img.error {
 
     ul {
         padding-left:0px;
-        >li {list-style:none;display:inline-block}
+        >li {list-style:none;display:inline-block;*display:inline;zoom:1}
     }
 
     .seeders, .leechers {
@@ -594,8 +594,7 @@ h1.extra{text-transform:none; padding:0em 1em 0em; margin:0em; font-size:1.3em; 
     font-weight:bold;margin:0em 0em 2em;text-align: justify; white-space: nowrap;
     >* {vertical-align:middle}
     span:first-child + div {
-        display:inline-block;*display:inline;zoom:1;white-space:normal;margin-top:1em
-
+        white-space:normal;margin-top:1em;display:inline-block;*display:inline;zoom:1
     }
     &.big_icon {
         span:first-child {margin-right:-60px}
@@ -748,9 +747,9 @@ h1.extra{text-transform:none; padding:0em 1em 0em; margin:0em; font-size:1.3em; 
         width:500px;
         padding:1px;
         vertical-align:middle;
-        display:inline-block;
         line-height:1em;
         border-radius:6px;
+        display:inline-block;*display:inline; zoom:1
         }
     .inner{
         background:$lightgray;
@@ -862,7 +861,7 @@ h1.extra{text-transform:none; padding:0em 1em 0em; margin:0em; font-size:1.3em; 
 .categories, .tags{
     display:inline;
     li{
-        font-size:1.6em;width:auto;display:inline-block;margin-right:0.5em
+        font-size:1.6em;width:auto;margin-right:0.5em;display:inline-block;*display:inline; zoom:1
         a{text-decoration:none;color:$grayfont;
             &:hover {color:$redfont}
         }
@@ -953,11 +952,10 @@ h1.extra{text-transform:none; padding:0em 1em 0em; margin:0em; font-size:1.3em; 
 .navigation {
     ol{
         padding-bottom:0.1em;overflow:hidden;
-
         li{
-            float:left;margin-right:1em;
+            margin-right:1em;display:inline-block;*display:inline; zoom:1
             &:first-child{display:none}
-            span, a{-webkit-border-radius:3px;-moz-border-radius:3px;border-radius:3px;font-size:1.6em;display:inline-block;padding:0.4em 0.8em;width:auto;}
+            span, a{-webkit-border-radius:3px;-moz-border-radius:3px;border-radius:3px;font-size:1.6em;padding:0.4em 0.8em;width:auto;display:inline-block;*display:inline; zoom:1}
             .title{display:none;}
             a{background:$red;color:#fff; &:hover{text-decoration:none;background-color:$darkgray}}
             span.current{background:$lightgray;color:$black;}
@@ -972,7 +970,7 @@ h1.extra{text-transform:none; padding:0em 1em 0em; margin:0em; font-size:1.3em; 
     .tagline { font-size: 3em; display:block;padding: 0.5em; color: #fff; font-weight:400 }
     p {font-size: 1.3em; text-align:right}
     h2 {font-size:1.7em; margin:0.2em 0em; text-align:right}
-    a { @include redbutton(); display:inline-block; margin:1em 0em;padding:0.8em 1.8em;font-size:1.5em;border-radius: 0.5em;}
+    a { @include redbutton() margin:1em 0em;padding:0.8em 1.8em;font-size:1.5em;border-radius: 0.5em; display:inline-block;*display:inline; zoom:1}
     img { margin:-2.5em 0}
 }
 
@@ -1020,14 +1018,14 @@ footer{
     h1 {font-size:4.7em;color:$redfont;text-transform:none;font-weight:100;margin-top:0;}
     h2{text-transform:none;font-weight:100;margin:0 auto 0.5em;text-align:center;color:$black;}
     p{font-size: 1.3em;color:$black;margin-bottom: 0.5em;}
-    .free{display:inline-block;padding:2px 5px;margin-right:4px;color:$white;background:$red;}
+    .free{padding:2px 5px;margin-right:4px;color:$white;background:$red; display:inline-block;*display:inline; zoom:1}
     .source {
-        font-size:1.2em;display:inline-block;padding:3px 7px;
+        font-size:1.2em;padding:3px 7px;display:inline-block;*display:inline; zoom:1
         a{color:$redfont;text-decoration:underline;}
     }
     .soon{font-style:italic;color:$darkgray;font-size:1.2em;}
   }
-a.downloader-download-button {display:inline-block;font-size:3em;background:$red;text-transform:uppercase;color:$white;text-decoration: none;margin:0 auto 0.5em;-webkit-border-radius:4px;-moz-border-radius:4px;border-radius:4px;padding: 0.5em 1.7em;text-align: center;}
+a.downloader-download-button {font-size:3em;background:$red;text-transform:uppercase;color:$white;text-decoration: none;margin:0 auto 0.5em;-webkit-border-radius:4px;-moz-border-radius:4px;border-radius:4px;padding: 0.5em 1.7em;text-align: center;display:inline-block;*display:inline; zoom:1}
 a.downloader-download-button:hover {background:$black;}
 
 .downloader-medium{

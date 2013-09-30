@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import datetime, time, itertools, re, math, urllib2, hashlib, os.path
-from flask import request, render_template, redirect, url_for, g, current_app, abort, escape, jsonify, make_response
+from flask import request, render_template, redirect, url_for, g, current_app, abort, escape, jsonify, make_response, send_from_directory
 from struct import pack, unpack
 from base64 import b64decode, urlsafe_b64encode, urlsafe_b64decode
 from urlparse import urlparse, parse_qs
@@ -161,6 +161,16 @@ def create_cloud(data, width, lines):
         if acum>limit or size<0.75:
             break
     return sorted(ret)
+
+@files.route('/favicon.ico')
+def favicon():
+    return send_from_directory(os.path.join(current_app.root_path, 'static'), 'favicon.ico', mimetype='image/vnd.microsoft.icon')
+
+@files.route('/opensearch.xml')
+def opensearch():
+    response = make_response(render_template('opensearch.xml',shortname = "Torrents",description = "opensearch_description"))
+    response.headers['content-type']='application/opensearchdescription+xml'
+    return response
 
 @files.route('/')
 def home():

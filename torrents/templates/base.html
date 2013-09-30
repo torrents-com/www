@@ -9,9 +9,9 @@
             {% endif %}
             <meta name="keywords" content="{{(g.keywords|list)[:17]|join(', ')}}" />
         {% endif %}
-        <link rel="search" type="application/opensearchdescription+xml" href="{{ url_for('index.opensearch') }}" title="Torrents" />
+        <link rel="search" type="application/opensearchdescription+xml" href="{{ url_for('files.opensearch') }}" title="Torrents" />
         <meta charset="utf-8" />
-        <link rel="shortcut icon" href="{{ url_for('index.favicon') }}" />
+        <link rel="shortcut icon" href="/favicon.ico" />
         {%- block assets -%}
             {%- assets "css_torrents" -%}
                 <link type="text/css" href="{{ASSET_URL.rstrip(' \n.')}}" rel="stylesheet" />

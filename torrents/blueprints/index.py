@@ -38,7 +38,7 @@ def robots():
     full_filename = os.path.join(os.path.join(current_app.root_path, 'static'), 'robots.txt')
 
     with open(full_filename) as input_file:
-        response = make_response(input_file.read() +  "\nSitemap: "+ url_for("news.main_sitemap", _external=True))
+        response = make_response(input_file.read() + "\nSitemap: "+ url_for("news.main_sitemap", _external=True) + "\nSitemap: "+ url_for(".static_sitemap", _external=True))
         response.mimetype='text/plain'
     return response
 
@@ -46,10 +46,11 @@ def robots():
 def favicon():
     return send_from_directory(os.path.join(current_app.root_path, 'static'), 'favicon.ico', mimetype='image/vnd.microsoft.icon')
 
-@index.route('/opensearch.xml')
-def opensearch():
-    response = make_response(render_template('opensearch.xml',shortname = "Torrents",description = "opensearch_description"))
-    response.headers['content-type']='application/opensearchdescription+xml'
+@index.route('/st_sitemap.xml')
+def static_sitemap():
+    pages = [url_for(page, _external=True) for page in ("news.home", ".about", ".legal", ".contact")]
+    response = make_response(render_template('sitemap.xml', pages = pages))
+    response.mimetype='text/xml'
     return response
 
 @index.route('/about')

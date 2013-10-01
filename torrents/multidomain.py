@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import re, flask
-from flask import g, url_for as flask_url_for, redirect, Blueprint, request, current_app
+from newrelic.agent import transaction_name
+from flask import g, url_for as flask_url_for, redirect, Blueprint, request, current_app, _request_ctx_stack
 
 DOMAIN_SUFFIX = ""
 _MultidomainBlueprint__rule_domains = {}
@@ -10,9 +11,11 @@ DOMAIN_REPLACER=re.compile(r"^(https?://)[^\/?]*(.*)$")
 
 def multidomain_view(*args, **kwargs):
     domains = _MultidomainBlueprint__rule_domains[request.url_rule.rule]
-    view_func = domains.get(g.domain, None)
-    if view_func:
-        return view_func(*args, **kwargs)
+    info = domains.get(g.domain, None)
+    if info:
+        if info[0]!=request.blueprint:
+            request.url_rule = next(r for r in _request_ctx_stack.top.url_adapter.map._rules if r.rule==request.url_rule.rule and r.endpoint.startswith(info[0]+"."))
+        return transaction_name()(info[1])(*args, **kwargs)
     else:
         return redirect(DOMAIN_REPLACER.sub(r"\1"+domains.iterkeys().next() + DOMAIN_SUFFIX + r"\2", request.url), 301)
 
@@ -22,7 +25,10 @@ def url_for(endpoint, **values):
         values["_external"]=False # Remove external parameter for flask
         return "http://"+ domain + DOMAIN_SUFFIX + flask_url_for(endpoint, **values)
     return flask_url_for(endpoint, **values)
-flask.url_for = url_for
+
+def patch_flask():
+    global flask
+    flask.url_for = url_for
 
 class MultidomainBlueprint(Blueprint):
     '''
@@ -46,9 +52,9 @@ class MultidomainBlueprint(Blueprint):
         if self.domain:
             # Add rule to domain mapping
             if rule in __rule_domains:
-                __rule_domains[rule][self.domain] = view_func
+                __rule_domains[rule][self.domain] = (self.name, view_func)
             else:
-                __rule_domains[rule] = {self.domain: view_func}
+                __rule_domains[rule] = {self.domain: (self.name, view_func)}
 
             # Add endpoint to domain mapping
             __endpoint_domain[self.name+"."+endpoint] = self.domain

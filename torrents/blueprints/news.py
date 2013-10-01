@@ -10,7 +10,6 @@ from .downloader.web import get_downloader_properties
 news = MultidomainBlueprint('news', __name__, domain="torrents.com")
 
 def fix_urls(content, external=False):
-
     home_url = url_for("news.home", _external=external).rstrip("/")
     inner_url = url_for("news.home", path="_", _external=external)[:-1] + r"\1"
     inner_url_on_url = urllib2.quote(url_for("news.home", path="_", _external=True)[:-1], "") + r"\1"

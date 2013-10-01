@@ -4,6 +4,7 @@
 """
 import foofind.globals
 from torrents import multidomain
+multidomain.patch_flask()
 
 import foofind.services.search.search
 foofind.services.search.search.WORD_SEARCH_MIN_LEN = 1
@@ -291,7 +292,7 @@ def init_g(app):
     else:
         g.RUM_code = None
 
-    # Patrón de URL de busqueda, para evitar demasiadas llamadas a url_for
+    # Patrón de URL de busqueda, para evitar demasiadas llamadas a
     g.url_search_base = url_for("files.search", query="___")
 
     # título de la página por defecto

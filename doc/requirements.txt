@@ -12,7 +12,6 @@ Flask-SeaSurf==0.1.22
 Flask-WTF==0.8
 Flask-Zen==0.2
 GitPython==0.1.7
-GnuPGInterface==0.3.2
 Jinja2==2.7.1
 Landscape-Client==12.05
 Markdown==2.3.1

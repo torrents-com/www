@@ -64,6 +64,7 @@ def home():
 
 @web.route("/success")
 def foodownloader_success():
+    g.cache_code += "D"
     return render_template(
         "microsite/foodownloader.html",
         mode = "success",

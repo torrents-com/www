@@ -33,7 +33,7 @@
             <div class="icon-stars"><span class="stars-{{file_data['view']['rating']}}"></span><span class="nostars stars-{{5-file_data['view']['rating']}}"></span></div>
         </div>
         <div class="grid_6 omega share_report">
-            <span>Share <a target="_blank" href="http://www.facebook.com/share.php?u={{ url_for('files.download', file_name=file_data['view']['nfn'], file_id=file_data['view']['url'], _external=True)}}"><span class="icon-facebook"></span></a>&nbsp;<a target="_blank" href="http://twitter.com/home?status={{ url_for("files.download", file_name=file_data["view"]["nfn"], file_id=file_data["view"]["url"], _external=True)}}"><span class="icon-twitter"></span></a></span>
+            <span>Share <a target="_blank" href="http://www.facebook.com/share.php?u={{ url_for('files.download', file_name=file_data["view"]["seo-fn"], file_id=file_data['view']['url'], _external=True)}}"><span class="icon-facebook"></span></a>&nbsp;<a target="_blank" href="http://twitter.com/home?status={{ url_for("files.download", file_name=file_data["view"]["seo-fn"], file_id=file_data["view"]["url"], _external=True)}}"><span class="icon-twitter"></span></a></span>
             | <form action="{{url_for('files.copyright')}}" method="POST">
             <input type="hidden" name="_csrf_token" value="{{ csrf_token() }}">
             <input type="hidden" name="file_id" value="{{file_data["view"]["url"]}}"/>

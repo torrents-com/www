@@ -63,7 +63,6 @@ def home():
         )
 
 @web.route("/success")
-@cache.cached()
 def foodownloader_success():
     return render_template(
         "microsite/foodownloader.html",

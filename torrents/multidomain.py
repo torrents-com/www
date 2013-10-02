@@ -15,7 +15,7 @@ def multidomain_view(*args, **kwargs):
     if info:
         if info[0]!=request.blueprint:
             request.url_rule = next(r for r in _request_ctx_stack.top.url_adapter.map._rules if r.rule==request.url_rule.rule and r.endpoint.startswith(info[0]+"."))
-        return transaction_name()(info[1])(*args, **kwargs)
+        return info[1](*args, **kwargs)
     else:
         return redirect(DOMAIN_REPLACER.sub(r"\1"+domains.iterkeys().next() + DOMAIN_SUFFIX + r"\2", request.url), 301)
 
@@ -52,9 +52,9 @@ class MultidomainBlueprint(Blueprint):
         if self.domain:
             # Add rule to domain mapping
             if rule in __rule_domains:
-                __rule_domains[rule][self.domain] = (self.name, view_func)
+                __rule_domains[rule][self.domain] = (self.name, transaction_name()(view_func))
             else:
-                __rule_domains[rule] = {self.domain: (self.name, view_func)}
+                __rule_domains[rule] = {self.domain: (self.name, transaction_name()(view_func))}
 
             # Add endpoint to domain mapping
             __endpoint_domain[self.name+"."+endpoint] = self.domain

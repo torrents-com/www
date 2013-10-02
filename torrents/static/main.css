@@ -555,7 +555,7 @@ img.error {
         height:14px;padding:0px;width:140px;border-radius:5px;border:1px solid $black;background-color:$lightgray;
 
         span {text-align:center;display:block}
-        span:first-child + span {color:white;text-shadow: 1px 1px 0px $darkgray, -1px 1px 0px $darkgray, 1px -1px 0px $darkgray, -1px -1px 0px $darkgray;margin-top:-15px;letter-spacing:1px}
+        span:first-child + span {color:white;text-shadow: 1px 1px 0px $gray, -1px 1px 0px $gray, 1px -1px 0px $gray, -1px -1px 0px $gray;margin-top:-15px;letter-spacing:1px}
         &.v0 {@include innerspan($redhealth, 0)}
         &.v1 {@include innerspan(mix($redhealth, $yellowhealth, 25%), 0.1)}
         &.v2 {@include innerspan(mix($redhealth, $yellowhealth, 50%), 0.2)}
@@ -970,7 +970,7 @@ h1.extra{text-transform:none; padding:0em 1em 0em; margin:0em; font-size:1.3em; 
     .tagline { font-size: 3em; display:block;padding: 0.5em; color: #fff; font-weight:400 }
     p {font-size: 1.3em; text-align:right}
     h2 {font-size:1.7em; margin:0.2em 0em; text-align:right}
-    a { @include redbutton() margin:1em 0em;padding:0.8em 1.8em;font-size:1.5em;border-radius: 0.5em; display:inline-block;*display:inline; zoom:1}
+    a { @include redbutton();margin:1em 0em;padding:0.8em 1.8em;font-size:1.5em;border-radius: 0.5em; display:inline-block;*display:inline; zoom:1}
     img { margin:-2.5em 0}
 }
 

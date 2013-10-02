@@ -4,16 +4,20 @@
     trackGAEvent("TD", "installed");
 {% endif %}
 {% endblock %}
-
 {% block content %}
 {% if mode == "success" %}
-<section class="container_24">
-    <div class="grid_6">&nbsp;</div>
-        <div class="grid_18" id="downloader">
-        <h1>Happy downloading!</h1>
-        <p>Thanks for installing Torrents Downloader, we hope you enjoy it. </p>
-    </div>
-</section>
+<div id="downloader-page">
+    <section class="downloader-top container_24">
+        <div class="grid_12">
+            <img src="{{g.static_prefix}}/downloader/downloader-computer.png" width="358" height="295" alt="Torrents Downloader screenshoot" />
+        </div>
+        <div class="download-box grid_12">
+            <h1>Happy downloading!</h1>
+            <p>&nbsp;</p>
+            <h2>Thanks for installing Torrents Downloader, we hope you enjoy it.</h2>
+        </div>
+    </section>
+</div>
 {% elif mode == "download" %}
 <div id="downloader-page">
   <section class="downloader-top container_24">

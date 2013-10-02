@@ -7,8 +7,8 @@
 {% block content %}
 {%- if top_stories or news_top %}
 {{ (top_stories or news_top)|safe }}
-<div id="carrusel">
-    <section class="container_24">
+<section id="carrusel">
+    <div class="container_24">
         <div class="grid_3">
             <img src="{{g.static_prefix}}/downloader/feature-logo-120.png" width="120" height="120" alt="Adam" />
         </div>
@@ -19,8 +19,8 @@
         </div>
         <div class="grid_4 prefix_1"><a href="{{ url_for('web.home') }}">Get it Now!</a>
         </div>
-    </section>
-</div>
+    </div>
+</section>
 {%- endif %}
 
 <div class="container_24" id="news_page">

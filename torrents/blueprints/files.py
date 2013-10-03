@@ -326,7 +326,7 @@ def category(category, query=None):
 
     g.title.append(page_title)
 
-    results, search_info = single_search(g.query, g.category.tag, order=order, zone=g.category.url, title=(page_title, 2, g.category.tag), last_items=get_last_items(), skip=get_skip(), show_order=show_order or True)
+    results, search_info = single_search(g.query, category=g.category.tag, not_category=None if g.category.tag=="porn" else "porn", order=order, zone=g.category.url, title=(page_title, 2, g.category.tag), last_items=get_last_items(), skip=get_skip(), show_order=show_order or True)
 
     if g.query:
         if g.search_bot:
@@ -402,7 +402,7 @@ def download(file_id, file_name=""):
             abort(404)
 
     query = download_search(file_data, file_name, "torrent")
-    related = single_search(query, category=None, title=("Related torrents",3,None), zone="File / Related", last_items=[], limit=30, max_limit=15, ignore_ids=[mid2hex(file_id)], show_order=None)
+    related = single_search(query, category=None, not_category=(None if g.category and g.category.tag=="porn" else "porn"), title=("Related torrents",3,None), zone="File / Related", last_items=[], limit=30, max_limit=15, ignore_ids=[mid2hex(file_id)], show_order=None)
 
     # elige el titulo de la página
     title = file_data['view']['fn']
@@ -739,7 +739,7 @@ def torrents_data(data, details=False):
     file_categories = []
     for category in g.categories:
         if category.tag in file_tags:
-            if not file_category:
+            if not file_category or category.tag=="porn":
                 file_category = category
             file_categories.append(category)
         if not file_category_type and category.content_main and category.content==data["view"]["file_type"]:

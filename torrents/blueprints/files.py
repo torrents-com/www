@@ -390,7 +390,7 @@ def download(file_id, file_name=""):
         abort(error)
 
     # completa datos de torrent
-    file_data = torrents_data(file_data, True)
+    file_data = torrents_data(file_data, True, g.category)
     if not file_data:
         abort(404)
 
@@ -552,7 +552,7 @@ def process_search_results(s=None, query=None, category=None, not_category=None,
     # si la canonical query es vacia, solo interesan resultados para busquedas con query nulo (rankings)
     if (g.show_blacklisted_content or not g.blacklisted_content) and (canonical_query or not query):
         if ids:
-            files_dict={str(f["_id"]):prepare_data(f,text=query,ntts=ntts) for f in get_files(ids,s)}
+            files_dict={str(f["_id"]):prepare_data(f,text=query,ntts=ntts,current_category=category) for f in get_files(ids,s)}
 
             if not g.search_bot:
                 save_visited(files_dict.values())
@@ -589,9 +589,9 @@ def process_search_results(s=None, query=None, category=None, not_category=None,
 
     return results, search_info
 
-def prepare_data(f, text=None, ntts=[], details=False):
+def prepare_data(f, text=None, ntts=[], details=False, current_category=None):
     try:
-        return torrents_data(secure_fill_data(f,text,ntts), details)
+        return torrents_data(secure_fill_data(f,text,ntts), details, current_category)
     except BaseException as e:
         logging.error("Error retrieving torrent data.")
         return None
@@ -626,7 +626,7 @@ def get_video_id(value):
 
     return None
 
-def torrents_data(data, details=False):
+def torrents_data(data, details=False, current_category_tag=None):
     valid_torrent = False
     providers = []
 
@@ -735,15 +735,21 @@ def torrents_data(data, details=False):
 
     # tags del fichero
     file_tags = data["view"]["tags"] if "tags" in data["view"] else []
-    file_category = file_category_type = None
+    current_category = file_category = file_category_type = None
     file_categories = []
     for category in g.categories:
         if category.tag in file_tags:
-            if not file_category or category.tag=="porn":
+            if category.tag==current_category_tag:
+                current_category = category
+            if category.tag=="porn": # always use adult when its present
                 file_category = category
             file_categories.append(category)
         if not file_category_type and category.content_main and category.content==data["view"]["file_type"]:
             file_category_type = category
+
+    # choose show file category
+    if not file_category and file_categories:
+        file_category = current_category if current_category and current_category in file_categories else file_categories[0]
 
     data["view"]["category"] = file_category
     data["view"]["categories"] = file_categories

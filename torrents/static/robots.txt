@@ -7,8 +7,6 @@
 # Crawlers that are kind enough to obey, but which we'd rather not have
 # unless they're feeding search engines.
 
-Sitemap: http://torrents.com/sitemap/sitemap0.xml.gz
-
 User-agent: UbiCrawler
 Disallow: /
 

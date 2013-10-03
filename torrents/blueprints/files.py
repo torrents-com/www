@@ -37,6 +37,7 @@ def tree_visitor(item):
         return item[1]["_w"]
 
 CATEGORY_ORDER = ("IDIV(fs,17280000)*(r+10)", "ok DESC, r DESC, fs DESC", "IDIV(fs,17280000)*(r+10)")
+IMAGES_ORDER = ("IDIV(fs,172800)*r2*(r+10)", "ok DESC, r DESC, fs DESC", "IDIV(fs,172800)*r2*(r+10)")
 RANKING_ORDER = ("IDIV(fs,1728000)*(r+10)", "ok DESC, r DESC, fs DESC", "IDIV(fs,1728000)*(r+10)")
 SEARCH_ORDER = ("@weight*(r+10)", "e DESC, ok DESC, r DESC, fs DESC", "@weight*(r+10)")
 
@@ -105,7 +106,7 @@ def get_featured(results_shown=100, headers=1):
     feat = g.featured[:]
     del g.featured
     heapify(feat)
-    results_shown += 1 if headers==1 else headers*4
+    results_shown += 1 if headers==1 else headers*6
     count = min(len(feat), int(math.ceil((results_shown)/7.)))
     return render_template('featured.html', files=[heappop(feat) for i in xrange(count)])
 
@@ -256,7 +257,8 @@ def search_info():
 
     final_query = (g.query+u" " if g.query else u"")+(u"("+g.category.tag+")" if g.category and g.category.tag else u"")+(u" -("+not_category+")" if not_category else u"")
 
-    order, show_order = get_order(SEARCH_ORDER)
+    special_order = request.args.get("so", None)
+    order, show_order = get_order({"c":CATEGORY_ORDER, "i":IMAGES_ORDER, "r":RANKING_ORDER, "s":SEARCH_ORDER}.get(special_order,SEARCH_ORDER))
     return jsonify(searchd.get_search_info(final_query, filters=None, order=order))
 
 @files.route('/search/')
@@ -506,7 +508,6 @@ def multi_search(params, query_time=500, extra_wait_time=500):
     for s, query, category, not_category, zone, title, limit, max_limit, show_order in searches:
         yield process_search_results(s, query, category, not_category, zone=zone, title=title, limit=limit, max_limit=max_limit, show_order=show_order)
 
-
 def process_search_results(s=None, query=None, category=None, not_category=None, title=None, zone="", last_items=[], skip=None, limit=70, max_limit=50, ignore_ids=[], show_order=True):
     files = []
     files_text = []
@@ -517,7 +518,7 @@ def process_search_results(s=None, query=None, category=None, not_category=None,
         title = (None, 2, False)
 
     if s:
-        ids = [result for result in ((bin2hex(fileid), server, sphinxid, weight, sg) for (fileid, server, sphinxid, weight, sg) in s.get_results((3.0, 0.1), last_items=last_items, skip=skip*100 if skip else None, min_results=limit, max_results=limit, extra_browse=limit, weight_processor=weight_processor, tree_visitor=tree_visitor)) if result[0] not in ignore_ids]
+        ids = [result for result in ((bin2hex(fileid), server, sphinxid, weight, sg) for (fileid, server, sphinxid, weight, sg) in s.get_results((1.0, 0.1), last_items=last_items, skip=skip*100 if skip else None, min_results=limit, max_results=limit, extra_browse=limit, weight_processor=weight_processor, tree_visitor=tree_visitor)) if result[0] not in ignore_ids]
 
         results_entities = list(set(int(aid[4])>>32 for aid in ids if int(aid[4])>>32))
         ntts = {int(ntt["_id"]):ntt for ntt in entitiesdb.get_entities(results_entities)} if results_entities else {}
@@ -574,7 +575,7 @@ def process_search_results(s=None, query=None, category=None, not_category=None,
 
                     g.featured.append((-featured_weight, position, afile))
 
-                    position-=1
+                    position+=1
 
             results = render_template('results.html', files=files[:max_limit or limit], list_title=title[0] or query or category, title_level=title[1], title_class=title[2], zone=zone, show_order=show_order)
 
@@ -786,16 +787,18 @@ def torrents_data(data, details=False, current_category_tag=None):
 
     return data
 
-@cache.memoize(timeout=60*60)
 def get_rankings():
     rs = current_app.config["RANKING_SIZE"]
     categories_len = len(g.categories)
-    return zip(
+
+    results = zip(
         multi_search(
-            (None, category.tag, "porn", RANKING_ORDER, "Home / " + category.title, ("<a href='%s'>%s torrents</a>"%
-                (url_for("files.category",category=category.url),singular_filter(category.title)), 3, category.url),
-            rs*2, rs, None) for category in g.categories if category.show_in_home),
-        (category for category in g.categories if category[-1])), get_featured(rs*categories_len,categories_len)
+            [(None, category.tag, "porn", RANKING_ORDER, "Home / " + category.title, ("<a href='%s'>%s torrents</a>"%
+                (url_for("files.category",category=category.url),singular_filter(category.title)), 3, category.url), rs, rs, None)
+                    for category in g.categories if category.show_in_home] + [(None, "torrent", "porn", IMAGES_ORDER, "", "", rs*5, rs*5, None)]),
+            [category for category in g.categories if category[-1]]+[None])
+
+    return results[:-1], get_featured(rs*categories_len, categories_len)
 
 def save_visited(files):
     if not g.search_bot:

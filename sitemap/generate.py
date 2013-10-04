@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-import sys, chardet, codecs, math, pymongo, Queue, os, argparse
+import sys, chardet, codecs, math, pymongo, Queue, os, argparse, glob
 os.environ["FOOFIND_NOAPP"] = "1"
 
 from os.path import dirname, abspath, exists
@@ -124,7 +124,17 @@ def generate(server, part, afilter, batch_size, output):
 
     close_writers()
 
+    sort_files(output)
+
     logging.info("Finaliza la generación de sitemap en servidor %s."%server)
+
+def last_part(line):
+    return line.rsplit('-', 1)[-1]
+
+def sort_files(output):
+    for f in filter(os.path.isfile, glob.iglob(output+'*/*/*')):
+        lines = sorted(open(f), key=last_part)
+        open(f, 'w').write(''.join(lines))
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Index data for a sphinx server.')

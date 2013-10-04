@@ -108,10 +108,17 @@ def generate(server, part, afilter, batch_size, output):
             else:
                 continue
 
-            file_id = mid2url(afile["_id"])
-            filename_info = afile["fn"].itervalues().next()
+            # elige algun nombre de fichero interesante
+            for filename_info in afile["fn"].itervalues():
+                if filename_info["n"]=="download" or IS_BTIH.match(filename_info["n"]) or filename_info["n"].startswith("[TorrentDownloads"):
+                    continue
+                break
+            else:
+                continue
+
             file_name = seoize_text(filename_info["n"]+("."+filename_info["x"] if "x" in filename_info and not filename_info["n"].endswith("."+filename_info["x"]) else ""), "-", True)
 
+            file_id = mid2url(afile["_id"])
             fs = afile["fs"]
             get_writer(fs, count, output, suffix).write("<url><loc>http://torrents.fm/%s-%s</loc></url>\n"%(file_name, file_id))
 

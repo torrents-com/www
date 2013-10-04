@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {%- block head -%}
     {%- if not is_canonical_filename: %}
-        <link rel="canonical" href="{{url_for('files.download', file_id=file_data["view"]["url"], file_name=file_data['view']['nfn'])}}" />
+        <link rel="canonical" href="{{url_for('files.download', file_id=file_data["view"]["url"], file_name=file_data['view']['seo-fn'])}}" />
     {%- endif %}
 {%- endblock -%}
 {%- macro print_filepaths(paths) %}

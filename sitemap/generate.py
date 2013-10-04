@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-import sys, chardet, codecs, math, pymongo, Queue, os, argparse, glob
+import sys, chardet, codecs, math, pymongo, Queue, os, argparse, glob, re
 os.environ["FOOFIND_NOAPP"] = "1"
 
 from os.path import dirname, abspath, exists
@@ -13,6 +13,8 @@ from foofind.utils import u, logging, mid2url
 from foofind.utils.seo import seoize_text
 from threading import Thread
 from multiprocessing import Pool
+
+IS_BTIH = re.compile(r"^([a-fA-F\d]{40}|[a-zA-Z2-7]{32})$")
 
 class FilesFetcher(Thread):
     def __init__(self, server, files_filter, batch_size):
@@ -93,10 +95,6 @@ def generate(server, part, afilter, batch_size, output):
         try:
             count += 1
 
-            # comprueba si tiene nombres de ficheros
-            if "fn" not in afile:
-                continue
-
             # comprueba si no está bloqueado
             if int(float(afile.get("bl", 0)))!=0:
                 continue
@@ -104,23 +102,34 @@ def generate(server, part, afilter, batch_size, output):
             # comprueba si tiene origenes validos
             for src in afile["src"].itervalues():
                 if "t" in src and src["t"] in {3, 7, 79, 80, 81, 82, 83, 90} and int(float(src.get("bl",0)))==0:
+                    main_src = src
                     break
             else:
                 continue
 
+            filename = None
             # elige algun nombre de fichero interesante
-            for filename_info in afile["fn"].itervalues():
-                if filename_info["n"]=="download" or IS_BTIH.match(filename_info["n"]) or filename_info["n"].startswith("[TorrentDownloads"):
+            for fn in afile.get("fn",{}).itervalues():
+                filename = fn["n"]
+                if filename=="download" or IS_BTIH.match(filename) or filename.startswith("[TorrentDownloads"):
                     continue
+
+                extension = fn.get("x",None)
+                if extension and not filename.endswith("."+extension):
+                    filename += "." + extension
                 break
             else:
-                continue
+                md = afile.get("md",{})
+                for possible_name in ("torrent:name", "torrent:title", "video:title", "video:name"):
+                    if possible_name in md:
+                        filename = u(md[possible_name])
+                        break
 
-            file_name = seoize_text(filename_info["n"]+("."+filename_info["x"] if "x" in filename_info and not filename_info["n"].endswith("."+filename_info["x"]) else ""), "-", True)
+                if not filename:
+                    filename = u(main_src["url"].rsplit("/",1)[-1])
 
-            file_id = mid2url(afile["_id"])
-            fs = afile["fs"]
-            get_writer(fs, count, output, suffix).write("<url><loc>http://torrents.fm/%s-%s</loc></url>\n"%(file_name, file_id))
+            if filename:
+                get_writer(afile["fs"], count, output, suffix).write("<url><loc>http://torrents.fm/%s-%s</loc></url>\n"%(seoize_text(filename, "-", True), mid2url(afile["_id"])))
 
         except BaseException as e:
             error_count += 1

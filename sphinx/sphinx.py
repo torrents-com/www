@@ -286,7 +286,7 @@ def init_file(afile):
     afile["_z"] = log(z,2) if z else False
 
     # metadatos
-    mds = chain(chain(*res), chain(value for key,value in md.iteritems() if key in GOOD_MDS and isinstance(value, basestring) and len(value)<GOOD_MDS[key]))
+    mds = chain(chain(*res), chain(value for key,value in md.iteritems() if key in GOOD_MDS and isinstance(value, basestring) and len(value)<=GOOD_MDS[key]))
     afile["_md"] = separator_join(amd for amd in mds if amd)
 
     # origenes

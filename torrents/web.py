@@ -129,7 +129,7 @@ def create_app(config=None, debug=False):
     register_filter(JsSlimmer)
     register_filter(CssSlimmer)
 
-    assets.register('css_torrents', Bundle('main.css', 'jquery.treeview.css', 'torrentsdownloader.css', filters='pyscss', output='gen/main.css', debug=False), '960_24_col.css', filters='css_slimmer', output='gen/torrent.css')
+    assets.register('css_torrents', Bundle('main.css', 'jquery.treeview.css', 'torrentsdownloader.css', filters='pyscss', output='gen/main.css', debug=False), '960_24_col.css', filters='css_slimmer', output='gen/torrents.css')
     assets.register('js_torrents', Bundle('jquery.js', 'jquery.treeview.js', 'torrents.js', "jquery.colorbox-min.js", filters='rjsmin', output='gen/torrents.js'), )
 
     # CSRF protection

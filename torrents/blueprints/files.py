@@ -283,12 +283,7 @@ def search(query=None):
 
     skip = get_skip()
 
-    results, search_info = single_search(g.query, None, zone="Search", order=order, title=("%s torrents"%escape(g.query), 2, None), last_items=get_last_items(), skip=skip, show_order=show_order or True)
-
-    if search_info['count'] == 0:
-        _query = normalize('NFC', g.query)
-        if g.query != _query:
-            results, search_info = single_search(_query, None, zone="Search", order=order, title=("%s torrents"%escape(g.query), 2, None), last_items=get_last_items(), skip=skip, show_order=show_order or True)
+    results, search_info = single_search(g.query, None, not_category="porn", zone="Search", order=order, title=("%s torrents"%escape(g.query), 2, None), last_items=get_last_items(), skip=skip, show_order=show_order or True)
 
     if skip>0:
         g.title.append("Page %d" % (int(skip) + 1))
@@ -518,7 +513,7 @@ def process_search_results(s=None, query=None, category=None, not_category=None,
         title = (None, 2, False)
 
     if s:
-        ids = [result for result in ((bin2hex(fileid), server, sphinxid, weight, sg) for (fileid, server, sphinxid, weight, sg) in s.get_results((1.0, 0.1), last_items=last_items, skip=skip*100 if skip else None, min_results=limit, max_results=limit, extra_browse=limit, weight_processor=weight_processor, tree_visitor=tree_visitor)) if result[0] not in ignore_ids]
+        ids = [result for result in ((bin2hex(fileid), server, sphinxid, weight, sg) for (fileid, server, sphinxid, weight, sg) in s.get_results((1.0, 0.1), last_items=last_items, skip=skip*max_limit if skip else None, min_results=limit, max_results=limit, extra_browse=limit, weight_processor=weight_processor, tree_visitor=tree_visitor)) if result[0] not in ignore_ids]
 
         results_entities = list(set(int(aid[4])>>32 for aid in ids if int(aid[4])>>32))
         ntts = {int(ntt["_id"]):ntt for ntt in entitiesdb.get_entities(results_entities)} if results_entities else {}

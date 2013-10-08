@@ -185,7 +185,7 @@ img {
         border:1px solid $gray;
         padding: 3px 6px;
         width: 400px;
-        display:inline-block;*display:inline; zoom:1
+        display:inline-block;*display:inline; zoom:1;
     }
     img {
         margin:0px;
@@ -327,10 +327,11 @@ img.error {
                 span {margin-top: -4px;vertical-align:middle;}
                 &:first-child{width:28px}
                 &:first-child + li {width:300px;text-align:left;
-                    a {color:$grayfont;width:100%;overflow: hidden;text-overflow:ellipsis;font-weight:bold;text-decoration:none;    display:inline-block;*display:inline;zoom:1;
-                        strong{color:$black};
-                        span{vertical-align:inherit}
-                }}
+                    a {color:$grayfont;width:100%;overflow: hidden;text-overflow:ellipsis;font-weight:bold;text-decoration:none; display:inline-block;*display:inline;zoom:1;
+                        strong{color:$black;}
+                        span{vertical-align:inherit;}
+                    }
+                }
                 &:first-child + li + li{width:48px;visibility:hidden;a:first-child{margin-right:4px}}
                 &:first-child + li + li + li, &:first-child + li + li + li + li{width:16px}
                 &:first-child + li + li + li + li + li{text-align:right;color:$grayfont;width:70px}
@@ -390,7 +391,7 @@ img.error {
             max-height: 5em;
             margin-bottom:30px;
             margin-left:5px;
-            display:inline-block;*display:inline; zoom:1
+            display:inline-block;*display:inline; zoom:1;
         }
 
         .download {

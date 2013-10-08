@@ -73,15 +73,14 @@
     </head>
     {% set hidden_category = g.category and not g.category in g.categories[:5] -%}
     {% set hidden_categories_start = 5 if hidden_category else 6 -%}
-    <body
-        data-downloader_title="Hey!<br/>You need a Torrent client to download this file"
-        data-downloader_text="Download Torrents Downloader to get this file right now.<br/>Our sofware lets you download torrents faster and more easily than ever - absolutely free! If you already have a Torrent client, click <i>No, thanks</i>."
-        data-downloader_href="{{'http://torrents.com/downloader'|forceescape}}"
-        data-downloader_yes="<p>Yes, download</p>Torrents Downloader"
-        data-downloader_no="<p>No, thanks</p>I already have a torrent client"
-        {{ body_class|safe if body_class }}
-        >
-        <div id="dialog" data-dialog_ok="{{'ok'}}" data-dialog_no="{{'no'}}" data-dialog_yes="{{'yes'}}"></div>
+    <body {{ body_class|safe if body_class }}{%- if g.offer_downloader %}
+            data-downloader_href="{{'http://torrents.ms'|forceescape}}"
+            data-downloader_title="Hey!<br/>You need a Torrent client to download this file"
+            data-downloader_text="Download Torrents Downloader to get this file right now.<br/>Our sofware lets you download torrents faster and more easily than ever - absolutely free! If you already have a Torrent client, click <i>No, thanks</i>."
+            data-downloader_yes="<p>Yes, download</p>Torrents Downloader"
+            data-downloader_no="<p>No, thanks</p>I already have a torrent client">
+            <div id="dialog" data-dialog_ok="OK" data-dialog_no="No" data-dialog_yes="Yes"></div>
+        {%- else %}>{%- endif %}
         <header>
             <div id="alert"{{ " class='%s'"|safe%g.alert[0] if g.alert }}>
                 <div class="container_24">

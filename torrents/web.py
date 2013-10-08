@@ -327,3 +327,6 @@ def init_g(app):
 
     # cookie control
     g.must_accept_cookies = False #request.remote_addr in spanish_ips
+
+    # permite ofrecer el downloader en enlaces de descarga
+    g.offer_downloader = False

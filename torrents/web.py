@@ -108,6 +108,7 @@ def create_app(config=None, debug=False):
     app.jinja_env.globals["u"] = u
 
     # Blueprints
+    print "Registering blueprints."
     app.register_blueprint(index)
     register_files_converters(app)
     app.register_blueprint(files)
@@ -115,11 +116,11 @@ def create_app(config=None, debug=False):
     for blueprint in downloader_blueprints:
         app.register_blueprint(blueprint)
 
-
     # Registra filtros de plantillas
     register_filters(app)
 
     # Web Assets
+    print "Web assets."
     if not os.path.isdir(app.static_folder+"/gen"): os.mkdir(app.static_folder+"/gen")
     assets = Environment(app)
     app.assets = assets
@@ -132,6 +133,7 @@ def create_app(config=None, debug=False):
     assets.register('css_torrents', Bundle('main.css', 'jquery.treeview.css', 'torrentsdownloader.css', filters='pyscss', output='gen/main.css', debug=False), '960_24_col.css', filters='css_slimmer', output='gen/torrents.css')
     assets.register('js_torrents', Bundle('jquery.js', 'jquery.treeview.js', 'torrents.js', "jquery.colorbox-min.js", filters='rjsmin', output='gen/torrents.js'), )
 
+    print "Initializing services."
     # CSRF protection
     csrf.init_app(app)
 
@@ -148,16 +150,24 @@ def create_app(config=None, debug=False):
     # Mail
     mail.init_app(app)
 
+    print "Database accesses:",
     # Acceso a bases de datos
     pagesdb.init_app(app)
+    print "pages",
     filesdb.init_app(app)
+    print "files",
     feedbackdb.init_app(app)
+    print "feedback",
     configdb.init_app(app)
+    print "config",
     entitiesdb.init_app(app)
+    print "entities",
     torrentsdb.init_app(app, feedbackdb)
+    print "torrents."
 
     configdb.register_action("flush_cache", cache.clear, _unique=True)
 
+    print "Blacklists."
     # Blacklists
     if app.debug:
         blacklists.debug=True
@@ -184,6 +194,7 @@ def create_app(config=None, debug=False):
     # Profiler
     profiler.init_app(app, feedbackdb)
 
+    print "Event manager."
     eventmanager.once(searchd.init_app, hargs=(app, filesdb, entitiesdb, profiler))
 
     # Refresco de conexiones
@@ -245,6 +256,7 @@ def create_app(config=None, debug=False):
 
         return render_template('error.html', code=str(error), title=title, description=description), error
 
+    print "App ready."
     return app
 
 def init_g(app):

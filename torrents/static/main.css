@@ -202,7 +202,7 @@ img {
         border: none;
         span {color:$redfont}
         .errors {
-            color:$redfont;display:inline-block;*display:inline;zoom:1
+            color:$redfont;display:inline-block;*display:inline;zoom:1;
         }
     }
 }
@@ -581,7 +581,7 @@ img.error {
             display:block;
         }
         width: 50%; margin: 30px 0px 0px; color: $grayfont; text-align:center;
-        display:inline-block; *display:inline; zoom:1
+        display:inline-block; *display:inline; zoom:1;
     }
     .seeders strong { color:$greenfont }
     .leechers strong { color:$redfont }

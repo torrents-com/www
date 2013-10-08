@@ -95,7 +95,7 @@ window.downloader = {
     skip:false,
     initialize:function(){
         var is_windows = navigator.appVersion.indexOf("Win")!=-1;
-        this.skip = (document.cookie.indexOf("skip_downloader=1") > -1) || !is_windows;
+        this.skip = !($("body").data("downloader_href")) || (document.cookie.indexOf("skip_downloader=1") > -1) || !is_windows;
         this.initialized = true;
         },
     disable:function(){
@@ -197,12 +197,9 @@ $(function(){
             });
         });
 
-    /*
     window.downloader.link_lookup("#download");
     window.downloader.link_lookup("#featured");
     window.downloader.link_lookup(".results");
-    */
-
 
     $("#q").focus();
 

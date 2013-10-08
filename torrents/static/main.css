@@ -595,7 +595,7 @@ h1.extra{text-transform:none; padding:0em 1em 0em; margin:0em; font-size:1.3em; 
     font-weight:bold;margin:0em 0em 2em;text-align: justify; white-space: nowrap;
     >* {vertical-align:middle}
     span:first-child + div {
-        white-space:normal;margin-top:1em;display:inline-block;*display:inline;zoom:1
+        white-space:normal;margin-top:1em;display:inline-block;*display:inline;zoom:1;
     }
     &.big_icon {
         span:first-child {margin-right:-60px}

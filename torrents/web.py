@@ -239,7 +239,7 @@ def create_app(config=None, debug=False):
         if g.cache_code:
             response.headers["X-Cache-Code"] = g.cache_code
         if g.last_modified:
-            response.headers["Last-Modified:"] = utils.formatdate(time.mktime(max(g.last_modified, current_app.config["APP_LAST_MODIFIED"]).timetuple()))
+            response.headers["Last-Modified"] = utils.formatdate(time.mktime(max(g.last_modified, current_app.config["APP_LAST_MODIFIED"]).timetuple()))
         return response
 
     # Páginas de error

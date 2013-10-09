@@ -21,7 +21,7 @@
     <div id="ranking" class="grid_24">
         <ol>
         {%- for search in ranking["final_ranking"] %}
-            <li>{{trend(search[3], loop.index0)}}<a href="{{url_for('files.search', query=search[0]|clean_query)}}">{{search[0]}}</a><span>{{(search[1]*100)|round(2)}} %</span></li>
+            <li>{{trend(search[3], loop.index0)}} {{search[0]|clean_query|blacklist_query(search[0])}}<span>{{(search[1]*100)|round(2)}} %</span></li>
         {%- endfor %}
         </ol>
     </div>

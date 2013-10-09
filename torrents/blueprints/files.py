@@ -221,6 +221,7 @@ def popular_searches(interval):
     if not interval_info:
         abort(404)
 
+    g.must_cache = 150 # cache this page for 2.5 minutes
     g.category=False
     g.keywords.clear()
     g.keywords.update(["popular torrent", "free movie", "full download", "search engine", "largest"])

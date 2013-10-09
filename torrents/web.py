@@ -9,7 +9,7 @@ multidomain.patch_flask()
 import foofind.services.search.search
 foofind.services.search.search.WORD_SEARCH_MIN_LEN = 1
 
-import os, os.path
+import os, os.path, time
 from foofind import defaults
 from collections import OrderedDict
 from flask import Flask, g, request, render_template, redirect, abort, url_for, make_response, get_flashed_messages, current_app
@@ -20,6 +20,7 @@ from babel import support, localedata, Locale
 from raven.contrib.flask import Sentry
 from webassets.filter import register_filter
 from hashlib import md5
+from email import utils
 
 from foofind.web import allerrors
 
@@ -238,7 +239,7 @@ def create_app(config=None, debug=False):
         if g.cache_code:
             response.headers["X-Cache-Code"] = g.cache_code
         if g.last_modified:
-            response.headers["Last-Modified:"] = max(g.last_modified, current_app.config["APP_LAST_MODIFIED"]).strftime("%a, %d %b %Y %H:%M:%S %Z")
+            response.headers["Last-Modified:"] = utils.formatdate(time.mktime(max(g.last_modified, current_app.config["APP_LAST_MODIFIED"]).timetuple()))
         return response
 
     # Páginas de error

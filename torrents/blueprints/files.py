@@ -448,6 +448,9 @@ def download(file_id, file_name=""):
     if related[0]:
         g.must_cache = 3600
 
+    # last-modified
+    g.last_modified = file_data["file"]["ls"]
+
     return render_template('file.html', related_query = query, file_data=file_data, related_files=related, is_canonical_filename=is_canonical_filename, featured=get_featured(related[1]["count"]+len(file_data["view"]["md"]), 1))
 
 @files.route('/copyright', methods=["GET","POST"])

@@ -150,20 +150,20 @@ def create_app(config=None, debug=False):
     # Mail
     mail.init_app(app)
 
-    print "Database accesses:",
+    print "Database accesses:"
     # Acceso a bases de datos
     pagesdb.init_app(app)
-    print "pages",
+    print "* pages"
     filesdb.init_app(app)
-    print "files",
+    print "* files"
     feedbackdb.init_app(app)
-    print "feedback",
+    print "* feedback"
     configdb.init_app(app)
-    print "config",
+    print "* config"
     entitiesdb.init_app(app)
-    print "entities",
+    print "* entities"
     torrentsdb.init_app(app, feedbackdb)
-    print "torrents."
+    print "* torrents"
 
     configdb.register_action("flush_cache", cache.clear, _unique=True)
 
@@ -209,6 +209,7 @@ def create_app(config=None, debug=False):
     @app.before_request
     def before_request():
         g.cache_code = ""
+        g.last_modified = None
 
         # No preprocesamos la peticiones a static
         if request.path.startswith("/static/"):
@@ -236,6 +237,8 @@ def create_app(config=None, debug=False):
             response.headers["X-Cache-Control"] = "max-age=%d"%g.must_cache
         if g.cache_code:
             response.headers["X-Cache-Code"] = g.cache_code
+        if g.last_modified:
+            response.headers["Last-Modified:"] = max(g.last_modified, current_app.config["APP_LAST_MODIFIED"]).strftime("%a, %d %b %Y %H:%M:%S %Z")
         return response
 
     # Páginas de error

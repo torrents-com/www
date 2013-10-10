@@ -535,7 +535,7 @@ if __name__ == '__main__':
     config.update(settings_module.settings.__dict__)
     del config["__builtins__"]
 
-    options = {"replicaSet": app.config["DATA_SOURCE_SERVER_RS"], "read_preference":pymongo.read_preferences.ReadPreference.SECONDARY_PREFERRED, "secondary_acceptable_latency_ms":app.config.get("SECONDARY_ACCEPTABLE_LATENCY_MS",15)} if "DATA_SOURCE_SERVER_RS" in app.config else {"slave_okay":True}
+    options = {"replicaSet": config["DATA_SOURCE_SERVER_RS"], "read_preference":pymongo.read_preferences.ReadPreference.SECONDARY_PREFERRED, "secondary_acceptable_latency_ms":config.get("SECONDARY_ACCEPTABLE_LATENCY_MS",15)} if "DATA_SOURCE_SERVER_RS" in config else {"slave_okay":True}
     server_conn = pymongo.MongoClient(config["DATA_SOURCE_SERVER"], max_pool_size=self.max_pool_size, **options)
     if params.refreshstats:
         server_conn.foofind.search_stats.update({"_id":part}, {"$set":{"d0":time(), "d1":time()}})

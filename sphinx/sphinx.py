@@ -53,6 +53,7 @@ extra_rating_md = frozenset({"video:series", "book:title", "audio:title", "video
 
 numeric_filters = {"video:season":FILTER_PREFIX_SEASON, "video:episode":FILTER_PREFIX_EPISODE, "audio:year":FILTER_PREFIX_YEAR, "video:year":FILTER_PREFIX_YEAR}
 
+
 dictget = dict.get
 def innergroup_hash(field_path, afile):
     return hash(u(reduce(dictget, field_path, afile)) or "")
@@ -239,12 +240,21 @@ def init_file(afile):
     ct, file_tags, file_format = guess_doc_content_type(afile, sources)
     afile["_ct"] = ct
 
+    '''# tags del fichero
+    file_category = file_category_type = None
+    for category in config["TORRENTS_CATEGORIES"]:
+        if category.tag in file_tags and (not file_category or category.tag=="porn"): # always use adult when its present
+            file_category = category.cat_id
+
+        if category.content_main and category.content==ct:
+            file_category_type = category.cat_id
+    afile["_ct"] = file_category or file_category_type'''
+
     # tamaño
     try:
         z = float(afile["z"]) if "z" in afile and afile["z"] else False
     except:
         z = False
-
 
     if ct == CONTENT_VIDEO:
         try:
@@ -525,7 +535,8 @@ if __name__ == '__main__':
     config.update(settings_module.settings.__dict__)
     del config["__builtins__"]
 
-    server_conn = pymongo.Connection(config["DATA_SOURCE_SERVER"], slave_okay=False)
+    options = {"replicaSet": app.config["DATA_SOURCE_SERVER_RS"], "read_preference":pymongo.read_preferences.ReadPreference.SECONDARY_PREFERRED, "secondary_acceptable_latency_ms":app.config.get("SECONDARY_ACCEPTABLE_LATENCY_MS",15)} if "DATA_SOURCE_SERVER_RS" in app.config else {"slave_okay":True}
+    server_conn = pymongo.MongoClient(config["DATA_SOURCE_SERVER"], max_pool_size=self.max_pool_size, **options)
     if params.refreshstats:
         server_conn.foofind.search_stats.update({"_id":part}, {"$set":{"d0":time(), "d1":time()}})
         exit()

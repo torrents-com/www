@@ -131,7 +131,7 @@ def pixel():
                     return PIXEL
 
                 # si toca registrar y hay resultados, registra busqueda para nubes de tags
-                ip = request.headers.getlist("X-Forwarded-For")[0] if request.headers.getlist("X-Forwarded-For") else request.remote_addr
+                ip = (request.headers.getlist("X-Forwarded-For") or [request.remote_addr])[0]
                 torrentsdb.save_search(g.query, hashlib.md5((g.safe_query+"_"+ip).encode("utf-8")).digest(), g.category.cat_id if g.category else 0)
     except BaseException as e:
         logging.warn("Error registering search.")
@@ -548,7 +548,8 @@ def process_search_results(s=None, query=None, category=None, not_category=None,
 
         if blacklists["underage"].exact(safe_phrase) or prepared_phrase in blacklists["forbidden"] or prepared_phrase in blacklists["searchblocked"] or (prepared_phrase in blacklists["misconduct"] and prepared_phrase in blacklists["underage"]):
             g.blacklisted_content = "Search"
-            abort(404)
+            if not g.show_blacklisted_content:
+                abort(404)
 
     # si la canonical query es vacia, solo interesan resultados para busquedas con query nulo (rankings)
     if (g.show_blacklisted_content or not g.blacklisted_content) and (canonical_query or not query):

@@ -5,7 +5,7 @@ import os.path
 
 from foofind.services.extensions import cache
 
-from flask import Blueprint, render_template, g, current_app, request, send_file, send_from_directory, redirect
+from flask import Blueprint, render_template, g, current_app, request, send_file, send_from_directory, redirect, make_response, url_for
 from flask.ext.babelex import gettext as _
 from torrents.multidomain import MultidomainBlueprint
 
@@ -46,8 +46,19 @@ def favicon():
     return send_from_directory(os.path.join(current_app.root_path, 'static'), 'favicon.ico', mimetype='image/vnd.microsoft.icon')
 
 @web.route('/robots.txt')
-def favicon():
-    return send_from_directory(os.path.join(current_app.root_path, 'static'), 'robots.txt', mimetype='text/plain')
+def robots():
+    full_filename = os.path.join(os.path.join(current_app.root_path, 'static'), 'robots.txt')
+
+    with open(full_filename) as input_file:
+        response = make_response(input_file.read() + "\nSitemap: " + url_for(".sitemap", _external=True))
+        response.mimetype='text/plain'
+    return response
+
+@web.route('/sitemap.xml')
+def sitemap():
+    response = make_response(render_template('sitemap.xml', pages = [url_for(".home", _external=True)]))
+    response.mimetype='text/xml'
+    return response
 
 @web.route('/')
 def home():

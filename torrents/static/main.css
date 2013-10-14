@@ -160,7 +160,8 @@ img {
     min-height:20em;
 }
 
-#text_page {
+#text_page, .text_page {
+    background-color:white;
 
     h2 { font-size: 1.6em}
 
@@ -313,7 +314,7 @@ img.error {
     font-size:1.4em;text-align:center;border-bottom:1px solid $red; background:$lightgray; padding:0.5em 0em;display:none;
 
     &.error {display:block;color:$redfont}
-    &.info {display:block;color:$greenfont}
+    &.info {display:block;color:$black}
 }
 
 .results {
@@ -945,7 +946,7 @@ h1.extra{text-transform:none; padding:0em 1em 0em; margin:0em; font-size:1.3em; 
 
 .post-image{position:relative;overflow:hidden;margin-bottom:1em;max-height:300px}
 .post-image img{margin:0 !important;width:680px;height:auto;}
-.post-image div.featured-image-caption{width:27em;background:url(/static/bg.image-caption.png) 0 0 repeat-y;padding:0.5em;position:absolute;bottom:0;z-index:2;}
+.post-image div.featured-image-caption{color:#fff;width:27em;background:url(/static/bg.image-caption.png) 0 0 repeat-y;padding:0.5em;position:absolute;bottom:0;z-index:2;}
 .post-image div.featured-image-caption a{color:#fff;}
 
 .navigation {

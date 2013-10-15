@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import os.path, re, urllib2
-from flask import render_template, current_app, g, send_from_directory, abort, make_response, request, url_for
+from flask import render_template, current_app, g, send_from_directory, abort, make_response, request, url_for, redirect
 from torrents.multidomain import MultidomainBlueprint
 from foofind.utils.fooprint import Fooprint
 from foofind.services import *

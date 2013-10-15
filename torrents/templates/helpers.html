@@ -4,7 +4,7 @@
     {%- elif field.type=="BooleanField" %}
         <label>{{ field }}
         {%- if field.name=="accept_tos" -%}
-            I have read and accept the <a href="{{url_for('index.legal')}}#terms">Terms of use</a> and <a href="{{url_for('index.legal')}}#tos">Privacy policy</a>.
+            I have read and accept the <a href="{{url_for('news.legal')}}#terms">Terms of use</a> and <a href="{{url_for('news.legal')}}#tos">Privacy policy</a>.
         {%- else -%}
             {{ field.label.text }}
         {%- endif -%}

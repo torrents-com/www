@@ -132,7 +132,7 @@ def create_app(config=None, debug=False):
     register_filter(CssSlimmer)
 
     assets.register('css_torrents', Bundle('main.css', 'jquery.treeview.css', 'torrentsdownloader.css', filters='pyscss', output='gen/main.css', debug=False), '960_24_col.css', filters='css_slimmer', output='gen/torrents.css')
-    assets.register('js_torrents', Bundle('jquery.js', 'jquery.treeview.js', 'torrents.js', "jquery.colorbox-min.js", filters='rjsmin', output='gen/torrents.js'), )
+    assets.register('js_torrents', Bundle('modernizr.js', 'jquery.js', 'jquery.treeview.js', 'jquery.cookie.js', 'jquery.colorbox-min.js', 'torrents.js', 'cookies.js',  filters='rjsmin', output='gen/torrents.js'), )
 
     print "Initializing services."
     # CSRF protection
@@ -293,11 +293,12 @@ def init_g(app):
 
     # dominio de la web
     g.domain = "torrents.com"
-    g.domains_family = ["torrents.com", "torrents.fm", "torrents.ag", "torrents.ms"]
+    g.domains_family = ["torrents.com", "torrents.fm", "torrents.ms"]
     for domain in g.domains_family:
         if domain in request.url_root:
             g.domain = domain
             break
+    g.domain_cookies = [url_for('index.cookies', _domain=domain) for domain in g.domains_family if domain!=g.domain]
 
     g.section = "torrents" if g.domain=="torrents.fm" else "downloader" if g.domain=="torrents.ms" else "news"
     g.domain_capitalized = g.domain.capitalize()
@@ -330,7 +331,7 @@ def init_g(app):
     g.category = None
 
     # cookie control
-    g.must_accept_cookies = False #request.remote_addr in spanish_ips
+    g.must_accept_cookies = app.config["MUST_ACCEPT_COOKIES"]
 
     # permite ofrecer el downloader en enlaces de descarga
     g.offer_downloader = False

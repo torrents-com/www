@@ -21,11 +21,6 @@
             {%- endassets -%}
         {%- endblock -%}
         <script type="text/javascript">
-
-            if ($.browser.msie) {
-                $.each(['aside', 'article', 'footer', 'header', 'nav', 'section'], function(index, e){document.createElement(e)});
-            }
-
             {%-if g.track%}$('<img src="{{url_for("files.pixel")}}"/>');{%-endif%}
             var _gaq, _prum;
             function cookiesScripts(){
@@ -56,11 +51,16 @@
                 {%- block cookies -%}
                 {%- endblock -%}
             }
+
         {% if g.must_accept_cookies %}
+            $.cookiesLaw.initialize({{g.domain_cookies|tojson}}, cookiesScripts);
+
             function trackGAEvent(){
+                if ($.cookiesLaw.accepted) {
+                    _gaq.push(['_trackEvent'].concat(Array.prototype.slice.call(arguments, 0)));
+                }
             }
         </script>
-        <script type="application/javascript" src="{{url_for('index.cookies')}}"></script>
         {% else %}
             function trackGAEvent(){
                 _gaq.push(['_trackEvent'].concat(Array.prototype.slice.call(arguments, 0)));
@@ -84,13 +84,13 @@
         <header>
             <div id="alert"{{ " class='%s'"|safe%g.alert[0] if g.alert }}>
                 <div class="container_24">
-                    <p class="grid_22">{{ g.alert[1] if g.alert }}</p>
+                    <p class="grid_24">{{ g.alert[1] if g.alert }}</p>
                 </div>
             </div>
             <div id="header">
                 <div class="container_24">
                     <div class="grid_7">
-                        <a class="logo" href="/"><img src="{{g.static_prefix}}/torrents.png" alt="Torrents" title="Torrents" /><img src="{{g.static_prefix}}/dot-{{g.domain.split('.')[-1]}}.png" alt=".com"/></a>
+                        <a class="logo" href="/"><img src="{{g.static_prefix}}/torrents.png" alt="Torrents" title="Torrents" height="33" width="220" /><img src="{{g.static_prefix}}/dot-{{g.domain.split('.')[-1]}}.png" alt=".com" height="50" width="50" /></a>
                     </div>
                     <div id="main-nav" class="grid_17">
                         <a href="{{ url_for('news.home') }}"{{' class=active' if g.section=="news" }}><div class="arrow"></div>News</a>
@@ -104,7 +104,7 @@
                     <div class="container_24">
                         <form method="get" action="{{ url_for('files.search', query='') }}" class="grid_24">
                             <input type="hidden" name="c" value="{{g.category.url if g.category else ""}}" />
-                            <div class="grid_18 alpha"><input placeholder="find torrents" type="text" id="q" name="q" autocomplete="off" value="{{g.query or ""}}"/></div>
+                            <div class="grid_18 alpha"><input placeholder="find torrents" type="text" id="q" name="q" autocomplete="off" value="{{g.query or ''}}"/></div>
                             <div class="grid_6 omega"><button type="submit">Search files&nbsp;&nbsp;&nbsp;<span class="icon-search"></span></button></div>
                         </form>
                         <ul class="grid_24">
@@ -126,7 +126,7 @@
                 </div>
                 <div class="grid_11 prefix_1">
                     <ul>
-                        <li><a href="{{ url_for('index.about') }}">About</a></li><li><a href="{{ url_for('index.contact') }}">Contact</a></li><li><a href="{{ url_for('index.legal') }}">Terms &amp; Privacy</a></li><li><a href="{{ url_for('files.copyright') }}">Copyright</a></li>
+                        <li><a href="{{ url_for('news.about') }}">About</a></li><li><a href="{{ url_for('news.contact') }}">Contact</a></li><li><a href="{{ url_for('news.legal') }}">Terms &amp; Privacy</a></li><li><a href="{{ url_for('files.copyright') }}">Copyright</a></li>
                     </ul>
                 </div>
                 <div class="networks grid_6">

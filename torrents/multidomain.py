@@ -20,10 +20,16 @@ def multidomain_view(*args, **kwargs):
         return redirect(DOMAIN_REPLACER.sub(r"\1"+domains.iterkeys().next() + DOMAIN_SUFFIX + r"\2", request.url), 301)
 
 def url_for(endpoint, **values):
-    domain = _MultidomainBlueprint__endpoint_domain.get(endpoint, None)
+    if "_domain" in values:
+        domain = values["_domain"]
+        del values["_domain"]
+    else:
+        domain = _MultidomainBlueprint__endpoint_domain.get(endpoint, None)
+
     if domain and domain != g.domain:
-        values["_external"]=False # Remove external parameter for flask
+        values["_external"] = False # Remove external parameter for flask
         return "http://"+ domain + DOMAIN_SUFFIX + flask_url_for(endpoint, **values)
+
     return flask_url_for(endpoint, **values)
 
 def patch_flask():
@@ -35,10 +41,7 @@ class MultidomainBlueprint(Blueprint):
     Blueprint for multiple domains handling.
     '''
     def __init__(self, *args, **kwargs):
-
-        if "domain" in kwargs:
-            domain = kwargs.pop("domain")
-            self.domain = domain
+        self.domain = kwargs.pop("domain") if "domain" in kwargs else None
         Blueprint.__init__(self, *args, **kwargs)
 
     def route(self, rule, **options):

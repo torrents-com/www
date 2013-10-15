@@ -146,7 +146,7 @@ window.downloader = {
         }
     };
 
-PAGE_MESSAGES = {"sent": ["The message has been sent successfully.", "info"],
+var PAGE_MESSAGES = {"sent": ["The message has been sent successfully.", "info"],
                  "write": ["Write something!", "error"]};
 
 function show_alert(html, type) {
@@ -163,9 +163,9 @@ $(function(){
     }
 
     var featured_images = $("#featured img");
-    max_width = featured_images.parent().parent().width();
+    var max_width = featured_images.parent().parent().width();
     $("#featured img").load(function(){
-        this_width = $(this).width();
+        var this_width = $(this).width();
         if (this_width>max_width)
             $(this).css("margin-left", (max_width-this_width)/2+"px"    );
     });
@@ -248,3 +248,4 @@ $(function(){
         show_alert(msg[0], msg[1]);
     }
 });
+

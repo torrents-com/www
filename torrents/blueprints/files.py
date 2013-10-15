@@ -107,7 +107,7 @@ def get_featured(results_shown=100, headers=1):
     del g.featured
     heapify(feat)
     results_shown += 1 if headers==1 else headers*6
-    count = min(len(feat), int(math.ceil((results_shown)/7.)))
+    count = min(len(feat), int(math.ceil((results_shown)/6.5)))
     return render_template('featured.html', files=[heappop(feat) for i in xrange(count)])
 
 

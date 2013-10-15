@@ -15,14 +15,13 @@
 <div class="title grid_24"><span></span><div>
 <a href='{{url_for("files.home")}}'>All</a>&nbsp;&nbsp;&gt;&nbsp;&nbsp;{{g.query}}
 <h1 class="main with-breadcrumbs">{{g.query}} torrents</h1>
-</div>
-
+</div></div>
 {%- if not results %}
-    <p>No results found for <strong>{{g.query}}</strong>.</p>
-    <p>Sorry, we don't have any result that matches your query. Please, try another search.</p>
+    <div class="text_page">
+        <p>No results found for <strong>{{g.query}}</strong>.</p>
+        <p>Sorry, we don't have any result that matches your query. Please, try another search.</p>
     </div>
 {%- endif %}
-</div>
 {%- if results %}
     {%- if featured %}
     <div id="featured_col" class="grid_6">

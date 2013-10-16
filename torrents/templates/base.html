@@ -26,7 +26,7 @@
             var _gaq, _prum;
             function cookiesScripts(){
                 _gaq = _gaq || []; _gaq.push(['_setAccount', 'UA-38333996-1']); _gaq.push(['_setDomainName', '{{ g.domain }}']);
-                _gaq.push(['_setAllowLinker', true]); _gaq.push(['_trackPageview']);
+                _gaq.push(['_setAllowLinker', true]); _gaq.push(['_trackPageview'{{ ", " + (g.domain[g.domain.rfind("."):]+request.path)|tojson if g.domain_conflict }} ]);
 
                 (function() {
                 var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;

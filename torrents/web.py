@@ -112,8 +112,8 @@ def create_app(config=None, debug=False):
     print "Registering blueprints."
     app.register_blueprint(index)
     register_files_converters(app)
-    app.register_blueprint(files)
     app.register_blueprint(news)
+    app.register_blueprint(files)
     for blueprint in downloader_blueprints:
         app.register_blueprint(blueprint)
 

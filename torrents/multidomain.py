@@ -14,6 +14,7 @@ def multidomain_view(*args, **kwargs):
     info = domains.get(g.domain, None)
     if info:
         if info[0]!=request.blueprint:
+            g.domain_conflict = True
             request.url_rule = next(r for r in _request_ctx_stack.top.url_adapter.map._rules if r.rule==request.url_rule.rule and r.endpoint.startswith(info[0]+"."))
         return info[1](*args, **kwargs)
     else:

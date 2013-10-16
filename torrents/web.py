@@ -292,12 +292,15 @@ def init_g(app):
     g.alert = None
 
     # dominio de la web
-    g.domain = "torrents.com"
+    g.domain = None
     g.domains_family = ["torrents.com", "torrents.fm", "torrents.ms"]
     for domain in g.domains_family:
         if domain in request.url_root:
             g.domain = domain
             break
+    else:
+        return redirect(url_for("files.home", _external=True), 301)
+
     g.domain_cookies = [url_for('index.cookies', _domain=domain) for domain in g.domains_family if domain!=g.domain]
 
     g.section = "torrents" if g.domain=="torrents.fm" else "downloader" if g.domain=="torrents.ms" else "news"
@@ -332,6 +335,8 @@ def init_g(app):
 
     # cookie control
     g.must_accept_cookies = app.config["MUST_ACCEPT_COOKIES"]
+
+    g.is_adult_content = False
 
     # permite ofrecer el downloader en enlaces de descarga
     g.offer_downloader = False

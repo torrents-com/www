@@ -166,10 +166,12 @@ def create_cloud(data, width, lines):
 
 @files.route('/favicon.ico')
 def favicon():
+    g.cache_code = "S"
     return send_from_directory(os.path.join(current_app.root_path, 'static'), 'favicon.ico', mimetype='image/vnd.microsoft.icon')
 
 @files.route('/opensearch.xml')
 def opensearch():
+    g.cache_code = "S"
     response = make_response(render_template('opensearch.xml',shortname = "Torrents",description = "opensearch_description"))
     response.headers['content-type']='application/opensearchdescription+xml'
     return response
@@ -190,6 +192,7 @@ def home():
 
 @files.route('/st_sitemap.xml')
 def static_sitemap():
+    g.cache_code = "S"
     pages = [url_for(page, _external=True) for page in (".home", ".copyright")]
     pages.extend(url_for(".category", category=category.url, _external=True) for category in g.categories)
     pages.extend(url_for(".popular_searches", interval=interval, _external=True) for interval in POPULAR_SEARCHES_INTERVALS.iterkeys())
@@ -204,6 +207,7 @@ def dynamic_sitemap():
 
 @files.route('/robots.txt')
 def robots():
+    g.cache_code = "S"
     full_filename = os.path.join(os.path.join(current_app.root_path, 'static'), 'robots.txt')
 
     with open(full_filename) as input_file:
@@ -465,6 +469,7 @@ def copyright():
     '''
     Muestra el formulario para reportar enlaces
     '''
+    g.cache_code = "S"
     g.category = False
     g.page_description = "%s is a free torrent search engine that offers users fast, simple, easy access to every torrent in one place." % g.domain_capitalized
     g.keywords.clear()

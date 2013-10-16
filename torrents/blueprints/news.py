@@ -100,23 +100,27 @@ def rss():
 
 @news.route('/downloader')
 def old_downloader():
+    g.cache_code = "S"
     return redirect(url_for("web.home"), 301)
 
 @news.route('/popular')
 def old_popular_torrents():
+    g.cache_code = "S"
     return redirect(url_for("files.popular_torrents", interval="month"), 301)
 
 @news.route('/recent')
 def old_recent_torrents():
+    g.cache_code = "S"
     return redirect(url_for("files.popular_torrents", interval="today"), 301)
 
 @news.route('/popular_searches')
 def old_popular_searches():
+    g.cache_code = "S"
     return redirect(url_for("files.popular_searches", interval="today"), 301)
-
 
 @news.route('/robots.txt')
 def robots():
+    g.cache_code = "S"
     full_filename = os.path.join(os.path.join(current_app.root_path, 'static'), 'robots.txt')
 
     with open(full_filename) as input_file:
@@ -126,6 +130,7 @@ def robots():
 
 @news.route('/st_sitemap.xml')
 def static_sitemap():
+    g.cache_code = "S"
     pages = [url_for(page, _external=True) for page in ("news.home", ".about", ".legal", ".contact")]
     response = make_response(render_template('sitemap.xml', pages = pages))
     response.mimetype='text/xml'
@@ -133,6 +138,7 @@ def static_sitemap():
 
 @news.route('/about')
 def about():
+    g.cache_code = "S"
     g.category=False
     g.page_description = "Torrents.com is a free torrent search engine that offers users fast, simple, easy access to every torrent in one place."
     g.keywords.clear()
@@ -142,6 +148,7 @@ def about():
 
 @news.route('/legal')
 def legal():
+    g.cache_code = "S"
     g.category=False
     g.title.append("Terms & privacy")
     g.keywords.clear()
@@ -154,6 +161,7 @@ def contact():
     '''
     Muestra el formulario para reportar enlaces
     '''
+    g.cache_code = "S"
     sent_error = g.category=False
     g.page_description = "Torrents.com is a free torrent search engine that offers users fast, simple, easy access to every torrent in one place."
     g.keywords.clear()

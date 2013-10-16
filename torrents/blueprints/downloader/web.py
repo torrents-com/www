@@ -43,10 +43,12 @@ def get_downloader_properties():
 
 @web.route('/favicon.ico')
 def favicon():
+    g.cache_code = "S"
     return send_from_directory(os.path.join(current_app.root_path, 'static'), 'favicon.ico', mimetype='image/vnd.microsoft.icon')
 
 @web.route('/robots.txt')
 def robots():
+    g.cache_code = "S"
     full_filename = os.path.join(os.path.join(current_app.root_path, 'static'), 'robots.txt')
 
     with open(full_filename) as input_file:
@@ -56,6 +58,7 @@ def robots():
 
 @web.route('/sitemap.xml')
 def sitemap():
+    g.cache_code = "S"
     response = make_response(render_template('sitemap.xml', pages = [url_for(".home", _external=True)]))
     response.mimetype='text/xml'
     return response

@@ -149,6 +149,10 @@ window.downloader = {
 var PAGE_MESSAGES = {"sent": ["The message has been sent successfully.", "info"],
                  "write": ["Write something!", "error"]};
 
+function hide_alert() {
+    $("#alert p").html("");
+}
+
 function show_alert(html, type) {
     $("#alert p").html(html);
     $("#alert").attr('class', type);

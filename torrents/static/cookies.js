@@ -1,6 +1,6 @@
 ;(function($) {
     $.cookiesLaw = {
-        accepted: false,
+        notified: false,
         hide_msg: false,
         start_call: function() {},
         initialize:function(domains, start_call) {
@@ -10,11 +10,11 @@
 
             // Check local cookie
             var cookie_level = $.cookie("cookie_level");
-            this.accepted = cookie_level>0;
+            this.notified = cookie_level>0;
             this.hide_msg = cookie_level>1;
 
-            // If accepted, start and exit
-            if (this.accepted) {
+            // If notified, start and exit
+            if (this.notified) {
                 this.final_process();
                 return;
             }
@@ -33,7 +33,7 @@
                     async: true, contentType: "application/json", dataType: 'jsonp',
                     success: function(response) {
                         if (response>0) {
-                            $.cookiesLaw.accepted = true;
+                            $.cookiesLaw.notified = true;
                             if (response>1) {
                                 $.cookiesLaw.hide_msg = true;
                             }
@@ -46,17 +46,22 @@
             $.when.apply($,requests).done(after);
         },
         final_process: function() {
-            if (this.accepted)
+            if (this.notified)
                 this.start_call();
 
             if (!this.hide_msg) {
+                if (this.notified)
+                    trackGAEvent('CookieLaw', "Notified");
+
                 $(function(){
-                    show_alert("<a href='#' id='cookies_accept'>aceptar</a><p>Utilizamos cookies para mejorar nuestros servicios. Si continúa navegando, consideramos que acepta su uso. <br/>Para más información haz click <a id='cookies_info' href='#'>aquí</a>.", "info");
+                    show_alert("<a href='#' id='cookies_accept'>cerrar</a><p>Utilizamos cookies para mejorar nuestros servicios. Si continúa navegando, consideramos que acepta su uso. <br/>Para más información haz click <a id='cookies_info' href='#'>aquí</a>.", "info");
                     $("#cookies_accept").click(function(event){
                         event.preventDefault();
                         $.cookie("cookie_level", 2, {expires: 3650, path: '/' });
                         $.cookiesLaw.visit_domains("accept", function(){
-                            window.location.reload();
+                            this.start_call();
+                            trackGAEvent('CookieLaw', "Close");
+                            hide_alert();
                         });
                     });
                     $("#cookies_info").click(function(event){

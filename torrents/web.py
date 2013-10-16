@@ -220,6 +220,9 @@ def create_app(config=None, debug=False):
         g.blacklisted_content = False
         init_g(current_app)
 
+        if not g.domain:
+            return redirect(url_for("files.home", _external=True), 301)
+
         # ignora peticiones sin blueprint
         if request.blueprint is None and request.path.endswith("/"):
             if "?" in request.url:
@@ -256,8 +259,10 @@ def create_app(config=None, debug=False):
         title, description = errors[error if error in errors else 500]
 
         init_g(current_app)
-        g.title.append(title)
+        if not g.domain:
+            return redirect(url_for("files.home", _external=True), 301)
 
+        g.title.append(title)
         return render_template('error.html', code=str(error), title=title, description=description), error
 
     print "App ready."
@@ -291,33 +296,6 @@ def init_g(app):
     # alerts system
     g.alert = None
 
-    # dominio de la web
-    g.domain = None
-    g.domains_family = ["torrents.com", "torrents.fm", "torrents.ms"]
-    for domain in g.domains_family:
-        if domain in request.url_root:
-            g.domain = domain
-            break
-    else:
-        return redirect(url_for("files.home", _external=True), 301)
-
-    g.domain_cookies = [url_for('index.cookies', _domain=domain) for domain in g.domains_family if domain!=g.domain]
-
-    g.section = "torrents" if g.domain=="torrents.fm" else "downloader" if g.domain=="torrents.ms" else "news"
-    g.domain_capitalized = g.domain.capitalize()
-
-    if "RUM_CODES" in app.config:
-        rum_codes = app.config["RUM_CODES"]
-        g.RUM_code = rum_codes[g.domain] if g.domain in rum_codes else rum_codes["torrents.com"]
-    else:
-        g.RUM_code = None
-
-    # Patrón de URL de busqueda, para evitar demasiadas llamadas a
-    g.url_search_base = url_for("files.search", query="___")
-
-    # título de la página por defecto
-    g.title = [g.domain_capitalized]
-
     g.keywords = {'torrents', 'download', 'files', 'search', 'audio', 'video', 'image', 'document', 'software'}
 
     g.show_blacklisted_content = app.config["SHOW_BLACKLISTED_CONTENT"]
@@ -340,3 +318,32 @@ def init_g(app):
 
     # permite ofrecer el downloader en enlaces de descarga
     g.offer_downloader = False
+
+    # dominio de la web
+    g.domain = None
+    g.domains_family = ["torrents.com", "torrents.fm", "torrents.ms"]
+
+    for domain in g.domains_family:
+        if domain in request.url_root:
+            g.domain = domain
+            break
+    else:
+        return
+
+    g.domain_cookies = [url_for('index.cookies', _domain=domain) for domain in g.domains_family if domain!=g.domain]
+
+    g.section = "torrents" if g.domain=="torrents.fm" else "downloader" if g.domain=="torrents.ms" else "news"
+    g.domain_capitalized = g.domain.capitalize()
+
+    if "RUM_CODES" in app.config:
+        rum_codes = app.config["RUM_CODES"]
+        g.RUM_code = rum_codes[g.domain] if g.domain in rum_codes else rum_codes["torrents.com"]
+    else:
+        g.RUM_code = None
+
+    # título de la página por defecto
+    g.title = [g.domain_capitalized]
+
+    # Patrón de URL de busqueda, para evitar demasiadas llamadas a url_for
+    g.url_search_base = url_for("files.search", query="___")
+

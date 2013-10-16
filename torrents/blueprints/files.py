@@ -324,7 +324,10 @@ def category(category, query=None):
 
     g.title.append(page_title)
 
-    results, search_info = single_search(g.query, category=g.category.tag, not_category=None if g.category.tag=="porn" else "porn", order=order, zone=g.category.url, title=(page_title, 2, g.category.tag), last_items=get_last_items(), skip=get_skip(), show_order=show_order or True)
+    if g.category and g.category.tag=="porn":
+        g.is_adult_content = True;
+
+    results, search_info = single_search(g.query, category=g.category.tag, not_category=None if g.is_adult_content else "porn", order=order, zone=g.category.url, title=(page_title, 2, g.category.tag), last_items=get_last_items(), skip=get_skip(), show_order=show_order or True)
 
     if g.query:
         if g.search_bot:
@@ -399,8 +402,11 @@ def download(file_id, file_name=""):
         if not g.show_blacklisted_content:
             abort(404)
 
+    if file_data["view"]["category"] and file_data["view"]["category"].tag=="porn":
+        g.is_adult_content = True;
+
     query = download_search(file_data, file_name, "torrent")
-    related = single_search(query, category=None, not_category=(None if g.category and g.category.tag=="porn" else "porn"), title=("Related torrents",3,None), zone="File / Related", last_items=[], limit=30, max_limit=15, ignore_ids=[mid2hex(file_id)], show_order=None)
+    related = single_search(query, category=None, not_category=(None if g.is_adult_content else "porn"), title=("Related torrents",3,None), zone="File / Related", last_items=[], limit=30, max_limit=15, ignore_ids=[mid2hex(file_id)], show_order=None)
 
     # elige el titulo de la página
     title = file_data['view']['fn']

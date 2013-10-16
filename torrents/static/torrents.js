@@ -154,6 +154,20 @@ function show_alert(html, type) {
     $("#alert").attr('class', type);
 }
 
+function data_track(){
+    var elm=$(this), link_href=this.href, target=this.target;
+    var data=elm.data("track").split(","), wait=elm.attr("_target");
+    elm.click(function(event){
+        trackGAEvent(data[0], data[1], data[2]);
+        if(!target){
+            setTimeout(function(){
+                if(!event.stop_redirection) window.location = link_href;
+                }, 100);
+            event.preventDefault();
+            }
+    });
+}
+
 $(function(){
     window.suggestmeyes_loaded = true;
 
@@ -162,6 +176,20 @@ $(function(){
         $("#files >.filepaths").treeview({"collapsed":true});
     }
 
+    if (adult_content) {
+        if (!$.cookie("adult_confirm")) {
+            trackGAEvent('Adult confirm', "Ask");
+            $.colorbox({html:"<div id='adult_confirm' class='adult_confirm title big_icon porn'><span></span><div><h1>Adult content confirmation</h1></div><p>You should be 18 or older to see this content.</p><a id='yes_button' href='#'>Yes, I am</a><a data-track='Adult confirm,No,' href='/'>No, I'm not</a></div>", width:"65%",close:false, overlayClose:false});
+            $("#adult_confirm a[data-track]").each(data_track);
+            $("#yes_button").click(function(event){
+                event.preventDefault();
+                $.cookie("adult_confirm", 1, {expires: 3650, path: '/' });
+                trackGAEvent('Adult confirm', "Yes");
+                $.colorbox.close()
+            });
+
+        }
+    }
     var featured_images = $("#featured img");
     var max_width = featured_images.parent().parent().width();
     $("#featured img").load(function(){
@@ -183,19 +211,7 @@ $(function(){
         event.stopPropagation();
     });
 
-    $("a[data-track]").each(function(){
-        var elm=$(this), link_href=this.href, target=this.target;
-        var data=elm.data("track").split(","), wait=elm.attr("_target");
-        elm.click(function(event){
-            trackGAEvent(data[0], data[1], data[2]);
-            if(!target){
-                setTimeout(function(){
-                    if(!event.stop_redirection) window.location = link_href;
-                    }, 100);
-                event.preventDefault();
-                }
-            });
-        });
+    $("a[data-track]").each(data_track);
 
     window.downloader.link_lookup("#download");
     window.downloader.link_lookup("#featured");
@@ -238,9 +254,12 @@ $(function(){
 
     $("#downloader_button").click(function(e){
             trackGAEvent('TD', "Download");
+            trackGAPageview(this.getAttribute("href"));
             e.preventDefault();
             setTimeout('document.location = "'+this.href+'"',100);
     });
+
+
 
     var message = window.location.hash.substring(1);
     if (message in PAGE_MESSAGES) {

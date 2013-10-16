@@ -21,6 +21,7 @@
             {%- endassets -%}
         {%- endblock -%}
         <script type="text/javascript">
+            var adult_content = {{ g.is_adult_content | tojson }};
             {%-if g.track%}$('<img src="{{url_for("files.pixel")}}"/>');{%-endif%}
             var _gaq, _prum;
             function cookiesScripts(){
@@ -51,23 +52,26 @@
                 {%- block cookies -%}
                 {%- endblock -%}
             }
+            function trackGAEvent() {
+                trackGA(['_trackEvent'].concat(Array.prototype.slice.call(arguments, 0)));
+            }
+            function trackGAPageview() {
+                trackGA(['_trackPageview'].concat(Array.prototype.slice.call(arguments, 0)));
+            }
 
         {% if g.must_accept_cookies %}
             $.cookiesLaw.initialize({{g.domain_cookies|tojson}}, cookiesScripts);
 
-            function trackGAEvent(){
-                if ($.cookiesLaw.accepted) {
-                    _gaq.push(['_trackEvent'].concat(Array.prototype.slice.call(arguments, 0)));
-                }
+            function trackGA(params){
+                if ($.cookiesLaw.accepted) _gaq.push(params);
             }
-        </script>
         {% else %}
-            function trackGAEvent(){
-                _gaq.push(['_trackEvent'].concat(Array.prototype.slice.call(arguments, 0)));
+            function trackGA(params){
+                _gaq.push(params);
             }
             cookiesScripts();
-        </script>
         {% endif %}
+        </script>
         {%- block head -%}
         {%- endblock -%}
     </head>

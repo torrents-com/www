@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% from "helpers.html" import small_banner -%}
 {% block head %}
 {{ head | safe }}
 <link rel="alternate"  href="{{ url_for('news.rss', _external=True) }}" type="application/rss+xml" title="Torrents.com" />
@@ -7,20 +8,7 @@
 {% block content %}
 {%- if top_stories or news_top %}
 {{ (top_stories or news_top)|safe }}
-<section id="carrusel">
-    <div class="container_24">
-        <div class="grid_3">
-            <img src="{{g.static_prefix}}/downloader/feature-logo-120.png" width="120" height="120" alt="Adam" />
-        </div>
-        <div class="grid_9"><span class="tagline">Find. Download. Play!</span></div>
-        <div class="grid_7">
-            <h2>INSTALL OUR FREE<br/>TORRENTS DOWNLOADER</h2>
-            <p>for Windows</p>
-        </div>
-        <div class="grid_4 prefix_1"><a href="{{ url_for('web.home') }}">Get it Now!</a>
-        </div>
-    </div>
-</section>
+{{ small_banner() }}
 {%- endif %}
 
 <div class="container_24" id="news_page">

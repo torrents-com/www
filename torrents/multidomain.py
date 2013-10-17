@@ -9,6 +9,9 @@ _MultidomainBlueprint__endpoint_domain = {}
 
 DOMAIN_REPLACER=re.compile(r"^(https?://)[^\/?]*(.*)$")
 
+def redirect_to_domain(domain, http_code):
+    return redirect(DOMAIN_REPLACER.sub(r"\1"+domain + DOMAIN_SUFFIX + r"\2", request.url), http_code)
+
 def multidomain_view(*args, **kwargs):
     domains = _MultidomainBlueprint__rule_domains[request.url_rule.rule]
     info = domains.get(g.domain, None)
@@ -18,7 +21,7 @@ def multidomain_view(*args, **kwargs):
             request.url_rule = next(r for r in _request_ctx_stack.top.url_adapter.map._rules if r.rule==request.url_rule.rule and r.endpoint.startswith(info[0]+"."))
         return info[1](*args, **kwargs)
     else:
-        return redirect(DOMAIN_REPLACER.sub(r"\1"+domains.iterkeys().next() + DOMAIN_SUFFIX + r"\2", request.url), 301)
+        return redirect_to_domain(domains.iterkeys().next(), 301)
 
 def url_for(endpoint, **values):
     if "_domain" in values:

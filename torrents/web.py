@@ -221,7 +221,7 @@ def create_app(config=None, debug=False):
         init_g(current_app)
 
         if not g.domain:
-            return redirect(url_for("files.home", _external=True), 301)
+            return multidomain.redirect_to_domain(g.domains_family[0], 301)
 
         # ignora peticiones sin blueprint
         if request.blueprint is None and request.path.endswith("/"):
@@ -260,7 +260,7 @@ def create_app(config=None, debug=False):
 
         init_g(current_app)
         if not g.domain:
-            return redirect(url_for("files.home", _external=True), 301)
+            return multidomain.redirect_to_domain(g.domains_family[0], 301)
 
         g.title.append(title)
         return render_template('error.html', code=str(error), title=title, description=description), error
@@ -321,7 +321,7 @@ def init_g(app):
 
     # dominio de la web
     g.domain = None
-    g.domains_family = ["torrents.com", "torrents.fm", "torrents.ms"]
+    g.domains_family = ["torrents.fm", "torrents.com", "torrents.ms"]
 
     for domain in g.domains_family:
         if domain in request.url_root:

@@ -72,7 +72,7 @@
             }
         },
         showMoreInfo: function() {
-            $.colorbox({html:this.legend, height:"80%", width:"80%",close:"cerrar"});
+            $.colorbox({html:this.legend, height:"80%", width:"80%",close:"cerrar", fixed:true});
         },
         legend:"<div class='text_page'><h1>Política de cookies</h1><h2>¿Qué es una cookie?</h2><p>Una <i><b>cookie</b></i> (o <b>galleta informática</b>) es una pequeña información enviada por un sitio web y almacenada en el navegador del usuario, de manera que el sitio web puede consultar la actividad previa del usuario. <small><a href='http://es.wikipedia.org/wiki/Cookie_%28inform%C3%A1tica%29'>Extraído del artículo en Wikipedia</a>.</small></p>\
         <h2>¿Qué tipos de cookies existen?</h2><p>Las cookies se suelen clasificar principalmente por su duración y por el uso que se les da.</p><p>Según su duración, se puede diferenciar entre cookies de sesión, que expiran cuando el usuario cierra el navegador, y las cookies permanentes, que llevan asociada una duración a partir del momento de creación. En cualquier caso, el usuario puede eliminar una cookie cuando lo desee, utilizando las herramientas que los navegadores proveen para este fin.</p><p>Por otro lado, podemos encontrar 5 tipos de cookies, según su objetivo:</p>\

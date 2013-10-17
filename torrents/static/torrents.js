@@ -183,7 +183,7 @@ $(function(){
     if (adult_content) {
         if (!$.cookie("adult_confirm")) {
             trackGAEvent('Adult confirm', "Ask");
-            $.colorbox({html:"<div id='adult_confirm' class='adult_confirm title big_icon porn'><span></span><div><h1>Adult content confirmation</h1></div><p>You should be 18 or older to see this content.</p><a id='yes_button' href='#'>Yes, I am</a><a data-track='Adult confirm,No,' href='/'>No, I'm not</a></div>", width:"65%",close:false, overlayClose:false});
+            $.colorbox({html:"<div id='adult_confirm' class='adult_confirm title big_icon porn'><span></span><div><h1>Adult content confirmation</h1></div><p>You should be 18 or older to see this content.</p><a id='yes_button' href='#'>Yes, I am</a><a data-track='Adult confirm,No,' href='/'>No, I'm not</a></div>", width:"65%",close:false, overlayClose:false, fixed:true});
             $("#adult_confirm a[data-track]").each(data_track);
             $("#yes_button").click(function(event){
                 event.preventDefault();

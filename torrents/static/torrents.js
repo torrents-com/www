@@ -95,14 +95,12 @@ window.downloader = {
     skip:false,
     initialize:function(){
         var is_windows = navigator.appVersion.indexOf("Win")!=-1;
-        this.skip = !($("body").data("downloader_href")) || (document.cookie.indexOf("skip_downloader=1") > -1) || !is_windows;
+        this.skip = !($("body").data("downloader_href")) || $.cookie("skip_downloader") || !is_windows;
         this.initialized = true;
         },
     disable:function(){
         if(!this.skip){
-            var expiration=new Date();
-            expiration.setDate(expiration.getDate() + this.expiration_days);
-            document.cookie = "skip_downloader=1; expires=" + expiration.toUTCString() + "; path=/";
+            $.cookie("skip_downloader", 1, {expires: this.expiration_days, path: '/' });
             this.skip = true;
             }
         },

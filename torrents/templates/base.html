@@ -58,7 +58,7 @@
                 })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
 
                 ga('create', 'UA-38333996-3', {{ g.domain|tojson }});
-                ga('send', 'pageview');
+                ga('send', 'pageview'{{ ", " + (g.domain[g.domain.rfind("."):]+request.path)|tojson if g.domain_conflict }});
 
                 {%- block cookies -%}
                 {%- endblock -%}

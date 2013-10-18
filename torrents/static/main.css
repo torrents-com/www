@@ -374,8 +374,8 @@ img.error {
             height:2.4em;padding:0em;vertical-align:middle;border-bottom:1px $green solid;text-align:center; span {vertical-align:middle;}
             &:first-child{width:28px;}
             &:first-child + td {width:348px;text-align:left;
-                a {line-height:1.7em;display:none;}
-                a:first-child {color:$grayfont;width:348px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-weight:bold;text-decoration:none; @include inline-block();vertical-align:middle;
+                a {display:none;}
+                a:first-child {height:19px;line-height:19px;color:$grayfont;width:348px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-weight:bold;text-decoration:none; @include inline-block();vertical-align:middle;
                     strong{color:$black;}
                 }
             }
@@ -389,7 +389,10 @@ img.error {
         &:hover {
             background:$darkgreen;
             &:first-child {background-color:white;}
-            td:first-child + td {a{margin-left:4px;@include inline-block();} a:first-child{margin-left:0em;width:300px;} }
+            td:first-child + td a:first-child {
+                margin-left:0em;width:300px;
+                & + a, & + a + a{margin-left:4px;@include inline-block();}
+            }
         }
     }
     >li {

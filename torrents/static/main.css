@@ -527,11 +527,11 @@ img.error {
 
 #ranking {
     background:$black;border-collapse: collapse;
-    td {background:white; padding:0.2em 0em;
-        &:first-child {text-align:center;width:60px;font-size:0.8em}
+    td {background:white; padding:0.4em 0em;
+        &:first-child {text-align:center;width:60px; span {font-size:0.8em;}}
         &:first-child + td {text-align:right;font-weight:bold;width:20px;}
-        &:first-child + td + td {text-align:left;width:780px;}
-        &:first-child + td + td + td {text-align:right;width:80px;}
+        &:first-child + td + td {text-align:left;width:740px;}
+        &:first-child + td + td + td {text-align:right;width:120px;}
     }
     span, a {
         margin:0 20px;

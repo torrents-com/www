@@ -18,12 +18,10 @@
             {%- endfor %}.
         </p>
     </div>
-    <div id="ranking" class="grid_24">
-        <ol>
+    <table id="ranking">
         {%- for search in ranking["final_ranking"] %}
-            <li>{{trend(search[3], loop.index0)}} {{search[0]|clean_query|blacklist_query(search[0])}}<span>{{(search[1]*100)|round(2)}} %</span></li>
+            <tr class="{{ loop.cycle('odd', 'even') }}"><td>{{trend(search[3], loop.index0)}}</td><td>{{ loop.index }}</td><td>{{search[0]|clean_query|blacklist_query(search[0])}}</td><td><span>{{"%0.2f"|format(search[1]*100)}} %</span></td></tr>
         {%- endfor %}
-        </ol>
-    </div>
+    </table>
 </section>
 {% endblock %}

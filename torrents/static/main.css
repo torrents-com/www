@@ -375,7 +375,7 @@ img.error {
             &:first-child{width:28px;}
             &:first-child + td {width:348px;text-align:left;
                 a {line-height:1.7em;display:none;}
-                a:first-child {color:$grayfont;width:348px;white-space:nowrap;overflow: hidden;text-overflow:ellipsis;font-weight:bold;text-decoration:none; @include inline-block();
+                a:first-child {color:$grayfont;width:348px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-weight:bold;text-decoration:none; @include inline-block();vertical-align:middle;
                     strong{color:$black;}
                 }
             }
@@ -526,9 +526,18 @@ img.error {
 }
 
 #ranking {
-    span {
-        padding:0.3em 0px;margin:0em 1em; font-size:0.7em; text-align:center; @include inline-block();
-        &:first-child {width:30px}
+    background:$black;border-collapse: collapse;
+    td {background:white; padding:0.2em 0em;
+        &:first-child {text-align:center;width:60px;font-size:0.8em}
+        &:first-child + td {text-align:right;font-weight:bold;width:20px;}
+        &:first-child + td + td {text-align:left;width:780px;}
+        &:first-child + td + td + td {text-align:right;width:80px;}
+    }
+    span, a {
+        margin:0 20px;
+    }
+    tr.even td {
+        background:$lightgreen;
     }
 }
 

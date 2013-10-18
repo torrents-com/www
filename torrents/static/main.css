@@ -171,7 +171,7 @@ img {
 
     h2 { font-size: 1.6em}
 
-    > ul {
+    > ul, > ol {
         font-size: 1.4em;
     }
 

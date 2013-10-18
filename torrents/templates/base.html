@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
     <head>
+        {%- block head -%}
+        {%- endblock -%}
         {% if not g.override_header %}
             <title>{{ g.title|reverse|join(" | ")}}</title>
             <meta http-equiv="content-language" content="en" />
@@ -89,8 +91,6 @@
             cookiesScripts();
         {% endif %}
         </script>
-        {%- block head -%}
-        {%- endblock -%}
     </head>
     {% set hidden_category = g.category and not g.category in g.categories[:5] -%}
     {% set hidden_categories_start = 5 if hidden_category else 6 -%}

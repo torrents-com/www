@@ -241,12 +241,13 @@ def init_file(afile):
     afile["_ct"] = ct
 
     '''# tags del fichero
+    file_type = CONTENTS[ct].lower()
     file_category = file_category_type = None
     for category in config["TORRENTS_CATEGORIES"]:
         if category.tag in file_tags and (not file_category or category.tag=="porn"): # always use adult when its present
             file_category = category.cat_id
 
-        if category.content_main and category.content==ct:
+        if category.content_main and category.content==file_type:
             file_category_type = category.cat_id
     afile["_ct"] = file_category or file_category_type'''
 

@@ -2,10 +2,15 @@
     $.cookiesLaw = {
         notified: false,
         hide_msg: false,
-        start_call: function() {},
-        initialize:function(domains, start_call) {
+        start_scripts: false,
+        run_scripts: function() {
+            if (!this.start_scripts) return;
+            this.start_scripts();
+            this.start_scripts = false; // avoid duplicate calls
+        },
+        initialize:function(domains, start_scripts) {
             // Save local variables
-            this.start_call = start_call;
+            this.start_scripts = start_scripts;
             this.domains = domains;
 
             // Check local cookie
@@ -13,7 +18,7 @@
             this.notified = cookie_level>0;
             this.hide_msg = cookie_level>1;
 
-            // If notified, start and exit
+            // If notified, don't notify again
             if (this.notified) {
                 this.final_process();
                 return;
@@ -47,7 +52,7 @@
         },
         final_process: function() {
             if (this.notified)
-                this.start_call();
+                this.run_scripts();
 
             if (!this.hide_msg) {
                 if (this.notified)
@@ -59,9 +64,9 @@
                         event.preventDefault();
                         $.cookie("cookie_level", 2, {expires: 3650, path: '/' });
                         $.cookiesLaw.visit_domains("accept", function(){
-                            this.start_call();
+                            $.cookiesLaw.run_scripts();
                             trackGAEvent('CookieLaw', "Close");
-                            hide_alert();
+                            hide_alert("cookies");
                         });
                     });
                     $("#cookies_info").click(function(event){
@@ -97,6 +102,7 @@
         </table>\
         <h2>¿Cómo se pueden administrar las cookies?</h2>\
         <p>Puede permitir, bloquear o eliminar las cookies instaladas en su equipo mediante la configuración de las opciones del navegador instalado en su ordenador:</p>\
-        <ul><li><a target='_blank' href='http://support.google.com/chrome/bin/answer.py?hl=es&answer=95647'>Google Chrome</a></li><li><a target='_blank' href='http://windows.microsoft.com/es-es/windows7/how-to-manage-cookies-in-internet-explorer-9'>Internet Explorer</a></li><li><a target='_blank' href='http://support.mozilla.org/es/kb/habilitar-y-deshabilitar-cookies-que-los-sitios-we'>Mozilla Firefox</a></li><li><a target='_blank' href='http://support.apple.com/kb/ph5042'>Safari</a></li></ul></div>"
+        <ul><li><a target='_blank' href='http://support.google.com/chrome/bin/answer.py?hl=es&answer=95647'>Google Chrome</a></li><li><a target='_blank' href='http://windows.microsoft.com/es-es/windows7/how-to-manage-cookies-in-internet-explorer-9'>Internet Explorer</a></li><li><a target='_blank' href='http://support.mozilla.org/es/kb/habilitar-y-deshabilitar-cookies-que-los-sitios-we'>Mozilla Firefox</a></li><li><a target='_blank' href='http://support.apple.com/kb/ph5042'>Safari</a></li></ul>\
+        <p>Los sitios web de la familia torrents.com continuarán funcionando si se bloquean o eliminan cookies asociadas a estos, aunque es posible que vuelvan a realizar preguntas que ya han sido respondidas.</p></div>"
     };
 })(jQuery);

@@ -105,9 +105,9 @@
         <header>
             <div id="alerts">
                 {%- for aid, alert in g.alert.iteritems() %}
-                <div class="{{alert[0]}}">
+                <div id="alert_{{aid}}" class="{{alert[0]}}">
                     <div class="container_24">
-                        <p id="alert_{{aid}}" class="grid_24">{{ alert[1]}}</p>
+                        <p class="grid_24">{{ alert[1]}}</p>
                     </div>
                 </div>
                 {%- endfor %}

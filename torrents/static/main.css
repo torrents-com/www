@@ -322,11 +322,15 @@ img.error {
     }
 }
 
-#alert {
-    font-size:1.4em;text-align:center;border-bottom:1px solid $red; background:$lightgray; padding:0.5em 0em;display:none;
+#alerts {
+    font-size:1.3em;text-align:center;
 
-    &.error {display:block;color:$redfont}
-    &.info {display:block;color:$black}
+    > div {
+        border-bottom:1px solid $red; padding:0.5em 0em;display:none;
+
+        &.error {display:block;color:$redfont;background:$lightgray;}
+        &.info {display:block;color:$black;background:$lightgreen;}
+    }
 
     #cookies_accept {
         text-align:center;

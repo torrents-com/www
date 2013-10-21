@@ -175,7 +175,7 @@ def contact():
                 return redirect(url_for('.home', _anchor="sent"))
 
             except BaseException as e:
-                g.alert = ("error", "The message has not been sent. Try again later or send mail to %s."%to)
+                g.alert["mail_error"] = ("error", "The message has not been sent. Try again later or send mail to %s."%to)
                 logging.exception(e)
 
     g.title.append("Contact form")

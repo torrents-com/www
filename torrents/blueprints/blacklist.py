@@ -34,10 +34,10 @@ def home():
             configdb.pull_actions()
 
             form.text.data = ""
-            g.alert = ("info", Markup("Entry added: %s. <a href='%s'>Undo</a>" % (text, url_for('blacklist.delete', category=category, text=text))))
+            g.alert["bl_added"] = ("info", Markup("Entry added: %s. <a href='%s'>Undo</a>" % (text, url_for('blacklist.delete', category=category, text=text))))
         except BaseException as e:
             logging.exception(e)
-            g.alert = ("error", "Error adding entry.")
+            g.alert["bl_add_error"] = ("error", "Error adding entry.")
 
     return render_template('blacklist.html', blacklists=blacklists, form=form)
 
@@ -54,10 +54,10 @@ def delete(category, text):
         configdb.run_action("refresh_blacklists")
         configdb.pull_actions()
 
-        g.alert = ("info",Markup("Entry deleted: %s. <a href='%s?category=%s&text=%s'>Undo</a>" % (text, url_for('blacklist.home'), category, urllib.quote(text))))
+        g.alert["bl_deleted"]  = ("info",Markup("Entry deleted: %s. <a href='%s?category=%s&text=%s'>Undo</a>" % (text, url_for('blacklist.home'), category, urllib.quote(text))))
     except BaseException as e:
         logging.exception(e)
-        g.alert = ("error", "Error deleting entry.")
+        g.alert["bl_del_error"] = ("error", "Error deleting entry.")
 
     return redirect(url_for('blacklist.home'))
 

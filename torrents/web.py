@@ -294,7 +294,7 @@ def init_g(app):
     g.override_header = False
 
     # alerts system
-    g.alert = None
+    g.alert = {}
 
     g.keywords = {'torrents', 'download', 'files', 'search', 'audio', 'video', 'image', 'document', 'software'}
 
@@ -321,7 +321,7 @@ def init_g(app):
 
     # dominio de la web
     g.domain = None
-    g.domains_family = ["torrents.fm", "torrents.com", "torrents.ms"]
+    g.domains_family = app.config["ALLOWED_DOMAINS"]
 
     for domain in g.domains_family:
         if domain in request.url_root:

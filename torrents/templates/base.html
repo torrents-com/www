@@ -103,10 +103,14 @@
             <div id="dialog" data-dialog_ok="OK" data-dialog_no="No" data-dialog_yes="Yes"></div>
         {%- else %}>{%- endif %}
         <header>
-            <div id="alert"{{ " class='%s'"|safe%g.alert[0] if g.alert }}>
-                <div class="container_24">
-                    <p class="grid_24">{{ g.alert[1] if g.alert }}</p>
+            <div id="alerts">
+                {%- for aid, alert in g.alert.iteritems() %}
+                <div class="{{alert[0]}}">
+                    <div class="container_24">
+                        <p id="alert_{{aid}}" class="grid_24">{{ alert[1]}}</p>
+                    </div>
                 </div>
+                {%- endfor %}
             </div>
             <div id="header">
                 <div class="container_24">

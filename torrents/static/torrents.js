@@ -145,15 +145,15 @@ window.downloader = {
     };
 
 var PAGE_MESSAGES = {"sent": ["The message has been sent successfully.", "info"],
-                 "write": ["Write something!", "error"]};
+                    "write": ["Write something!", "error"]};
 
-function hide_alert() {
-    $("#alert p").html("");
+function hide_alert(aid) {
+    $("#alerts #alert_"+aid).remove();
 }
 
-function show_alert(html, type) {
-    $("#alert p").html(html);
-    $("#alert").attr('class', type);
+function show_alert(aid, html, type) {
+    hide_alert(aid);
+    $("#alerts").prepend($("<div id='alert_"+aid+"' class='"+type+"'><div class='container_24'><p class='grid_24'>"+html+"</p></div></div>"));
 }
 
 function data_track(){
@@ -262,11 +262,10 @@ $(function(){
     });
 
 
-
     var message = window.location.hash.substring(1);
     if (message in PAGE_MESSAGES) {
         var msg = PAGE_MESSAGES[message];
-        show_alert(msg[0], msg[1]);
+        show_alert(message, msg[0], msg[1]);
     }
 });
 

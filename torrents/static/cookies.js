@@ -54,7 +54,7 @@
                     trackGAEvent('CookieLaw', "Notified");
 
                 $(function(){
-                    show_alert("<a href='#' id='cookies_accept'>cerrar</a><p>Utilizamos cookies para mejorar nuestros servicios. Si continúa navegando, consideramos que acepta su uso. <br/>Para más información haz click <a id='cookies_info' href='#'>aquí</a>.", "info");
+                    show_alert("cookies", "<a href='#' id='cookies_accept'>cerrar</a>Utilizamos cookies propias y de terceros para mejorar nuestros servicios y realizar estadísticas sobre el uso de nuestra web.<br/>Si continua navegando, consideramos que acepta su uso. Puede cambiar la configuración u obtener más información <a id='cookies_info' href='#'>aquí</a>.", "info");
                     $("#cookies_accept").click(function(event){
                         event.preventDefault();
                         $.cookie("cookie_level", 2, {expires: 3650, path: '/' });
@@ -74,11 +74,11 @@
         showMoreInfo: function() {
             $.colorbox({html:this.legend, height:"80%", width:"80%",close:"cerrar", fixed:true});
         },
-        legend:"<div class='text_page'><h1>Política de cookies</h1><h2>¿Qué es una cookie?</h2><p>Una <i><b>cookie</b></i> (o <b>galleta informática</b>) es una pequeña información enviada por un sitio web y almacenada en el navegador del usuario, de manera que el sitio web puede consultar la actividad previa del usuario. <small><a href='http://es.wikipedia.org/wiki/Cookie_%28inform%C3%A1tica%29'>Extraído del artículo en Wikipedia</a>.</small></p>\
-        <h2>¿Qué tipos de cookies existen?</h2><p>Las cookies se suelen clasificar principalmente por su duración y por el uso que se les da.</p><p>Según su duración, se puede diferenciar entre cookies de sesión, que expiran cuando el usuario cierra el navegador, y las cookies permanentes, que llevan asociada una duración a partir del momento de creación. En cualquier caso, el usuario puede eliminar una cookie cuando lo desee, utilizando las herramientas que los navegadores proveen para este fin.</p><p>Por otro lado, podemos encontrar 5 tipos de cookies, según su objetivo:</p>\
+        legend:"<div class='text_page'><h1>Política de cookies</h1><h2>¿Qué es una cookie?</h2><p>Una cookie es un fichero que se descarga en su ordenador al acceder a determinadas páginas web. Las cookies permiten a una página web, entre otras cosas, almacenar y recuperar información sobre los hábitos de navegación de un usuario o de su equipo y, dependiendo de la información que contengan y de la forma en que utilice su equipo, pueden utilizarse para reconocer al usuario. <small><a target='_blank' href='http://www.iabspain.net/privacidadeninternet/conocer'>Más información</a></small></p>\
+        <h2>¿Qué tipos de cookies existen?</h2><p>Las cookies se suelen clasificar principalmente por su duración y por el uso que se les da.</p><p>Según su duración, se puede diferenciar entre cookies de sesión, que expiran cuando el usuario cierra el navegador, y las cookies permanentes, que llevan asociada una duración a partir del momento de creación.</p><p>Por otro lado, podemos encontrar 5 tipos de cookies, según su objetivo:</p>\
         <ul><li><strong>Rendimiento</strong>: Este tipo de cookie recuerda sus preferencias para las herramientas que se encuentran en los servicios, por lo que no tiene que volver a configurar el servicio cada vez que usted visita. A modo de ejemplo, en esta tipología se incluyen:\
         <ul><li>Ajustes de volumen de reproductores de vídeo o sonido.</li><li>Las velocidades de transmisión de vídeo que sean compatibles con su navegador.</li><li>Los objetos guardados en el carrito de la compra en los servicios de e-commerce tales como tiendas.</li></ul></li>\
-        <li><strong>Geolocalización</strong>: Estas cookies son utilizadas para averiguar en qué país se encuentra cuando se solicita un servicio. Esta cookie es totalmente anónima, y sólo se utiliza para ayudar a orientar el contenido a su ubicación. Permiten establecer la ubicación geográfica del usuario. </li>\
+        <li><strong>Geolocalización</strong>: Estas cookies son utilizadas para averiguar en qué país se encuentra cuando se solicita un servicio. Esta cookie es totalmente anónima, y sólo se utiliza para ayudar a orientar el contenido a su ubicación. Permiten establecer la ubicación geográfica del usuario.</li>\
         <li><strong>Analítica</strong>: Cada vez que un usuario visita un servicio, una herramienta de un proveedor externo genera una cookie analítica en el ordenador del usuario. Esta cookie que sólo se genera en la visita, servirá en próximas visitas al mismo servicio para identificar de forma anónima al visitante. Los objetivos principales que se persiguen son:\
         <ul><li>Permitir la identificación anónima de los usuarios navegantes a través de la cookie (identifica navegadores y dispositivos, no personas) y por lo tanto la contabilización aproximada del número de visitantes y su tendencia en el tiempo.</li><li>Identificar de forma anónima los contenidos más visitados y por lo tanto más atractivos para los usuarios.</li><li>Saber si el usuario que está accediendo es nuevo o repite visita.</li></ul></li>\
         <li><strong>Registro</strong>: Las cookies de registro se generan una vez que el usuario se ha registrado o posteriormente ha abierto su sesión, y se utilizan para identificarle en los servicios con los siguientes objetivos:\
@@ -94,6 +94,9 @@
         <tr><td>__utmc</td><td>Analítica</td><td>Sesión</td></tr>\
         <tr><td>__utmz</td><td>Analítica</td><td>6 meses</td></tr>\
         <tr><td>__ga</td><td>Analítica</td><td>2 años</td></tr>\
-        </table></div>"
+        </table>\
+        <h2>¿Cómo se pueden administrar las cookies?</h2>\
+        <p>Puede permitir, bloquear o eliminar las cookies instaladas en su equipo mediante la configuración de las opciones del navegador instalado en su ordenador:</p>\
+        <ul><li><a target='_blank' href='http://support.google.com/chrome/bin/answer.py?hl=es&answer=95647'>Google Chrome</a></li><li><a target='_blank' href='http://windows.microsoft.com/es-es/windows7/how-to-manage-cookies-in-internet-explorer-9'>Internet Explorer</a></li><li><a target='_blank' href='http://support.mozilla.org/es/kb/habilitar-y-deshabilitar-cookies-que-los-sitios-we'>Mozilla Firefox</a></li><li><a target='_blank' href='http://support.apple.com/kb/ph5042'>Safari</a></li></ul></div>"
     };
 })(jQuery);

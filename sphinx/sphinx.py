@@ -238,9 +238,8 @@ def init_file(afile):
 
     # informacion del contenido
     ct, file_tags, file_format = guess_doc_content_type(afile, sources)
-    afile["_ct"] = ct
 
-    '''# tags del fichero
+    # tags del fichero
     file_type = CONTENTS[ct].lower()
     file_category = file_category_type = None
     for category in config["TORRENTS_CATEGORIES"]:
@@ -249,7 +248,7 @@ def init_file(afile):
 
         if category.content_main and category.content==file_type:
             file_category_type = category.cat_id
-    afile["_ct"] = file_category or file_category_type'''
+    afile["_ct"] = file_category or file_category_type
 
     # tamaño
     try:

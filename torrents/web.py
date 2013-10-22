@@ -307,6 +307,9 @@ def init_g(app):
 
     g.featured = []
 
+    # pagina actual
+    g.page_type = None
+
     # busqueda actual
     g.track = False
     g.query = g.clean_query = None

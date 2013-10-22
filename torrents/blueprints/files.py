@@ -36,6 +36,11 @@ def tree_visitor(item):
     else:
         return item[1]["_w"]
 
+# page type constants
+FILE_PAGE_TYPE = 1
+SEARCH_PAGE_TYPE = 2
+CATEGORY_PAGE_TYPE = 3
+
 CATEGORY_ORDER = ("IDIV(fs,17280000)*(r+10)", "ok DESC, r DESC, fs DESC", "IDIV(fs,17280000)*(r+10)")
 IMAGES_ORDER = ("IDIV(fs,172800)*r2*(r+10)", "ok DESC, r DESC, fs DESC", "IDIV(fs,172800)*r2*(r+10)")
 RANKING_ORDER = ("IDIV(fs,1728000)*(r+10)", "ok DESC, r DESC, fs DESC", "IDIV(fs,1728000)*(r+10)")
@@ -270,6 +275,8 @@ def search_info():
 @files.route('/search/<query>')
 def search(query=None):
 
+    g.page_type = SEARCH_PAGE_TYPE
+
     search_bot = g.search_bot
 
     must_redirect = get_query_info(query)
@@ -312,6 +319,8 @@ def search(query=None):
 @files.route('/<category:category>/<query>')
 def category(category, query=None):
 
+    g.page_type = CATEGORY_PAGE_TYPE
+
     get_query_info(query, category)
 
     # categoria invalida
@@ -352,6 +361,7 @@ def category(category, query=None):
 @files.route('/-<fileid:file_id>')
 @files.route('/<file_name>-<fileid:file_id>')
 def download(file_id, file_name=""):
+    g.page_type = FILE_PAGE_TYPE
     if request.referrer:
         try:
             posibles_queries = referrer_parser.match(request.referrer)
@@ -573,7 +583,7 @@ def process_search_results(s=None, query=None, category=None, not_category=None,
 
         if blacklists["underage"].exact(safe_phrase) or prepared_phrase in blacklists["forbidden"] or prepared_phrase in blacklists["searchblocked"] or (prepared_phrase in blacklists["misconduct"] and prepared_phrase in blacklists["underage"]):
             g.blacklisted_content = "Search"
-            if not g.show_blacklisted_content:
+            if not g.show_blacklisted_content and g.page_type in {SEARCH_PAGE_TYPE, CATEGORY_PAGE_TYPE} and not g.show_blacklisted_content:
                 abort(404)
 
     # si la canonical query es vacia, solo interesan resultados para busquedas con query nulo (rankings)

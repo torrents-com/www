@@ -93,7 +93,8 @@
         <tr><th width='20%'>Nombre</th><th width='15%'>Tipo</th><th width='15%'>Duracion</th><th width='50%'>Objetivo</th></tr>\
         <tr><td>cookie_level</td><td>Rendimiento</td><td>10 años</td><td>Permite saber si el usuario ha sido notificado sobre nuestra política de cookies.</td></tr>\
         <tr><td>adult_confirm</td><td>Rendimiento</td><td>10 años</td><td>Evita preguntar al usuario si es mayor de edad más de una vez.</td></tr>\
-        <tr><td>__cfduid</td><td>Analítica</td><td>5 años</td><td>Servicio provisto por pingdom.com que mide el rendimiento de la página para los usuarios finales.</td></tr>\
+        <tr><td>PRUM_EPISODES</td><td>Analítica</td><td>Sesión</td><td rowspan='2'>Servicio provisto por pingdom.com que mide el rendimiento de la página para los usuarios finales.</td></tr>\
+        <tr><td>__cfduid</td><td>Analítica</td><td>5 años</td></tr>\
         <tr><td>__utma</td><td>Analítica</td><td>2 años</td><td rowspan='5'>Servicio provisto por google.com que genera estadísticas sobre los accesos al sitio web.</td></tr>\
         <tr><td>__utmb</td><td>Analítica</td><td>30 minutos</td></tr>\
         <tr><td>__utmc</td><td>Analítica</td><td>Sesión</td></tr>\

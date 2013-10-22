@@ -296,27 +296,51 @@ img.error {
         }
 
         ul {
-            font-size:1.6em;margin-top:3px;padding:0px;width:100%;text-shadow: 0px 0px 1px $lightredfont; white-space:nowrap;
+            margin-top:3px;padding:0px;width:100%; white-space:nowrap;
             li {
-                list-style:none;margin: 0px 0px 0px 2.4em;padding:0px;display:inline;
-                a { color:$lightredfont; text-decoration:none;position:relative;
+                text-align:center;list-style:none;margin: 0px 0px 0px 40px;padding:0px;@include inline-block();
+                a { font-size:1.6em;color:$lightredfont;text-shadow: 0px 0px 1px $lightredfont; text-decoration:none;position:relative;
                     .arrow {
                         position:absolute;
                         top:1.9em;
                         width: 0;
                         height: 0;
+                        left: 50%;
+                        margin-left: -15px;
                         border-left: 15px solid transparent;
                         border-right: 15px solid transparent;
                         border-top: 15px solid $red;
-                        left: 50%;
-                        margin-left: -15px;
                         display:none;
                     }
                 }
 
-                &:first-child {margin-left:5px}
-                &.active a, > a:hover { color:white }
-                &.active a .arrow { display:block }
+                &:first-child {margin-left:5px;}
+
+                &.searchable a {
+                    color:white;
+                }
+                &.active a {
+                    color:white;
+                    .arrow {
+                        display:block;
+                    }
+                }
+                /*> a:hover {
+                    color: white;
+                    .arrow {
+                        border-top: 5px solid white;
+                    }
+                }
+                &.active a {
+                    color:white;
+                    .arrow {
+                        top:1.9em;
+                        margin-left: -15px;
+                        border-left: 15px solid transparent;
+                        border-right: 15px solid transparent;
+                        border-top: 15px solid $red;
+                    }
+                }*/
             }
         }
     }
@@ -379,7 +403,7 @@ img.error {
             &:first-child{width:28px;}
             &:first-child + td {width:348px;text-align:left;
                 a {display:none;}
-                a:first-child {height:19px;line-height:19px;color:$grayfont;width:348px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-weight:bold;text-decoration:none; @include inline-block();vertical-align:middle;
+                a:first-child {height:19px;line-height:19px;color:$grayfont;width:348px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-weight:bold;text-decoration:none;vertical-align:middle;@include inline-block();
                     strong{color:$black;}
                 }
             }

@@ -303,6 +303,7 @@ def init_g(app):
     # informacion de categorias
     g.categories = app_categories = app.config["TORRENTS_CATEGORIES"]
     g.categories_by_url = {category.url:category for category in app_categories}
+    g.categories_results = None
 
     g.featured = []
 
@@ -346,4 +347,5 @@ def init_g(app):
 
     # Patrón de URL de busqueda, para evitar demasiadas llamadas a url_for
     g.url_search_base = url_for("files.search", query="___")
+    g.url_adult_search_base = url_for("files.category", category="porn", query="___")
 

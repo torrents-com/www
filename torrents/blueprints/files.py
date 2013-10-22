@@ -288,6 +288,8 @@ def search(query=None):
 
     skip = get_skip()
 
+    group_count_search = start_guess_categories_with_results(g.query)
+
     results, search_info = single_search(g.query, None, not_category="porn", zone="Search", order=order, title=("%s torrents"%escape(g.query), 2, None), last_items=get_last_items(), skip=skip, show_order=show_order or True)
 
     if skip>0:
@@ -301,7 +303,8 @@ def search(query=None):
         searchd.log_bot_event(search_bot, (search_info["total_found"]>0 or search_info["sure"]))
     else:
         g.track = bool(results)
-        #register_search(g.query, g.category, False, bool(results), search_info["canonical_query"])
+
+    g.categories_results = end_guess_categories_with_results(group_count_search)
 
     return render_template('search.html', results=results, search_info=search_info, show_order=show_order, featured=get_featured(search_info["count"]))
 
@@ -316,11 +319,12 @@ def category(category, query=None):
         return abort(404)
 
     page_title = singular_filter(g.category.title)+" torrents"
-    pop_searches = None
+    group_count_search = pop_searches = None
     if g.query:
         page_title += " | " + g.query
         g.page_description = "%s %s torrents at %s, the free and fast torrent search engine."%(g.query.capitalize(), singular_filter(g.category.title).lower(), g.domain_capitalized)
         order, show_order = get_order(SEARCH_ORDER)
+        group_count_search = start_guess_categories_with_results(g.query)
     else:
         pop_searches = create_cloud(torrentsdb.get_ranking(category), 500, 2)
         g.page_description = "%s torrents at %s, the free and fast torrent search engine."%(singular_filter(g.category.title).capitalize(), g.domain_capitalized)
@@ -338,6 +342,9 @@ def category(category, query=None):
             searchd.log_bot_event(g.search_bot, (search_info["total_found"]>0 or search_info["sure"]))
         else:
             g.track = bool(results)
+
+    if group_count_search:
+        g.categories_results = end_guess_categories_with_results(group_count_search)
 
     return render_template('category.html', results=results, search_info=search_info, show_order=show_order, featured=get_featured(search_info["count"]), pop_searches=pop_searches)
 
@@ -517,6 +524,13 @@ def multi_search(params, query_time=500, extra_wait_time=500):
 
     for s, query, category, not_category, zone, title, limit, max_limit, show_order in searches:
         yield process_search_results(s, query, category, not_category, zone=zone, title=title, limit=limit, max_limit=max_limit, show_order=show_order)
+
+def start_guess_categories_with_results(query):
+    return searchd.search(query, start=True, group=True, no_group=False)
+
+def end_guess_categories_with_results(s):
+    # averigua si ha encontrado resultados para otras categorias
+    return s.get_group_count(lambda x:(long(x)>>28)&0xF)
 
 def process_search_results(s=None, query=None, category=None, not_category=None, title=None, zone="", last_items=[], skip=None, limit=70, max_limit=50, ignore_ids=[], show_order=True):
     files = []

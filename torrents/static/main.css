@@ -320,7 +320,6 @@ img.error {
                     color:white;
                 }
                 &.active a {
-                    color:white;
                     .arrow {
                         display:block;
                     }

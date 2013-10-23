@@ -324,22 +324,6 @@ img.error {
                         display:block;
                     }
                 }
-                /*> a:hover {
-                    color: white;
-                    .arrow {
-                        border-top: 5px solid white;
-                    }
-                }
-                &.active a {
-                    color:white;
-                    .arrow {
-                        top:1.9em;
-                        margin-left: -15px;
-                        border-left: 15px solid transparent;
-                        border-right: 15px solid transparent;
-                        border-top: 15px solid $red;
-                    }
-                }*/
             }
         }
     }

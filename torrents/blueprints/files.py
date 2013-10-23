@@ -41,10 +41,10 @@ FILE_PAGE_TYPE = 1
 SEARCH_PAGE_TYPE = 2
 CATEGORY_PAGE_TYPE = 3
 
-CATEGORY_ORDER = ("IDIV(fs,17280000)*(r+10)", "ok DESC, r DESC, fs DESC", "IDIV(fs,17280000)*(r+10)")
-IMAGES_ORDER = ("IDIV(fs,172800)*r2*(r+10)", "ok DESC, r DESC, fs DESC", "IDIV(fs,172800)*r2*(r+10)")
-RANKING_ORDER = ("IDIV(fs,1728000)*(r+10)", "ok DESC, r DESC, fs DESC", "IDIV(fs,1728000)*(r+10)")
-SEARCH_ORDER = ("@weight*(r+10)", "e DESC, ok DESC, r DESC, fs DESC", "@weight*(r+10)")
+CATEGORY_ORDER = ("fs*r", "ok DESC, r DESC, fs DESC", "fs*r")
+IMAGES_ORDER = ("fs*r2", "ok DESC, r DESC, fs DESC", "fs*r2")
+RANKING_ORDER = ("fs*r", "ok DESC, r DESC, fs DESC", "fs*r")
+SEARCH_ORDER = ("@weight*r", "e DESC, ok DESC, r DESC, fs DESC", "@weight*r")
 
 CATEGORY_UNKNOWN = Category(cat_id=11, url="unknown", title='Unknown', tag=u'unknown', content='unknown', content_main=True, show_in_home=False)
 
@@ -121,12 +121,13 @@ PIXEL = b64decode("R0lGODlhAQABAPAAAAAAAAAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw=="
 @files.route("/res/pixel.gif")
 @nocache
 def pixel():
+
     pixel_response = make_response(PIXEL)
     pixel_response.mimetype="image/gif"
-
     g.must_cache = 0
-    try:
-        if not g.search_bot:
+
+    if not g.search_bot and request.referrer:
+        try:
             parts = urllib2.unquote(request.referrer).decode("utf-8").split("?")[0].split("/")
             get_query_info(parts[-1], parts[-2] if parts[-2]!="search" else None, check_qs=False)
 
@@ -142,8 +143,8 @@ def pixel():
                 # si toca registrar y hay resultados, registra busqueda para nubes de tags
                 ip = (request.headers.getlist("X-Forwarded-For") or [request.remote_addr])[0]
                 torrentsdb.save_search(g.query, hashlib.md5((g.safe_query+"_"+ip).encode("utf-8")).digest(), g.category.cat_id if g.category else 0)
-    except BaseException as e:
-        logging.warn("Error registering search.")
+        except BaseException as e:
+            logging.warn("Error registering search.")
 
     return pixel_response
 
@@ -610,8 +611,7 @@ def process_search_results(s=None, query=None, category=None, not_category=None,
 
 
                     featured_weight = (afile['view']["rating"]
-                                        + (3 if 'images_server' in afile['view'] or 'thumbnail' in afile['view'] else 0)
-                                        + (4 if all(cat.show_in_home for cat in afile["view"]["categories"]) else 0))
+                                        + (10 if 'images_server' in afile['view'] or 'thumbnail' in afile['view']["md"] else 0))
 
                     g.featured.append((-featured_weight, position, afile))
 
@@ -770,10 +770,6 @@ def torrents_data(data, details=False, current_category_tag=None):
             else:
                 data["view"]["md"]["description"] = desc
 
-    # preview
-    if "torrent:thumbnail" in data["file"]["md"]:
-        data["view"]["thumbnail"] = data["file"]["md"]["torrent:thumbnail"]
-
     # tags del fichero
     file_tags = data["view"]["tags"] if "tags" in data["view"] else []
     current_category = file_category = file_category_type = None
@@ -835,7 +831,7 @@ def get_rankings():
         multi_search(
             [(None, category.tag, "porn", RANKING_ORDER, "Home / " + category.title, ("<a href='%s'>%s torrents</a>"%
                 (url_for("files.category",category=category.url),singular_filter(category.title)), 3, category.url), rs, rs, None)
-                    for category in g.categories if category.show_in_home] + [(None, "torrent", "porn", IMAGES_ORDER, "", "", rs*5, rs*5, None)]),
+                    for category in g.categories if category.show_in_home] + [(None, "torrent", "porn", IMAGES_ORDER, "", "", rs*3, rs*3, None)]),
             [category for category in g.categories if category[-1]]+[None])
 
     return results[:-1], get_featured(rs*categories_len, categories_len)

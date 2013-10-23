@@ -3,7 +3,7 @@
 {%- for beauty, quality, file in files %}
     <li class="grid_6 alpha omega">
         <div class="grid_3 alpha omega"><a title="{{file['view']['fn']}}" href='{{ url_for("files.download", file_name=file["view"]["seo-fn"], file_id=file["view"]["url"])}}'>
-    {%- if 'images_server' in file['view'] or 'thumbnail' in file['view']%}
+    {%- if 'images_server' in file['view'] or 'thumbnail' in file['view']['md']%}
         <img src="http://images.torrents.fm/{{ file['file']['_id'] }}0" alt="Preview {{ file["view"]["nfn"] }}" />
     {%- else%}
         <img src="{{g.static_prefix}}/missing-{{ file['view']['icon'].url}}.jpg" alt="No preview" />

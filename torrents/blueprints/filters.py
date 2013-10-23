@@ -335,8 +335,7 @@ def process_search_results(s=None, query=None, category=None, not_category=None,
                     afile["view"]['query'] = filtered[str(afile['file']['_id'])]['query']
 
                     featured_weight = (afile['view']["rating"]
-                                        + (3 if 'images_server' in afile['view'] or 'thumbnail' in afile['view'] else 0)
-                                        + (4 if all(cat.show_in_home for cat in afile["view"]["categories"]) else 0))
+                                        + (10 if 'images_server' in afile['view'] or 'thumbnail' in afile['view']["md"] else 0))
 
                     g.featured.append((-featured_weight, position, afile))
 
@@ -495,10 +494,6 @@ def torrents_data(data, details=False):
                 data["view"]["md"]["long_desc"] = URL_DETECTOR.sub(r'<a rel="nofollow" href="\1">\1</a>', desc)
             else:
                 data["view"]["md"]["description"] = URL_DETECTOR.sub(r'<a rel="nofollow" href="\1">\1</a>', desc)
-
-    # preview
-    if "torrent:thumbnail" in data["file"]["md"]:
-        data["view"]["thumbnail"] = data["file"]["md"]["torrent:thumbnail"]
 
     # tags del fichero
     file_tags = data["view"]["tags"] if "tags" in data["view"] else []

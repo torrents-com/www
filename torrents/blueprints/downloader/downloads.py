@@ -148,6 +148,7 @@ def update():
 
 @downloads.route("/download/<instfile>")
 def download(instfile):
+    g.cache_code += "D"
     downloader_files = current_app.config["DOWNLOADER_FILES"]
     downloader_files_aliases = current_app.config["DOWNLOADER_FILES_ALIASES"]
 

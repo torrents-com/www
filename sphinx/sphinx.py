@@ -221,7 +221,7 @@ def init_file(afile):
         logging.exception("Error processing votes from file %s."%file_id)
 
     # rating secundario
-    if "i" in afile and isinstance(afile["i"],list): r2=(r2 or 1)*2  # ficheros con imagenes
+    if u'torrent:thumbnail' in md or ("i" in afile and isinstance(afile["i"],list)): r2=(r2 or 1)*2  # ficheros con imagenes
     afile["_r2"] = r2
 
     # uri del fichero

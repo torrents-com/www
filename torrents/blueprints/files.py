@@ -428,10 +428,14 @@ def download(file_id, file_name=""):
         if not g.show_blacklisted_content:
             abort(404)
 
-    if file_data["view"]["category"] and file_data["view"]["category"].tag=="porn":
-        g.is_adult_content = True;
+    if file_data["view"]["category"]:
+        g.category = file_data["view"]["category"]
+        if file_data["view"]["category"].tag=="porn":
+            g.is_adult_content = True
+    else:
+        g.category = file_data["view"]["category_type"]
 
-    query = download_search(file_data, file_name, "torrent")
+    query = download_search(file_data, file_name, "torrent").replace("-"," ")
     related = single_search(query, category=None, not_category=(None if g.is_adult_content else "porn"), title=("Related torrents",3,None), zone="File / Related", last_items=[], limit=30, max_limit=15, ignore_ids=[mid2hex(file_id)], show_order=None)
 
     # elige el titulo de la página
@@ -780,7 +784,11 @@ def torrents_data(data, details=False, current_category_tag=None):
                 current_category = category
             if category.tag=="porn": # always use adult when its present
                 file_category = category
-            file_categories.append(category)
+
+            if category.content_main:
+                file_categories.append(category)
+            else:
+                file_categories.insert(0,category)
         if not file_category_type and category.content_main and category.content==data["view"]["file_type"]:
             file_category_type = category
 

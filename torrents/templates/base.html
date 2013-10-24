@@ -78,7 +78,7 @@
             $.cookiesLaw.initialize({{g.domain_cookies|tojson}}, cookiesScripts);
 
             function trackGA(params, new_params){
-                if ($.cookiesLaw.accepted) {
+                if ($.cookiesLaw.notified) {
                     _gaq.push(params);
                     ga(new_params);
                 }

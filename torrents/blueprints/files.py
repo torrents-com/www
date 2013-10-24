@@ -611,7 +611,7 @@ def process_search_results(s=None, query=None, category=None, not_category=None,
 
 
                     featured_weight = (afile['view']["rating"]
-                                        + (10 if 'images_server' in afile['view'] or 'thumbnail' in afile['view']["md"] else 0))
+                                        + (10 if 'images_server' in afile['view'] or 'thumbnail' in afile['view'] else 0))
 
                     g.featured.append((-featured_weight, position, afile))
 

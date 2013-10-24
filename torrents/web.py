@@ -318,6 +318,9 @@ def init_g(app):
     # cookie control
     g.must_accept_cookies = app.config["MUST_ACCEPT_COOKIES"]
 
+    # images server
+    g.images_server = app.config["IMAGES_SERVER"]
+
     g.is_adult_content = False
 
     # permite ofrecer el downloader en enlaces de descarga

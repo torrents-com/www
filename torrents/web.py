@@ -70,7 +70,7 @@ def create_app(config=None, debug=False):
 
     # Runtime config
     app.config["DOWNLOADER_FILES"] = {
-        k: os.path.join(os.path.abspath(os.path.join(app.root_path,"..")), "downloads", v)
+        k: os.path.join(os.path.abspath(os.path.join(app.root_path,"../downloads")), v)
         for k, v in app.config["DOWNLOADER_FILES"].iteritems()
         }
 

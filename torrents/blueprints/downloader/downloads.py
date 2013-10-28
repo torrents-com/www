@@ -135,7 +135,7 @@ def download(instfile):
 
     # Redirect downloads on static directories to static_download endpoint
     # hoping server will handle request and serve it directly
-    prefix = os.path.join(current_app.root_path, "downloads") + os.sep
+    prefix = os.path.abspath(os.path.join(current_app.root_path,"../downloads")) + os.sep
     if path.startswith(prefix):
         relative_path = path[len(prefix):]
         return redirect(url_for('.static_download', instfile=relative_path))
@@ -148,11 +148,11 @@ def download(instfile):
 def static_download(instfile):
     g.cache_code += "D"
 
-    # Check if instfile is inside downloads (seccurity stuff)
-    prefix = os.path.join(current_app.root_path, "downloads") + os.sep
-    path = os.path.abspath(prefix + path)
+    # Check if instfile is inside downloads (security stuff)
+    prefix = os.path.abspath(os.path.join(current_app.root_path,"../downloads")) + os.sep
+    path = os.path.abspath(prefix + instfile)
     if path.startswith(prefix):
-        return send_file(path, instfile)
+        return send_file(path, mimetypes.guess_type(path)[0])
 
     # Path outside static dir
     abort(404)

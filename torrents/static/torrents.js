@@ -189,16 +189,8 @@ $(function(){
                 trackGAEvent('Adult confirm', "Yes");
                 $.colorbox.close()
             });
-
         }
     }
-    var featured_images = $("#featured img");
-    var max_width = featured_images.parent().parent().width();
-    $("#featured img").load(function(){
-        var this_width = $(this).width();
-        if (this_width>max_width)
-            $(this).css("margin-left", (max_width-this_width)/2+"px"    );
-    });
 
     $("#more").change(function() {
         $(this).toggleClass("checked", $(this).is(":checked"));

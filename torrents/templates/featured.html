@@ -4,11 +4,10 @@
     <li class="grid_6 alpha omega">
         <div class="grid_3 alpha omega"><a title="{{file['view']['fn']}}" href='{{ url_for("files.download", file_name=file["view"]["seo-fn"], file_id=file["view"]["url"])}}'>
     {%- if 'images_server' in file['view'] or 'thumbnail' in file['view']%}
-        <img src="{{g.images_server}}{{ file['file']['_id'] }}0" alt="Preview {{ file["view"]["nfn"] }}" />
+        <img src="{{g.images_server}}{{ file['file']['_id'] }}0/110{{'/'+ file['view']['icon'].url if file['view']['icon']}}" alt="Preview {{ file["view"]["nfn"] }}" />
     {%- else%}
-        <img src="{{g.static_prefix}}/missing-{{ file['view']['icon'].url}}.jpg" alt="No preview" />
-    {%- endif%}
-        </a></div>
+        <img src="{{g.static_prefix}}/missing-{{ file['view']['icon'].url}}.jpg" width="110" height="147" alt="No preview" />
+    {%- endif%}</a></div>
         <div class="grid_3 alpha omega">
             <div class="icon-stars"><span class="stars-{{file['view']['rating']}}"></span><span class="nostars stars-{{5-file['view']['rating']}}"></span></div>
             <a class="filelink" title="{{file['view']['fn']}}" href='{{ url_for("files.download", file_name=file["view"]["seo-fn"], file_id=file["view"]["url"])}}'>{{ file["view"]["nfn"] }}</a>

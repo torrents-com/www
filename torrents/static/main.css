@@ -913,9 +913,6 @@ h1.extra{text-transform:none; padding:0em 1em 0em; margin:0em; font-size:1.3em; 
 
 }
 
-#downloader h1{font-size: 1em; font-weight: 400;text-transform:none; color:$black;}
-
-
 /* NEWS ------------------------------------------ */
 .widget-title a img {display:none;}
 .widget-title a {color:$black;}
@@ -1085,8 +1082,10 @@ footer{
         }
     }
 }
-
 /* DOWNLOADER ------------------------------------------ */
+
+#downloader h1{font-size: 1em; font-weight: 400;text-transform:none; color:$black;}
+
 #downloader-page{
     text-align:center;
     h2 {margin-top:0}
@@ -1120,6 +1119,7 @@ a.downloader-download-button:hover {background:$black;}
     section:first-child+section h2, section:first-child+section+section+section h2, section:first-child+section+section+section+section+section h2{text-align:right}
     p{font-size:1.6em;margin-top:1em}
 }
+
 
 /* CSS Document For Styling the Rich Snippets Data*/
 table #tbl-rich-snippet {

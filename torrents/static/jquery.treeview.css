@@ -1,34 +1,34 @@
 .treeview, .treeview ul {
-	padding: 0;
-	margin: 0;
-	list-style: none;
+    padding: 0;
+    margin: 0;
+    list-style: none;
 }
 
 .treeview ul {
-	margin-top: 4px;
+    margin-top: 4px;
 }
 
 .treeview .hitarea {
-	background: url(/static/images/treeview-default.gif) -64px -25px no-repeat;
-	height: 16px;
-	width: 16px;
-	margin-left: -16px;
-	float: left;
-	cursor: pointer;
+    background: url(/static/images/treeview-default.gif) -64px -25px no-repeat;
+    height: 16px;
+    width: 16px;
+    margin-left: -16px;
+    float: left;
+    cursor: pointer;
 }
 /* fix for IE6 */
 * html .hitarea {
-	display: inline;
-	float:none;
+    display: inline;
+    float:none;
 }
 
 .treeview li {
-	margin: 0;
-	padding: 3px 0pt 3px 16px;
+    margin: 0;
+    padding: 3px 0pt 3px 16px;
 }
 
 .treeview a.selected {
-	background-color: #eee;
+    background-color: #eee;
 }
 
 #treecontrol { margin: 1em 0; display: none; }
@@ -43,7 +43,7 @@
 .treeview li.last { background-position: 0 -1766px }
 .treeview li.lastCollapsable, .treeview li.lastExpandable { background-image: url(/static/images/treeview-default.gif); }
 .treeview li.lastCollapsable { background-position: 0 -111px }
-.treeview li.lastExpandable { background-position: -32px -67px }
+.treeview li.lastExpandable { background-position: -32px -68px }
 
 .treeview div.lastCollapsable-hitarea, .treeview div.lastExpandable-hitarea { background-position: 0; }
 
@@ -60,10 +60,10 @@
 .treeview-famfamfam .hitarea, .treeview-famfamfam li.lastCollapsable, .treeview-famfamfam li.lastExpandable { background-image: url(/static/images/treeview-famfamfam.gif); }
 
 .treeview .placeholder {
-	background: url(/static/images/ajax-loader.gif) 0 0 no-repeat;
-	height: 16px;
-	width: 16px;
-	display: block;
+    background: url(/static/images/ajax-loader.gif) 0 0 no-repeat;
+    height: 16px;
+    width: 16px;
+    display: block;
 }
 
 .filetree li { padding: 3px 0 2px 16px; }

@@ -165,21 +165,21 @@
                     <p>the torrents.com family of sites:</p>
                 </div>
                 <ul class="grid_17 prefix_1">
-                    <li class="grid_5 alpha"><a href="{{ url_for('news.home') }}">torrents<span>.com</span></a>
+                    <li class="grid_5 alpha"><a href="{{ url_for('news.home') }}">torrents<img src="{{g.static_prefix}}/dot-com.png" alt=".com" height="32" width="32" /></a>
                         <ul>
                             <li><a href="{{ url_for('news.home', path='category/movies') }}">Movies</a></li>
                             <li><a href="{{ url_for('news.home', path='category/music') }}">Music</a></li>
                             <li><a href="{{ url_for('news.home', path='category/tv') }}">TV</a></li>
                         </ul>
                     </li>
-                    <li class="grid_6"><a href="{{ url_for('files.home') }}">torrents<span>.fm</span></a>
+                    <li class="grid_6"><a href="{{ url_for('files.home') }}">torrents<img src="{{g.static_prefix}}/dot-fm.png" alt=".com" height="32" width="32" /></a>
                         <ul>
                             <li><a href="{{ url_for('files.category', category='movies') }}">Popular movies</a></li>
                             <li><a href="{{ url_for('files.popular_torrents', interval='week') }}">Popular torrents</a></li>
                             <li><a href="{{ url_for('files.popular_searches', interval='week') }}">Favorite torrent searches</a></li>
                         </ul>
                     </li>
-                    <li class="grid_5 suffix_1 omega"><a href="{{ url_for('web.home') }}">torrents<span>.ms</span></a>
+                    <li class="grid_5 suffix_1 omega"><a href="{{ url_for('web.home') }}">torrents<img src="{{g.static_prefix}}/dot-ms.png" alt=".com" height="32" width="32" /></a>
                         <ul>
                             <li><a href="{{ url_for('web.home') }}">Torrents Downloader</a></li>
                         </ul>

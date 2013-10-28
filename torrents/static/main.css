@@ -26,17 +26,6 @@ $greenhealth:#4BF22E;
 $yellowhealth:#F1F22E;
 $redhealth:#F2602E;
 
-@font-face {
-    font-family: 'Journal';
-    src: url(/static/journal-webfont.eot);
-    src: url(/static/journal-webfont.eot?#iefix) format('embedded-opentype'),
-         url(/static/journal-webfont.woff) format('woff'),
-         url(/static/journal-webfont.ttf) format('truetype'),
-         url(/static/journal-webfont.svg#journalregular) format('svg');
-    font-weight: normal;
-    font-style: normal;
-}
-
 @mixin inline-block() {
     display:inline-block;
     zoom:1;
@@ -927,7 +916,6 @@ h1.extra{text-transform:none; padding:0em 1em 0em; margin:0em; font-size:1.3em; 
 #downloader h1{font-size: 1em; font-weight: 400;text-transform:none; color:$black;}
 
 
-
 /* NEWS ------------------------------------------ */
 .widget-title a img {display:none;}
 .widget-title a {color:$black;}
@@ -1087,10 +1075,10 @@ footer{
                 background:url(/static/ico.arrow-khaki-down.png) 0 1em no-repeat;
                 > a {
                     text-decoration:none; margin-left:0.9em; line-height:1em; font-size:2.2em;color:$grayfont;
-                    span {font-family:'Journal',Arial,sans-serif;font-size:1.1em;margin-left:0.05em;}
+                    img {margin:0;vertical-align:-0.6em;}
                 }
                 ul {
-                    margin:1em 0em 0em 2em;
+                    margin:0em 0em 0em 2em;
                     li {margin-bottom: 0.5em}
                 }
             }
@@ -1132,7 +1120,6 @@ a.downloader-download-button:hover {background:$black;}
     section:first-child+section h2, section:first-child+section+section+section h2, section:first-child+section+section+section+section+section h2{text-align:right}
     p{font-size:1.6em;margin-top:1em}
 }
-
 
 /* CSS Document For Styling the Rich Snippets Data*/
 table #tbl-rich-snippet {

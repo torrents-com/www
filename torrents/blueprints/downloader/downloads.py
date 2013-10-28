@@ -6,9 +6,10 @@ import os.path
 
 from foofind.services.extensions import cache
 
-from flask import Blueprint, current_app, request, jsonify, url_for, abort, send_file, g
+from flask import Blueprint, current_app, request, jsonify, url_for, abort, send_file, g, redirect
 from flask.ext.babelex import gettext as _
 
+from foofind.utils import logging
 from foofind.utils.downloader import downloader_url, is_downloader_useragent, get_file_metadata
 
 downloads = Blueprint("downloads", __name__)
@@ -111,38 +112,7 @@ def update():
             }
 
     # Messages
-    # TODO(felipe): remove before release
-    response["messages"] = [
-        #{
-            #"title": "Test",
-            #"icon": "wxART_WARNING",
-            #"text": "This is a test server message",
-            #"url": "http://foofind.is",
-            #"go_url": "http://foofind.is"
-        #},
-        #{
-            #"url": "http://foofind.is",
-        #},
-        #{
-            #"title": "Simple message",
-            #"icon": "wxART_FIND",
-            #"text": "Simple text"
-        #},
-        #{
-            #"title": "Test",
-            #"text": "This is another server message\nin two lines",
-            #"go_url": "http://foofind.is",
-            #"go_text": "Open URL"
-        #},
-        #{
-            #"title": "Download test",
-            #"text": "Download test\n<b>What if we add this before next release?</b>",
-            #"start_url": "http://foofind.is/en/downloader/foofind_download_manager_installer.exe",
-            #"start_text": "Download installer",
-            #"start_close": True,
-            #"id":"test1",
-        #},
-        ]
+    response["messages"] = []
 
     return jsonify(response)
 
@@ -162,4 +132,27 @@ def download(instfile):
     platform = request.args.get("platform", None)
 
     path = downloader_files[instfile]
+
+    # Redirect downloads on static directories to static_download endpoint
+    # hoping server will handle request and serve it directly
+    prefix = os.path.join(current_app.root_path, "downloads") + os.sep
+    if path.startswith(prefix):
+        relative_path = path[len(prefix):]
+        return redirect(url_for('.static_download', instfile=relative_path))
+
+    # All downloads should be inside downloads static dir
+    logging.warn("Download %r served dinamically because not in static directory %r" % (path, prefix))
     return send_file(path, mimetypes.guess_type(path)[0])
+
+@downloads.route("/download/static/<path:instfile>") # Should be served statically
+def static_download(instfile):
+    g.cache_code += "D"
+
+    # Check if instfile is inside downloads (seccurity stuff)
+    prefix = os.path.join(current_app.root_path, "downloads") + os.sep
+    path = os.path.abspath(prefix + path)
+    if path.startswith(prefix):
+        return send_file(path, instfile)
+
+    # Path outside static dir
+    abort(404)

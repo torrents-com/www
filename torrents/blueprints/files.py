@@ -46,7 +46,7 @@ IMAGES_ORDER = ("fs*r2", "ok DESC, r DESC, fs DESC", "fs*r2")
 RANKING_ORDER = ("fs*r", "ok DESC, r DESC, fs DESC", "fs*r")
 SEARCH_ORDER = ("@weight*r", "e DESC, ok DESC, r DESC, fs DESC", "@weight*r")
 
-CATEGORY_UNKNOWN = Category(cat_id=11, url="unknown", title='Unknown', tag=u'unknown', content='unknown', content_main=True, show_in_home=False)
+CATEGORY_UNKNOWN = Category(cat_id=11, url="unknown", title='Unknown', tag=u'unknown', content='unknown', content_main=True, show_in_home=False, subcats=[])
 
 COLUMN_ORDERS = {
     "fs": ("fs", "ok DESC, r DESC, e DESC", "fs"),
@@ -224,6 +224,20 @@ def robots():
         response = make_response(input_file.read() + "\nSitemap: " + url_for("files.dynamic_sitemap", _external=True) + "\nSitemap: "+ url_for("files.static_sitemap", _external=True))
         response.mimetype='text/plain'
     return response
+
+@files.route('/browse')
+def browse():
+    '''
+    Renderiza la página de navegacion
+    '''
+    g.must_cache = 7200
+    g.category=False
+    g.keywords.clear()
+    g.keywords.update(["popular torrent", "free movie", "full download", "search engine", "largest"])
+    g.page_description = "Torrents.com is a free torrent search engine that offers users fast, simple, easy access to every torrent in one place."
+    g.title.append("Browse torrent categories")
+
+    return render_template('browse.html')
 
 @files.route('/popular/searches/<interval>')
 def popular_searches(interval):

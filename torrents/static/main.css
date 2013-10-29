@@ -897,6 +897,16 @@ h1.extra{text-transform:none; padding:0em 1em 0em; margin:0em; font-size:1.3em; 
         }
     }
 
+#browse > li {
+    margin:1em 0em;
+    > ul {
+        padding-left:0.5em; a{color:$black;}
+        > li {
+            font-size:0.9em;margin:0em 0.2em;@include inline-block();
+        }
+    }
+}
+
 /* dialog downloader */
 #dialog.downloader{
     header{

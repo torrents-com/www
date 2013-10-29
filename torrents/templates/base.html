@@ -45,7 +45,7 @@
 
         {%- if g.must_accept_cookies %}
             function trackGA(params, new_params){if ($.cookiesLaw.notified) {_gaq.push(params);ga(new_params);};}
-            $.cookiesLaw.initialize("+g.domain_cookies|tojson+", cookiesScripts);
+            $.cookiesLaw.initialize({{g.domain_cookies|tojson}}, cookiesScripts);
         {%- else %}
             function trackGA(params, new_params){_gaq.push(params);ga(new_params);}
             cookiesScripts();

@@ -39,8 +39,8 @@
 
                 {%- block cookies -%}{%- endblock -%}
             }
-            function trackGAEvent() {var args_array = Array.prototype.slice.call(arguments, 0);trackGA(['_trackEvent'].concat(args_array), ['send', 'event'].concat(args_array));}
-            function trackGAPageview(){var args_array = Array.prototype.slice.call(arguments, 0);trackGA(['_trackPageview'].concat(args_array), ['send', 'pageview'].concat(args_array));}
+            function trackGAEvent(){var args_array = Array.prototype.slice.call(arguments,0);trackGA(['_trackEvent'].concat(args_array),['send','event'].concat(args_array));}
+            function trackGAPageview(){var args_array = Array.prototype.slice.call(arguments,0);trackGA(['_trackPageview'].concat(args_array),['send','pageview'].concat(args_array));}
 
         {%- if g.must_accept_cookies %}
             function trackGA(params, new_params){if ($.cookiesLaw.notified) {_gaq.push(params);ga(new_params);};}

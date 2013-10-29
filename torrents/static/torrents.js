@@ -253,7 +253,6 @@ $(function(){
             setTimeout('document.location = "'+this.href+'"',100);
     });
 
-
     var message = window.location.hash.substring(1);
     if (message in PAGE_MESSAGES) {
         var msg = PAGE_MESSAGES[message];

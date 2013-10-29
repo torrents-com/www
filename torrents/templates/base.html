@@ -14,10 +14,16 @@
         <link rel="search" type="application/opensearchdescription+xml" href="{{ url_for('files.opensearch') }}" title="Torrents" />
         <meta charset="utf-8" />
         <link rel="shortcut icon" href="/favicon.ico" />
+        {%- block assets -%}
+            {%- assets "js_torrents" -%}
+                <script type="text/javascript" src="{{ ASSET_URL.rstrip(' \n.') }}"></script>
+            {%- endassets -%}
+            {%- assets "css_torrents" -%}
+               <link type="text/css" href="{{ASSET_URL.rstrip(' \n.')}}" rel="stylesheet" />
+            {%- endassets -%}
+        {%- endblock -%}
         <script type="text/javascript">
             var _gaq,_prum,adult_content={{ g.is_adult_content | tojson }};
-            function loadScripts(e,t){var n=e.length,r=s=null;var i=document.getElementsByTagName("script")[0];s=document.createElement("script");s.type="text/javascript";s.srcs=e.slice(1);s.src=e[0];s.callback=t;s.async='async';s.onload=s.onreadystatechange=function(){if(this.callback&&(!this.readyState||this.readyState=="complete")){if(this.srcs.length)loadScripts(this.srcs,this.callback);else this.callback();this.callback=false}};i.parentNode.insertBefore(s,i)}
-
             function cookiesScripts(){
                 _gaq = _gaq || [];_gaq.push(['_setAccount','UA-38333996-1']);_gaq.push(['_setDomainName', '{{ g.domain }}']); _gaq.push(['_setAllowLinker', true]);_gaq.push(['_trackPageview'{{ ", "+(g.domain[g.domain.rfind("."):]+request.path)|tojson if g.domain_conflict }}]);(function(){var ga=document.createElement('script');ga.type='text/javascript';ga.async=true;ga.src=('https:'==document.location.protocol?'https://ssl':'http://www')+'.google-analytics.com/ga.js';var s=document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);})();
 
@@ -39,23 +45,14 @@
 
         {%- if g.must_accept_cookies %}
             function trackGA(params, new_params){if ($.cookiesLaw.notified) {_gaq.push(params);ga(new_params);};}
-            {%- set init_script = "$.cookiesLaw.initialize("+g.domain_cookies|tojson+", cookiesScripts);" %}
+            $.cookiesLaw.initialize("+g.domain_cookies|tojson+", cookiesScripts);
         {%- else %}
             function trackGA(params, new_params){_gaq.push(params);ga(new_params);}
-            {%- set init_script = "cookiesScripts();" %}
+            cookiesScripts();
         {%- endif %}
 
-        {%- block assets -%}
-            loadScripts([
-            {%- assets "js_torrents" -%}
-                {{ ASSET_URL.rstrip(' \n.')|tojson }},
-            {%- endassets -%}
-                ], function (){ {{ init_script }} {%-if g.track%}$('<img src="{{url_for("files.pixel")}}"/>');{%-endif%} });
+            {%-if g.track%}$('<img src="{{url_for("files.pixel")}}"/>');{%-endif%}
         </script>
-        {%- assets "css_torrents" -%}
-           <link type="text/css" href="{{ASSET_URL.rstrip(' \n.')}}" rel="stylesheet" />
-        {%- endassets -%}
-        {%- endblock -%}
     </head>
     {% set hidden_category = g.category and not g.category in g.categories[:5] -%}
     {% set hidden_categories_start = 5 if hidden_category else 6 -%}

@@ -14,6 +14,7 @@
         <link rel="search" type="application/opensearchdescription+xml" href="{{ url_for('files.opensearch') }}" title="Torrents" />
         <meta charset="utf-8" />
         <link rel="shortcut icon" href="/favicon.ico" />
+        <script type="text/javascript" src="{{g.static_prefix}}/modernizr.js"></script>
         {%- assets "css_torrents" -%}
            <link type="text/css" href="{{ASSET_URL.rstrip(' \n.')}}" rel="stylesheet" />
         {%- endassets -%}
@@ -44,8 +45,9 @@
             function trackGA(params, new_params){_gaq.push(params);ga(new_params);}
             {% set init_script = "cookiesScripts();" %}
         {%- endif %}
-            function loadScripts(e,t){var n=e.length,r=s=null;var i=document.getElementsByTagName("script")[0];s=document.createElement("script");s.type="text/javascript";s.srcs=e.slice(1);s.src=e[0];s.callback=t;s.async='async';s.onload=s.onreadystatechange=function(){if(this.callback&&(!this.readyState||this.readyState=="complete")){if(this.srcs.length)loadScripts(this.srcs,this.callback);else this.callback();this.callback=false}};i.parentNode.insertBefore(s,i)}
-            loadScripts([{%- assets "js_torrents" -%}{{ ASSET_URL.rstrip(' \n.')|tojson }},{%- endassets -%}], function(){ {{init_script}}{%-if g.track%}$('<img src="{{url_for("files.pixel")}}"/>');{%-endif%} });
+            Modernizr.load([{
+                load:[{%- assets "js_torrents" -%}{{ ASSET_URL.rstrip(' \n.')|tojson }},{%- endassets -%}],
+                complete: function(){ {{init_script}}{%-if g.track%}$('<img src="{{url_for("files.pixel")}}"/>');{%-endif%} }}]);
         </script>
     </head>
     {% set hidden_category = g.category and not g.category in g.categories[:5] -%}

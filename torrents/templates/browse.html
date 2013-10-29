@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="container_24" id="text_page">
+    <div class="title grid_24">
+        <h1 class="tagline">{{g.h1}}</h1>
+        <h2 class="main">Browse torrents categories</h2>
+    </div>
+    <ul id="browse" class="grid_24">{%- for category in g.categories|sort %}<li class="grid_12" {{"style='clear:left'"|safe if loop.index0%2==0}}><a href="{{url_for("files.category", category=category.url)}}">{{category.title}}</a><ul>{%- for subcat in category.subcats|sort %}<li><a href="{{url_for("files.category", category=category.url, query=subcat|lower)}}">{{subcat}}</a></li>{%- endfor %}</ul>{%- endfor %}</ul>
+</section>
+{% endblock %}

@@ -26,13 +26,9 @@ $greenhealth:#4BF22E;
 $yellowhealth:#F1F22E;
 $redhealth:#F2602E;
 
-@mixin inline-block() {
-    display:inline-block;
-    zoom:1;
-    *display:inline;
-}
+@mixin inline-block() {display:inline-block;zoom:1;*display:inline;}
 
-@mixin icon{background: url(/static/icons.png?2) top left no-repeat; @include inline-block();}
+@mixin icon{background:url(/static/icons.png?3) top left no-repeat; @include inline-block();}
 .icon-all{ @include icon(); background-position: 0 0; width: 18px; height: 16px; }
 .icon-anime{ @include icon(); background-position: -19px 0; width: 20px; height: 20px; }
 .icon-audio, .icon-music{ @include icon(); background-position: -40px 0; width: 20px; height: 20px; }
@@ -56,7 +52,6 @@ $redhealth:#F2602E;
 .icon-trailer{ @include icon(); background-position: -370px 0; width: 26px; height: 20px; }
 .icon-twitter{ @include icon(); background-position: -397px 0; width: 17px; height: 17px; }
 .icon-unknown{ @include icon(); background-position: -415px 0; width: 16px; height: 16px; }
-
 
 @mixin button()
 {

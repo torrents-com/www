@@ -14,10 +14,14 @@
         <link rel="search" type="application/opensearchdescription+xml" href="{{ url_for('files.opensearch') }}" title="Torrents" />
         <meta charset="utf-8" />
         <link rel="shortcut icon" href="/favicon.ico" />
-        <script type="text/javascript" src="{{g.static_prefix}}/modernizr.js"></script>
-        {%- assets "css_torrents" -%}
-           <link type="text/css" href="{{ASSET_URL.rstrip(' \n.')}}" rel="stylesheet" />
-        {%- endassets -%}
+        {%- block assets -%}
+            {%- assets "css_torrents" -%}
+               <link type="text/css" href="{{ASSET_URL.rstrip(' \n.')}}" rel="stylesheet" />
+            {%- endassets -%}
+            {%- assets "js_torrents" -%}
+                <script type="text/javascript" src="{{ ASSET_URL.rstrip(' \n.') }}"></script>
+            {%- endassets -%}
+        {%- endblock -%}
         <script type="text/javascript">
             var _gaq,_prum,adult_content={{ g.is_adult_content | tojson }};
             function cookiesScripts(){
@@ -40,14 +44,13 @@
 
         {%- if g.must_accept_cookies %}
             function trackGA(params, new_params){if ($.cookiesLaw.notified) {_gaq.push(params);ga(new_params);};}
-            {% set init_script = "$.cookiesLaw.initialize("+g.domain_cookies|tojson+", cookiesScripts);"%}
+            $.cookiesLaw.initialize({{g.domain_cookies|tojson}}, cookiesScripts);
         {%- else %}
             function trackGA(params, new_params){_gaq.push(params);ga(new_params);}
-            {% set init_script = "cookiesScripts();" %}
+            cookiesScripts();
         {%- endif %}
-            Modernizr.load([{
-                load:[{%- assets "js_torrents" -%}{{ ASSET_URL.rstrip(' \n.')|tojson }},{%- endassets -%}],
-                complete: function(){ {{init_script}}{%-if g.track%}$('<img src="{{url_for("files.pixel")}}"/>');{%-endif%} }}]);
+
+            {%-if g.track%}$('<img src="{{url_for("files.pixel")}}"/>');{%-endif%}
         </script>
     </head>
     {% set hidden_category = g.category and not g.category in g.categories[:5] -%}

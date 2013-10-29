@@ -9,10 +9,11 @@ from foofind.services.extensions import cache
 from flask import Blueprint, current_app, request, jsonify, url_for, abort, send_file, g, redirect
 from flask.ext.babelex import gettext as _
 
+from torrents.multidomain import MultidomainBlueprint
 from foofind.utils import logging
 from foofind.utils.downloader import downloader_url, is_downloader_useragent, get_file_metadata
 
-downloads = Blueprint("downloads", __name__)
+downloads = MultidomainBlueprint('downloads', __name__, domain="torrents.ms")
 
 @downloads.route("/update")
 @downloader_url

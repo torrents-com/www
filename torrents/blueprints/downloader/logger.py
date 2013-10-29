@@ -10,10 +10,11 @@ import base64
 from flask import Blueprint, current_app, request, jsonify, url_for, make_response, abort
 from flask.ext.babelex import gettext as _
 
+from torrents.multidomain import MultidomainBlueprint
 from foofind.utils.downloader import downloader_url
 from foofind.utils import logging
 
-logger = Blueprint("logger", __name__)
+logger = MultidomainBlueprint('logger', __name__)
 
 @logger.route("/logger", methods=("GET", "POST"))
 @downloader_url

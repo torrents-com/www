@@ -31,7 +31,7 @@ def cookies():
     if new_value:
         response.set_cookie('cookie_level', value=new_value, expires=(datetime.datetime.now() + datetime.timedelta(3650)), httponly=False)
 
-    # guarda el id de cliente si puede
+    # guarda el id de cliente si viene, puede guardar cookies y ha cambiado
     if new_cid and current_cid!=new_cid and current_value!="0":
         response.set_cookie('__cid', value=new_cid, expires=(datetime.datetime.now() + datetime.timedelta(730)), httponly=False)
 

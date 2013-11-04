@@ -14,7 +14,7 @@ def cookies():
     # obtiene la cookie actual y estable la cookie nueva como aceptada
     current_value = request.cookies.get("cookie_level","0")
     current_cid = request.cookies.get("__cid",None)
-    new_cid = request.args.get("cid")
+    new_cid = request.args.get("cid", None)
     new_value = "2"
 
     # si no está aceptando...
@@ -32,7 +32,7 @@ def cookies():
         response.set_cookie('cookie_level', value=new_value, expires=(datetime.datetime.now() + datetime.timedelta(3650)), httponly=False)
 
     # guarda el id de cliente si puede
-    if current_cid!=new_cid and current_value!="0":
+    if new_cid and current_cid!=new_cid and current_value!="0":
         response.set_cookie('__cid', value=new_cid, expires=(datetime.datetime.now() + datetime.timedelta(730)), httponly=False)
 
     return response

@@ -28,6 +28,8 @@ window.downloader = {expiration_days:365,initialized:false,skip:false,
 
 var PAGE_MESSAGES = {"sent": ["The message has been sent successfully.", "info"],"write":["Write something!","error"]};
 
+function hash(o){var c,h=0;if(o.length)for(i=0;i<o.length;i++){c=o.charCodeAt(i);h=((h<<5)-h)+c;h=h&h;}return h;}
+
 function rp(){$("body").addClass("_rp").removeClass("_rp");}
 function hide_alert(aid){$("#alerts #alert_"+aid).remove();rp();}
 function show_alert(aid,html,type){hide_alert(aid);$("#alerts").prepend($("<div id='alert_"+aid+"' class='"+type+"'><div class='container_24'><p class='grid_24'>"+html+"</p></div></div>"));rp();}

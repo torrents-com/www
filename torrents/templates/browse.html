@@ -1,10 +1,17 @@
 {% extends "base.html" %}
+{% from "helpers.html" import small_banner -%}
 {% block content %}
+<section class="container_24" id="text_top">
+    <h1 class="extra">A free torrent search engine offering fast, simple, and easy access to torrent downloads in one place.</h1>
+<div id="popular" >
+        <div><span>Most popular searches</span></div>
+    {%- for key, search, size in pop_searches %}
+        <a class="{{ loop.cycle('odd', 'even') }}" style="font-size:{{size}}em" href="{{url_for('files.search', query=key|clean_query)}}">{{search}}</a>
+    {%- endfor %}
+</div>
+</section>
+{{ small_banner() }}
 <section class="container_24" id="text_page">
-    <div class="title grid_24">
-        <h1 class="tagline">{{g.h1}}</h1>
-        <h2 class="main">Browse torrents categories</h2>
-    </div>
-    <ul id="browse" class="grid_24">{%- for category in g.categories|sort %}<li class="grid_12" {{"style='clear:left'"|safe if loop.index0%2==0}}><a href="{{url_for("files.category", category=category.url)}}">{{category.title}}</a><ul>{%- for subcat in category.subcats|sort %}<li><a href="{{url_for("files.category", category=category.url, query=subcat|lower)}}">{{subcat}}</a></li>{%- endfor %}</ul>{%- endfor %}</ul>
+    <ul id="browse" class="grid_24">{%- for category in g.categories|sort %}<li class="title grid_11 suffix_1 big_icon {{category.url}}" {{"style='clear:left'"|safe if loop.index0%2==0}}><span></span><div><h2 class="category"><a href="{{url_for("files.category", category=category.url)}}">{{category.title|singular}} torrents</a></h2><ul>{%- for subcat in category.subcats|sort %}<li><a href="{{url_for("files.category", category=category.url, query=subcat|lower)}}">{{subcat}}</a></li>{%- endfor %}</ul></div>{%- endfor %}</ul>
 </section>
 {% endblock %}

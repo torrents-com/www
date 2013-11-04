@@ -148,8 +148,8 @@ def pixel():
 
     return pixel_response
 
-CHAR_SIZE=12
-WORD_SIZE=10
+CHAR_SIZE=11
+WORD_SIZE=8
 def create_cloud(data, width, lines):
     g.cache_code = "B"
     ranking = data["final_ranking"] if "final_ranking" in data else None
@@ -157,22 +157,16 @@ def create_cloud(data, width, lines):
     if not ranking:
         return []
 
-    ret=[]
     acum = 0
-    limit = lines*width*.95
-    size = 1.25
-    last_weight = ranking[0][1]
+    cloud_size = 0
+    limit = lines*width
     for search, weight, trend, trend_pos in ranking:
-        if last_weight*.99>weight:
-            last_weight = weight
-            size -= 0.05
-
-        ret.append((search.lower(), search, size))
-
-        acum += len(search)*CHAR_SIZE+WORD_SIZE
-        if acum>limit or size<0.75:
+        limit -= len(search)*CHAR_SIZE+WORD_SIZE
+        if limit<0:
             break
-    return sorted(ret)
+        cloud_size +=1
+
+    return sorted((search.lower(), search, 0.75+0.5*(cloud_size-size)/cloud_size) for size, (search, weight, trend, trend_pos) in enumerate(itertools.islice(ranking, 0, cloud_size)))
 
 @files.route('/favicon.ico')
 def favicon():
@@ -186,8 +180,8 @@ def opensearch():
     response.headers['content-type']='application/opensearchdescription+xml'
     return response
 
-@files.route('/')
-def home():
+@files.route('/old_home')
+def old_home():
     '''
     Renderiza la portada.
     '''
@@ -196,7 +190,7 @@ def home():
     g.keywords.update(["torrents", "search engine", "free download", "music", "online", "movie", "games", "TV", "music", "Anime", "Books", "Adult", "Porn", "Spoken word", "Software", "Mobile", "Pictures"])
 
     rankings, featured = get_rankings()
-    pop_searches = create_cloud(torrentsdb.get_ranking("weekly"), 700, 4)
+    pop_searches = create_cloud(torrentsdb.get_ranking("weekly"), 670, 4)
 
     return render_template('index.html', rankings = rankings, pop_searches = pop_searches, featured=featured)
 
@@ -225,19 +219,29 @@ def robots():
         response.mimetype='text/plain'
     return response
 
-@files.route('/browse')
-def browse():
+@files.route('/')
+def home():
     '''
     Renderiza la página de navegacion
     '''
     g.must_cache = 7200
     g.category=False
-    g.keywords.clear()
-    g.keywords.update(["popular torrent", "free movie", "full download", "search engine", "largest"])
-    g.page_description = "Torrents.com is a free torrent search engine that offers users fast, simple, easy access to every torrent in one place."
-    g.title.append("Browse torrent categories")
 
-    return render_template('browse.html')
+    pop_searches = create_cloud(torrentsdb.get_ranking("weekly"), 960, 4)
+
+    return render_template('browse.html', pop_searches = pop_searches)
+
+@files.route('/<category:category>')
+def browse_category(category):
+    '''
+    Renderiza la página de navegacion de categoria
+    '''
+    get_query_info(None, category)
+    g.must_cache = 7200
+
+    pop_searches = torrentsdb.get_ranking(category)["final_ranking"]
+
+    return render_template('browse_category.html', pop_searches = pop_searches)
 
 @files.route('/popular/searches/<interval>')
 def popular_searches(interval):
@@ -334,7 +338,7 @@ def search(query=None):
 
     return render_template('search.html', results=results, search_info=search_info, show_order=show_order, featured=get_featured(search_info["count"]))
 
-@files.route('/<category:category>')
+@files.route('/popular/<category:category>')
 @files.route('/<category:category>/<query>')
 def category(category, query=None):
 
@@ -354,7 +358,7 @@ def category(category, query=None):
         order, show_order = get_order(SEARCH_ORDER)
         group_count_search = start_guess_categories_with_results(g.query)
     else:
-        pop_searches = create_cloud(torrentsdb.get_ranking(category), 500, 2)
+        pop_searches = create_cloud(torrentsdb.get_ranking(category), 550, 2)
         g.page_description = "%s torrents at %s, the free and fast torrent search engine."%(singular_filter(g.category.title).capitalize(), g.domain_capitalized)
         order, show_order = get_order(CATEGORY_ORDER)
 

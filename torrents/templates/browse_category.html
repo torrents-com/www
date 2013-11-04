@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% from "helpers.html" import small_banner -%}
+{%- block content -%}
+<section class="container_24 browse_cat">
+<div class="title big_icon {{g.category.url}}">
+    <span></span><div><h1 class="main">Browse {{g.category.title|singular}} torrents</h1></div>
+</div>
+<h2>Subcategories</h2>
+<ul>{%- for subcat in g.category.subcats|sort %}<li class="grid_6 alpha omega"><a href="{{url_for('files.category', category=g.category.url, query=subcat|lower)}}">{{subcat}}</a></li>{%- endfor %}</ul>
+</section>
+{{ small_banner() }}
+<section class="container_24 browse_cat">
+<h2>Browse popular {{g.category.title|singular}} searches</h2>
+<ul>{%- for search in pop_searches %}<li class="grid_6 alpha omega"><a  href="{{url_for('files.search', query=search[0]|clean_query)}}">{{search[0]}}</a></li>{%- endfor %}</ul>
+</section>
+{% endblock %}

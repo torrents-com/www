@@ -13,7 +13,7 @@ index = MultidomainBlueprint('index', __name__)
 def cookies():
     # obtiene la cookie actual y estable la cookie nueva como aceptada
     current_value = request.cookies.get("cookie_level","0")
-    current_cid = request.cookies.get("_cid",None)
+    current_cid = request.cookies.get("__cid",None)
     new_cid = request.args.get("cid")
     new_value = "2"
 
@@ -33,7 +33,7 @@ def cookies():
 
     # guarda el id de cliente si puede
     if current_cid!=new_cid and current_value!="0":
-        response.set_cookie('_cid', value=new_cid, expires=(datetime.datetime.now() + datetime.timedelta(365*2)), httponly=False)
+        response.set_cookie('__cid', value=new_cid, expires=(datetime.datetime.now() + datetime.timedelta(730)), httponly=False)
 
     return response
 

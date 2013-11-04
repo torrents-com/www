@@ -28,7 +28,7 @@ window.downloader = {expiration_days:365,initialized:false,skip:false,
 
 var PAGE_MESSAGES = {"sent": ["The message has been sent successfully.", "info"],"write":["Write something!","error"]};
 
-function hash(o){var c,h=0;if(o.length)for(i=0;i<o.length;i++){c=o.charCodeAt(i);h=((h<<5)-h)+c;h=h&h;}return h;}
+function hash(o){var c,h=0;if(o.length)for(var i=0;i<o.length;i++){c=o.charCodeAt(i);h=((h<<5)-h)+c;h=h&h;};return h;}
 
 function rp(){$("body").addClass("_rp").removeClass("_rp");}
 function hide_alert(aid){$("#alerts #alert_"+aid).remove();rp();}

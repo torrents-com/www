@@ -3,14 +3,17 @@
 {%- block content -%}
 <section class="container_24 browse_cat">
 <div class="title big_icon {{g.category.url}}">
-    <span></span><div><h1 class="main">Browse {{g.category.title|singular}} torrents</h1></div>
+    <span></span><div><h1 class="main">{{g.category.title|singular}} torrents</h1></div>
 </div>
-<h2>Subcategories</h2>
 <ul>{%- for subcat in g.category.subcats|sort %}<li class="grid_6 alpha omega"><a href="{{url_for('files.category', category=g.category.url, query=subcat|lower)}}">{{subcat}}</a></li>{%- endfor %}</ul>
 </section>
 {{ small_banner() }}
-<section class="container_24 browse_cat">
-<h2>Browse popular {{g.category.title|singular}} searches</h2>
-<ul>{%- for search in pop_searches %}<li class="grid_6 alpha omega"><a  href="{{url_for('files.search', query=search[0]|clean_query)}}">{{search[0]}}</a></li>{%- endfor %}</ul>
+<section class="container_24" id="text_page">
+<h2>Popular {{g.category.title|singular}} searches</h2>
+<table id="ranking">
+    {%- for search in pop_searches %}
+        <tr class="{{ loop.cycle('odd', 'even') }}"><td>&nbsp;</td><td>{{ loop.index }}</td><td>{{search[0]|clean_query|blacklist_query(search[0])}}</td><td>&nbsp;</td></tr>
+    {%- endfor %}
+</table>
 </section>
 {% endblock %}

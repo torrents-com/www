@@ -908,11 +908,8 @@ h1.extra{text-transform:none; padding:0em 1em 0em; margin:0em; font-size:1.7em; 
     }
 }
 .browse_cat {
-    font-weight:bold;white-space:normal;padding-left:0em;margin-top:3em;
-    h2 {font-size:1.8em}
-    li {
-        a{color:$black;font-size:1.4em}
-    }
+    font-weight:bold;white-space:normal;padding-left:0em;margin-top:3em;text-align:center;
+    li {a{color:$black;font-size:1.4em}}
 }
 
 /* dialog downloader */

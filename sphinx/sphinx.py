@@ -6,12 +6,13 @@ environ["FOOFIND_NOAPP"] = "1"
 
 import signal, sys
 
-# carga Foofind de la carpeta padre
 import pymongo
 from collections import Counter, defaultdict
 from heapq import nlargest
 
+# carga Foofind de la carpeta padre
 from os.path import dirname, abspath, exists
+sys.path.insert(0,dirname(dirname(dirname( abspath(__file__))))+"/foofind")
 sys.path.insert(0,dirname(dirname( abspath(__file__))))
 sys.path.insert(0,dirname( abspath(__file__)))
 
@@ -53,6 +54,8 @@ extra_rating_md = frozenset({"video:series", "book:title", "audio:title", "video
 
 numeric_filters = {"video:season":FILTER_PREFIX_SEASON, "video:episode":FILTER_PREFIX_EPISODE, "audio:year":FILTER_PREFIX_YEAR, "video:year":FILTER_PREFIX_YEAR}
 
+DYNAMIC_TAGS = {}
+DYNAMIC_TAGS_METADATA = [':tags', ':category', ':genre', ':quality', ':keywords']
 
 dictget = dict.get
 def innergroup_hash(field_path, afile):
@@ -242,7 +245,7 @@ def init_file(afile):
     # tags del fichero
     file_type = CONTENTS[ct].lower()
     file_category = []
-    file_category_type = None
+    file_category_tag = file_category_type = None
     for category in config["TORRENTS_CATEGORIES"]:
         if category.tag in file_tags and (not file_category or category.tag=="porn"): # always use adult when its present
             if category.content_main:
@@ -252,6 +255,7 @@ def init_file(afile):
 
         if category.content_main and category.content==file_type:
             file_category_type = category.cat_id
+            file_category_tag = category.tag
     afile["_ct"] = file_category[0] if file_category else file_category_type
 
     # tamaño
@@ -308,10 +312,14 @@ def init_file(afile):
 
     # filtros de texto
     filters = {FILTER_PREFIX_CONTENT_TYPE+CONTENTS[ct]}
-    filters.update(sources_domains[t] for t in types if sources[t]["d"])
-    filters.update(sources_groups[g] for t in types for g in sources[t]["g"] if g in sources_groups)
+    #filters.update(sources_domains[t] for t in types if sources[t]["d"])
+    #filters.update(sources_groups[g] for t in types for g in sources[t]["g"] if g in sources_groups)
+    filters.add("%storrent"%FILTER_PREFIX_SOURCE_GROUP)
     filters.update("%s%02d"%(prefix,int(md[key])) for key, prefix in numeric_filters.iteritems() if key in md and (isinstance(md[key], int) or isinstance(md[key], float) or (isinstance(md[key], basestring) and md[key].isdecimal())))
     filters.update("%s%s"%(FILTER_PREFIX_TAGS, tag) for tag in file_tags)
+
+    file_dtags = [word for key, value in md.iteritems() if value and isinstance(value, basestring) and any(key.endswith(dtag_md) for dtag_md in DYNAMIC_TAGS_METADATA) for word in seoize_text(value, separator=" ", is_url=False, max_length=200).split(" ")]
+    filters.update("%s%s"%(FILTER_PREFIX_DYNAMIC_TAGS, dtag) for dtag in file_dtags if file_category_tag and dtag in DYNAMIC_TAGS[file_category_tag] or any(dtag in DYNAMIC_TAGS[tag] for tag in file_tags if tag in DYNAMIC_TAGS))
     if file_format: filters.add(FILTER_PREFIX_FORMAT+file_format[0])
 
     afile["_fil"] = " ".join(filters)
@@ -544,6 +552,9 @@ if __name__ == '__main__':
     if params.refreshstats:
         server_conn.foofind.search_stats.update({"_id":part}, {"$set":{"d0":time(), "d1":time()}})
         exit()
+
+    for subcats in server_conn.torrents.subcategories.find():
+        DYNAMIC_TAGS[subcats["_id"]] = set(subcats["sc"])
 
     signal.signal(signal.SIGINT, signal_handler)
     if params.profile:

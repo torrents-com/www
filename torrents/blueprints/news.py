@@ -96,7 +96,7 @@ def inner_sitemap(name):
 @news.route('/news/rss')
 def rss():
     g.cache_code += "N"
-    return fix_response('feed/rss', "application/rss+xml")
+    return fix_response('feed/index.html', "application/rss+xml")
 
 
 @news.route('/downloader')

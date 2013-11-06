@@ -553,7 +553,7 @@ if __name__ == '__main__':
         server_conn.foofind.search_stats.update({"_id":part}, {"$set":{"d0":time(), "d1":time()}})
         exit()
 
-    for subcats in server_conn.torrents.subcategories.find():
+    for subcats in server_conn.torrents.subcategory.find():
         DYNAMIC_TAGS[subcats["_id"]] = set(subcats["sc"])
 
     signal.signal(signal.SIGINT, signal_handler)

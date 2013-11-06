@@ -895,21 +895,28 @@ h1.extra{text-transform:none; padding:0em 1em 0em; margin:0em; font-size:1.7em; 
 #browse > li {
     >div {vertical-align:top;}
     >span {vertical-align:-4em;}
-    a{color:$black;}
+
     margin:0em 0em 1em;
     h2 {
+        a{color:$black;}
         margin:0.2em;
     }
     div > ul {
         white-space:normal;padding-left:0.2em;
         > li {
             font-size:0.9em;margin:0em 0.2em;@include inline-block();
+            a{font-weight:normal;text-decoration:underline}
+            &:first-child > a {font-weight:bold}
         }
+
     }
 }
 .browse_cat {
-    font-weight:bold;white-space:normal;padding-left:0em;margin-top:3em;text-align:center;
-    li {a{color:$black;font-size:1.4em}}
+    font-weight:bold;white-space:normal;padding-left:0em;margin-top:1em;text-align:center;
+    li {
+        height:2em;
+        a{color:$redfont;font-size:1.4em;font-weight:normal;text-decoration:underline}
+        &:first-child > a {font-weight:bold}}
 }
 
 /* dialog downloader */

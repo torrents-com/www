@@ -12,6 +12,6 @@
 </section>
 {{ small_banner() }}
 <section class="container_24" id="text_page">
-    <ul id="browse" class="grid_24">{%- for category in g.categories|sort if category.show_in_home%}<li class="title grid_11 suffix_1 big_icon {{category.url}}" {{"style='clear:left'"|safe if loop.index0%2==0}}><span></span><div><h2 class="category"><a href="{{url_for("files.category", category=category.url)}}">{{category.title|singular}} torrents</a></h2><ul>{%- for subcat in category.subcats|sort %}<li><a href="{{url_for("files.category", category=category.url, query=subcat|lower)}}">{{subcat}}</a></li>{%- endfor %}</ul></div>{%- endfor %}</ul>
+    <ul id="browse" class="grid_24">{%- for category in g.categories|sort if category.show_in_home%}<li class="title grid_11 suffix_1 big_icon {{category.url}}" {{"style='clear:left'"|safe if loop.index0%2==0}}><span></span><div><h2 class="category"><a href="{{url_for("files.browse_category", category=category.url)}}">{{category.title|singular}} torrents</a></h2><ul><li><a href="{{url_for("files.category", category=category.url)}}">popular</a></li>{%- for subcat in category.subcats|sort %}<li><a href="{{url_for("files.category", category=category.url, query=subcat|lower)}}">{{subcat}}</a></li>{%- endfor %}</ul></div>{%- endfor %}</ul>
 </section>
 {% endblock %}

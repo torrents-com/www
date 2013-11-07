@@ -524,19 +524,18 @@ img.error {
     margin-top:0;
 }
 
-#ranking {
-    background:$black;border-collapse: collapse;
-    td {background:white; padding:0.4em 0em;
-        &:first-child {text-align:center;width:60px; span {font-size:0.8em;}}
-        &:first-child + td {text-align:right;font-weight:bold;width:20px;}
-        &:first-child + td + td {text-align:left;width:740px;}
-        &:first-child + td + td + td {text-align:right;width:120px;}
-    }
+.browse_ranking, #ranking {
+    border-collapse: collapse;
     span, a {
         margin:0 20px;
     }
-    tr.even td {
+    tr.even, tr.even td {
         background:$lightgreen;
+    }
+    td {background:white; padding:0.4em 0em;
+        &.trend {text-align:center;span {font-size:0.8em;}}
+        &.position {text-align:right;font-weight:bold;}
+        &.popularity {text-align:right;}
     }
 }
 

@@ -18,9 +18,9 @@
             {%- endfor %}.
         </p>
     </div>
-    <table id="ranking">
+    <table id="ranking" class="grid_18">
         {%- for search in ranking["final_ranking"] %}
-            <tr class="{{ loop.cycle('odd', 'even') }}"><td>{{trend(search[3], loop.index0)}}</td><td>{{ loop.index }}</td><td>{{search[0]|clean_query|blacklist_query(search[0])}}</td><td><span>{{"%0.2f"|format(search[1]*100)}} %</span></td></tr>
+            <tr class="{{ loop.cycle('odd', 'even') }}"><td class="trend grid_2 alpha omega">{{trend(search[3], loop.index0)}}</td><td class="position grid_1 alpha omega">{{ loop.index }}</td><td class="grid_12 alpha omega">{{search[0]|clean_query|blacklist_query(search[0])}}</td><td class="grid_2 alpha omega"><span>{{"%0.2f"|format(search[1]*100)}}%</span></td></tr>
         {%- endfor %}
     </table>
 </section>

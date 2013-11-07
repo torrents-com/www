@@ -192,6 +192,7 @@ def create_app(config=None, debug=False):
         Refresh subcategories.
         '''
         categories_cache.update_subcategories(torrentsdb.get_subcategories())
+
     configdb.register_action("refresh_subcategories", refresh_subcategories)
 
     # IPs españolas

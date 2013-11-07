@@ -10,9 +10,9 @@
 {{ small_banner() }}
 <section class="container_24" id="text_page">
 <h2>Popular {{g.category.title|singular}} searches</h2>
-<table id="ranking">
+<table class="browse_ranking grid_12">
     {%- for search in pop_searches %}
-        <tr class="{{ loop.cycle('odd', 'even') }}"><td>&nbsp;</td><td>{{ loop.index }}</td><td><a href="{{url_for('files.category', category=g.category.url, query=search[0]|clean_query)}}">{{search[0]}}</a></td><td>&nbsp;</td></tr>
+        <tr class="{{ loop.cycle('odd', 'even') }}"><td class="position grid_2 alpha omega">{{ loop.index }}</td><td class="grid_7 alpha omega"><a href="{{url_for('files.search', query=search[0]|clean_query)}}">{{search[0]}}</a></td><td class="grid_3 alpha omega popularity"><span>{{"%0.2f"|format(search[1]*100)}}%</span></td></tr>
     {%- endfor %}
 </table>
 </section>

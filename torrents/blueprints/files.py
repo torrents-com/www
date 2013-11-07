@@ -231,7 +231,7 @@ def home():
     g.must_cache = 7200
     g.category=False
 
-    pop_searches = create_cloud(torrentsdb.get_ranking("weekly"), 960, 4)
+    pop_searches = torrentsdb.get_ranking("weekly")["final_ranking"]
 
     return render_template('browse.html', pop_searches = pop_searches)
 
@@ -375,7 +375,6 @@ def category(category, query=None, subcategory=None):
             return abort(404)
         page_title += " | " + g.subcategory.capitalize()
         g.page_description = "%s %s torrents at %s, the free and fast torrent search engine."%(g.subcategory.capitalize(), singular_filter(g.category.title).lower(), g.domain_capitalized)
-        g.query = g.subcategory
         order, show_order = get_order(CATEGORY_ORDER)
     else:
         pop_searches = create_cloud(torrentsdb.get_ranking(category), 550, 2)

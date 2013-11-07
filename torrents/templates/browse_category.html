@@ -5,7 +5,7 @@
 <div class="title big_icon {{g.category.url}}">
     <span></span><div><h1 class="main">{{g.category.title|singular}} torrents</h1></div>
 </div>
-<ul><li class="grid_4"><a href="{{url_for('files.category', category=g.category.url)}}">popular {{g.category.title|lower}}</a></li>{%- for subcat in g.category.subcats|sort %}<li class="grid_4"><a href="{{url_for('files.category', category=g.category.url, query=subcat|lower)}}">{{subcat}}</a></li>{%- endfor %}</ul>
+<ul><li class="grid_4"><a href="{{url_for('files.category', category=g.category.url)}}">popular {{g.category.title|lower}}</a></li>{%- for subcat in g.category.subcategories|sort %}<li class="grid_4"><a href="{{url_for('files.category', category=g.category.url, query=subcat|lower)}}">{{subcat}}</a></li>{%- endfor %}</ul>
 </section>
 {{ small_banner() }}
 <section class="container_24" id="text_page">

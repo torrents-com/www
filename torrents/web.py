@@ -151,6 +151,7 @@ def create_app(config=None, debug=False):
     # Mail
     mail.init_app(app)
 
+
     print "Database accesses:"
     # Acceso a bases de datos
     pagesdb.init_app(app)
@@ -181,6 +182,17 @@ def create_app(config=None, debug=False):
         blacklists.load_data(torrentsdb.get_blacklists())
 
     configdb.register_action("refresh_blacklists", refresh_blacklists)
+
+    # Categories
+    categories_cache.init_app(app.config["TORRENTS_CATEGORIES"])
+    categories_cache.update_subcategories(torrentsdb.get_subcategories())
+
+    def refresh_subcategories():
+        '''
+        Refresh subcategories.
+        '''
+        categories_cache.update_subcategories(torrentsdb.get_subcategories())
+    configdb.register_action("refresh_subcategories", refresh_subcategories)
 
     # IPs españolas
     spanish_ips.load(os.path.join(os.path.dirname(app.root_path),app.config["SPANISH_IPS_FILENAME"]))
@@ -301,8 +313,8 @@ def init_g(app):
     g.show_blacklisted_content = app.config["SHOW_BLACKLISTED_CONTENT"]
 
     # informacion de categorias
-    g.categories = app_categories = app.config["TORRENTS_CATEGORIES"]
-    g.categories_by_url = {category.url:category for category in app_categories}
+    g.categories = categories_cache.categories
+    g.categories_by_url = categories_cache.categories_by_url
     g.categories_results = None
 
     g.featured = []

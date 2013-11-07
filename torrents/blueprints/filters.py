@@ -59,7 +59,7 @@ RANKING_ORDER = ("IDIV(fs,1728000)*(r+10)", "ok DESC, r DESC, fs DESC", "IDIV(fs
 POPULAR_ORDER = RANKING_ORDER
 SEARCH_ORDER = ("@weight*(r+10)", "e DESC, ok DESC, r DESC, fs DESC", "@weight*(r+10)")
 
-CATEGORY_UNKNOWN = Category(cat_id=11, url="unknown", title='Unknown', tag=u'unknown', content='unknown', content_main=True, show_in_home=False, subcats=[])
+CATEGORY_UNKNOWN = Category(cat_id=11, url="unknown", title='Unknown', tag=u'unknown', content='unknown', content_main=True, show_in_home=False, subcategories=[])
 
 COLUMN_ORDERS = {
     "fs": ("fs", "ok DESC, r DESC, e DESC", "fs"),

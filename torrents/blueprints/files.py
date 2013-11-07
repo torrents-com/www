@@ -46,7 +46,7 @@ IMAGES_ORDER = ("fs*r2", "ok DESC, r DESC, fs DESC", "fs*r2")
 RANKING_ORDER = ("fs*r", "ok DESC, r DESC, fs DESC", "fs*r")
 SEARCH_ORDER = ("@weight*r", "e DESC, ok DESC, r DESC, fs DESC", "@weight*r")
 
-CATEGORY_UNKNOWN = Category(cat_id=11, url="unknown", title='Unknown', tag=u'unknown', content='unknown', content_main=True, show_in_home=False, subcats=[])
+CATEGORY_UNKNOWN = Category(cat_id=11, url="unknown", title='Unknown', tag=u'unknown', content='unknown', content_main=True, show_in_home=False, subcategories=[])
 
 COLUMN_ORDERS = {
     "fs": ("fs", "ok DESC, r DESC, e DESC", "fs"),
@@ -288,11 +288,17 @@ def search_info():
     must_redirect = get_query_info()
     not_category = request.args.get("nc",None)
 
-    final_query = (g.query+u" " if g.query else u"")+(u"("+g.category.tag+")" if g.category and g.category.tag else u"")+(u" -("+not_category+")" if not_category else u"")
+    full_query = []
+    if g.query:
+        full_query.append(g.query)
+    if g.category and g.category.tag:
+        full_query.append(u"("+g.category.tag+")")
+    if not_category:
+        full_query.append(u"-("+not_category+")")
 
     special_order = request.args.get("so", None)
-    order, show_order = get_order({"c":CATEGORY_ORDER, "i":IMAGES_ORDER, "r":RANKING_ORDER, "s":SEARCH_ORDER}.get(special_order,SEARCH_ORDER))
-    return jsonify(searchd.get_search_info(final_query, filters=None, order=order))
+    order, show_order = get_order({"c":CATEGORY_ORDER, "i":IMAGES_ORDER, "r":RANKING_ORDER, "s":SEARCH_ORDER}.get(special_order,None))
+    return jsonify(searchd.get_search_info(" ".join(full_query), filters=None, order=order))
 
 @files.route('/search/')
 @files.route('/search/<query>')
@@ -335,6 +341,7 @@ def search(query=None):
         g.track = bool(results)
 
     g.categories_results = end_guess_categories_with_results(group_count_search)
+
 
     return render_template('search.html', results=results, search_info=search_info, show_order=show_order, featured=get_featured(search_info["count"]))
 
@@ -549,8 +556,10 @@ def get_last_items():
     return last_items
 
 def single_search(query, category=None, not_category=None, order=None, title=None, zone="", query_time=800, skip=None, last_items=[], limit=70, max_limit=50, ignore_ids=[], show_order=None):
+
+    dynamic_tags = torrentsdb.get_subcategories()[category] if category else None
     if (query and (len(query)>=WORD_SEARCH_MIN_LEN or query in NGRAM_CHARS)) or category:
-        s = searchd.search((query+u" " if query else u"")+(u"("+category+")" if category else u"")+(u" -("+not_category+")" if not_category else u""), None, order=order, start=not skip, group=not skip, no_group=True)
+        s = searchd.search((query+u" " if query else u"")+(u"("+category+")" if category else u"")+(u" -("+not_category+")" if not_category else u""), None, order=order, start=not skip, group=not skip, no_group=True, dynamic_tags = dynamic_tags)
 
         return process_search_results(s, query, category, not_category, zone=zone, title=title, last_items=last_items, skip=skip, limit=limit, max_limit=max_limit, ignore_ids=ignore_ids, show_order=show_order)
     else:
@@ -567,7 +576,13 @@ def start_guess_categories_with_results(query):
 
 def end_guess_categories_with_results(s):
     # averigua si ha encontrado resultados para otras categorias
-    return s.get_group_count(lambda x:(long(x)>>28)&0xF)
+    count_results = s.get_group_count(lambda x:(long(x)>>28)&0xF)
+    if count_results and count_results[0]:
+        count_results[0] -= sum(count_results.get(cat.cat_id,0) for cat in g.categories if not cat.show_in_home)
+        if count_results[0]<0:
+            count_results[0]=0
+            logging.warn("Count results for home lower than zero for search '%s' in category '%s'"%(g.query, g.category.title if g.category else "-"))
+    return count_results
 
 def process_search_results(s=None, query=None, category=None, not_category=None, title=None, zone="", last_items=[], skip=None, limit=70, max_limit=50, ignore_ids=[], show_order=True):
     files = []

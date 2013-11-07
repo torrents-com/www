@@ -84,7 +84,6 @@
                         <a href="{{ url_for('files.home') }}"{{' class=active' if g.section=="torrents" }}><div class="arrow"></div>Torrents</a>
                     </div>
                 </div>
-
                 {% if g.section!="downloader" %}
                 <div id="search-banner">
                     <div class="container_24">
@@ -94,7 +93,7 @@
                             <div class="grid_6 omega"><button type="submit">Search files&nbsp;&nbsp;&nbsp;<span class="icon-search"></span></button></div>
                         </form>
                         <ul class="grid_24">
-                            <li class="{{'active ' if not g.category and g.section=='torrents'}}{{'searchable' if g.categories_results}}"><a href="{{ url_for('files.search', query=g.clean_query ) if g.category and g.categories_results and g.clean_query else url_for('files.home')}}">{{ "<div class='arrow'></div>"|safe if g.category==None or g.categories_results }}all torrents</a></li>
+                            <li class="{{'active ' if not g.category and g.section=='torrents'}}{{'searchable' if g.categories_results and g.categories_results[0]}}"><a href="{{ url_for('files.search', query=g.clean_query ) if g.category and g.categories_results and g.clean_query else url_for('files.home')}}">{{ "<div class='arrow'></div>"|safe if g.category==None or g.categories_results }}all torrents</a></li>
                             {% for category in g.categories %}
                             <li class="{{'active ' if g.category==category and g.section=='torrents' }}{{'searchable' if g.categories_results and category.cat_id in g.categories_results}}"><a href="{{ url_for('files.browse_category', category=category.url) if g.category == category or not g.categories_results or not category.cat_id in g.categories_results else url_for('files.category', category=category.url, query=g.clean_query)}}">{{ "<div class='arrow'></div>"|safe if g.category == category or (g.categories_results and category.cat_id in g.categories_results)}}{{category.title|lower}}</a></li>
                             {% endfor %}

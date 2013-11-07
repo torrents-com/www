@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 import pymongo, bson, msgpack, redis
-from foofind.utils import mid2hex, check_capped_collections, u, check_collection_indexes
+from foofind.utils import mid2hex, check_capped_collections, u, check_collection_indexes, logging
 from datetime import datetime
 from time import time
 from collections import defaultdict, OrderedDict
@@ -43,7 +43,7 @@ class TorrentsStore(object):
         self.searches_conn = feedbackdb.feedback_conn # uses feedback database for searches
 
         # Inicia conexion al redis para avisar de files visitados
-        self.redis_server = app.config["SPHINX_REDIS_SERVER"]
+        self.redis_server = app.config["SPHINX_REDIS_SERVER"][0]
         self.redis_conn = redis.StrictRedis(host=self.redis_server[0], port=self.redis_server[1])
 
         # Crea las colecciones capadas si no existen
@@ -127,4 +127,12 @@ class TorrentsStore(object):
         return ret
 
     def save_visited(self, files):
-        self.redis_conn.publish(VISITED_LINKS_CHANNEL, msgpack.packb([mid2hex(f["file"]["_id"]) for f in files if f]))
+        try:
+            self.redis_conn.publish(VISITED_LINKS_CHANNEL, msgpack.packb([mid2hex(f["file"]["_id"]) for f in files if f]))
+        except BaseException as e:
+            logging.exception("Can't log visited files.")
+
+    def get_subcategories(self):
+        results = {subcats["_id"]:set(subcats["sc"]) for subcats in self.torrents_conn.torrents.subcategory.find()}
+        self.torrents_conn.end_request()
+        return results

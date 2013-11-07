@@ -84,7 +84,7 @@ def get_skip(x=None):
     except:
         return 0
 
-def get_query_info(query=None, category=None, check_qs=True):
+def get_query_info(query=None, category=None, subcategory=None, check_qs=True):
     must_redirect = False
     if not query and check_qs:
         query = request.args.get("q",None)
@@ -104,6 +104,10 @@ def get_query_info(query=None, category=None, check_qs=True):
     if category:
         if category in g.categories_by_url:
             g.category = g.categories_by_url[category]
+
+    if g.category and subcategory:
+        if subcategory in g.category.subcategories:
+            g.subcategory = subcategory
 
     return must_redirect
 
@@ -347,11 +351,13 @@ def search(query=None):
 
 @files.route('/popular/<category:category>')
 @files.route('/<category:category>/<query>')
-def category(category, query=None):
+@files.route('/browse/<category:category>/<subcategory>')
+def category(category, query=None, subcategory=None):
 
     g.page_type = CATEGORY_PAGE_TYPE
 
-    get_query_info(query, category)
+    g.subcategory = None
+    get_query_info(query, category, subcategory)
 
     # categoria invalida
     if not g.category:
@@ -364,6 +370,13 @@ def category(category, query=None):
         g.page_description = "%s %s torrents at %s, the free and fast torrent search engine."%(g.query.capitalize(), singular_filter(g.category.title).lower(), g.domain_capitalized)
         order, show_order = get_order(SEARCH_ORDER)
         group_count_search = start_guess_categories_with_results(g.query)
+    elif subcategory:
+        if not g.subcategory:
+            return abort(404)
+        page_title += " | " + g.subcategory.capitalize()
+        g.page_description = "%s %s torrents at %s, the free and fast torrent search engine."%(g.subcategory.capitalize(), singular_filter(g.category.title).lower(), g.domain_capitalized)
+        g.query = g.subcategory
+        order, show_order = get_order(CATEGORY_ORDER)
     else:
         pop_searches = create_cloud(torrentsdb.get_ranking(category), 550, 2)
         g.page_description = "%s torrents at %s, the free and fast torrent search engine."%(singular_filter(g.category.title).capitalize(), g.domain_capitalized)
@@ -374,7 +387,7 @@ def category(category, query=None):
     if g.category and g.category.tag=="porn":
         g.is_adult_content = True;
 
-    results, search_info = single_search(g.query, category=g.category.tag, not_category=None if g.is_adult_content else "porn", order=order, zone=g.category.url, title=(page_title, 2, g.category.tag), last_items=get_last_items(), skip=get_skip(), show_order=show_order or True)
+    results, search_info = single_search("("+g.subcategory+")" if g.subcategory else g.query, category=g.category.tag, not_category=None if g.is_adult_content else "porn", order=order, zone=g.category.url, title=(page_title, 2, g.category.tag), last_items=get_last_items(), skip=get_skip(), show_order=show_order or True)
 
     if g.query:
         if g.search_bot:

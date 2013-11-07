@@ -84,7 +84,6 @@
                         <a href="{{ url_for('files.home') }}"{{' class=active' if g.section=="torrents" }}><div class="arrow"></div>Torrents</a>
                     </div>
                 </div>
-                {{ g.category.title }} {{ g.subcategory }}
                 {% if g.section!="downloader" %}
                 <div id="search-banner">
                     <div class="container_24">

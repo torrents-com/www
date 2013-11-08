@@ -90,11 +90,11 @@ class TorrentsStore(object):
     def batch_ranking_searches(self, ranking, ranking_trends, generate_trends, multiplier):
         # get searches to generate trends (and reduce weights in the same process)
         if generate_trends:
-            trend_reduce = bson.Code("function(k,v){if('t' in v[1])v.reverse();for(var p in v[1])v[0][p]=v[1][p];v[0].w*=%f;return v[0]}"%multiplier)
+            trend_reduce = bson.Code("function(k,v){if('w' in v[0]){v[0].w*=%f;v[0].t=v[1].t}else{v[0].w=%f*v[1].w}return v[0]}"%(multiplier,multiplier))
             self.torrents_conn.torrents["rankings."+ranking_trends].map_reduce(self.trend_map, trend_reduce, {"reduce":"rankings."+ranking})
         else:
             # reduce weights
-            self.torrents_conn.torrents.eval(bson.Code("db.rankings.%s.find().forEach(function(d){d.value.w*=%f;db.rankings.%s.save(d)})"%(ranking, multiplier, ranking)))
+            self.torrents_conn.torrents.command("$eval",bson.Code("db.rankings.%s.find().forEach(function(d){d.value.w*=%f;db.rankings.%s.save(d)})"%(ranking, multiplier, ranking)), nolock=True)
 
     def update_ranking_searches(self, ranking, search, weight):
         self.torrents_conn.torrents["rankings."+ranking].update({"_id":search},{"$inc": {"value.w": weight}}, upsert=True)

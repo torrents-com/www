@@ -263,7 +263,7 @@ def popular_searches(interval):
     g.keywords.update(["popular torrent", "free movie", "full download", "search engine", "largest"])
     g.page_description = "Torrents.com is a free torrent search engine that offers users fast, simple, easy access to every torrent in one place."
     g.title.append("Popular searches "+interval_info[1])
-    g.h1 = "See up to the minute results for most popular torrent searches ranging from movies to music."
+    g.h1 = "See up to the minute results for most popular torrent searches ranging from movies to music"
 
     ranking = torrentsdb.get_ranking(interval_info[0])
 
@@ -283,7 +283,7 @@ def popular_torrents(interval):
     g.keywords.clear()
     g.keywords.update(["torrent", "torrents", "search engine", "popular downloads", "online movies"])
     g.page_description = "%s is a free torrent search engine that offers users fast, simple, easy access to every torrent in one place." % g.domain_capitalized
-    g.h1 = " These are the most popular torrents %s."%interval_info[1]
+    g.h1 = " These are the most popular torrents %s"%interval_info[1]
     return render_template('ranking.html',  interval=interval, interval_info=interval_info, results=results, search_info=search_info, featured=get_featured(search_info["count"]), links=POPULAR_TORRENTS_INTERVALS)
 
 @files.route('/search_info')
@@ -569,7 +569,7 @@ def get_last_items():
 
 def single_search(query, category=None, not_category=None, order=None, title=None, zone="", query_time=800, skip=None, last_items=[], limit=70, max_limit=50, ignore_ids=[], show_order=None):
 
-    dynamic_tags = torrentsdb.get_subcategories()[category] if category else None
+    dynamic_tags = g.category.subcategories if g.category else None
     if (query and (len(query)>=WORD_SEARCH_MIN_LEN or query in NGRAM_CHARS)) or category:
         s = searchd.search((query+u" " if query else u"")+(u"("+category+")" if category else u"")+(u" -("+not_category+")" if not_category else u""), None, order=order, start=not skip, group=not skip, no_group=True, dynamic_tags = dynamic_tags)
 

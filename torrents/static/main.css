@@ -522,8 +522,8 @@ img.error {
 
 .ranking {
     border-collapse: collapse;
-    h2 {margin:0.45em 0em 0.1em; text-align:left;font-size:1.8em;}
-    span, a {
+    h2 {margin:0.45em 0em 0.1em; text-align:left;font-size:1.8em; a {color:$black}}
+    span, td a {
         margin:0 5px;position:relative;
     }
     a{width:100%;@include inline-block()}
@@ -550,14 +550,13 @@ ul.browse {
             white-space:normal;margin-top:0.8em;@include inline-block();
         }
 
-        h2 {
-            a{color:$black;}
-        }
+        h2 a {color:$black;}
+
         div > ul {
             white-space:normal;padding-left:0.2em;
             > li {
                 font-size:1.2em;margin:0em 0.2em;@include inline-block();
-                a{font-weight:normal;text-decoration:underline}
+                a{font-weight:normal;color:$grayfont}
                 &:first-child > a {font-weight:bold}
             }
 
@@ -566,14 +565,14 @@ ul.browse {
 }
 #files_page, #files_top {
     h2 {
-        font-size:1.8em;margin:0em 0.1em 0.1em;
+        font-size:1.8em;margin:0;
     }
 }
 .browse_cat {
     font-weight:bold;white-space:normal;padding-left:0em;margin-top:1em;text-align:center;
     li {
         height:2em;
-        a{color:$redfont;font-size:1.2em;font-weight:normal;text-decoration:underline}
+        a{color:$grayfont;font-size:1.2em;font-weight:normal}
         &:first-child > a {font-weight:bold}}
 }
 
@@ -705,13 +704,12 @@ h1.extra{text-transform:none; font-weight:normal; margin:0em 0em 2em; font-size:
     span:first-child + div {
         white-space:normal;margin-top:0.8em;@include inline-block();
     }
-
-    .main {margin:0}
+    .main {font-size:2.5em !important; margin:0}
     .main a {text-decoration:none;color:$black}
     p {font-size: 1.4em;font-weight:normal;}
 }
 
-.lead {font-size: 1.5em; margin:0 0.2em; font-weight:normal;text-transform:uppercase;color:$grayfont;
+.lead {font-size: 1.5em; margin:0; font-weight:normal;text-transform:uppercase;color:$grayfont;
     span{font-size: 0.8em;vertical-align:top}
     a{text-decoration:none;color:$grayfont}
     a:hover {color:$redfont}

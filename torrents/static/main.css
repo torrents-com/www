@@ -699,14 +699,14 @@ h1 {text-transform:uppercase;font-size:2.5em;color:$black}
 h1.extra{text-transform:none; font-weight:normal; margin:0em 0em 2em; font-size:1.9em; color:$redfont; text-align:center}
 
 .title {
-    font-weight:bold;margin:0em 0em 2em;text-align:justify; white-space: nowrap;
+    margin:0em 0em 2em;white-space: nowrap;
 
     >* {vertical-align:middle}
     span:first-child + div {
         white-space:normal;margin-top:0.8em;@include inline-block();
     }
 
-    .main {font-size:2.5em !important; margin: 0.1em 0 0.5em}
+    .main {margin:0}
     .main a {text-decoration:none;color:$black}
     p {font-size: 1.4em;font-weight:normal;}
 }
@@ -719,10 +719,10 @@ h1.extra{text-transform:none; font-weight:normal; margin:0em 0em 2em; font-size:
 
 .title, .browse li {
     &.big_icon {
-        span:first-child {margin-right:-60px}
+        span:first-child {margin-right:-60px;}
         span:first-child + div {
             padding-left:70px;
-            .main {margin-top:0.9em}
+            .main {padding-top:0.6em}
         }
     }
 }

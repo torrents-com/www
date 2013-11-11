@@ -2,7 +2,7 @@
 {% from "helpers.html" import small_banner -%}
 {%- block content -%}
 <section class="container_24" id="files_top">
-<div class="title big_icon {{g.category.url}}">
+<div class="title big_icon grid_24 {{g.category.url}}">
     <span></span><div><h1 class="main">{{g.category.title|singular}} torrents</h1></div>
 </div>
 <ul class="browse_cat"><li class="grid_3"><a href="{{url_for('files.category', category=g.category.url)}}">popular {{g.category.title|lower}}</a></li>{%- for subcat in g.category.subcategories|sort %}<li class="grid_3"><a href="{{url_for('files.category', category=g.category.url, subcategory=subcat)}}">{{subcat}}</a></li>{%- endfor %}</ul>

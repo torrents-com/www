@@ -7,8 +7,9 @@
 </section>
 {{ small_banner() }}
 <section class="container_24" id="text_page">
-    <ul class="browse grid_12">{%- for category in g.categories[5:] if category.show_in_home%}<li class="title grid_11 suffix_1 alpha omega big_icon {{category.url}}"><span></span><div><h2 class="category"><a href="{{url_for('files.browse_category', category=category.url)}}">{{category.title|singular}} torrents</a></h2><ul><li><a href="{{url_for('files.category', category=category.url)}}">popular</a></li>{%- for subcat in category.subcategories|sort %}<li><a href="{{url_for('files.category', category=category.url, subcategory=subcat)}}">{{subcat}}</a></li>{%- endfor %}</ul></div>{%- endfor %}</ul>
+    <ul class="browse grid_12">{%- for category in g.categories[4:] if category.show_in_home%}<li class="title grid_11 suffix_1 alpha omega big_icon {{category.url}}"><span></span><div><h2 class="category"><a href="{{url_for('files.browse_category', category=category.url)}}">{{category.title|singular}} torrents</a></h2><ul><li><a href="{{url_for('files.category', category=category.url)}}">popular</a></li>{%- for subcat in category.subcategories|sort %}<li><a href="{{url_for('files.category', category=category.url, subcategory=subcat)}}">{{subcat}}</a></li>{%- endfor %}</ul></div>{%- endfor %}</ul>
     <table class="browse_ranking grid_12">
+        <tr><th class="position prefix_1 grid_11 omega"><h2>Popular searches</h2></th></tr>
         {% set first_width=pop_searches[0][1]/350 %}
         {%- for search in pop_searches[:20] %}
             <tr><td class="position grid_1 alpha"><div class="bar" style="width:{{120+(search[1]/first_width)|int}}px"></div><span>{{ loop.index }}</span></td><td class="grid_9">{{search[0]|clean_query|blacklist_query(search[0])}}</td><td class="grid_2 omega popularity"><span>{{"%0.2f"|format(search[1]*100)}}%</span></td></tr>

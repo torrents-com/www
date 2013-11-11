@@ -526,6 +526,7 @@ img.error {
 
 .browse_ranking, #ranking {
     border-collapse: collapse;background:white;
+    h2 {margin:0.5em 0em 0.2em; text-align:left;}
     span, a {
         margin:0 5px;position:relative;
     }
@@ -659,7 +660,7 @@ img.error {
 }
 
 h1 {text-transform:uppercase;font-size:2.5em;color:$black}
-h1.extra{text-transform:none; padding:0em 1em 0em; margin:0em; font-size:1.7em; color:$black; text-align:center}
+h1.extra{text-transform:none; margin:0em 0em 2em; font-size:1.7em; color:$black; text-align:center}
 
 .title {
     font-weight:bold;margin:0em 0em 2em;text-align: justify; white-space: nowrap;
@@ -667,7 +668,7 @@ h1.extra{text-transform:none; padding:0em 1em 0em; margin:0em; font-size:1.7em; 
     &.ranking {margin:0em}
     >* {vertical-align:middle}
     span:first-child + div {
-        white-space:normal;margin-top:1em;@include inline-block();
+        white-space:normal;margin-top:0.8em;@include inline-block();
     }
     &.big_icon {
         span:first-child {margin-right:-60px}
@@ -733,11 +734,6 @@ h1.extra{text-transform:none; padding:0em 1em 0em; margin:0em; font-size:1.7em; 
     text-align:right; text-decoration:none;font-size:1.1em;display:block;margin:3px;
 }
 
-
-/*
-    Colorbox Core Style:
-    The following CSS is consistent between example themes and should not be altered.
-*/
 #colorbox, #cboxOverlay, #cboxWrapper{position:absolute; top:0; left:0; z-index:9999; overflow:hidden;}
 #cboxOverlay{position:fixed; width:100%; height:100%;}
 #cboxMiddleLeft, #cboxBottomLeft{clear:left;}
@@ -749,12 +745,6 @@ h1.extra{text-transform:none; padding:0em 1em 0em; margin:0em; font-size:1.7em; 
 .cboxPhoto{float:left; margin:auto; border:0; display:block; max-width:none; -ms-interpolation-mode:bicubic;}
 .cboxIframe{width:100%; height:100%; display:block; border:0;}
 #colorbox, #cboxContent, #cboxLoadedContent{box-sizing:content-box;}
-
-/*
-    User Style:
-    Change the following styles to modify the appearance of Colorbox.  They are
-    ordered & tabbed in a way that represents the nesting of the generated HTML.
-*/
 #cboxOverlay{background:$darkgray}
 #colorbox{outline:0;padding:8px}
     #cboxWrapper{padding:8px;background-color:white;border-radius:7px}
@@ -764,32 +754,17 @@ h1.extra{text-transform:none; padding:0em 1em 0em; margin:0em; font-size:1.7em; 
         #cboxLoadedContent{margin-bottom:20px;}
         #cboxTitle{position:absolute; bottom:0px; left:0; text-align:center; width:100%; color:#999;}
         #cboxCurrent{position:absolute; bottom:0px; left:100px; color:#999;}
-
-        /* these elements are buttons, and may need to have additional styles reset to avoid unwanted base styles */
         #cboxPrevious, #cboxNext, #cboxSlideshow, #cboxClose {border:0; padding:0; margin:0; overflow:visible; width:auto; background:none; }
-
-        /* avoid outlines on :active (mouseclick), but preserve outlines on :focus (tabbed navigating) */
         #cboxPrevious:active, #cboxNext:active, #cboxSlideshow:active, #cboxClose:active {outline:0;}
-
         #cboxSlideshow{position:absolute; bottom:0px; right:42px; color:#444;}
         #cboxPrevious{position:absolute; bottom:0px; left:0; color:#444;}
         #cboxNext{position:absolute; bottom:0px; left:63px; color:#444;}
         #cboxClose{position:absolute; font-weight:700; bottom:0; right:0; display:block; color:$redfont;}
 
-/*
-  The following fixes a problem where IE7 and IE8 replace a PNG's alpha transparency with a black fill
-  when an alpha filter (opacity change) is set on the element or ancestor element.  This style is not applied to or needed in IE9.
-  See: http://jacklmoore.com/notes/ie-transparency-problems/
-*/
-.cboxIE #cboxTopLeft,
-.cboxIE #cboxTopCenter,
-.cboxIE #cboxTopRight,
-.cboxIE #cboxBottomLeft,
-.cboxIE #cboxBottomCenter,
-.cboxIE #cboxBottomRight,
-.cboxIE #cboxMiddleLeft,
-.cboxIE #cboxMiddleRight {
-    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#00FFFFFF,endColorstr=#00FFFFFF);
+.cboxIE {
+    #cboxTopLeft, #cboxTopCenter, #cboxTopRight, #cboxBottomLeft, #cboxBottomCenter, #cboxBottomRight, #cboxMiddleLeft, #cboxMiddleRight {
+        filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#00FFFFFF,endColorstr=#00FFFFFF);
+    }
 }
 
 /* dialog */
@@ -900,7 +875,7 @@ ul.browse {
         margin:0em 0em 1em;
         h2 {
             a{color:$black;}
-            margin:0.2em;
+            margin:0em 0.1em;
         }
         div > ul {
             white-space:normal;padding-left:0.2em;
@@ -916,13 +891,7 @@ ul.browse {
 #text_top, #text_page  {
     ul { padding-left:0;}
 }
-.browse_cat {
-    font-weight:bold;white-space:normal;padding-left:0em;margin-top:1em;text-align:center;
-    li {
-        height:2em;
-        a{color:$redfont;font-size:1.4em;font-weight:normal;text-decoration:underline}
-        &:first-child > a {font-weight:bold}}
-}
+
 
 /* dialog downloader */
 #dialog.downloader{
@@ -1007,7 +976,7 @@ ul.browse {
     }
 }
 
-#news-top, #text_top, .browse_cat {
+#news-top, #text_top {
     margin:6em auto;overflow:hidden;
     section {margin:0em auto 4em}
     h2 {margin-top:0}

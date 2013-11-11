@@ -477,7 +477,7 @@ img.error {
 }
 
 .icon-stars {
-    margin:21px 0px 15px;height:19px;
+    margin:0px 0px 15px;height:19px;
     span {
         background:url(/static/star.png) left center repeat-x;
         height:19px;
@@ -520,25 +520,61 @@ img.error {
     a.odd {color:$black; &:hover, &:focus, &:active { color:$redfont; outline: none }}
 }
 
-#popular.category {
-    margin-top:0;
-}
-
-.browse_ranking, #ranking {
-    border-collapse: collapse;background:white;
-    h2 {margin:0.5em 0em 0.2em; text-align:left;}
+.ranking {
+    border-collapse: collapse;
+    h2 {margin:0.45em 0em 0.1em; text-align:left;font-size:1.8em;}
     span, a {
         margin:0 5px;position:relative;
     }
-    td {padding:0.2em 0em;position:relative;
-        &.trend {text-align:center;span {font-size:0.8em;}}
+    a{width:100%;@include inline-block()}
+    tr {border-bottom:1px solid $darkgreen; &:hover {background-color:$darkgreen; .bar {background-color:$darkgreen}}}
+    tr:first-child {border-top:1px solid $darkgreen;}
+    td {background-color:transparent;font-size:1.2em; padding:0.4em 0em;position:relative;
+        &.trend {text-align:center;}
         &.position {text-align:right;font-weight:bold;}
         &.popularity {text-align:right;}
     }
 
     .bar {
-        position:absolute;background:$lightgreen;bottom:1px;top:1px;margin:0;z-index:0;
+        position:absolute;background:$lightgreen;bottom:0px;top:0px;margin:0;z-index:0;
     }
+
+    tr.norow {border-top:none;&:hover{background:none}}
+}
+
+ul.browse {
+    > li {
+        margin:0em 0em 3em;
+        >div {vertical-align:middle;@include inline-block();}
+        >span {
+            white-space:normal;margin-top:0.8em;@include inline-block();
+        }
+
+        h2 {
+            a{color:$black;}
+        }
+        div > ul {
+            white-space:normal;padding-left:0.2em;
+            > li {
+                font-size:1.2em;margin:0em 0.2em;@include inline-block();
+                a{font-weight:normal;text-decoration:underline}
+                &:first-child > a {font-weight:bold}
+            }
+
+        }
+    }
+}
+#files_page, #files_top {
+    h2 {
+        font-size:1.8em;margin:0em 0.1em 0.1em;
+    }
+}
+.browse_cat {
+    font-weight:bold;white-space:normal;padding-left:0em;margin-top:1em;text-align:center;
+    li {
+        height:2em;
+        a{color:$redfont;font-size:1.2em;font-weight:normal;text-decoration:underline}
+        &:first-child > a {font-weight:bold}}
 }
 
 #download {
@@ -548,7 +584,7 @@ img.error {
         overflow:hidden;
     }
     .share_report {
-        margin-top:15px;text-align:right;font-size:1.2em;vertical-align:middle
+        margin-top:0px;text-align:right;font-size:1.2em;vertical-align:middle
         > span:first-child {
             margin: 10px 10px 0px;
             color: $grayfont;
@@ -660,16 +696,28 @@ img.error {
 }
 
 h1 {text-transform:uppercase;font-size:2.5em;color:$black}
-h1.extra{text-transform:none; margin:0em 0em 2em; font-size:1.7em; color:$black; text-align:center}
+h1.extra{text-transform:none; font-weight:normal; margin:0em 0em 2em; font-size:1.9em; color:$redfont; text-align:center}
 
 .title {
-    font-weight:bold;margin:0em 0em 2em;text-align: justify; white-space: nowrap;
+    font-weight:bold;margin:0em 0em 2em;text-align:justify; white-space: nowrap;
 
-    &.ranking {margin:0em}
     >* {vertical-align:middle}
     span:first-child + div {
         white-space:normal;margin-top:0.8em;@include inline-block();
     }
+
+    .main {font-size:2.5em !important; margin: 0.1em 0 0.5em}
+    .main a {text-decoration:none;color:$black}
+    p {font-size: 1.4em;font-weight:normal;}
+}
+
+.lead {font-size: 1.5em; margin:0 0.2em; font-weight:normal;text-transform:uppercase;color:$grayfont;
+    span{font-size: 0.8em;vertical-align:top}
+    a{text-decoration:none;color:$grayfont}
+    a:hover {color:$redfont}
+}
+
+.title, .browse li {
     &.big_icon {
         span:first-child {margin-right:-60px}
         span:first-child + div {
@@ -677,11 +725,6 @@ h1.extra{text-transform:none; margin:0em 0em 2em; font-size:1.7em; color:$black;
             .main {margin-top:0.9em}
         }
     }
-
-    .tagline {font-size: 1.4em; margin:0; font-weight:normal; color:$grayfont}
-    .main {text-transform:uppercase;font-size:2.5em !important; margin: 0.1em 0 0.5em}
-    .main a {text-decoration:none;color:$black}
-    p {font-size: 1.4em;font-weight:normal;}
 }
 
 #featured_col {clear:left}
@@ -699,8 +742,7 @@ h1.extra{text-transform:none; margin:0em 0em 2em; font-size:1.7em; color:$black;
                 a{color:$redfont;&:hover, &:focus, &:active { color:$red; outline: none }}
             }
         }
-        >li:first-child {margin-top:-15px;}
-        >li.even {background:$lightgreen}
+       >li.even {background:$lightgreen}
     }
 }
 
@@ -727,7 +769,6 @@ h1.extra{text-transform:none; margin:0em 0em 2em; font-size:1.7em; color:$black;
 #download p, #metadata > ul , #files > ul, #long_desc > p {
     font-size:1.3em;
     color:$black;
-    text-align: justify;
 }
 
 .more_results {
@@ -867,37 +908,6 @@ h1.extra{text-transform:none; margin:0em 0em 2em; font-size:1.7em; color:$black;
         }
     }
 
-ul.browse {
-    > li {
-        >div {vertical-align:top;}
-        >span {vertical-align:-4em;}
-
-        margin:0em 0em 1em;
-        h2 {
-            a{color:$black;}
-            margin:0em 0.1em;
-        }
-        div > ul {
-            white-space:normal;padding-left:0.2em;
-            > li {
-                font-size:0.9em;margin:0em 0.2em;@include inline-block();
-                a{font-weight:normal;text-decoration:underline}
-                &:first-child > a {font-weight:bold}
-            }
-
-        }
-    }
-}
-#text_top, #text_page  {
-    ul { padding-left:0;}
-}
-.browse_cat {
-    font-weight:bold;white-space:normal;padding-left:0em;margin-top:1em;text-align:center;
-    li {
-        height:2em;
-        a{color:$redfont;font-size:1.4em;font-weight:normal;text-decoration:underline}
-        &:first-child > a {font-weight:bold}}
-}
 
 /* dialog downloader */
 #dialog.downloader{
@@ -933,7 +943,7 @@ ul.browse {
 .categories, .tags{
     display:inline;
     li{
-        font-size:1.6em;width:auto;margin-right:0.5em;@include inline-block();
+        font-size:1.5em;width:auto;margin-right:0.5em;@include inline-block();
         a{text-decoration:none;color:$grayfont;
             &:hover {color:$redfont}
         }
@@ -982,7 +992,7 @@ ul.browse {
     }
 }
 
-#news-top, #text_top, .browse_cat {
+#news-top, #text_top, #files_top {
     margin:6em auto;overflow:hidden;
     section {margin:0em auto 4em}
     h2 {margin-top:0}

@@ -1,19 +1,19 @@
 {% extends "base.html" %}
 {% from "helpers.html" import small_banner -%}
 {%- block content -%}
-<section class="container_24 browse_cat">
+<section class="container_24" id="files_top">
 <div class="title big_icon {{g.category.url}}">
     <span></span><div><h1 class="main">{{g.category.title|singular}} torrents</h1></div>
 </div>
-<ul><li class="grid_4"><a href="{{url_for('files.category', category=g.category.url)}}">popular {{g.category.title|lower}}</a></li>{%- for subcat in g.category.subcategories|sort %}<li class="grid_4"><a href="{{url_for('files.category', category=g.category.url, subcategory=subcat)}}">{{subcat}}</a></li>{%- endfor %}</ul>
+<ul class="browse_cat"><li class="grid_3"><a href="{{url_for('files.category', category=g.category.url)}}">popular {{g.category.title|lower}}</a></li>{%- for subcat in g.category.subcategories|sort %}<li class="grid_3"><a href="{{url_for('files.category', category=g.category.url, subcategory=subcat)}}">{{subcat}}</a></li>{%- endfor %}</ul>
 </section>
 {{ small_banner() }}
-<section class="container_24" id="text_page">
-<table class="browse_ranking grid_24">
-    <tr><th class="position grid_24 alpha omega"><h2>Popular {{g.category.title|singular}} searches</h2></th></tr>
+<section class="container_24" id="files_page">
+<table class="ranking grid_24">
+    <tr class="norow"><th class="position grid_24 alpha omega"><h2>Popular {{g.category.title|singular}} searches</h2></th></tr>
     {% set first_width=pop_searches[0][1]/830 %}
     {%- for search in pop_searches %}
-        <tr><td class="position grid_1 alpha"><div class="bar" style="width:{{120+(search[1]/first_width)|int}}px"></div><span>{{ loop.index }}</span></td><td class="grid_21"><a href="{{url_for('files.search', query=search[0]|clean_query)}}">{{search[0]}}</a></td><td class="grid_2 popularity omega"><span>{{"%0.2f"|format(search[1]*100)}}%</span></td></tr>
+        <tr><td class="position grid_1 alpha"><div class="bar" style="width:{{120+(search[1]/first_width)|int}}px"></div><span>{{ loop.index }}</span></td><td class="grid_21"><a href="{{url_for('files.category', category=g.category.url, query=search[0]|clean_query)}}">{{search[0]}}</a></td><td class="grid_2 popularity omega"><span>{{"%0.2f"|format(search[1]*100)}}%</span></td></tr>
     {%- endfor %}
 </table>
 </section>

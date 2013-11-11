@@ -10,7 +10,7 @@
 <div class="title big_icon grid_24 {{g.category.url}}">
     <span></span>
     <div>
-        <a href='{{url_for("files.home")}}'>All</a>&nbsp;&nbsp;&gt;&nbsp;&nbsp;<a href='{{url_for("files.category", category=g.category.url)}}'>{{g.category.title}}</a>&nbsp;&nbsp;&gt;&nbsp;&nbsp;{{g.query or g.subcategory}}
+        <div class="lead"><a href='{{url_for("files.home")}}'>All</a>&nbsp;&nbsp;<span>&gt;</span>&nbsp;&nbsp;<a href='{{url_for("files.category", category=g.category.url)}}'>{{g.category.title}}</a>&nbsp;&nbsp;<span>&gt;</span>&nbsp;&nbsp;{{g.query or g.subcategory}}</div>
         <h1 class="category">{{g.query or g.subcategory}} {{g.category.title|singular}} torrents</h1>
     </div></div>
 
@@ -24,7 +24,7 @@
 <div class="title big_icon grid_24 {{g.category.url}}">
     <span></span>
     <div>
-        <a href='{{url_for("files.home")}}'>All</a>&nbsp;&nbsp;&gt;&nbsp;&nbsp;{{g.category.title}}
+        <div class="lead"><a href='{{url_for("files.home")}}'>All</a>&nbsp;&nbsp;<span>&gt;</span>&nbsp;&nbsp;{{g.category.title}}</div>
         <h1 class="category">Popular {{g.category.title|singular}} torrents</h1>
     </div>
 </div>

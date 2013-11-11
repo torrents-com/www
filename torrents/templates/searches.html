@@ -7,9 +7,9 @@
     {%- endif%}
 {%- endmacro %}
 {% block content %}
-<section class="container_24" id="text_page">
+<section class="container_24" id="files_page">
     <div class="title grid_24">
-        <h1 class="tagline">{{g.h1}}</h1>
+        <h1 class="lead">{{g.h1}}</h1>
         <h2 class="main">Popular searches {{interval_info[1]}}</h2>
         <p>You can also browse favorite torrent searches
             {%- for search_interval, search in links.iteritems() if search_interval!=interval %}
@@ -18,10 +18,10 @@
             {%- endfor %}.
         </p>
     </div>
-    <table id="ranking" class="grid_24">
+    <table class="ranking grid_24">
         {% set first_width=ranking["final_ranking"][0][1]/830 %}
         {%- for search in ranking["final_ranking"] %}
-            <tr><td class="trend grid_2 alpha"><div class="bar" style="width:{{120+(search[1]/first_width)|int}}px"></div>{{trend(search[3], loop.index0)}}</td><td class="position grid_1">{{ loop.index }}</td><td class="grid_19">{{search[0]|clean_query|blacklist_query(search[0])}}</td><td class="grid_2 omega popularity"><span>{{"%0.2f"|format(search[1]*100)}}%</span></td></tr>
+            <tr><td class="trend grid_1 alpha"><div class="bar" style="width:{{120+(search[1]/first_width)|int}}px"></div>{{trend(search[3], loop.index0)}}</td><td class="position grid_1">{{ loop.index }}</td><td class="grid_20">{{search[0]|clean_query|blacklist_query(search[0])}}</td><td class="grid_2 omega popularity"><span>{{"%0.2f"|format(search[1]*100)}}%</span></td></tr>
         {%- endfor %}
     </table>
 </section>

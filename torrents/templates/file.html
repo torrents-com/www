@@ -87,7 +87,7 @@
 <div class="grid_17 prefix_1">
 {%- if "filepaths" in file_data['view']['md'] %}
 <section id="files" class="grid_17">
-    <h3>Torrent files</h3>
+    <h2>Torrent files</h2>
     {%- if 'torrent:partial_filepaths' in file_data['file']['md'] and file_data['file']['md']['torrent:partial_filepaths']: %}
         <span>(showing only first 100 files)</span>
     {%- endif %}
@@ -96,29 +96,28 @@
 {%- endif %}
 
 <section id="metadata" class="grid_17">
-    <h3>Torrent information</h3>
+    <h2>Torrent information</h2>
     {% set rowcycle = ['even', 'odd'] %}
     <ul>
-        <li class="grid_17 alpha omega {{ rowcycle|cycle }}"><div class="grid_6 alpha">Name</div>
-            <div class="grid_11 omega">{{ file_data['view']['nfn'] }}</div>
+        <li class="grid_17 alpha omega {{ rowcycle|cycle }}"><div class="grid_5 alpha">Name</div>
+            <div class="grid_12 omega">{{ file_data['view']['nfn'] }}</div>
         </li>
         {%- if file_data['view']['file_type'] %}
-        <li class="grid_17 alpha omega {{ rowcycle|cycle }}"><div class="grid_6 alpha">Type</div>
-            <div class="grid_11 omega">{{ file_data['view']['file_type']|capitalize}}</div>
+        <li class="grid_17 alpha omega {{ rowcycle|cycle }}"><div class="grid_5 alpha">Type</div>
+            <div class="grid_12 omega">{{ file_data['view']['file_type']|capitalize}}</div>
         </li>
         {% endif %}
         {%- if file_data['view']["categories"] %}
-        <li class="grid_17 alpha omega {{ rowcycle|cycle }}"><div class="grid_6 alpha">{{"Category" if file_data['view']["categories"]|length==1 else "Categories"}}</div>
-            <div class="grid_11 omega">{%- for category in file_data['view']["categories"] %}
-            <a href="{{ url_for("files.category",category=category.url) }}">{{ category.title }}</a>
-            {{ ", " if not loop.last }}
+        <li class="grid_17 alpha omega {{ rowcycle|cycle }}"><div class="grid_5 alpha">{{"Category" if file_data['view']["categories"]|length==1 else "Categories"}}</div>
+            <div class="grid_12 omega">{%- for category in file_data['view']["categories"] %}
+            <a href="{{ url_for("files.category",category=category.url) }}">{{ category.title }}</a>{{ ", " if not loop.last }}
             {%- endfor %}</div>
         </li>
         {%- endif %}
         {%- for metadata, value in file_data['view']['md'].iteritems() if metadata not in ("long_desc", "short_desc", "filepaths", "seeds","leechs") %}
         <li class="grid_17 alpha omega {{ rowcycle|cycle }}">
-        <div class="grid_6 alpha">{{metadata|replace("_"," ")|capitalize}}</div>
-        <div class="grid_11 omega">
+        <div class="grid_5 alpha">{{metadata|replace("_"," ")|capitalize}}</div>
+        <div class="grid_12 omega">
             {%-if metadata in file_data['view']['searches'] %}
                 {%-if file_data['view']['searches'][metadata] == [] %}
                     {% for avalue in value.split(",") %}
@@ -137,8 +136,8 @@
         {%- endfor %}
         {%- if file_data['view']['providers'] %}
         <li class="grid_17 alpha omega {{ rowcycle|cycle }}">
-            <div class="grid_6 alpha">Providers</div>
-            <div class="grid_11 omega">
+            <div class="grid_5 alpha">Providers</div>
+            <div class="grid_12 omega">
                 {%- for provider in file_data['view']['providers'] %}
                      <a target='_blank' href='http://{{provider}}'>{{provider}}</a>{{ "," if not loop.last }}
                 {%- endfor %}
@@ -150,7 +149,7 @@
 
 {%- if "long_desc" in file_data['view']['md'] %}
 <section id="long_desc" class="grid_17">
-    <h3>Torrent description</h3>
+    <h2>Torrent description</h2>
     <p>
     {{ (file_data['view']['md']['long_desc']|string)[:100000].replace("\n","<br />") | safe }}
     </p>
@@ -159,7 +158,7 @@
 
 {%- if related_files[1] and related_files[1]["count"]>0%}
 <section id="related" class="grid_17">
-    <h3>Related torrents</h3>
+    <h2>Related torrents</h2>
     {{ related_files[0]|safe}}
 </section>
 {%- endif %}

@@ -891,7 +891,13 @@ ul.browse {
 #text_top, #text_page  {
     ul { padding-left:0;}
 }
-
+.browse_cat {
+    font-weight:bold;white-space:normal;padding-left:0em;margin-top:1em;text-align:center;
+    li {
+        height:2em;
+        a{color:$redfont;font-size:1.4em;font-weight:normal;text-decoration:underline}
+        &:first-child > a {font-weight:bold}}
+}
 
 /* dialog downloader */
 #dialog.downloader{
@@ -976,7 +982,7 @@ ul.browse {
     }
 }
 
-#news-top, #text_top {
+#news-top, #text_top, .browse_cat {
     margin:6em auto;overflow:hidden;
     section {margin:0em auto 4em}
     h2 {margin-top:0}

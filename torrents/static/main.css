@@ -525,17 +525,18 @@ img.error {
 }
 
 .browse_ranking, #ranking {
-    border-collapse: collapse;
+    border-collapse: collapse;background:white;
     span, a {
-        margin:0 20px;
+        margin:0 5px;position:relative;
     }
-    tr.even, tr.even td {
-        background:$lightgreen;
-    }
-    td {background:white; padding:0.4em 0em;
+    td {padding:0.2em 0em;position:relative;
         &.trend {text-align:center;span {font-size:0.8em;}}
         &.position {text-align:right;font-weight:bold;}
         &.popularity {text-align:right;}
+    }
+
+    .bar {
+        position:absolute;background:$lightgreen;bottom:1px;top:1px;margin:0;z-index:0;
     }
 }
 
@@ -891,24 +892,29 @@ h1.extra{text-transform:none; padding:0em 1em 0em; margin:0em; font-size:1.7em; 
         }
     }
 
-#browse > li {
-    >div {vertical-align:top;}
-    >span {vertical-align:-4em;}
+ul.browse {
+    > li {
+        >div {vertical-align:top;}
+        >span {vertical-align:-4em;}
 
-    margin:0em 0em 1em;
-    h2 {
-        a{color:$black;}
-        margin:0.2em;
-    }
-    div > ul {
-        white-space:normal;padding-left:0.2em;
-        > li {
-            font-size:0.9em;margin:0em 0.2em;@include inline-block();
-            a{font-weight:normal;text-decoration:underline}
-            &:first-child > a {font-weight:bold}
+        margin:0em 0em 1em;
+        h2 {
+            a{color:$black;}
+            margin:0.2em;
         }
+        div > ul {
+            white-space:normal;padding-left:0.2em;
+            > li {
+                font-size:0.9em;margin:0em 0.2em;@include inline-block();
+                a{font-weight:normal;text-decoration:underline}
+                &:first-child > a {font-weight:bold}
+            }
 
+        }
     }
+}
+#text_top, #text_page  {
+    ul { padding-left:0;}
 }
 .browse_cat {
     font-weight:bold;white-space:normal;padding-left:0em;margin-top:1em;text-align:center;

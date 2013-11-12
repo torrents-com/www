@@ -7,5 +7,5 @@ class CategoriesCache:
 
     def update_subcategories(self, subcategories):
         for category in self.categories:
-            category.subcategories[:] = [subcat for subcat, info in subcategories[category.tag].iteritems() if info.get("c",1)>0]
+            category.subcategories[:] = [subcat for subcat, info in subcategories[category.tag].iteritems() if info.get("c",0)>0]
             category.dynamic_tags[:] = [subcat.replace(" ","") for subcat in category.subcategories]

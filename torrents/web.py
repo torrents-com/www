@@ -219,6 +219,7 @@ def create_app(config=None, debug=False):
         '''
         categories_cache.update_subcategories(torrentsdb.get_subcategories())
     configdb.register_action("refresh_subcategories", refresh_subcategories)
+    eventmanager.interval(app.config["CATEGORIES_REFRESH_INTERVAL"], refresh_subcategories)
 
     @app.before_request
     def before_request():

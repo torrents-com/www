@@ -4,7 +4,7 @@
 from os import environ
 environ["FOOFIND_NOAPP"] = "1"
 
-import signal, sys
+import signal, sys, re
 
 import pymongo
 from collections import Counter, defaultdict
@@ -56,6 +56,8 @@ numeric_filters = {"video:season":FILTER_PREFIX_SEASON, "video:episode":FILTER_P
 
 DYNAMIC_TAGS = {}
 DYNAMIC_TAGS_METADATA = [':tags', ':category', ':genre', ':quality', ':keywords']
+
+SUBCATEGORIES_FINDER = re.compile(r"[\w \-]+")
 
 dictget = dict.get
 def innergroup_hash(field_path, afile):
@@ -318,11 +320,19 @@ def init_file(afile):
     filters.update("%s%02d"%(prefix,int(md[key])) for key, prefix in numeric_filters.iteritems() if key in md and (isinstance(md[key], int) or isinstance(md[key], float) or (isinstance(md[key], basestring) and md[key].isdecimal())))
     filters.update("%s%s"%(FILTER_PREFIX_TAGS, tag) for tag in file_tags)
 
-    file_dtags = [word for key, value in md.iteritems() if value and isinstance(value, basestring) and any(key.endswith(dtag_md) for dtag_md in DYNAMIC_TAGS_METADATA) for word in seoize_text(value, separator=" ", is_url=False, max_length=200).split(" ")]
-    filters.update("%s%s"%(FILTER_PREFIX_DYNAMIC_TAGS, dtag) for dtag in file_dtags if file_category_tag and dtag in DYNAMIC_TAGS[file_category_tag] or any(dtag in DYNAMIC_TAGS[tag] for tag in file_tags if tag in DYNAMIC_TAGS))
+    file_words = [word.strip().replace("-"," ") for key, value in md.iteritems() if value and isinstance(value, basestring) and any(key.endswith(dtag_md) for dtag_md in DYNAMIC_TAGS_METADATA) for word in SUBCATEGORIES_FINDER.findall(value.lower())] + file_tags
+
+    dtags = {(tag, DYNAMIC_TAGS[tag][word]) for tag in file_tags if tag in DYNAMIC_TAGS for word in file_words if word in DYNAMIC_TAGS[tag]}
+
+    if file_category_tag and file_category_tag in DYNAMIC_TAGS and file_category_tag not in file_tags:
+        dtags.update((file_category_tag, DYNAMIC_TAGS[file_category_tag][word]) for word in file_words if word in DYNAMIC_TAGS[file_category_tag])
+
+    filters.update("%s%s"%(FILTER_PREFIX_DYNAMIC_TAGS, dtag.replace(" ","")) for tag, dtag in dtags)
+
     if file_format: filters.add(FILTER_PREFIX_FORMAT+file_format[0])
 
     afile["_fil"] = " ".join(filters)
+    afile["__dtags"] = dtags
 
     # grupos
     afile["_g"] = ((entity << 32) |
@@ -373,6 +383,9 @@ def file_stats(afile, stats):
         delta = l-stats["la"][g]
         stats["la"][g]+=delta/(glcount+1.0)
         stats["lpa"][g]+=delta*(l-stats["la"][g])
+
+    for tag, dtag in afile["__dtags"]:
+        stats["__dtags"][tag][dtag]+=1
 
 def fav_stats(afile, stats):
     pass
@@ -429,7 +442,7 @@ def main(processes, part, server, xml_file, fileid, favs, stats_update):
         files_filter = {'bl': 0}
         if fileid: files_filter["_id"] = hex2mid(fileid)
 
-        stats = {"_id": part, "sg":defaultdict(int), "z":defaultdict(int), "l":defaultdict(int), "lc":defaultdict(int), "la":defaultdict(float), "lpa":defaultdict(float), "zc":defaultdict(int), "za":defaultdict(float), "zpa":defaultdict(float), "ra":defaultdict(float), "rpa":defaultdict(float), "rM":defaultdict(float), "rc":defaultdict(int)}
+        stats = {"_id": part, "sg":defaultdict(int), "z":defaultdict(int), "l":defaultdict(int), "lc":defaultdict(int), "la":defaultdict(float), "lpa":defaultdict(float), "zc":defaultdict(int), "za":defaultdict(float), "zpa":defaultdict(float), "ra":defaultdict(float), "rpa":defaultdict(float), "rM":defaultdict(float), "rc":defaultdict(int), "__dtags":{tag:defaultdict(int) for tag in DYNAMIC_TAGS.iterkeys()}}
 
         if xml_file:
             if exists(xml_file):
@@ -463,7 +476,14 @@ def main(processes, part, server, xml_file, fileid, favs, stats_update):
             xml = xmlpipe2.XmlPipe2(processes, fields, attrs, stats, generate_id)
             xml.generate(server, ntts_server, part<<16, files_filter, batch_size)
 
+
+        dtags_stats = stats["__dtags"]
+        del stats["__dtags"]
+
         if stats_update and not incremental_index:
+            for tag, dtags in dtags_stats.iteritems():
+                server_conn.torrents.subcategory.update({"_id":tag}, {"$set":{"sc.%s.c"%dtag:count for dtag, count in dtags}})
+
             server_conn.foofind.search_stats.insert({"_id":part, "d0":time(), "d1":time()})
             server_conn.foofind.search_stats.update({"_id":part}, {"$set":stats})
             server_conn.foofind.server.update({"_id":part},{"$set":{"ss":0}})
@@ -554,7 +574,9 @@ if __name__ == '__main__':
         exit()
 
     for subcats in server_conn.torrents.subcategory.find():
-        DYNAMIC_TAGS[subcats["_id"]] = set(subcats["sc"])
+        DYNAMIC_TAGS[subcats["_id"]] = {subcat:subcat for subcat in subcats["sc"].iterkeys()}
+        DYNAMIC_TAGS[subcats["_id"]].update({alt:subcat for subcat, info in subcats["sc"].iteritems() if "a" in info
+                                                            for alt in info["a"]})
 
     signal.signal(signal.SIGINT, signal_handler)
     if params.profile:

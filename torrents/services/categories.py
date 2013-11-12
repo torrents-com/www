@@ -7,4 +7,4 @@ class CategoriesCache:
 
     def update_subcategories(self, subcategories):
         for category in self.categories:
-            category.subcategories[:] = subcategories.get(category.tag,[])
+            category.subcategories[:] = [subcat for subcat, info in subcategories[category.tag].iteritems() if info.get("c",0)>0]

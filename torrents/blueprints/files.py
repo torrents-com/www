@@ -46,7 +46,7 @@ IMAGES_ORDER = ("fs*r2", "ok DESC, r DESC, fs DESC", "fs*r2")
 RANKING_ORDER = ("fs*r", "ok DESC, r DESC, fs DESC", "fs*r")
 SEARCH_ORDER = ("@weight*r", "e DESC, ok DESC, r DESC, fs DESC", "@weight*r")
 
-CATEGORY_UNKNOWN = Category(cat_id=11, url="unknown", title='Unknown', tag=u'unknown', content='unknown', content_main=True, show_in_home=False, subcategories=[])
+CATEGORY_UNKNOWN = Category(cat_id=11, url="unknown", title='Unknown', tag=u'unknown', content='unknown', content_main=True, adult_content=True)
 
 COLUMN_ORDERS = {
     "fs": ("fs", "ok DESC, r DESC, e DESC", "fs"),
@@ -184,25 +184,13 @@ def opensearch():
     response.headers['content-type']='application/opensearchdescription+xml'
     return response
 
-@files.route('/old_home')
-def old_home():
-    '''
-    Renderiza la portada.
-    '''
-    g.page_description = "A free torrent search engine providing download results for movies, software and other torrent files."
-    g.keywords.clear()
-    g.keywords.update(["torrents", "search engine", "free download", "music", "online", "movie", "games", "TV", "music", "Anime", "Books", "Adult", "Porn", "Spoken word", "Software", "Mobile", "Pictures"])
-
-    rankings, featured = get_rankings()
-    pop_searches = create_cloud(torrentsdb.get_ranking("weekly"), 670, 4)
-
-    return render_template('index.html', rankings = rankings, pop_searches = pop_searches, featured=featured)
-
 @files.route('/st_sitemap.xml')
 def static_sitemap():
     g.cache_code = "S"
     pages = [url_for(page, _external=True) for page in (".home", ".copyright")]
+    pages.extend(url_for(".browse_category", category=category.url, _external=True) for category in g.categories)
     pages.extend(url_for(".category", category=category.url, _external=True) for category in g.categories)
+    pages.extend(url_for(".category", category=category.url, subcategory=subcategory, _external=True) for category in g.categories for subcategory in category.subcategories)
     pages.extend(url_for(".popular_searches", interval=interval, _external=True) for interval in POPULAR_SEARCHES_INTERVALS.iterkeys())
     pages.extend(url_for(".popular_torrents", interval=interval, _external=True) for interval in POPULAR_TORRENTS_INTERVALS.iterkeys())
     response = make_response(render_template('sitemap.xml', pages = pages))
@@ -219,7 +207,7 @@ def robots():
     full_filename = os.path.join(os.path.join(current_app.root_path, 'static'), 'robots.txt')
 
     with open(full_filename) as input_file:
-        response = make_response(input_file.read() + "\nSitemap: " + url_for("files.dynamic_sitemap", _external=True) + "\nSitemap: "+ url_for("files.static_sitemap", _external=True))
+        response = make_response(input_file.read() + "\n\nUser-Agent: Googlebot\nDisallow: /search*\n"+"".join("Disallow: /%s/*\n"%cat.url for cat in g.categories) + "\n\nSitemap: " + url_for("files.dynamic_sitemap", _external=True) + "\nSitemap: "+ url_for("files.static_sitemap", _external=True))
         response.mimetype='text/plain'
     return response
 
@@ -233,7 +221,7 @@ def home():
 
     pop_searches = torrentsdb.get_ranking("weekly")["final_ranking"]
 
-    return render_template('browse.html', pop_searches = pop_searches)
+    return render_template('index.html', pop_searches = pop_searches)
 
 @files.route('/<category:category>')
 def browse_category(category):
@@ -320,9 +308,9 @@ def search(query=None):
 
     if must_redirect:
         if g.category:
-            return redirect(url_for("files.category", category=g.category.url, query=g.clean_query))
+            return redirect(url_for(".category", category=g.category.url, query=g.clean_query))
         else:
-            return redirect(url_for("files.search", query=g.clean_query))
+            return redirect(url_for(".search", query=g.clean_query))
 
     order, show_order = get_order(SEARCH_ORDER)
 
@@ -383,7 +371,7 @@ def category(category, query=None, subcategory=None):
 
     g.title.append(page_title)
 
-    if g.category and g.category.tag=="porn":
+    if g.category and g.category.adult_content:
         g.is_adult_content = True;
 
     results, search_info = single_search("("+g.subcategory+")" if g.subcategory else g.query, category=g.category.tag, not_category=None if g.is_adult_content else "porn", order=order, zone=g.category.url, title=(page_title, 2, g.category.tag), last_items=get_last_items(), skip=get_skip(), show_order=show_order or True)
@@ -590,7 +578,7 @@ def end_guess_categories_with_results(s):
     # averigua si ha encontrado resultados para otras categorias
     count_results = s.get_group_count(lambda x:(long(x)>>28)&0xF)
     if count_results and count_results[0]:
-        count_results[0] -= sum(count_results.get(cat.cat_id,0) for cat in g.categories if not cat.show_in_home)
+        count_results[0] -= sum(count_results.get(cat.cat_id,0) for cat in g.categories if cat.adult_content)
         if count_results[0]<0:
             count_results[0]=0
             logging.warn("Count results for home lower than zero for search '%s' in category '%s'"%(g.query, g.category.title if g.category else "-"))
@@ -663,7 +651,6 @@ def process_search_results(s=None, query=None, category=None, not_category=None,
                                         + (10 if 'images_server' in afile['view'] or 'thumbnail' in afile['view'] else 0))
 
                     g.featured.append((-featured_weight, position, afile))
-
                     position+=1
 
             results = render_template('results.html', files=files[:max_limit or limit], list_title=title[0] or query or category, title_level=title[1], title_class=title[2], zone=zone, show_order=show_order)
@@ -821,13 +808,14 @@ def torrents_data(data, details=False, current_category_tag=None):
 
     # tags del fichero
     file_tags = data["view"]["tags"] if "tags" in data["view"] else []
+
     current_category = file_category = file_category_type = None
     file_categories = []
     for category in g.categories:
         if category.tag in file_tags:
             if category.tag==current_category_tag:
                 current_category = category
-            if category.tag=="porn": # always use adult when its present
+            if category.adult_content: # always use adult when its present
                 file_category = category
 
             if category.content_main:
@@ -875,19 +863,6 @@ def torrents_data(data, details=False, current_category_tag=None):
     data["view"]["seo-fn"] = data["view"]["nfn"].replace(" ","-")
 
     return data
-
-def get_rankings():
-    rs = current_app.config["RANKING_SIZE"]
-    categories_len = len(g.categories)
-
-    results = zip(
-        multi_search(
-            [(None, category.tag, "porn", RANKING_ORDER, "Home / " + category.title, ("<a href='%s'>%s torrents</a>"%
-                (url_for("files.category",category=category.url),singular_filter(category.title)), 3, category.url), rs, rs, None)
-                    for category in g.categories if category.show_in_home] + [(None, "torrent", "porn", IMAGES_ORDER, "", "", rs*3, rs*3, None)]),
-            [category for category in g.categories if category[-1]]+[None])
-
-    return results[:-1], get_featured(rs*categories_len, categories_len)
 
 def save_visited(files):
     if not g.search_bot:

@@ -183,17 +183,6 @@ def create_app(config=None, debug=False):
 
     configdb.register_action("refresh_blacklists", refresh_blacklists)
 
-    # Categories
-    categories_cache.init_app(app.config["TORRENTS_CATEGORIES"])
-    categories_cache.update_subcategories(torrentsdb.get_subcategories())
-
-    def refresh_subcategories():
-        '''
-        Refresh subcategories.
-        '''
-        categories_cache.update_subcategories(torrentsdb.get_subcategories())
-
-    configdb.register_action("refresh_subcategories", refresh_subcategories)
 
     # IPs españolas
     spanish_ips.load(os.path.join(os.path.dirname(app.root_path),app.config["SPANISH_IPS_FILENAME"]))
@@ -219,6 +208,17 @@ def create_app(config=None, debug=False):
     # Refresco de configuración
     eventmanager.once(configdb.pull)
     eventmanager.interval(app.config["CONFIG_UPDATE_INTERVAL"], configdb.pull)
+
+    # Categorias
+    categories_cache.init_app(app.config["TORRENTS_CATEGORIES"])
+    categories_cache.update_subcategories(torrentsdb.get_subcategories())
+
+    def refresh_subcategories():
+        '''
+        Refresh subcategories.
+        '''
+        categories_cache.update_subcategories(torrentsdb.get_subcategories())
+    configdb.register_action("refresh_subcategories", refresh_subcategories)
 
     @app.before_request
     def before_request():

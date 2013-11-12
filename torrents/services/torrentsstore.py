@@ -133,6 +133,6 @@ class TorrentsStore(object):
             logging.exception("Can't log visited files.")
 
     def get_subcategories(self):
-        results = {subcats["_id"]:set(subcats["sc"]) for subcats in self.torrents_conn.torrents.subcategory.find()}
+        results = {subcats["_id"]:subcats["sc"] for subcats in self.torrents_conn.torrents.subcategory.find()}
         self.torrents_conn.end_request()
         return results

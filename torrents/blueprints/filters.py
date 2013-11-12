@@ -59,7 +59,7 @@ RANKING_ORDER = ("IDIV(fs,1728000)*(r+10)", "ok DESC, r DESC, fs DESC", "IDIV(fs
 POPULAR_ORDER = RANKING_ORDER
 SEARCH_ORDER = ("@weight*(r+10)", "e DESC, ok DESC, r DESC, fs DESC", "@weight*(r+10)")
 
-CATEGORY_UNKNOWN = Category(cat_id=11, url="unknown", title='Unknown', tag=u'unknown', content='unknown', content_main=True, show_in_home=False, subcategories=[])
+CATEGORY_UNKNOWN = Category(cat_id=11, url="unknown", title='Unknown', tag=u'unknown', content='unknown', content_main=True, adult_content = False)
 
 COLUMN_ORDERS = {
     "fs": ("fs", "ok DESC, r DESC, e DESC", "fs"),
@@ -541,17 +541,6 @@ def torrents_data(data, details=False):
     data["view"]["seo-fn"] = seoize_text(data["view"]["fn"], "-", True)
 
     return data
-
-@cache.memoize(timeout=60*60)
-def get_rankings():
-    rs = current_app.config["RANKING_SIZE"]
-    categories_len = len(g.categories)
-    return zip(
-        multi_search(
-            (None, category.tag, "porn", RANKING_ORDER, "Home / " + category.title, ("<a href='%s'>%s torrents</a>"%
-                (url_for("files.category",category=category.url),singular_filter(category.title)), 3, category.url),
-            rs*2, rs, None) for category in g.categories if category.show_in_home),
-        (category for category in g.categories if category[-1])), get_featured(rs*categories_len,categories_len)
 
 def save_visited(files):
     if not g.search_bot:

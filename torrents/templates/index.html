@@ -1,30 +1,19 @@
 {% extends "base.html" %}
+{% from "helpers.html" import small_banner -%}
 {% block content %}
-<section class="container_24" id="files_page">
-<div class="grid_6 home">
-{{featured|safe}}
-</div>
-<div class="grid_17 prefix_1">
+<section class="container_24" id="files_top">
     <h1 class="extra">A free torrent search engine offering fast, simple, and easy access to torrent downloads in one place.</h1>
-
-    {% if pop_searches %}
-    <div id="popular">
-        <div><span>Most popular searches</span></div>
-        {%- for key, search, size in pop_searches %}
-            <a class="{{ loop.cycle('odd', 'even') }}" style="font-size:{{size}}em" href="{{url_for('files.search', query=key|clean_query)}}">{{search}}</a>
+    <ul class="browse grid_24">{%- for category in g.categories[:4] if not category.adult_content %}<li class="grid_11 {{'alpha' if loop.index0%2==0 else 'omega'}} suffix_1 big_icon {{category.url}}" ><span></span><div><h2 class="category"><a href="{{url_for('files.browse_category', category=category.url)}}">{{category.title|singular}} torrents</a></h2><ul><li><a href="{{url_for('files.category', category=category.url)}}">popular</a></li>{%- for subcat in category.subcategories|sort %}<li><a href="{{url_for('files.category', category=category.url, subcategory=subcat)}}">{{subcat}}</a></li>{%- endfor %}</ul></div>{%- endfor %}</ul>
+</section>
+{{ small_banner() }}
+<section class="container_24" id="files_page">
+    <ul class="browse grid_12">{%- for category in g.categories[4:] if not category.adult_content %}<li class="grid_11 suffix_1 alpha omega big_icon {{category.url}}"><span></span><div><h2 class="category"><a href="{{url_for('files.browse_category', category=category.url)}}">{{category.title|singular}} torrents</a></h2><ul><li><a href="{{url_for('files.category', category=category.url)}}">popular</a></li>{%- for subcat in category.subcategories|sort %}<li><a href="{{url_for('files.category', category=category.url, subcategory=subcat)}}">{{subcat}}</a></li>{%- endfor %}</ul></div>{%- endfor %}</ul>
+    <table class="ranking grid_12">
+        <tr class="norow"><th class="position grid_12 alpha omega"><h2><a href="{{ url_for('files.popular_searches', interval='week') }}">Popular searches</a></h2></th></tr>
+        {% set first_width=pop_searches[0][1]/350 %}
+        {%- for search in pop_searches[:20] %}
+            <tr><td class="position grid_1 alpha"><div class="bar" style="width:{{120+(search[1]/first_width)|int}}px"></div><span>{{ loop.index }}</span></td><td class="grid_9">{{search[0]|clean_query|blacklist_query(search[0])}}</td><td class="grid_2 omega popularity"><span>{{"%0.2f"|format(search[1]*100)}}%</span></td></tr>
         {%- endfor %}
-    </div>
-
-    {%- endif %}
-    {%- for (results, search_info), category in rankings %}
-    <div class="title ranking big_icon {{category.url}}">
-    <span></span><div><h2 class="main"><a href='{{url_for("files.category", category=category.url)}}'>{{category.title|singular}} torrents</a></h2></div>
-    </div>
-        {%- if results %}
-            {{ results | safe }}
-            <a class='more_results' href='{{url_for("files.category", category=category.url)}}'>view more {{category.title|singular|lower}} torrents...</a>
-        {%- endif %}
-    {%- endfor %}
-</div>
+    </table>
 </section>
 {% endblock %}

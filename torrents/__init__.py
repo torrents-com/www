@@ -1,3 +1,5 @@
 # -*- coding: utf-8 -*-
 from collections import namedtuple
-Category = namedtuple('Category', ['cat_id','url','title','tag','content','content_main','show_in_home','subcategories'])
+class Category(namedtuple('Category', ['cat_id','url','title','tag','content','content_main','adult_content','subcategories'])):
+    def __new__(cls, cat_id, url, title, tag, content, content_main, adult_content):
+        return super(Category, cls).__new__(cls, cat_id, url, title, tag, content, content_main, adult_content, [])

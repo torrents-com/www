@@ -453,7 +453,7 @@ img.error {
             font-size:1.4em;
             line-height:1em;
             overflow: hidden;
-            max-height: 5em;
+            max-height: 4em;
             margin-bottom:30px;
             margin-left:5px;
             @include inline-block();
@@ -556,7 +556,7 @@ ul.browse {
             white-space:normal;padding-left:0.2em;
             > li {
                 font-size:1.2em;margin:0em 0.2em;@include inline-block();
-                a{font-weight:normal;color:$grayfont}
+                a{font-weight:normal;color:$redfont}
                 &:first-child > a {font-weight:bold}
             }
 
@@ -572,7 +572,7 @@ ul.browse {
     font-weight:bold;white-space:normal;padding-left:0em;margin-top:1em;text-align:center;
     li {
         height:2em;
-        a{color:$grayfont;font-size:1.2em;font-weight:normal}
+        a{color:$redfont;font-size:1.2em;font-weight:normal}
         &:first-child > a {font-weight:bold}}
 }
 
@@ -695,7 +695,7 @@ ul.browse {
 }
 
 h1 {text-transform:uppercase;font-size:2.5em;color:$black}
-h1.extra{text-transform:none; font-weight:normal; margin:0em 0em 2em; font-size:1.9em; color:$redfont; text-align:center}
+h1.extra{text-transform:none; font-weight:normal; margin:0em 0em 2em; font-size:1.9em; color:$grayfont; text-align:center}
 
 .title {
     margin:0em 0em 2em;white-space: nowrap;

@@ -476,13 +476,12 @@ def main(processes, part, server, xml_file, fileid, favs, stats_update):
             xml = xmlpipe2.XmlPipe2(processes, fields, attrs, stats, generate_id)
             xml.generate(server, ntts_server, part<<16, files_filter, batch_size)
 
-
         dtags_stats = stats["__dtags"]
         del stats["__dtags"]
 
         if stats_update and not incremental_index:
             for tag, dtags in dtags_stats.iteritems():
-                server_conn.torrents.subcategory.update({"_id":tag}, {"$set":{"sc.%s.c"%dtag:count for dtag, count in dtags}})
+                server_conn.torrents.subcategory.update({"_id":tag}, {"$set":{"sc.%s.c"%dtag:count for dtag, count in dtags.iteritems()}})
 
             server_conn.foofind.search_stats.insert({"_id":part, "d0":time(), "d1":time()})
             server_conn.foofind.search_stats.update({"_id":part}, {"$set":stats})

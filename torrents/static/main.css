@@ -559,8 +559,9 @@ ul.browse {
                 a{font-weight:normal;color:$redfont}
                 &:first-child > a {font-weight:bold}
             }
-
         }
+
+        &.clearer {clear:left}
     }
 }
 #files_page, #files_top {

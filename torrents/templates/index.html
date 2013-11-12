@@ -3,7 +3,7 @@
 {% block content %}
 <section class="container_24" id="files_top">
     <h1 class="extra">A free torrent search engine offering fast, simple, and easy access to torrent downloads in one place.</h1>
-    <ul class="browse grid_24">{%- for category in g.categories[:4] if not category.adult_content %}<li class="grid_11 {{'alpha' if loop.index0%2==0 else 'omega'}} suffix_1 big_icon {{category.url}}" ><span></span><div><h2 class="category"><a href="{{url_for('files.browse_category', category=category.url)}}">{{category.title|singular}} torrents</a></h2><ul><li><a href="{{url_for('files.category', category=category.url)}}">popular</a></li>{%- for subcat in category.subcategories|sort %}<li><a href="{{url_for('files.category', category=category.url, subcategory=subcat|clean_query)}}">{{subcat}}</a></li>{%- endfor %}</ul></div>{%- endfor %}</ul>
+    <ul class="browse grid_24">{%- for category in g.categories[:4] if not category.adult_content %}<li class="grid_11 {{'clearer alpha' if loop.index0%2==0 else 'omega'}} suffix_1 big_icon {{category.url}}" ><span></span><div><h2 class="category"><a href="{{url_for('files.browse_category', category=category.url)}}">{{category.title|singular}} torrents</a></h2><ul><li><a href="{{url_for('files.category', category=category.url)}}">popular</a></li>{%- for subcat in category.subcategories|sort %}<li><a href="{{url_for('files.category', category=category.url, subcategory=subcat|clean_query)}}">{{subcat}}</a></li>{%- endfor %}</ul></div>{%- endfor %}</ul>
 </section>
 {{ small_banner() }}
 <section class="container_24" id="files_page">

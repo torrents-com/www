@@ -4,6 +4,15 @@
         <link rel="canonical" href="{{url_for('files.category', category=g.category.url, query=search_info['canonical_query'])}}" />
     {%- endif %}
 {%- endblock -%}
+{%- block cookies -%}
+    {%- if not results %}
+        {%- if g.query %}
+            trackGAEvent("No results", {{g.clean_query|tojson|safe}}, {{g.category.title|tojson|safe}});
+        {%- elif g.subcategory %}
+            trackGAEvent("Empty subcategory", {{g.subcategory|tojson|safe}}, {{g.category.title|tojson|safe}});
+        {%- endif %}
+    {%- endif %}
+{%- endblock -%}
 {% block content %}
 <section id="files_page" class="container_24">
 <div class="title big_icon grid_24 {{g.category.url}}">

@@ -106,6 +106,7 @@ def get_query_info(query=None, category=None, subcategory=None, check_qs=True):
             g.category = g.categories_by_url[category]
 
     if g.category and subcategory:
+        subcategory = subcategory.replace("_", " ")
         if subcategory in g.category.subcategories:
             g.subcategory = subcategory
 
@@ -190,7 +191,7 @@ def static_sitemap():
     pages = [url_for(page, _external=True) for page in (".home", ".copyright")]
     pages.extend(url_for(".browse_category", category=category.url, _external=True) for category in g.categories)
     pages.extend(url_for(".category", category=category.url, _external=True) for category in g.categories)
-    pages.extend(url_for(".category", category=category.url, subcategory=subcategory, _external=True) for category in g.categories for subcategory in category.subcategories)
+    pages.extend(url_for(".category", category=category.url, subcategory=clean_query(subcategory), _external=True) for category in g.categories for subcategory in category.subcategories)
     pages.extend(url_for(".popular_searches", interval=interval, _external=True) for interval in POPULAR_SEARCHES_INTERVALS.iterkeys())
     pages.extend(url_for(".popular_torrents", interval=interval, _external=True) for interval in POPULAR_TORRENTS_INTERVALS.iterkeys())
     response = make_response(render_template('sitemap.xml', pages = pages))
@@ -374,7 +375,7 @@ def category(category, query=None, subcategory=None):
     if g.category and g.category.adult_content:
         g.is_adult_content = True;
 
-    results, search_info = single_search("("+g.subcategory+")" if g.subcategory else g.query, category=g.category.tag, not_category=None if g.is_adult_content else "porn", order=order, zone=g.category.url, title=(page_title, 2, g.category.tag), last_items=get_last_items(), skip=get_skip(), show_order=show_order or True)
+    results, search_info = single_search("("+g.subcategory.replace(" ","")+")" if g.subcategory else g.query, category=g.category.tag, not_category=None if g.is_adult_content else "porn", order=order, zone=g.category.url, title=(page_title, 2, g.category.tag), last_items=get_last_items(), skip=get_skip(), show_order=show_order or True)
 
     if g.query:
         if g.search_bot:

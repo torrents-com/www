@@ -557,7 +557,7 @@ def get_last_items():
 
 def single_search(query, category=None, not_category=None, order=None, title=None, zone="", query_time=800, skip=None, last_items=[], limit=70, max_limit=50, ignore_ids=[], show_order=None):
 
-    dynamic_tags = g.category.subcategories if g.category else None
+    dynamic_tags = g.category.dynamic_tags if g.category else None
     if (query and (len(query)>=WORD_SEARCH_MIN_LEN or query in NGRAM_CHARS)) or category:
         s = searchd.search((query+u" " if query else u"")+(u"("+category+")" if category else u"")+(u" -("+not_category+")" if not_category else u""), None, order=order, start=not skip, group=not skip, no_group=True, dynamic_tags = dynamic_tags)
 

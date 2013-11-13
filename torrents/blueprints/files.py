@@ -235,6 +235,7 @@ def browse_category(category):
     if g.category and g.category.adult_content:
         g.is_adult_content = True
 
+    g.title.append("Browse " + singular_filter(g.category.title.lower()) + " torrents")
     pop_searches = torrentsdb.get_ranking(category)["final_ranking"]
 
 
@@ -268,7 +269,6 @@ def popular_torrents(interval):
     interval_info = POPULAR_TORRENTS_INTERVALS.get(interval, None)
     if not interval_info:
         abort(404)
-
 
     g.category = False
     g.title.append("Popular torrents "+interval_info[1])
@@ -356,9 +356,14 @@ def category(category, query=None, subcategory=None):
     if not g.category:
         return abort(404)
 
+    skip = get_skip()
+    if skip>0:
+        g.title.append("Page %d" % (int(skip) + 1))
+
     page_title = singular_filter(g.category.title)+" torrents"
     group_count_search = pop_searches = None
     if g.query:
+        g.title.append(g.query)
         page_title += " | " + g.query
         g.page_description = "%s %s torrents at %s, the free and fast torrent search engine."%(g.query.capitalize(), singular_filter(g.category.title).lower(), g.domain_capitalized)
         order, show_order = get_order(SEARCH_ORDER)
@@ -366,6 +371,7 @@ def category(category, query=None, subcategory=None):
     elif subcategory:
         if not g.subcategory:
             return abort(404)
+        g.title.append(g.subcategory.capitalize())
         page_title += " | " + g.subcategory.capitalize()
         g.page_description = "%s %s torrents at %s, the free and fast torrent search engine."%(g.subcategory.capitalize(), singular_filter(g.category.title).lower(), g.domain_capitalized)
         order, show_order = get_order(CATEGORY_ORDER)
@@ -374,12 +380,13 @@ def category(category, query=None, subcategory=None):
         g.page_description = "%s torrents at %s, the free and fast torrent search engine."%(singular_filter(g.category.title).capitalize(), g.domain_capitalized)
         order, show_order = get_order(CATEGORY_ORDER)
 
-    g.title.append(page_title)
+    g.title.append(singular_filter(g.category.title)+" torrents")
 
     if g.category and g.category.adult_content:
         g.is_adult_content = True
 
-    results, search_info = single_search("("+g.subcategory.replace(" ","")+")" if g.subcategory else g.query, category=g.category.tag, not_category=None if g.is_adult_content else "porn", order=order, zone=g.category.url, title=(page_title, 2, g.category.tag), last_items=get_last_items(), skip=get_skip(), show_order=show_order or True)
+    results, search_info = single_search("("+g.subcategory.replace(" ","")+")" if g.subcategory else g.query, category=g.category.tag, not_category=None if g.is_adult_content else "porn", order=order, zone=g.category.url, title=(None, 2, g.category.tag), last_items=get_last_items(), skip=skip, show_order=show_order or True)
+
 
     if g.query:
         if g.search_bot:

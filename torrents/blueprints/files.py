@@ -232,7 +232,11 @@ def browse_category(category):
     get_query_info(None, category)
     g.must_cache = 7200
 
+    if g.category and g.category.adult_content:
+        g.is_adult_content = True
+
     pop_searches = torrentsdb.get_ranking(category)["final_ranking"]
+
 
     return render_template('browse_category.html', pop_searches = pop_searches)
 
@@ -373,7 +377,7 @@ def category(category, query=None, subcategory=None):
     g.title.append(page_title)
 
     if g.category and g.category.adult_content:
-        g.is_adult_content = True;
+        g.is_adult_content = True
 
     results, search_info = single_search("("+g.subcategory.replace(" ","")+")" if g.subcategory else g.query, category=g.category.tag, not_category=None if g.is_adult_content else "porn", order=order, zone=g.category.url, title=(page_title, 2, g.category.tag), last_items=get_last_items(), skip=get_skip(), show_order=show_order or True)
 

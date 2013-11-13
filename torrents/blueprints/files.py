@@ -107,7 +107,7 @@ def get_query_info(query=None, category=None, subcategory=None, check_qs=True):
 
     if g.category and subcategory:
         subcategory = subcategory.replace("_", " ")
-        if subcategory in g.category.subcategories:
+        if subcategory in g.category.all_subcategories:
             g.subcategory = subcategory
 
     return must_redirect

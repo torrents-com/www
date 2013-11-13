@@ -210,7 +210,7 @@ def create_app(config=None, debug=False):
     eventmanager.interval(app.config["CONFIG_UPDATE_INTERVAL"], configdb.pull)
 
     # Categorias
-    categories_cache.init_app(app.config["TORRENTS_CATEGORIES"])
+    categories_cache.init_app(app.config["TORRENTS_CATEGORIES"], app.config["SUBCATEGORIES_MIN_OCCURS"])
     categories_cache.update_subcategories(torrentsdb.get_subcategories())
 
     def refresh_subcategories():

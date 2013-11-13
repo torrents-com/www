@@ -442,7 +442,7 @@ def main(processes, part, server, xml_file, fileid, favs, stats_update):
         files_filter = {'bl': 0}
         if fileid: files_filter["_id"] = hex2mid(fileid)
 
-        stats = {"_id": part, "sg":defaultdict(int), "z":defaultdict(int), "l":defaultdict(int), "lc":defaultdict(int), "la":defaultdict(float), "lpa":defaultdict(float), "zc":defaultdict(int), "za":defaultdict(float), "zpa":defaultdict(float), "ra":defaultdict(float), "rpa":defaultdict(float), "rM":defaultdict(float), "rc":defaultdict(int), "__dtags":{tag:defaultdict(int) for tag in DYNAMIC_TAGS.iterkeys()}}
+        stats = {"_id": part, "sg":defaultdict(int), "z":defaultdict(int), "l":defaultdict(int), "lc":defaultdict(int), "la":defaultdict(float), "lpa":defaultdict(float), "zc":defaultdict(int), "za":defaultdict(float), "zpa":defaultdict(float), "ra":defaultdict(float), "rpa":defaultdict(float), "rM":defaultdict(float), "rc":defaultdict(int), "__dtags":{tag:{subcat:0 for word, subcat in DYNAMIC_TAGS[tag].iteritems() if word==subcat} for tag in DYNAMIC_TAGS.iterkeys()}}
 
         if xml_file:
             if exists(xml_file):
@@ -478,6 +478,7 @@ def main(processes, part, server, xml_file, fileid, favs, stats_update):
 
         dtags_stats = stats["__dtags"]
         del stats["__dtags"]
+
 
         if stats_update and not incremental_index:
             for tag, dtags in dtags_stats.iteritems():

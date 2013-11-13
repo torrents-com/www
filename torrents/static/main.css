@@ -544,7 +544,7 @@ img.error {
 
 ul.browse {
     > li {
-        margin:0em 0em 3em;
+        margin-bottom:2em;
         >div {vertical-align:middle;@include inline-block();}
         >span {
             white-space:normal;margin-top:0.8em;@include inline-block();
@@ -552,12 +552,14 @@ ul.browse {
 
         h2 a {color:$black;}
 
-        div > ul {
-            white-space:normal;padding-left:0.2em;
-            > li {
-                font-size:1.2em;margin:0em 0.2em;@include inline-block();
-                a{font-weight:normal;color:$redfont}
-                &:first-child > a {font-weight:bold}
+        div {
+            > ul {
+                white-space:normal;padding:0 1em 0 0.2em;
+                > li {
+                     font-size:1.2em;margin:0em 0.4em;@include inline-block();
+                    a{font-weight:normal;color:$redfont}
+                    &:first-child > a {font-weight:bold}
+                }
             }
         }
 

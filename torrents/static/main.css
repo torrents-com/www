@@ -288,7 +288,7 @@ img.error {
                 a { font-size:1.6em;color:$lightredfont;text-shadow: 0px 0px 1px $lightredfont; text-decoration:none;position:relative;
                     .arrow {
                         position:absolute;
-                        top:2em;
+                        top:31px;
                         width: 0;
                         height: 0;
                         left: 50%;
@@ -297,6 +297,7 @@ img.error {
                         border-right: 15px solid transparent;
                         border-top: 15px solid $red;
                         display:none;
+                        -moz-border-bottom-colors: transparent;
                     }
                 }
 

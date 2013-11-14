@@ -207,6 +207,7 @@ def home():
     '''
     g.must_cache = 7200
     g.category=False
+    g.cache_code = "B"
 
     pop_searches = torrentsdb.get_ranking("weekly")["final_ranking"]
 

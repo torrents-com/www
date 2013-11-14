@@ -161,26 +161,6 @@ def pixel():
 
     return pixel_response
 
-CHAR_SIZE=11
-WORD_SIZE=8
-def create_cloud(data, width, lines):
-    g.cache_code = "B"
-    ranking = data["final_ranking"] if "final_ranking" in data else None
-
-    if not ranking:
-        return []
-
-    acum = 0
-    cloud_size = 0
-    limit = lines*width
-    for search, weight, trend, trend_pos in ranking:
-        limit -= len(search)*CHAR_SIZE+WORD_SIZE
-        if limit<0:
-            break
-        cloud_size +=1
-
-    return sorted((search.lower(), search, 0.75+0.5*(cloud_size-size)/cloud_size) for size, (search, weight, trend, trend_pos) in enumerate(itertools.islice(ranking, 0, cloud_size)))
-
 @files.route('/favicon.ico')
 def favicon():
     g.cache_code = "S"
@@ -237,6 +217,7 @@ def browse_category(category):
     '''
     Renderiza la página de navegacion de categoria
     '''
+    g.cache_code = "B"
     get_query_info(None, category)
     g.must_cache = 7200
 
@@ -256,6 +237,7 @@ def popular_searches(interval):
     Renderiza la página de búsquedas populares.
     '''
 
+    g.cache_code = "B"
     interval_info = POPULAR_SEARCHES_INTERVALS.get(interval, None)
     if not interval_info:
         abort(404)
@@ -380,12 +362,12 @@ def category(category, query=None, subcategory=None):
     elif subcategory:
         if not g.subcategory:
             return abort(404)
+        g.cache_code = "B"
         page_title = g.subcategory.capitalize()+" "+page_title.lower()
         g.page_description = "%s %s torrents at %s, the free and fast torrent search engine."%(g.subcategory.capitalize(), singular_filter(g.category.title).lower(), g.domain_capitalized)
         order, show_order, order_title = get_order(CATEGORY_ORDER)
     else:
         page_title = "Popular "+page_title.lower()
-        pop_searches = create_cloud(torrentsdb.get_ranking(category), 550, 2)
         g.page_description = "Popular %s torrents at %s, the free and fast torrent search engine."%(singular_filter(g.category.title).capitalize(), g.domain_capitalized)
         order, show_order, order_title = get_order(CATEGORY_ORDER)
 
@@ -409,7 +391,7 @@ def category(category, query=None, subcategory=None):
     if group_count_search:
         g.categories_results = end_guess_categories_with_results(group_count_search)
 
-    return render_template('category.html', results=results, search_info=search_info, show_order=show_order, featured=get_featured(search_info["count"]), pop_searches=pop_searches), 200 if bool(results) else 404
+    return render_template('category.html', results=results, search_info=search_info, show_order=show_order, featured=get_featured(search_info["count"])), 200 if bool(results) else 404
 
 
 @files.route('/-<fileid:file_id>')

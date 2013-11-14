@@ -56,6 +56,14 @@ COLUMN_ORDERS = {
     "s": ("r", "ok DESC, e DESC, fs DESC", "r"),
     "rs": ("if(r>0,1/r,-1)", "ok DESC, e DESC, fs DESC", "if(r>0,1/r,-1)"),
 }
+COLUMN_ORDERS_TITLES = {
+    "fs": "Recent first",
+    "rfs": "Older first",
+    "z": "Bigger first",
+    "rz": "Smaller first",
+    "s": "High availability first",
+    "rs": "Low availability first",
+}
 
 POPULAR_SEARCHES_INTERVALS = OrderedDict([
                         ("now", ("recent", "at this moment")),
@@ -73,10 +81,10 @@ def get_order(default_order):
     try:
         order = request.args.get("o",None)
         if order and order in COLUMN_ORDERS:
-            return COLUMN_ORDERS[order], order
+            return COLUMN_ORDERS[order], order, COLUMN_ORDERS_TITLES[order]
     except:
         pass
-    return default_order, None
+    return default_order, None, None
 
 def get_skip(x=None):
     try:
@@ -235,9 +243,10 @@ def browse_category(category):
     if g.category and g.category.adult_content:
         g.is_adult_content = True
 
-    g.title.append("Browse " + singular_filter(g.category.title.lower()) + " torrents")
+    g.title.append(singular_filter(g.category.title) + " torrents")
     pop_searches = torrentsdb.get_ranking(category)["final_ranking"]
 
+    g.page_description = "Popular %s torrents at %s, the free and fast torrent search engine."%(singular_filter(g.category.title).capitalize(), g.domain_capitalized)
 
     return render_template('browse_category.html', pop_searches = pop_searches)
 
@@ -294,7 +303,7 @@ def search_info():
         full_query.append(u"-("+not_category+")")
 
     special_order = request.args.get("so", None)
-    order, show_order = get_order({"c":CATEGORY_ORDER, "i":IMAGES_ORDER, "r":RANKING_ORDER, "s":SEARCH_ORDER}.get(special_order,None))
+    order, show_order, title = get_order({"c":CATEGORY_ORDER, "i":IMAGES_ORDER, "r":RANKING_ORDER, "s":SEARCH_ORDER}.get(special_order,None))
     return jsonify(searchd.get_search_info(" ".join(full_query), filters=None, order=order))
 
 @files.route('/search/')
@@ -317,16 +326,17 @@ def search(query=None):
         else:
             return redirect(url_for(".search", query=g.clean_query))
 
-    order, show_order = get_order(SEARCH_ORDER)
+    order, show_order, order_title = get_order(SEARCH_ORDER)
+    if order_title:
+        g.title.append(order_title)
 
     skip = get_skip()
+    if skip>0:
+        g.title.append("Page %d" % (int(skip) + 1))
 
     group_count_search = start_guess_categories_with_results(g.query)
 
     results, search_info = single_search(g.query, None, not_category="porn", zone="Search", order=order, title=("%s torrents"%escape(g.query), 2, None), last_items=get_last_items(), skip=skip, show_order=show_order or True)
-
-    if skip>0:
-        g.title.append("Page %d" % (int(skip) + 1))
 
     g.title.append(g.query)
 
@@ -340,11 +350,11 @@ def search(query=None):
     g.categories_results = end_guess_categories_with_results(group_count_search)
 
 
-    return render_template('search.html', results=results, search_info=search_info, show_order=show_order, featured=get_featured(search_info["count"]))
+    return render_template('search.html', results=results, search_info=search_info, show_order=show_order, featured=get_featured(search_info["count"])), 200 if bool(results) else 404
 
 @files.route('/popular/<category:category>')
 @files.route('/<category:category>/<query>')
-@files.route('/browse/<category:category>/<subcategory>')
+@files.route('/torrents/<category:category>/<subcategory>')
 def category(category, query=None, subcategory=None):
 
     g.page_type = CATEGORY_PAGE_TYPE
@@ -360,27 +370,29 @@ def category(category, query=None, subcategory=None):
     if skip>0:
         g.title.append("Page %d" % (int(skip) + 1))
 
-    page_title = singular_filter(g.category.title)+" torrents"
     group_count_search = pop_searches = None
+    page_title = singular_filter(g.category.title)+" torrents"
     if g.query:
-        g.title.append(g.query)
-        page_title += " | " + g.query
+        page_title = g.query.capitalize()+" "+page_title.lower()
         g.page_description = "%s %s torrents at %s, the free and fast torrent search engine."%(g.query.capitalize(), singular_filter(g.category.title).lower(), g.domain_capitalized)
-        order, show_order = get_order(SEARCH_ORDER)
+        order, show_order, order_title = get_order(SEARCH_ORDER)
         group_count_search = start_guess_categories_with_results(g.query)
     elif subcategory:
         if not g.subcategory:
             return abort(404)
-        g.title.append(g.subcategory.capitalize())
-        page_title += " | " + g.subcategory.capitalize()
+        page_title = g.subcategory.capitalize()+" "+page_title.lower()
         g.page_description = "%s %s torrents at %s, the free and fast torrent search engine."%(g.subcategory.capitalize(), singular_filter(g.category.title).lower(), g.domain_capitalized)
-        order, show_order = get_order(CATEGORY_ORDER)
+        order, show_order, order_title = get_order(CATEGORY_ORDER)
     else:
+        page_title = "Popular "+page_title.lower()
         pop_searches = create_cloud(torrentsdb.get_ranking(category), 550, 2)
-        g.page_description = "%s torrents at %s, the free and fast torrent search engine."%(singular_filter(g.category.title).capitalize(), g.domain_capitalized)
-        order, show_order = get_order(CATEGORY_ORDER)
+        g.page_description = "Popular %s torrents at %s, the free and fast torrent search engine."%(singular_filter(g.category.title).capitalize(), g.domain_capitalized)
+        order, show_order, order_title = get_order(CATEGORY_ORDER)
 
-    g.title.append(singular_filter(g.category.title)+" torrents")
+    if order_title:
+        g.title.append(order_title)
+
+    g.title.append(page_title)
 
     if g.category and g.category.adult_content:
         g.is_adult_content = True
@@ -397,7 +409,7 @@ def category(category, query=None, subcategory=None):
     if group_count_search:
         g.categories_results = end_guess_categories_with_results(group_count_search)
 
-    return render_template('category.html', results=results, search_info=search_info, show_order=show_order, featured=get_featured(search_info["count"]), pop_searches=pop_searches)
+    return render_template('category.html', results=results, search_info=search_info, show_order=show_order, featured=get_featured(search_info["count"]), pop_searches=pop_searches), 200 if bool(results) else 404
 
 
 @files.route('/-<fileid:file_id>')

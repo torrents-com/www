@@ -19,7 +19,7 @@
     <span></span>
     <div>
         <div class="lead"><a href='{{url_for("files.home")}}'>All</a>&nbsp;&nbsp;<span>&gt;</span>&nbsp;&nbsp;<a href='{{url_for("files.browse_category", category=g.category.url)}}'>{{g.category.title}}</a>&nbsp;&nbsp;<span>&gt;</span>&nbsp;&nbsp;{{g.query or g.subcategory or "popular"}}</div>
-        <h1 class="category">{{g.query or g.subcategory or "Popular"}} {{g.category.title|singular}} torrents</h1>
+        <h1 class="category">{{(g.query or g.subcategory or "popular")|capitalize}} {{g.category.title|singular|lower}} torrents</h1>
     </div>
 </div>
 {%- if results %}

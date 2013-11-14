@@ -9,9 +9,9 @@
 <section class="ranking container_24" id="files_page">
     <h2 class="grid_24"><a href="{{ url_for('files.popular_searches', interval='week') }}">Popular searches</a></h2>
     <table class="grid_24">
-        {% set first_width=pop_searches[0][1]/830 %}
+        {% set first_width=pop_searches[0][1] %}
         {%- for search in pop_searches[:20] %}
-            <tr><td class="position grid_1 alpha"><div class="bar" style="width:{{120+(search[1]/first_width)|int}}px"></div><span>{{ loop.index }}</span></td><td class="grid_21">{{search[0]|clean_query|blacklist_query(search[0])}}</td><td class="grid_2 omega popularity"><span>{{"%0.2f"|format(search[1]*100)}}%</span></td></tr>
+            <tr><td class="position grid_1 alpha"><div class="bar" style="width:{{120+(search[1]/first_width*830)|int}}px"></div><span>{{ loop.index }}</span></td><td class="grid_21">{{search[0]|clean_query|blacklist_query(search[0])}}</td><td class="grid_2 omega popularity"><span>{{"%0.2f"|format(search[1]/first_width*10)}}</span></td></tr>
         {%- endfor %}
     </table>
 </section>

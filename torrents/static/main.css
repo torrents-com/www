@@ -1057,7 +1057,7 @@ h1.extra{text-transform:none; font-weight:normal; margin:0em 0em 2em; font-size:
 /* carruseles */
 #carrusel, #mini_carrusel {
     background-color:$black;color: #fff;box-shadow: 0px 0px 15px $darkgray;
-    .tagline { font-family:cursive; font-size: 2.5em; font-style:italic; display:block;margin: 0.7em 0em; color: #fff; font-weight:400 }
+    .tagline { font-size: 2.5em; font-style:italic; display:block;margin: 0.7em 0em; color: #fff; font-weight:400 }
     a { @include redbutton();margin:1em 0em;padding:0.8em 1.8em;font-size:1.5em;border-radius: 0.5em; @include inline-block();}
     img {margin: -2.5em 1.5em;float: left;}
     p {font-size: 1.3em; text-align:right}

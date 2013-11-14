@@ -57,5 +57,7 @@ def blacklist_query(query, text=None, title=None):
 
     if g.is_adult_content:
         return Markup("<a href='" + g.url_adult_search_base.replace('___', query)+"' title='"+(title or text or query)+"'>"+(text or query)+"</a>")
+    elif g.category:
+        return Markup("<a href='" + url_for("files.category", query=query, category=g.category.url)+"' title='"+(title or text or query)+"'>"+(text or query)+"</a>")
     else:
         return Markup("<a href='" + g.url_search_base.replace('___', query)+"' title='"+(title or text or query)+"'>"+(text or query)+"</a>")

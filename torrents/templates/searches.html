@@ -19,9 +19,9 @@
         </p>
     </div>
     <table class="grid_24">
-        {% set first_width=ranking["final_ranking"][0][1]/830 %}
+        {% set first_width=ranking["final_ranking"][0][1] %}
         {%- for search in ranking["final_ranking"] %}
-            <tr><td class="trend grid_1 alpha"><div class="bar" style="width:{{120+(search[1]/first_width)|int}}px"></div>{{trend(search[3], loop.index0)}}</td><td class="position grid_1">{{ loop.index }}</td><td class="grid_20">{{search[0]|clean_query|blacklist_query(search[0])}}</td><td class="grid_2 omega popularity"><span>{{"%0.2f"|format(search[1]*100)}}%</span></td></tr>
+            <tr><td class="trend grid_1 alpha"><div class="bar" style="width:{{120+(search[1]/first_width*830)|int}}px"></div>{{trend(search[3], loop.index0)}}</td><td class="position grid_1">{{ loop.index }}</td><td class="grid_20">{{search[0]|clean_query|blacklist_query(search[0])}}</td><td class="grid_2 omega popularity"><span>{{"%0.2f"|format(search[1]/first_width*10)}}</span></td></tr>
         {%- endfor %}
     </table>
 </section>

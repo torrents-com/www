@@ -288,7 +288,7 @@ img.error {
                 a { font-size:1.6em;color:$lightredfont;text-shadow: 0px 0px 1px $lightredfont; text-decoration:none;position:relative;
                     .arrow {
                         position:absolute;
-                        top:1.9em;
+                        top:2em;
                         width: 0;
                         height: 0;
                         left: 50%;
@@ -521,26 +521,28 @@ img.error {
 }
 
 .ranking {
-    border-collapse: collapse;
-    h2 {margin:0.45em 0em 0.1em; text-align:left;font-size:1.8em; a {color:$black}}
-    span, td a {
-        margin:0 5px;position:relative;
-    }
-    a{width:100%;@include inline-block()}
-    tr {border-bottom:1px solid $darkgreen; &:hover {background-color:$darkgreen; .bar {background-color:$darkgreen}}}
-    tr:first-child {border-top:1px solid $darkgreen;}
-    td {background-color:transparent;font-size:1.2em; padding:0.4em 0em;position:relative;
-        &.trend {text-align:center;}
-        &.position {text-align:right;font-weight:bold;}
-        &.popularity {text-align:right;}
-    }
+    > table {
+        border-collapse: collapse;
+        span, td a {
+            margin:0 5px;position:relative;
+        }
+        a{width:100%;@include inline-block()}
+        tr {border-bottom:1px solid $darkgreen; &:hover {background-color:$darkgreen; .bar {background-color:$darkgreen}}}
+        tr:first-child {border-top:1px solid $darkgreen;}
+        td {background-color:transparent;font-size:1.2em; padding:0.4em 0em;position:relative;
+            &.trend {text-align:center;}
+            &.position {text-align:right;font-weight:bold;}
+            &.popularity {text-align:right;}
+        }
 
-    .bar {
-        position:absolute;background:$lightgreen;bottom:0px;top:0px;margin:0;z-index:0;
+        .bar {
+            position:absolute;background:$lightgreen;bottom:0px;top:0px;margin:0;z-index:0;
+        }
     }
-
-    tr.norow {border-top:none;&:hover{background:none}}
+    > h2 {a{color:$black}}
 }
+
+
 
 ul.browse {
     > li {
@@ -568,7 +570,7 @@ ul.browse {
 }
 #files_page, #files_top {
     h2 {
-        font-size:1.8em;margin:0;
+        font-size:1.8em;margin-top:0;margin-bottom:0;
     }
 }
 .browse_cat {

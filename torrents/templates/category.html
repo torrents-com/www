@@ -8,8 +8,6 @@
     {%- if not results %}
         {%- if g.query %}
             trackGAEvent("No results", {{g.clean_query|tojson|safe}}, {{g.category.title|tojson|safe}});
-        {%- elif g.subcategory %}
-            trackGAEvent("Empty subcategory", {{g.subcategory|tojson|safe}}, {{g.category.title|tojson|safe}});
         {%- endif %}
     {%- endif %}
 {%- endblock -%}
@@ -18,8 +16,8 @@
 <div class="title big_icon grid_24 {{g.category.url}}">
     <span></span>
     <div>
-        <div class="lead"><a href='{{url_for("files.home")}}'>All</a>&nbsp;&nbsp;<span>&gt;</span>&nbsp;&nbsp;<a href='{{url_for("files.browse_category", category=g.category.url)}}'>{{g.category.title}}</a>&nbsp;&nbsp;<span>&gt;</span>&nbsp;&nbsp;{{g.query or g.subcategory or "popular"}}</div>
-        <h1 class="category">{{(g.query or g.subcategory or "popular")|capitalize}} {{g.category.title|singular|lower}} torrents</h1>
+        <div class="lead"><a href='{{url_for("files.home")}}'>All</a>&nbsp;&nbsp;<span>&gt;</span>&nbsp;&nbsp;<a href='{{url_for("files.browse_category", category=g.category.url)}}'>{{g.category.title}}</a>&nbsp;&nbsp;<span>&gt;</span>&nbsp;&nbsp;{{g.query or "popular"}}</div>
+        <h1 class="category">{{(g.query or "popular")|capitalize}} {{g.category.title|singular|lower}} torrents</h1>
     </div>
 </div>
 {%- if results %}
@@ -39,7 +37,7 @@
 {%- else %}
 <div class="text_page">
     <p>No <strong>{{g.category.title|singular}}</strong> torrents found for <strong>{{g.query}}</strong>.</p>
-    <p>Sorry, we don't have any result that matches your query in this category. Please, try another search or another category.</p>
+    <p>Sorry, we don't have any result that matches your query in this category. Please try another search or another category.</p>
 </div>
 {%- endif %}
 

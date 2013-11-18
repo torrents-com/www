@@ -42,6 +42,7 @@ SEARCH_PAGE_TYPE = 2
 CATEGORY_PAGE_TYPE = 3
 
 CATEGORY_ORDER = ("fs*r", "ok DESC, r DESC, fs DESC", "fs*r")
+SUBCATEGORY_ORDER = ("fs*r*r2", "ok DESC, r DESC, fs DESC", "fs*r*r2")
 IMAGES_ORDER = ("fs*r2", "ok DESC, r DESC, fs DESC", "fs*r2")
 RANKING_ORDER = ("fs*r", "ok DESC, r DESC, fs DESC", "fs*r")
 SEARCH_ORDER = ("@weight*r", "e DESC, ok DESC, r DESC, fs DESC", "@weight*r")
@@ -189,6 +190,20 @@ def static_sitemap():
 @files.route('/sitemap/sitemap0.xml.gz')
 def dynamic_sitemap():
     pass
+
+@files.route('/smap')
+def user_sitemap():
+    structure = [
+                    [("Home page", url_for(".home"), []), ("Copyright", url_for(".copyright"), [])] +
+                    [("Popular searches", None, [(info[-1], url_for(".popular_searches", interval=interval)) for interval, info in POPULAR_SEARCHES_INTERVALS.iteritems()])] +
+                    [("Popular torrents", None, [(info[-1], url_for(".popular_torrents", interval=interval)) for interval, info in POPULAR_TORRENTS_INTERVALS.iteritems()])]
+                 ] + [
+                    [(category.title, url_for(".browse_category", category=category.url),
+                        [("popular "+category.title.lower(),url_for(".category", category=category.url))] +
+                        [(subcategory, url_for(".category", category=category.url, subcategory=clean_query(subcategory))) for subcategory in category.subcategories])]
+                                for category in g.categories
+                ]
+    return render_template('sitemap.html', structure=structure, column_count=4, column_width=5)
 
 @files.route('/robots.txt')
 def robots():
@@ -355,6 +370,7 @@ def category(category, query=None, subcategory=None):
 
     group_count_search = pop_searches = None
     page_title = singular_filter(g.category.title)+" torrents"
+    results_template = "results.html"
     if g.query:
         page_title = g.query.capitalize()+" "+page_title.lower()
         g.page_description = "%s %s torrents at %s, the free and fast torrent search engine."%(g.query.capitalize(), singular_filter(g.category.title).lower(), g.domain_capitalized)
@@ -366,7 +382,8 @@ def category(category, query=None, subcategory=None):
         g.cache_code = "B"
         page_title = g.subcategory.capitalize()+" "+page_title.lower()
         g.page_description = "%s %s torrents at %s, the free and fast torrent search engine."%(g.subcategory.capitalize(), singular_filter(g.category.title).lower(), g.domain_capitalized)
-        order, show_order, order_title = get_order(CATEGORY_ORDER)
+        order, show_order, order_title = get_order(SUBCATEGORY_ORDER)
+        results_template = "browse.html"
     else:
         page_title = "Popular "+page_title.lower()
         g.page_description = "Popular %s torrents at %s, the free and fast torrent search engine."%(singular_filter(g.category.title).capitalize(), g.domain_capitalized)
@@ -380,19 +397,22 @@ def category(category, query=None, subcategory=None):
     if g.category and g.category.adult_content:
         g.is_adult_content = True
 
-    results, search_info = single_search("("+g.subcategory.replace(" ","")+")" if g.subcategory else g.query, category=g.category.tag, not_category=None if g.is_adult_content else "porn", order=order, zone=g.category.url, title=(None, 2, g.category.tag), last_items=get_last_items(), skip=skip, show_order=show_order or True)
+    results, search_info = single_search("("+g.subcategory.replace(" ","")+")" if g.subcategory else g.query, category=g.category.tag, not_category=None if g.is_adult_content else "porn", order=order, zone=g.category.url, title=(None, 2, g.category.tag), last_items=get_last_items(), skip=skip, show_order=show_order, results_template=results_template, details=bool(g.subcategory))
 
+    if g.subcategory:
+        return render_template('subcategory.html', results=results, search_info=search_info, show_order=show_order, featured=get_featured(search_info["count"])), 200 if bool(results) else 404
+    else:
 
-    if g.query:
-        if g.search_bot:
-            searchd.log_bot_event(g.search_bot, (search_info["total_found"]>0 or search_info["sure"]))
-        else:
-            g.track = bool(results)
+        if g.query:
+            if g.search_bot:
+                searchd.log_bot_event(g.search_bot, (search_info["total_found"]>0 or search_info["sure"]))
+            else:
+                g.track = bool(results)
 
-    if group_count_search:
-        g.categories_results = end_guess_categories_with_results(group_count_search)
+        if group_count_search:
+            g.categories_results = end_guess_categories_with_results(group_count_search)
 
-    return render_template('category.html', results=results, search_info=search_info, show_order=show_order, featured=get_featured(search_info["count"])), 200 if bool(results) else 404
+        return render_template('category.html', results=results, search_info=search_info, show_order=show_order, featured=get_featured(search_info["count"])), 200 if bool(results) else 404
 
 
 @files.route('/-<fileid:file_id>')
@@ -562,15 +582,15 @@ def get_last_items():
 
     return last_items
 
-def single_search(query, category=None, not_category=None, order=None, title=None, zone="", query_time=800, skip=None, last_items=[], limit=70, max_limit=50, ignore_ids=[], show_order=None):
+def single_search(query, category=None, not_category=None, order=None, title=None, zone="", query_time=800, skip=None, last_items=[], limit=70, max_limit=50, ignore_ids=[], show_order=None, results_template="results.html", details=False):
 
     dynamic_tags = g.category.dynamic_tags if g.category else None
     if (query and (len(query)>=WORD_SEARCH_MIN_LEN or query in NGRAM_CHARS)) or category:
         s = searchd.search((query+u" " if query else u"")+(u"("+category+")" if category else u"")+(u" -("+not_category+")" if not_category else u""), None, order=order, start=not skip, group=not skip, no_group=True, dynamic_tags = dynamic_tags)
 
-        return process_search_results(s, query, category, not_category, zone=zone, title=title, last_items=last_items, skip=skip, limit=limit, max_limit=max_limit, ignore_ids=ignore_ids, show_order=show_order)
+        return process_search_results(s, query, category, not_category, zone=zone, title=title, last_items=last_items, skip=skip, limit=limit, max_limit=max_limit, ignore_ids=ignore_ids, show_order=show_order, results_template=results_template, details=details)
     else:
-        return process_search_results(None, query, category, zone=zone, title=title, last_items=last_items, skip=skip, limit=limit, max_limit=max_limit, ignore_ids=ignore_ids, show_order=show_order)
+        return process_search_results(None, query, category, zone=zone, title=title, last_items=last_items, skip=skip, limit=limit, max_limit=max_limit, ignore_ids=ignore_ids, show_order=show_order, results_template=results_template, details=details)
 
 def multi_search(params, query_time=500, extra_wait_time=500):
     searches = [(searchd.search((query+u" " if query else u"")+(u"("+category+")" if category else u"")+(u" -("+not_category+")" if not_category else u""), None, order=order, start=True, group=True, no_group=True), query, category, not_category, zone, title, limit, max_limit, show_order) for query, category, not_category, order, zone, title, limit, max_limit, show_order in params]
@@ -591,7 +611,7 @@ def end_guess_categories_with_results(s):
             logging.warn("Count results for home lower than zero for search '%s' in category '%s'"%(g.query, g.category.title if g.category else "-"))
     return count_results
 
-def process_search_results(s=None, query=None, category=None, not_category=None, title=None, zone="", last_items=[], skip=None, limit=70, max_limit=50, ignore_ids=[], show_order=True):
+def process_search_results(s=None, query=None, category=None, not_category=None, title=None, zone="", last_items=[], skip=None, limit=70, max_limit=50, ignore_ids=[], show_order=True, results_template="results.html", details=False):
     files = []
     files_text = []
     files_dict = None
@@ -638,7 +658,7 @@ def process_search_results(s=None, query=None, category=None, not_category=None,
     # si la canonical query es vacia, solo interesan resultados para busquedas con query nulo (rankings)
     if (g.show_blacklisted_content or not g.blacklisted_content) and (canonical_query or not query):
         if ids:
-            files_dict={str(f["_id"]):prepare_data(f,text=query,ntts=ntts,current_category=category) for f in get_files(ids,s)}
+            files_dict={str(f["_id"]):prepare_data(f,text=query,ntts=ntts,details=details, current_category=category) for f in get_files(ids,s)}
 
             if not g.search_bot:
                 save_visited(files_dict.values())
@@ -660,7 +680,7 @@ def process_search_results(s=None, query=None, category=None, not_category=None,
                     g.featured.append((-featured_weight, position, afile))
                     position+=1
 
-            results = render_template('results.html', files=files[:max_limit or limit], list_title=title[0] or query or category, title_level=title[1], title_class=title[2], zone=zone, show_order=show_order)
+            results = render_template(results_template, files=files[:max_limit or limit], list_title=title[0] or query or category, title_level=title[1], title_class=title[2], zone=zone, show_order=show_order)
 
         count = min(len(files), max_limit or limit)
         search_info = {"time": max(stats["t"].itervalues()) if stats["t"] else 0, "total_found": stats["cs"],

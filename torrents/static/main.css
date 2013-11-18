@@ -157,15 +157,21 @@ img {
 
     h2 { font-size: 1.6em}
 
+    .clearer {clear:left}
     > ul, > ol {
+        margin-top:1em;
         font-size: 1.4em;
     }
 
     ul, ol {
-        padding-left:3em;vertical-align: top;
+        vertical-align: top;
         li {
+            margin-top:0.2em;
             list-style-type:inherit;
         }
+    }
+    li > ul, li > ol {
+        padding-left:3em;
     }
     ul > li { list-style-type:circle}
     p, label, input, textarea, td, th {
@@ -477,6 +483,62 @@ img.error {
     }
 }
 
+#browse_torrents {
+    padding-left:0px; margin-top:-20px;
+    .icon-stars {
+        margin:10px 0px 10px 5px;height:12px;
+        span {background:url(/static/star_small.png) left center repeat-x;height:12px}
+        .nostars {background-image:url(/static/star_no_small.png)}
+        .stars-1 {width:12px*1}
+        .stars-2 {width:12px*2}
+        .stars-3 {width:12px*3}
+        .stars-4 {width:12px*4}
+        .stars-5 {width:12px*5}
+    }
+
+    li {
+        list-style:none;
+
+        &.clearer {clear:left}
+        >div:first-child {
+            overflow:hidden; margin-top:20px;
+        }
+
+        >div:first-child + div {
+            > .icon-stars{margin-top:25px}
+        }
+
+        .filelink {
+            color:$black;
+            text-decoration:none;
+            text-transform:uppercase;
+            word-wrap:break-word;
+            width:97%;
+            font-weight:700;
+            font-size:1.4em;
+            overflow: hidden;
+            max-height: 4em;
+            @include inline-block();
+            &:hover { color:$redfont}
+        }
+
+        .download {
+            text-align:center;
+            @include redbutton();
+            display:block;
+            font-size:1.1em;
+            padding: 0px 3px 0px 0px;
+            border-radius: 7px;
+            font-weight:700;
+            margin-top:-30px;
+            margin-left:115px;
+            width:100px;
+
+            .icon-download_button { vertical-align:-6px }
+        }
+    }
+
+}
 .icon-stars {
     margin:0px 0px 15px;height:19px;
     span {

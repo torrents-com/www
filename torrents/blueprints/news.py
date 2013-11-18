@@ -125,7 +125,7 @@ def robots():
     full_filename = os.path.join(os.path.join(current_app.root_path, 'static'), 'robots.txt')
 
     with open(full_filename) as input_file:
-        response = make_response(input_file.read() + "\nSitemap: "+ url_for("news.main_sitemap", _external=True) + "\nSitemap: "+ url_for(".static_sitemap", _external=True))
+        response = make_response(input_file.read() + "\n\nUser-agent: Googlebot\nDisallow: /search*\n"+"".join("Disallow: /%s/*\n"%cat.url for cat in g.categories) + "\nSitemap: "+ url_for("news.main_sitemap", _external=True) + "\nSitemap: "+ url_for(".static_sitemap", _external=True))
         response.mimetype='text/plain'
     return response
 
@@ -136,6 +136,11 @@ def static_sitemap():
     response = make_response(render_template('sitemap.xml', pages = pages))
     response.mimetype='text/xml'
     return response
+
+@news.route('/smap')
+def user_sitemap():
+    structure = [[("Home page", url_for("news.home"), [("About us", url_for(".about")), ("Terms & privacy", url_for(".legal")), ("Contact us", url_for(".contact"))]),]]
+    return render_template('sitemap.html', structure=structure, column_count=2, column_width=11)
 
 @news.route('/about')
 def about():

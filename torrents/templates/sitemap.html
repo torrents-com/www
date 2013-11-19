@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block content %}
+    <div class="container_24" id="text_page">
+        <h1>{{g.domain}} sitemap</h1>
+    {%- for column in structure %}
+        <ul class="grid_{{column_width}} prefix_1 {{'clearer' if loop.index0%column_count==0 }}">
+        {%- for item in column %}
+            <li>
+                {{ item[0] if not item[1] else "<a href='%s'>%s</a>"|safe%(item[1],item[0])}}
+                {%- if item[2] %}
+                <ul>
+                    {%- for subitem in item[2] %}
+                    <li><a href='{{subitem[1]}}'>{{subitem[0]}}</a></li>
+                    {%- endfor %}
+                </ul>
+                {%- endif %}
+            </li>
+        {%- endfor %}
+        </ul>
+    {%- endfor %}
+    </div>
+{% endblock %}

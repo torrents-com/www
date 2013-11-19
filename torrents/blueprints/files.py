@@ -42,7 +42,7 @@ SEARCH_PAGE_TYPE = 2
 CATEGORY_PAGE_TYPE = 3
 
 CATEGORY_ORDER = ("fs*r", "ok DESC, r DESC, fs DESC", "fs*r")
-SUBCATEGORY_ORDER = ("fs*r*r2", "ok DESC, r DESC, fs DESC", "fs*r*r2")
+SUBCATEGORY_ORDER = ("r*r2", "ok DESC, r DESC, fs DESC", "r*r2")
 IMAGES_ORDER = ("fs*r2", "ok DESC, r DESC, fs DESC", "fs*r2")
 RANKING_ORDER = ("fs*r", "ok DESC, r DESC, fs DESC", "fs*r")
 SEARCH_ORDER = ("@weight*r", "e DESC, ok DESC, r DESC, fs DESC", "@weight*r")
@@ -371,6 +371,9 @@ def category(category, query=None, subcategory=None):
     group_count_search = pop_searches = None
     page_title = singular_filter(g.category.title)+" torrents"
     results_template = "results.html"
+    limit=70
+    max_limit=50
+
     if g.query:
         page_title = g.query.capitalize()+" "+page_title.lower()
         g.page_description = "%s %s torrents at %s, the free and fast torrent search engine."%(g.query.capitalize(), singular_filter(g.category.title).lower(), g.domain_capitalized)
@@ -384,6 +387,7 @@ def category(category, query=None, subcategory=None):
         g.page_description = "%s %s torrents at %s, the free and fast torrent search engine."%(g.subcategory.capitalize(), singular_filter(g.category.title).lower(), g.domain_capitalized)
         order, show_order, order_title = get_order(SUBCATEGORY_ORDER)
         results_template = "browse.html"
+        limit = max_limit = 30
     else:
         page_title = "Popular "+page_title.lower()
         g.page_description = "Popular %s torrents at %s, the free and fast torrent search engine."%(singular_filter(g.category.title).capitalize(), g.domain_capitalized)
@@ -397,7 +401,7 @@ def category(category, query=None, subcategory=None):
     if g.category and g.category.adult_content:
         g.is_adult_content = True
 
-    results, search_info = single_search("("+g.subcategory.replace(" ","")+")" if g.subcategory else g.query, category=g.category.tag, not_category=None if g.is_adult_content else "porn", order=order, zone=g.category.url, title=(None, 2, g.category.tag), last_items=get_last_items(), skip=skip, show_order=show_order, results_template=results_template, details=bool(g.subcategory))
+    results, search_info = single_search("("+g.subcategory.replace(" ","")+")" if g.subcategory else g.query, category=g.category.tag, not_category=None if g.is_adult_content else "porn", order=order, zone=g.category.url, title=(None, 2, g.category.tag), last_items=get_last_items(), limit=limit, max_limit=max_limit, skip=skip, show_order=show_order, results_template=results_template, details=bool(g.subcategory))
 
     if g.subcategory:
         return render_template('subcategory.html', results=results, search_info=search_info, show_order=show_order, featured=get_featured(search_info["count"])), 200 if bool(results) else 404

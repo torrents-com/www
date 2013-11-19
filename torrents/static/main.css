@@ -497,16 +497,16 @@ img.error {
     }
 
     li {
-        list-style:none;
+        list-style:none; margin-top:2em;
+
+        >div {
+            max-height:16em;
+            overflow:hidden;
+        }
 
         &.clearer {clear:left}
-        >div:first-child {
-            overflow:hidden; margin-top:20px;
-        }
 
-        >div:first-child + div {
-            > .icon-stars{margin-top:25px}
-        }
+        .icon-stars{margin:0 0 5px 0;}
 
         .filelink {
             color:$black;
@@ -517,25 +517,17 @@ img.error {
             font-weight:700;
             font-size:1.4em;
             overflow: hidden;
-            max-height: 4em;
+            max-height: 2.8em;
             @include inline-block();
             &:hover { color:$redfont}
         }
-
-        .download {
-            text-align:center;
-            @include redbutton();
-            display:block;
+        p {
+            word-wrap: break-word;
             font-size:1.1em;
-            padding: 0px 3px 0px 0px;
-            border-radius: 7px;
-            font-weight:700;
-            margin-top:-30px;
-            margin-left:115px;
-            width:100px;
-
-            .icon-download_button { vertical-align:-6px }
+            max-height: 9.1em;
+            line-height:1.3em;
         }
+
     }
 
 }

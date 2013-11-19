@@ -12,7 +12,7 @@
             <div class="icon-stars"><span class="stars-{{file['view']['rating']}}"></span><span class="nostars stars-{{5-file['view']['rating']}}"></span></div>
             <a class="filelink" title="{{file['view']['fn']}}" href='{{ url_for("files.download", file_name=file["view"]["seo-fn"], file_id=file["view"]["url"])}}'>{{ file["view"]["nfn"] }}</a>
         {% if "short_desc" in file['view']['md'] %}
-        <p>{{ file['view']['md']['short_desc']|truncate(200) }}</p>
+        <p>{{ file['view']['md']['short_desc']|truncate(250) }}</p>
         {% endif %}
         </div>
     </li>

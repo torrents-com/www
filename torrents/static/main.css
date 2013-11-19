@@ -516,8 +516,9 @@ img.error {
             width:97%;
             font-weight:700;
             font-size:1.4em;
+            line-height:1.2em;
             overflow: hidden;
-            max-height: 2.8em;
+            max-height: 2.4em;
             @include inline-block();
             &:hover { color:$redfont}
         }

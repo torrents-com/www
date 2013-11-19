@@ -139,7 +139,12 @@ def static_sitemap():
 
 @news.route('/smap')
 def user_sitemap():
-    structure = [[("Home page", url_for("news.home"), [("About us", url_for(".about")), ("Terms & privacy", url_for(".legal")), ("Contact us", url_for(".contact"))]),]]
+    path_parts = load_html_parts("smap")
+    news_categories = path_parts["content"]
+    news_categories = news_categories[news_categories.index("<ul"):news_categories.rindex("</ul>")+4]
+
+    structure = [[("Home page", url_for("news.home"), [("About us", url_for(".about")), ("Terms & privacy", url_for(".legal")), ("Contact us", url_for(".contact"))])], [("News", None, news_categories)]]
+
     return render_template('sitemap.html', structure=structure, column_count=2, column_width=11)
 
 @news.route('/about')

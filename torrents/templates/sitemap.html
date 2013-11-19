@@ -7,7 +7,9 @@
         {%- for item in column %}
             <li>
                 {{ item[0] if not item[1] else "<a href='%s'>%s</a>"|safe%(item[1],item[0])}}
-                {%- if item[2] %}
+                {%- if item[2] is string %}
+                    {{ item[2]|safe }}
+                {%- elif item[2] %}
                 <ul>
                     {%- for subitem in item[2] %}
                     <li><a href='{{subitem[1]}}'>{{subitem[0]}}</a></li>

@@ -262,7 +262,7 @@ def create_app(config=None, debug=False):
     # Páginas de error
     errors = {
         404: ("Page not found", "The requested address does not exists."),
-        410: ("Page not available", "The requested address is no longer available."),
+        410: ("File not available", "The file you are trying to access has been removed."),
         500: ("An error happened", "We had some problems displaying this page. Maybe later we can show it to you."),
         503: ("Service unavailable", "This page is temporarily unavailable. Please try again later.")
     }

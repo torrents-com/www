@@ -227,7 +227,7 @@ def init_file(afile):
 
     # rating secundario
     if any(key.endswith(":thumbnail") for key in md.iterkeys()) or ("i" in afile and isinstance(afile["i"],list)): r2+=2  # ficheros con imagenes
-    if any(key.endswith(":description") for key in md.iterkeys()): r2+=1  # ficheros con imagenes
+    if any(key.endswith(":description") for key in md.iterkeys()): r2+=1  # ficheros con descripcion
     afile["_r2"] = r2
 
     # uri del fichero

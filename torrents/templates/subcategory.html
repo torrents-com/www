@@ -17,6 +17,18 @@
     <div class="grid_24">
     {{ results |safe }}
     </div>
+    {%- if pagination %}
+    <nav class="grid_24 navigation">
+        <ol>
+            <li class="title"></li>
+        {%- if "prev" in pagination %}<li>{%- if pagination["prev"] %}<a class="prev" href='?p={{pagination["prev"]+1}}'>&laquo;</a>{%- else %}<a class="prev" href='?p=1'>&laquo;</a>{%- endif %}</li>{%- endif %}
+        {%- for page in pagination["show"] %}
+            <li>{%- if page == None %}...{%- elif page==pagination["current"] %}<span class="page current">{{page+1}}</span>{%- else %}<a class="page" href='?p={{page+1}}'>{{page+1}}</a>{%- endif %}</li>
+        {%- endfor %}
+        {%- if "next" in pagination %}<li><a class="next" href='?p={{pagination["next"]+1}}'>&raquo;</a></li>{%- endif %}
+        </ol>
+    </nav>
+    {%- endif %}
 {%- else %}
 <div class="text_page">
     <p>No <strong>{{g.subcategory}}</strong> torrents found in <strong>{{g.category.title|singular}}</strong>.</p>

@@ -497,11 +497,10 @@ img.error {
     }
 
     li {
-        list-style:none; margin-top:2em;
+        list-style:none; margin-top:2em; margin-bottom:1em;
 
         >div {
-            max-height:16em;
-            overflow:hidden;
+            max-height:16em; overflow:hidden;
         }
 
         &.clearer {clear:left}
@@ -528,7 +527,6 @@ img.error {
             max-height: 9.1em;
             line-height:1.3em;
         }
-
     }
 
 }
@@ -1097,9 +1095,9 @@ h1.extra{text-transform:none; font-weight:normal; margin:0em 0em 2em; font-size:
 *:first-child+html .clearfix { zoom: 1; } /* IE7 */
 
 .navigation {
+    margin-top:2em;
     ol{
-        padding-bottom:0.1em;
-    margin:0em;
+        padding-bottom:0.1em; margin:0em;
         li{
             margin-right:1em;@include inline-block();
             &:first-child{display:none}

@@ -87,9 +87,12 @@ def get_order(default_order):
         pass
     return default_order, None, None
 
-def get_skip(x=None):
+def get_skip(limit=10):
     try:
-        return min(int(request.args.get("s","0")),10)
+        if "p" in request.args:
+            return min(int(request.args.get("p","1")),limit+1)-1
+        else:
+            return min(int(request.args.get("s","0")),limit)
     except:
         return 0
 
@@ -211,7 +214,7 @@ def robots():
     full_filename = os.path.join(os.path.join(current_app.root_path, 'static'), 'robots.txt')
 
     with open(full_filename) as input_file:
-        response = make_response(input_file.read() + "\n\nUser-agent: Googlebot\nDisallow: /search*\n"+"".join("Disallow: /%s/*\n"%cat.url for cat in g.categories) + "\n\nSitemap: " + url_for("files.dynamic_sitemap", _external=True) + "\nSitemap: "+ url_for("files.static_sitemap", _external=True))
+        response = make_response(input_file.read() + "\n\nUser-agent: Googlebot\nDisallow: /search/*\n"+"".join("Disallow: /%s/*\n"%cat.url for cat in g.categories) + "\n\nSitemap: " + url_for("files.dynamic_sitemap", _external=True) + "\nSitemap: "+ url_for("files.static_sitemap", _external=True))
         response.mimetype='text/plain'
     return response
 
@@ -364,15 +367,12 @@ def category(category, query=None, subcategory=None):
     if not g.category:
         return abort(404)
 
-    skip = get_skip()
-    if skip>0:
-        g.title.append("Page %d" % (int(skip) + 1))
-
     group_count_search = pop_searches = None
     page_title = singular_filter(g.category.title)+" torrents"
     results_template = "results.html"
     limit=70
     max_limit=50
+    browse_limit = 10
 
     if g.query:
         page_title = g.query.capitalize()+" "+page_title.lower()
@@ -387,11 +387,17 @@ def category(category, query=None, subcategory=None):
         g.page_description = "%s %s torrents at %s, the free and fast torrent search engine."%(g.subcategory.capitalize(), singular_filter(g.category.title).lower(), g.domain_capitalized)
         order, show_order, order_title = get_order(SUBCATEGORY_ORDER)
         results_template = "browse.html"
-        limit = max_limit = 30
+        limit = 300
+        max_limit = 30
+        browse_limit = 10
     else:
         page_title = "Popular "+page_title.lower()
         g.page_description = "Popular %s torrents at %s, the free and fast torrent search engine."%(singular_filter(g.category.title).capitalize(), g.domain_capitalized)
         order, show_order, order_title = get_order(CATEGORY_ORDER)
+
+    skip = get_skip(browse_limit)
+    if skip>0:
+        g.title.append("Page %d" % (int(skip) + 1))
 
     if order_title:
         g.title.append(order_title)
@@ -404,9 +410,46 @@ def category(category, query=None, subcategory=None):
     results, search_info = single_search("("+g.subcategory.replace(" ","")+")" if g.subcategory else g.query, category=g.category.tag, not_category=None if g.is_adult_content else "porn", order=order, zone=g.category.url, title=(None, 2, g.category.tag), last_items=get_last_items(), limit=limit, max_limit=max_limit, skip=skip, show_order=show_order, results_template=results_template, details=bool(g.subcategory))
 
     if g.subcategory:
-        return render_template('subcategory.html', results=results, search_info=search_info, show_order=show_order, featured=get_featured(search_info["count"])), 200 if bool(results) else 404
-    else:
+        PAGINATION_SIZE = 10
+        total_pages = int(math.ceil(1.0*search_info["total_found"]/limit))
+        print total_pages, search_info["total_found"], limit
+        if total_pages<=1:
+            pagination = None
+        else:
+            pagination = {"current":skip}
+            last_page = min(total_pages, browse_limit)
 
+            if skip>0:
+                pagination["prev"] = skip-1 if skip>1 else None
+
+            if skip<last_page-1:
+                pagination["next"] = skip+1
+
+            start_page = max(0,skip-PAGINATION_SIZE/2)
+            end_page = min(skip+PAGINATION_SIZE/2, last_page)
+
+            if end_page-start_page<PAGINATION_SIZE:
+                if end_page < last_page:
+                    end_page = min(start_page+PAGINATION_SIZE, last_page)
+
+            if end_page-start_page<PAGINATION_SIZE:
+                if start_page > 0:
+                    start_page = max(end_page-PAGINATION_SIZE, 0)
+
+            show_pages = [i for i in range(start_page,end_page)]
+
+            if start_page>0:
+                show_pages.insert(0, None)
+                show_pages.insert(0, 0)
+
+            if end_page<last_page:
+                show_pages.append(None)
+                show_pages.append(last_page)
+
+            pagination["show"] = show_pages
+
+        return render_template('subcategory.html', results=results, search_info=search_info, pagination=pagination, show_order=show_order, featured=get_featured(search_info["count"])), 200 if bool(results) else 404
+    else:
         if g.query:
             if g.search_bot:
                 searchd.log_bot_event(g.search_bot, (search_info["total_found"]>0 or search_info["sure"]))

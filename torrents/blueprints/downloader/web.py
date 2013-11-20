@@ -5,7 +5,7 @@ import os.path
 
 from foofind.services.extensions import cache
 
-from flask import Blueprint, render_template, g, current_app, request, send_file, send_from_directory, redirect, make_response, url_for
+from flask import Blueprint, render_template, g, current_app, request, send_file, send_from_directory, redirect, make_response, url_for, abort
 from flask.ext.babelex import gettext as _
 from torrents.multidomain import MultidomainBlueprint
 
@@ -52,9 +52,13 @@ def robots():
     full_filename = os.path.join(os.path.join(current_app.root_path, 'static'), 'robots.txt')
 
     with open(full_filename) as input_file:
-        response = make_response(input_file.read() + "\n\nUser-agent: Googlebot\nDisallow: /search*\n"+"".join("Disallow: /%s/*\n"%cat.url for cat in g.categories) + "\nSitemap: " + url_for(".sitemap", _external=True))
+        response = make_response(input_file.read() + "\n\nUser-agent: Googlebot\nDisallow: /search/*\n"+"".join("Disallow: /%s/*\n"%cat.url for cat in g.categories) + "\nSitemap: " + url_for(".sitemap", _external=True))
         response.mimetype='text/plain'
     return response
+
+@web.route('/smap')
+def smap():
+    abort(404)
 
 @web.route('/sitemap.xml')
 def sitemap():

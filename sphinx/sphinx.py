@@ -176,6 +176,7 @@ def init_file(afile):
         entity = 0
 
     md = afile["md"]
+    md_schemaless_keys = {key.split(":")[-1] for key in md.iterkeys()}
 
     # tipos del fichero
     src = afile["src"]
@@ -226,8 +227,9 @@ def init_file(afile):
         logging.exception("Error processing votes from file %s."%file_id)
 
     # rating secundario
-    if any(key.endswith(":thumbnail") for key in md.iterkeys()) or ("i" in afile and isinstance(afile["i"],list)): r2+=2  # ficheros con imagenes
-    if any(key.endswith(":description") for key in md.iterkeys()): r2+=1  # ficheros con descripcion
+
+    if "thumbnail" in md_schemaless_keys or ("i" in afile and isinstance(afile["i"],list)): r2+=2  # ficheros con imagenes
+    if "description" in md_schemaless_keys: r2+=1  # ficheros con descripcion
     afile["_r2"] = r2
 
     # uri del fichero

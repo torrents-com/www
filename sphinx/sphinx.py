@@ -324,7 +324,7 @@ def init_file(afile):
 
     if file_category_tag and file_category_tag in DYNAMIC_TAGS and file_category_tag not in file_tags:
         dtags.update((file_category_tag, DYNAMIC_TAGS[file_category_tag][word]) for word in file_words if word in DYNAMIC_TAGS[file_category_tag])
-        file_tags.add(file_category_tag)
+        file_tags.append(file_category_tag)
 
     filters.update("%s%s"%(FILTER_PREFIX_TAGS, tag) for tag in file_tags)
     filters.update("%s%s"%(FILTER_PREFIX_DYNAMIC_TAGS, dtag.replace(" ","")) for tag, dtag in dtags)

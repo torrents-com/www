@@ -119,7 +119,7 @@ def get_definitions():
                 "field": "_ct",
                 "field_type": int
             },
-            {"name":"r2", "type":"int", "bits":8, "default":0, # Secondary rating
+            {"name":"r2", "type":"int", "bits":8, "default":1, # Secondary rating
                 "field": "_r2",
                 "field_type": int
             },
@@ -200,7 +200,7 @@ def init_file(afile):
     inner_group = 0
 
     # rating secundario
-    r2 = False
+    r2 = 1
 
     # los errores votos no deben afectar a la indexación del fichero
     try:
@@ -221,12 +221,13 @@ def init_file(afile):
             afile["_vd"] = vd
 
         elif "cs" in afile and afile["cs"]: # ficheros sin votos pero con comentarios aumenta el rating secundario
-            r2 = 2
+            r2 += 1
     except BaseException as e:
         logging.exception("Error processing votes from file %s."%file_id)
 
     # rating secundario
-    if any(key.endswith(":thumbnail") for key in md.iterkeys()) or ("i" in afile and isinstance(afile["i"],list)): r2=(r2 or 1)*2  # ficheros con imagenes
+    if any(key.endswith(":thumbnail") for key in md.iterkeys()) or ("i" in afile and isinstance(afile["i"],list)): r2+=2  # ficheros con imagenes
+    if any(key.endswith(":description") for key in md.iterkeys()): r2+=1  # ficheros con imagenes
     afile["_r2"] = r2
 
     # uri del fichero
@@ -314,11 +315,8 @@ def init_file(afile):
 
     # filtros de texto
     filters = {FILTER_PREFIX_CONTENT_TYPE+CONTENTS[ct]}
-    #filters.update(sources_domains[t] for t in types if sources[t]["d"])
-    #filters.update(sources_groups[g] for t in types for g in sources[t]["g"] if g in sources_groups)
     filters.add("%storrent"%FILTER_PREFIX_SOURCE_GROUP)
     filters.update("%s%02d"%(prefix,int(md[key])) for key, prefix in numeric_filters.iteritems() if key in md and (isinstance(md[key], int) or isinstance(md[key], float) or (isinstance(md[key], basestring) and md[key].isdecimal())))
-    filters.update("%s%s"%(FILTER_PREFIX_TAGS, tag) for tag in file_tags)
 
     file_words = [word.strip().replace("-"," ") for key, value in md.iteritems() if value and isinstance(value, basestring) and any(key.endswith(dtag_md) for dtag_md in DYNAMIC_TAGS_METADATA) for word in SUBCATEGORIES_FINDER.findall(value.lower())] + file_tags
 
@@ -326,7 +324,9 @@ def init_file(afile):
 
     if file_category_tag and file_category_tag in DYNAMIC_TAGS and file_category_tag not in file_tags:
         dtags.update((file_category_tag, DYNAMIC_TAGS[file_category_tag][word]) for word in file_words if word in DYNAMIC_TAGS[file_category_tag])
+        file_tags.add(file_category_tag)
 
+    filters.update("%s%s"%(FILTER_PREFIX_TAGS, tag) for tag in file_tags)
     filters.update("%s%s"%(FILTER_PREFIX_DYNAMIC_TAGS, dtag.replace(" ","")) for tag, dtag in dtags)
 
     if file_format: filters.add(FILTER_PREFIX_FORMAT+file_format[0])

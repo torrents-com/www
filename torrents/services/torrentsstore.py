@@ -37,7 +37,7 @@ class TorrentsStore(object):
         self.max_pool_size = app.config["DATA_SOURCE_MAX_POOL_SIZE"]
 
         # soporte para ReplicaSet
-        self.options = {"replicaSet": app.config["DATA_SOURCE_TORRENTS_RS"], "read_preference":pymongo.read_preferences.ReadPreference.SECONDARY_PREFERRED, "secondary_acceptable_latency_ms":app.config.get("SECONDARY_ACCEPTABLE_LATENCY_MS",15)} if "DATA_SOURCE_TORRENTS_RS" in app.config else {"slave_okay":True}
+        self.options = {"replicaSet": app.config["DATA_SOURCE_TORRENTS_RS"], "read_preference":pymongo.read_preferences.ReadPreference.SECONDARY_PREFERRED, "secondary_acceptable_latency_ms":app.config.get("SECONDARY_ACCEPTABLE_LATENCY_MS",15), "tag_sets":app.config.get("DATA_SOURCE_TORRENTS_RS_TAG_SETS",[{}])} if "DATA_SOURCE_TORRENTS_RS" in app.config else {"slave_okay":True}
 
         # Inicia conexiones
         self.torrents_conn = pymongo.MongoClient(app.config["DATA_SOURCE_TORRENTS"], max_pool_size=self.max_pool_size, **self.options)

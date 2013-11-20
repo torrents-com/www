@@ -411,8 +411,7 @@ def category(category, query=None, subcategory=None):
 
     if g.subcategory:
         PAGINATION_SIZE = 10
-        total_pages = int(math.ceil(1.0*search_info["total_found"]/limit))
-        print total_pages, search_info["total_found"], limit
+        total_pages = int(math.ceil(1.0*search_info["total_found"]/max_limit))
         if total_pages<=1:
             pagination = None
         else:

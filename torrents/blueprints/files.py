@@ -282,7 +282,7 @@ def popular_torrents(interval):
 
     g.category = False
     g.title.append("Popular torrents "+interval_info[1])
-    results, search_info = single_search(None, "torrent", "porn", order=interval_info[0], zone="Popular", title=("Popular torrents", 2, None), last_items=get_last_items(), skip=get_skip(), show_order=None)
+    results, search_info = single_search(None, "torrent", "porn", order=interval_info[0], zone="Popular", title=("Popular torrents", 2, None), skip=get_skip(), show_order=None)
     g.keywords.clear()
     g.keywords.update(["torrent", "torrents", "search engine", "popular downloads", "online movies"])
     g.page_description = "%s is a free torrent search engine that offers users fast, simple, easy access to every torrent in one place." % g.domain_capitalized
@@ -337,7 +337,7 @@ def search(query=None):
 
     group_count_search = start_guess_categories_with_results(g.query)
 
-    results, search_info = single_search(g.query, None, not_category="porn", zone="Search", order=order, title=("%s torrents"%escape(g.query), 2, None), last_items=get_last_items(), skip=skip, show_order=show_order or True)
+    results, search_info = single_search(g.query, None, not_category="porn", zone="Search", order=order, title=("%s torrents"%escape(g.query), 2, None), skip=skip, show_order=show_order or True)
 
     g.title.append(g.query)
 
@@ -407,7 +407,7 @@ def category(category, query=None, subcategory=None):
     if g.category and g.category.adult_content:
         g.is_adult_content = True
 
-    results, search_info = single_search("("+g.subcategory.replace(" ","")+")" if g.subcategory else g.query, category=g.category.tag, not_category=None if g.is_adult_content else "porn", order=order, zone=g.category.url, title=(None, 2, g.category.tag), last_items=get_last_items(), limit=limit, max_limit=max_limit, skip=skip, show_order=show_order, results_template=results_template, details=bool(g.subcategory))
+    results, search_info = single_search("("+g.subcategory.replace(" ","")+")" if g.subcategory else g.query, category=g.category.tag, not_category=None if g.is_adult_content else "porn", order=order, zone=g.category.url, title=(None, 2, g.category.tag), limit=limit, max_limit=max_limit, skip=skip, show_order=show_order, results_template=results_template, details=bool(g.subcategory))
 
     if g.subcategory:
         PAGINATION_SIZE = 10
@@ -615,18 +615,6 @@ def copyright():
             pagesdb.create_complaint(dict([("ip",request.remote_addr)]+[(field.name,field.data) for field in form]))
             return redirect(url_for('.home', _anchor="sent"))
     return render_template('copyright.html',form=form)
-
-def get_last_items():
-    last_items = []
-    try:
-        last_items = urlsafe_b64decode(str(request.args.get("p","")))
-        if last_items:
-            last_items = unpack("%dh"%(len(last_items)/2), last_items)
-    except BaseException as e:
-        last_items = []
-        logging.error("Error parsing last_items information from request.")
-
-    return last_items
 
 def single_search(query, category=None, not_category=None, order=None, title=None, zone="", query_time=800, skip=None, last_items=[], limit=70, max_limit=50, ignore_ids=[], show_order=None, results_template="results.html", details=False):
 

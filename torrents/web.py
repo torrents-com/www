@@ -154,18 +154,22 @@ def create_app(config=None, debug=False):
 
     print "Database accesses:"
     # Acceso a bases de datos
-    pagesdb.init_app(app)
-    print "* pages"
     filesdb.init_app(app)
     print "* files"
-    feedbackdb.init_app(app)
-    print "* feedback"
+    torrentsdb.init_app(app, searchd)
+    print "* torrents"
+
+    pagesdb.init_app(app)
+    print "* pages"
+    #feedbackdb.init_app(app)
+    #print "* feedback"
     configdb.init_app(app)
     print "* config"
     entitiesdb.init_app(app)
     print "* entities"
-    torrentsdb.init_app(app, feedbackdb)
-    print "* torrents"
+
+    for service_name, params in app.config["DATA_SOURCE_SHARING"].iteritems():
+        eval(service_name).share_connections(**{key:eval(value) for key, value in params.iteritems()})
 
     configdb.register_action("flush_cache", cache.clear, _unique=True)
 
@@ -187,23 +191,22 @@ def create_app(config=None, debug=False):
     # IPs españolas
     spanish_ips.load(os.path.join(os.path.dirname(app.root_path),app.config["SPANISH_IPS_FILENAME"]))
 
-    # Servicio de búsqueda
     @app.before_first_request
     def init_process():
         if not eventmanager.is_alive():
             # Fallback inicio del eventManager
             eventmanager.start()
+    print "Event manager."
 
     # Profiler
-    profiler.init_app(app, feedbackdb)
+    # profiler.init_app(app, feedbackdb)
 
-    print "Event manager."
+    # Servicio de búsqueda
     eventmanager.once(searchd.init_app, hargs=(app, filesdb, entitiesdb, profiler))
 
     # Refresco de conexiones
     eventmanager.once(filesdb.load_servers_conn)
     eventmanager.interval(app.config["FOOCONN_UPDATE_INTERVAL"], filesdb.load_servers_conn)
-    eventmanager.interval(app.config["FOOCONN_UPDATE_INTERVAL"], entitiesdb.connect)
 
     # Refresco de configuración
     eventmanager.once(configdb.pull)

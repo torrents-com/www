@@ -431,7 +431,7 @@ def main(processes, part, server, xml_file, fileid, favs, stats_update):
     incremental_index = False
     if favs:
         counters.append(0)
-        user_conn = pymongo.Connection(config["DATA_SOURCE_USER"])
+        user_conn = pymongo.Connection(config["DATA_SOURCE_USER"]) # TO-DO: maybe won't work with shared connections settings
         xml = xmlpipe2.XmlPipe2(processes, fields, attrs, None, generate_fav_id)
         xml.generate_header()
         for doc in user_conn.foofind.favfile.find({"files.server":part}):

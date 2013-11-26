@@ -28,34 +28,48 @@ class TorrentsStore(object):
         Inicialización de la clase.
         '''
         self.max_pool_size = 0
-        self.torrents_conn = None
+        self.torrents_conn = self.redis_conn = self.searches_conn = None
 
-    def init_app(self, app, feedbackdb):
+    def init_app(self, app, searchd):
         '''
         Inicializa la clase con la configuración de la aplicación.
         '''
         self.max_pool_size = app.config["DATA_SOURCE_MAX_POOL_SIZE"]
 
-        # soporte para ReplicaSet
-        self.options = {"replicaSet": app.config["DATA_SOURCE_TORRENTS_RS"], "read_preference":pymongo.read_preferences.ReadPreference.SECONDARY_PREFERRED, "secondary_acceptable_latency_ms":app.config.get("SECONDARY_ACCEPTABLE_LATENCY_MS",15), "tag_sets":app.config.get("DATA_SOURCE_TORRENTS_RS_TAG_SETS",[{}])} if "DATA_SOURCE_TORRENTS_RS" in app.config else {"slave_okay":True}
+        if app.config["DATA_SOURCE_TORRENTS"]:
+            # soporte para ReplicaSet
+            options = {"replicaSet": app.config["DATA_SOURCE_TORRENTS_RS"], "read_preference":pymongo.read_preferences.ReadPreference.SECONDARY_PREFERRED, "secondary_acceptable_latency_ms":app.config.get("SECONDARY_ACCEPTABLE_LATENCY_MS",15), "tag_sets":app.config.get("DATA_SOURCE_TORRENTS_RS_TAG_SETS",[{}])} if "DATA_SOURCE_TORRENTS_RS" in app.config else {"slave_okay":True}
 
-        # Inicia conexiones
-        self.torrents_conn = pymongo.MongoClient(app.config["DATA_SOURCE_TORRENTS"], max_pool_size=self.max_pool_size, **self.options)
-        self.searches_conn = feedbackdb.feedback_conn # uses feedback database for searches
+            # Inicia conexiones
+            self.torrents_conn = pymongo.MongoReplicaSetClient(app.config["DATA_SOURCE_TORRENTS"], max_pool_size=self.max_pool_size, **options)
 
-        # Inicia conexion al redis para avisar de files visitados
-        self.redis_server = app.config["SPHINX_REDIS_SERVER"][0]
-        self.redis_conn = redis.StrictRedis(host=self.redis_server[0], port=self.redis_server[1])
+        # Referencia al servicio de busquedas
+        self.searchd = searchd
 
+        # Conexion a bases de datos de feedback
+        self.feedback_dbs = app.config["DATA_SOURCES_TORRENTS_FEEDBACK"]
+        self.feedback_dbs_index = app.config.get("DATA_SOURCES_TORRENTS_FEEDBACK_INDEX", None)
+
+        if not self.feedback_dbs_index is None:
+            self.searches_conn = pymongo.MongoClient(self.feedback_dbs[self.feedback_dbs_index], max_pool_size=self.max_pool_size)
+            self.init_searches_conn()
+
+    def share_connections(self, torrents_conn=None, searches_conn=None):
+        ''' Allows to share data source connections with other modules.'''
+        if torrents_conn:
+            self.torrents_conn = torrents_conn
+        if searches_conn:
+            self.searches_conn = searches_conn
+            self.init_searches_conn()
+
+    def init_searches_conn(self):
+        ''' Inits searches database before its first use. '''
         # Crea las colecciones capadas si no existen
         check_capped_collections(self.searches_conn.torrents, self._capped)
 
         # Comprueba índices
         check_collection_indexes(self.searches_conn.torrents, self._indexes)
-
-        self.torrents_conn.end_request()
-
-        self.trend_map = bson.Code("function(){emit(this._id,{'t':this.value.w})}")
+        self.searches_conn.end_request()
 
     def get_blacklists(self):
         ret = {row["_id"]:row["entries"] for row in self.torrents_conn.torrents.blacklists.find()}
@@ -132,22 +146,30 @@ class TorrentsStore(object):
     def get_ranking_searches(self, ranking):
         return self.torrents_conn.torrents.rankings_data.find({ranking:{"$exists":True}}).sort(ranking, -1)
 
-    def save_search(self, search, rowid, cat_id):
-        self.searches_conn.torrents.searches.insert({"_id":bson.objectid.ObjectId(rowid[:12]), "t":time(), "s":search, "c":cat_id})
-        self.searches_conn.end_request()
-
-    def get_searches(self, start_date):
-        ret = list(self.searches_conn.torrents.searches.find({"t":{"$gt": start_date}}))
-        self.searches_conn.end_request()
-        return ret
-
-    def save_visited(self, files):
-        try:
-            self.redis_conn.publish(VISITED_LINKS_CHANNEL, msgpack.packb([mid2hex(f["file"]["_id"]) for f in files if f]))
-        except BaseException as e:
-            logging.exception("Can't log visited files.")
-
     def get_subcategories(self):
         results = {subcats["_id"]:subcats["sc"] for subcats in self.torrents_conn.torrents.subcategory.find()}
         self.torrents_conn.end_request()
         return results
+
+    def save_visited(self, files):
+        try:
+            self.searchd.get_redis_connection().publish(VISITED_LINKS_CHANNEL, msgpack.packb([mid2hex(f["file"]["_id"]) for f in files if f]))
+        except BaseException as e:
+            logging.exception("Can't log visited files.")
+
+    def save_search(self, search, rowid, cat_id):
+        if self.searches_conn:
+            try:
+                self.searches_conn.torrents.searches.insert({"_id":bson.objectid.ObjectId(rowid[:12]), "t":time(), "s":search, "c":cat_id})
+                self.searches_conn.end_request()
+            except BaseException as e:
+                logging.exception("Can't register search stats.")
+
+    def get_searches(self, start_date):
+        ret = []
+        for db in self.feedback_dbs:
+            conn = pymongo.MongoClient(db, max_pool_size=self.max_pool_size)
+            ret.extend(conn.torrents.searches.find({"t":{"$gt": start_date}}))
+            conn.end_request()
+        return ret
+

@@ -38,14 +38,14 @@ class TorrentsStore(object):
 
         if app.config["DATA_SOURCE_TORRENTS"]:
             if "DATA_SOURCE_TORRENTS_RS" in app.config:
-                self.pages_conn = pymongo.MongoReplicaSetClient(app.config["DATA_SOURCE_TORRENTS"],
+                self.torrents_conn = pymongo.MongoReplicaSetClient(app.config["DATA_SOURCE_TORRENTS"],
                                                                 max_pool_size = self.max_pool_size,
                                                                 replicaSet = app.config["DATA_SOURCE_TORRENTS_RS"],
                                                                 read_preference = pymongo.read_preferences.ReadPreference.SECONDARY_PREFERRED,
                                                                 tag_sets = app.config.get("DATA_SOURCE_TORRENTS_RS_TAG_SETS",[{}]),
                                                                 secondary_acceptable_latency_ms = app.config.get("SECONDARY_ACCEPTABLE_LATENCY_MS", 15))
             else:
-                self.pages_conn = pymongo.MongoClient(app.config["DATA_SOURCE_TORRENTS"], max_pool_size=self.max_pool_size, slave_okay=True)
+                self.torrents_conn = pymongo.MongoClient(app.config["DATA_SOURCE_TORRENTS"], max_pool_size=self.max_pool_size, slave_okay=True)
 
         # Referencia al servicio de busquedas
         self.searchd = searchd

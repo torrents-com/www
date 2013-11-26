@@ -32,12 +32,9 @@ def get_ranking_info(ranking, new_last_update):
 
 def update_rankings(app):
     try:
-
         # initialize data access services
-        feedbackdb = FeedbackStore()
-        feedbackdb.init_app(app)
         torrentsdb = TorrentsStore()
-        torrentsdb.init_app(app, feedbackdb)
+        torrentsdb.init_app(app, None)
 
         # initialize blacklists
         blacklists = Blacklists()

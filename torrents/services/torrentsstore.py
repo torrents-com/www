@@ -162,7 +162,7 @@ class TorrentsStore(object):
             try:
                 self.searches_conn.torrents.searches.insert({"_id":bson.objectid.ObjectId(rowid[:12]), "t":time(), "s":search, "c":cat_id})
                 self.searches_conn.end_request()
-            except DuplicateKeyError as e:
+            except pymongo.errors.DuplicateKeyError as e:
                 pass # don't log when a search is duplicated
             except BaseException as e:
                 logging.exception("Can't register search stats.")

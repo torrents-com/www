@@ -15,4 +15,8 @@ app = type("fake_app",(),{"config":foofind.defaults.__dict__.copy()})
 app.config.update(production.settings.__dict__)
 del app.config["__builtins__"]
 
+# If Torrents has a shared connection, uses that connection settings
+if not app.config["DATA_SOURCE_TORRENTS"]:
+    app.config["DATA_SOURCE_TORRENTS"] = app.config["DATA_SOURCE_SHARING_SETTINGS"]["DATA_SOURCE_TORRENTS"]
+
 rankings.generate.update_rankings(app)

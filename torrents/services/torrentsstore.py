@@ -28,7 +28,7 @@ class TorrentsStore(object):
         Inicialización de la clase.
         '''
         self.max_pool_size = 0
-        self.torrents_conn = self.redis_conn = self.searches_conn = None
+        self.torrents_conn = self.searches_conn = None
 
     def init_app(self, app, searchd):
         '''

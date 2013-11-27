@@ -72,6 +72,8 @@ def home():
     g.category=False
     g.title.append("Torrents Downloader")
     g.page_description = "Torrents Downloader is a fast client for the Torrent P2P network"
+    g.keywords.clear()
+    g.keywords.update(["files", "search", "document", "image", "video", "torrents", "audio", "software"])
 
     return render_template(
         "microsite/foodownloader.html",

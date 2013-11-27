@@ -227,6 +227,11 @@ def home():
     g.category=False
     g.cache_code = "B"
 
+    g.title.append("Torrents Search Engine")
+    g.page_description = "A free, fast, easy to use search engine for Torrents"
+    g.keywords.clear()
+    g.keywords.update(["torrent files", "search engine", "download", "movies", "games", "music", "tv shows software"])
+
     pop_searches = torrentsdb.get_ranking("weekly")["final_ranking"]
 
     return render_template('index.html', pop_searches = pop_searches)
@@ -656,6 +661,9 @@ def process_search_results(s=None, query=None, category=None, not_category=None,
 
     if s:
         ids = [result for result in ((bin2hex(fileid), server, sphinxid, weight, sg) for (fileid, server, sphinxid, weight, sg) in s.get_results((1.0, 0.1), last_items=last_items, skip=skip*max_limit if skip else None, min_results=limit, max_results=limit, extra_browse=limit, weight_processor=weight_processor, tree_visitor=tree_visitor)) if result[0] not in ignore_ids]
+
+        # don't use all ids
+        del ids[int(max_limit*1.1):]
 
         results_entities = list(set(int(aid[4])>>32 for aid in ids if int(aid[4])>>32))
         ntts = {int(ntt["_id"]):ntt for ntt in entitiesdb.get_entities(results_entities)} if results_entities else {}

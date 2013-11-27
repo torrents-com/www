@@ -76,6 +76,10 @@ def home(path=""):
     if not path_parts:
         return abort(404)
 
+    if not path:
+        g.keywords.clear()
+        g.keywords.update(["movies", "tv", "video", "music", "torrents", "software"])
+
     return render_template('news.html', **path_parts)
 
 @news.route('/news/wp-content/<path:path>')
@@ -93,7 +97,7 @@ def inner_sitemap(name):
     g.cache_code += "N"
     return fix_response(name+'-sitemap.xml', "text/xml")
 
-@news.route('/news/rss')
+@news.route('/news/feed/')
 def rss():
     g.cache_code += "N"
     return fix_response('feed/index.html', "application/rss+xml")

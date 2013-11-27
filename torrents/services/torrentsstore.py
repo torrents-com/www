@@ -104,15 +104,16 @@ class TorrentsStore(object):
 
     def verify_rankings_searches(self, rankings):
         for ranking in rankings.iterkeys():
-            self.torrents_conn.torrents.rankings_data.ensure_index([(ranking, 1)])
-        self.torrents_conn.end_request()
+            self.searches_conn.torrents.rankings_data.ensure_index([(ranking, 1)])
+        self.searches_conn.end_request()
 
     def batch_rankings_searches(self, rankings):
-        self.torrents_conn.torrents.command("$eval",bson.Code("var alpha = ["+",".join("['%s',%f]"%(ranking, info["alpha"]) for ranking, info in rankings.iteritems())+"];db.rankings_data.find().forEach(function(d){for(var r in alpha)if(alpha[r][0] in d)d[alpha[r][0]]*=alpha[r][1];db.rankings_data.save(d)})"), nolock=True)
+        self.searches_conn.torrents.command("$eval",bson.Code("var alpha = ["+",".join("['%s',%f]"%(ranking, info["alpha"]) for ranking, info in rankings.iteritems())+"];db.rankings_data.find().forEach(function(d){for(var r in alpha)if(alpha[r][0] in d)d[alpha[r][0]]*=alpha[r][1];db.rankings_data.save(d)})"), nolock=True)
+        self.searches_conn.end_request()
 
     def update_rankings_searches(self, rankings, search, category):
-        self.torrents_conn.torrents.rankings_data.update({"_id":search},{"$inc": {ranking: info["beta"] for ranking, info in rankings.iteritems() if not info["category"] or category==info["category"]}}, upsert=True)
-        self.torrents_conn.end_request()
+        self.searches_conn.torrents.rankings_data.update({"_id":search},{"$inc": {ranking: info["beta"] for ranking, info in rankings.iteritems() if not info["category"] or category==info["category"]}}, upsert=True)
+        self.searches_conn.end_request()
 
     def clean_rankings_searches(self, rankings, max_size):
         # chooses max interval ranking to truncate less important searches
@@ -122,7 +123,7 @@ class TorrentsStore(object):
         # gets nth search, if exists
         nth_search = None
         try:
-            nth_search = next(self.torrents_conn.torrents.rankings_data.find().sort(ranking,-1).skip(max_size).limit(1))
+            nth_search = next(self.searches_conn.torrents.rankings_data.find().sort(ranking,-1).skip(max_size).limit(1))
         except:
             pass
 
@@ -131,16 +132,17 @@ class TorrentsStore(object):
             min_weight = nth_search[ranking]
 
             # delete all elements less important than minimum weight
-            self.torrents_conn.torrents.rankings_data.remove({ranking:{"$lt":min_weight}})
-            self.torrents_conn.torrents.rankings_data.remove({ranking:{"$exists":False}})
+            self.searches_conn.torrents.rankings_data.remove({ranking:{"$lt":min_weight}})
+            self.searches_conn.torrents.rankings_data.remove({ranking:{"$exists":False}})
 
             return min_weight, max_ranking["weight_threshold"]
+        self.searches_conn.end_request()
 
         return None, max_ranking["weight_threshold"]
 
     def get_ranking_norm_factor(self, ranking, max_size):
-        norm_sum = self.torrents_conn.torrents.rankings_data.aggregate([{"$sort":{ranking:-1}}, {"$limit":max_size}, {"$group":{"_id":{}, "norm":{"$sum" : "$"+ranking}}}, {"$project":{"_id":0, "norm": "$norm"}}])
-        self.torrents_conn.end_request()
+        norm_sum = self.searches_conn.torrents.rankings_data.aggregate([{"$sort":{ranking:-1}}, {"$limit":max_size}, {"$group":{"_id":{}, "norm":{"$sum" : "$"+ranking}}}, {"$project":{"_id":0, "norm": "$norm"}}])
+        self.searches_conn.end_request()
 
         if norm_sum["ok"] and norm_sum["result"]:
             return norm_sum["result"][0]["norm"]
@@ -148,7 +150,7 @@ class TorrentsStore(object):
             return None
 
     def get_ranking_searches(self, ranking):
-        return self.torrents_conn.torrents.rankings_data.find({ranking:{"$exists":True}}).sort(ranking, -1)
+        return self.searches_conn.torrents.rankings_data.find({ranking:{"$exists":True}}).sort(ranking, -1)
 
     def get_subcategories(self):
         results = {subcats["_id"]:subcats["sc"] for subcats in self.torrents_conn.torrents.subcategory.find()}

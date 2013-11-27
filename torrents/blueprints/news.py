@@ -102,6 +102,11 @@ def rss():
     g.cache_code += "N"
     return fix_response('feed/index.html', "application/rss+xml")
 
+@news.route('/news/rss')
+def old_rss():
+    g.cache_code = "S"
+    return redirect(url_for("news.rss"), 301)
+
 
 @news.route('/downloader')
 def old_downloader():

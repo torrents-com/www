@@ -215,25 +215,30 @@ img {
         border: none;
         span {color:$redfont}
         .errors {
-            color:$redfont;@include inline-block();
+            margin-top:0;color:$redfont;@include inline-block();
         }
     }
 }
-#about, #legal {
+#about, #legal, #contact, #copyright {
     li, h3 {
         a {color: $black }
     }
-    div {
+    > div {
         margin-top:4em;
     }
-    div.alpha {
+    > div.alpha {
         text-align:center;
     }
-    div.omega {
+    > div.omega {
         border-left: 1px solid $gray;
     }
     h2 { margin-top:0em}
-
+    fieldset {margin-top:1em}
+    label {color:$black;margin-top:0.7em;margin-bottom:0.7em;}
+    label[for] {text-align:right; font-weight:bold}
+    input[type="text"], input[type="email"], input[type="password"], textarea {
+        margin-bottom:10px;border-radius:5px;width:290px;padding:5px 10px;
+    }
 }
 
 #cboxContent .text_page {

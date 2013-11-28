@@ -1,21 +1,16 @@
 {% extends "base.html" %}
 {% block content %}
-<section class="container_24" id="text_page">
+<section class="container_24 text_page" id="about">
 <h1>About {{ g.domain_capitalized }}</h1>
-<p>{{ g.domain_capitalized }} is a free torrent search engine that offers you fast, simple and easy access to every torrent in one place. {{ g.domain_capitalized }} crawls millions of Internet addresses to automatically generate meaningful links to your queries.</p>
-<p>We are not a torrent tracker. We are not a search aggregator.</p>
+
+<div class="grid_5 alpha"><a name="company"><img src="{{g.static_prefix}}/ico.company.png"/></a></div>
+<div class="grid_18 prefix_1 omega">
+
+<p>{{ g.domain_capitalized }} is a free torrent search engine that offers you fast, simple and easy access to every torrent in one place. Torrents.com crawls millions of Internet addresses to automatically generate meaningful links to your queries.</p><p>We are not a torrent tracker. We are not a search aggregator.</p>
 <p>{{ g.domain_capitalized }} does not host, does not reproduce nor publish the linked torrents that appear as search results. Nevertheless, if you believe any of the linked works are being disseminated without the appropriate authorisation from the rights holders, or that they infringe the rights of third parties, you may request that we remove them using <a href="{{url_for('files.copyright')}}">the copyright claim form</a>.</p>
 <p>You should read and accept our terms of use and our privacy policy before using the services provided by {{ g.domain_capitalized }}.</p>
-<p>{{ g.domain_capitalized }} uses these amazing technologies:</p>
-<ul>
-<li><a href="http://foofind.is">Foofind</a>: Foofind is an open source universal search engine.</li>
-<li><a href="http://flask.pocoo.org/">Flask</a>: Flask is a microframework for Python based on Werkzeug, Jinja 2 and it's BSD licensed.</li>
-<li><a href="http://www.mongodb.org/">MongoDB</a>: MongoDB (from "hu<strong>mongo</strong>us") is a scalable, high-performance, open source NoSQL database.</li>
-<li><a href="http://github.com/dcramer/sentry">Sentry</a>: Sentry is a realtime event logging and aggregation platform. It specializes in monitoring errors and extracting all the information needed to do a proper post-mortem without any of the hassle of the standard user feedback loop.</li>
-<li><a href="http://sphinxsearch.com/">Sphinx</a>: Sphinx is an open source full text search server, designed from the ground up with performance, relevance (aka search quality), and integration simplicity in mind. It's written in C++ and works on Linux (RedHat, Ubuntu, etc), Windows, MacOS, Solaris, FreeBSD, and a few other systems.</li>
-<li><a href="http://jquery.com/">jQuery</a>: jQuery is a fast, small, and feature-rich JavaScript library. It makes things like HTML document traversal and manipulation, event handling, animation, and Ajax much simpler with an easy-to-use API that works across a multitude of browsers. With a combination of versatility and extensibility, jQuery has changed the way that millions of people write JavaScript.</li>
-<li><a href="http://bassistance.de/jquery-plugins/jquery-plugin-treeview/">jQuery plugin: Treeview</a>: Lightweight and flexible transformation of an unordered list into an expandable and collapsable tree, great for unobtrusive navigation enhancements.</li>
-</ul>
-<p>You can download our website's source code <a href="https://github.com/torrents-com">here</a> under <a rel="license" href="http://www.gnu.org/licenses/agpl.html">Affero GPL</a> license.</p>
+<p>{{ g.domain_capitalized }} uses these amazing technologies:</p><ul><li><a href="http://foofind.is">Foofind</a>: Foofind is an open source universal search engine.</li><li><a href="http://flask.pocoo.org/">Flask</a>: Flask is a microframework for Python based on Werkzeug, Jinja 2 and it's BSD licensed.</li><li><a href="http://www.mongodb.org/">MongoDB</a>: MongoDB (from "hu<strong>mongo</strong>us") is a scalable, high-performance, open source NoSQL database.</li><li><a href="http://github.com/dcramer/sentry">Sentry</a>: Sentry is a realtime event logging and aggregation platform. It specializes in monitoring errors and extracting all the information needed to do a proper post-mortem without any of the hassle of the standard user feedback loop.</li><li><a href="http://sphinxsearch.com/">Sphinx</a>: Sphinx is an open source full text search server, designed from the ground up with performance, relevance (aka search quality), and integration simplicity in mind. It's written in C++ and works on Linux (RedHat, Ubuntu, etc), Windows, MacOS, Solaris, FreeBSD, and a few other systems.</li><li><a href="http://jquery.com/">jQuery</a>: jQuery is a fast, small, and feature-rich JavaScript library. It makes things like HTML document traversal and manipulation, event handling, animation, and Ajax much simpler with an easy-to-use API that works across a multitude of browsers. With a combination of versatility and extensibility, jQuery has changed the way that millions of people write JavaScript.</li><li><a href="http://bassistance.de/jquery-plugins/jquery-plugin-treeview/">jQuery plugin: Treeview</a>: Lightweight and flexible transformation of an unordered list into an expandable and collapsable tree, great for unobtrusive navigation enhancements.</li></ul><p>You can download our website's source code <a href="https://github.com/torrents-com">here</a> under <a rel="license" href="http://www.gnu.org/licenses/agpl.html">Affero GPL</a> license.</p>
+
+</div>
 </section>
 {% endblock %}

@@ -2,7 +2,7 @@
     {%- if not field %}
         <input type="hidden" name="_csrf_token" id="_csrf_token" value="{{ csrf_token() }}" />
     {%- elif field.type=="BooleanField" %}
-        <label>{{ field }}
+        <label class="errors grid_8 prefix_5 alpha clearer">{{ field }}
         {%- if field.name=="accept_tos" -%}
             I have read and accept the <a href="{{url_for('news.legal')}}#terms">Terms of use</a> and <a href="{{url_for('news.legal')}}#tos">Privacy policy</a>.
         {%- else -%}
@@ -21,21 +21,22 @@
         {%- endfor %}
     {%- else %}
         {%- if field.type!="SubmitField" %}
-            <label for="{{ field.name }}">{% if field.flags.required %}<span title="Required field">*</span>{% endif %} {{ field.label.text|safe }}</label>
+            <label class="grid_4 suffix_1 alpha clearer" for="{{ field.name }}">{% if field.flags.required %}<span title="Required field">*</span>{% endif %} {{ field.label.text|safe }}</label>
         {%- endif %}
-        {{ field(**kwargs)|safe }}{%- if field.type!="FileField" %}<span></span>{%- endif %}
+        <div class="grid_8{{' alpha prefix_5' if field.type=='SubmitField' }} ">{{ field(**kwargs)|safe }}{%- if field.type!="FileField" %}<span></span>{%- endif %}</div>
     {%- endif %}
     {%- if field.description %}
         <div class="description">{{ field.description }}</div>
     {%- endif %}
     {%- if field.errors %}
-        <ul class="errors">
+        <div class="grid_5 omega"><ul class="errors">
         {%- for error in field.errors %}
             <li>{{ error }}</li>
         {%- endfor %}
-        </ul>
+        </ul></div>
     {%- endif %}
 {%- endmacro %}
+
 {%- macro flash() %}
     {%- with messages = get_flashed_messages(with_categories=true) %}
         {%- if messages %}
@@ -45,6 +46,7 @@
         {%- endif %}
     {%- endwith %}
 {%- endmacro %}
+
 {%- macro small_banner() %}
 <section id="carrusel">
     <div class="container_24">

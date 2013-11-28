@@ -140,7 +140,7 @@ def robots():
 
 @news.route('/st_sitemap.xml')
 def static_sitemap():
-    g.cache_code = "S"
+    g.cache_code += "SN"
     pages = [url_for(page, _external=True) for page in ("news.home", ".about", ".legal", ".contact")]
     response = make_response(render_template('sitemap.xml', pages = pages))
     response.mimetype='text/xml'
@@ -149,6 +149,7 @@ def static_sitemap():
 LIST_FINDER = re.compile("(?:<h4.*?</h4>\s*)?<ul...+?</ul>", re.M+re.U+re.I+re.S)
 @news.route('/smap')
 def user_sitemap():
+    g.cache_code += "N"
 
     with open(os.path.join(current_app.root_path, 'news', 'wp-json.php', 'posts', 'types', 'post', 'taxonomies', 'category', 'terms')) as json_file:
         posts_categories = json.load(json_file)

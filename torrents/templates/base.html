@@ -109,7 +109,7 @@
                 <div class="grid_6">
                     <a href="/"><img src="{{g.static_prefix}}/logo.torrents-220-khaki.png" alt="Torrents" title="Torrents"/></a>
                 </div>
-                <div class="grid_11 prefix_1">
+                <div class="grid_10 prefix_2">
                     <ul>
                         <li><a href="{{ url_for('news.about') }}">About</a></li><li><a href="{{ url_for('news.contact') }}">Contact</a></li><li><a href="{{ url_for('news.legal') }}">Terms &amp; Privacy</a></li><li><a href="{{ url_for('files.copyright') }}">Copyright</a></li>
                     </ul>
@@ -121,27 +121,40 @@
                 </div>
             </div>
             <div id="footer-bottom" class="container_24">
-                <div class="grid_6">
-                    <p>the torrents.com family of sites:</p>
+                <div class="grid_8">
+                    <p>Torrent Software, S.L.<br/>Some rights reserved.</p>
+                    <p>Website under Creative Commons <a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/deed.es">BY-SA</a> license.<br/><a href="https://github.com/torrents-com">Source code</a> under <a rel="license" href="http://www.gnu.org/licenses/agpl.html">Affero GPL</a> license.</p>
                 </div>
-                <ul class="grid_17 prefix_1">
-                    <li class="grid_5 alpha"><a href="{{ url_for('news.home') }}">torrents<img src="{{g.static_prefix}}/dot-com.png" alt=".com" height="32" width="32" /></a>
+                <ul class="grid_16">
+                    <li class="grid_5 alpha"><a href="{{ url_for('news.user_sitemap') }}">torrents<img src="{{g.static_prefix}}/dot-com.png" alt=".com" height="32" width="32" /></a>
                         <ul>
-                            <li><a href="{{ url_for('news.home', path='category/movies') }}">Movies</a></li>
-                            <li><a href="{{ url_for('news.home', path='category/music') }}">Music</a></li>
-                            <li><a href="{{ url_for('news.home', path='category/tv') }}">TV</a></li>
+                            <li><a href="{{ url_for('news.home', path='category/news') }}">General news</a></li>
+                            <li><a href="{{ url_for('news.home', path='category/mobile') }}">Mobile news</a></li>
+                            <li><a href="{{ url_for('news.home', path='category/movies') }}">Movies news</a></li>
+                            <li><a href="{{ url_for('news.home', path='category/music') }}">Music news</a></li>
+                            <li><a href="{{ url_for('news.home', path='category/software') }}">Software news</a></li>
+                            <li><a href="{{ url_for('news.home', path='category/tv') }}">TV news</a></li>
+                            <li><a href="{{ url_for('news.home', path='category/technology') }}">Technology news</a></li>
                         </ul>
                     </li>
-                    <li class="grid_6"><a href="{{ url_for('files.home') }}">torrents<img src="{{g.static_prefix}}/dot-fm.png" alt=".com" height="32" width="32" /></a>
-                        <ul>
-                            <li><a href="{{ url_for('files.category', category='movies') }}">Popular movies</a></li>
-                            <li><a href="{{ url_for('files.popular_torrents', interval='week') }}">Popular torrents</a></li>
-                            <li><a href="{{ url_for('files.popular_searches', interval='week') }}">Favorite torrent searches</a></li>
-                        </ul>
-                    </li>
-                    <li class="grid_5 suffix_1 omega"><a href="{{ url_for('web.home') }}">torrents<img src="{{g.static_prefix}}/dot-ms.png" alt=".com" height="32" width="32" /></a>
+                    <li class="grid_5"><a href="{{ url_for('web.user_sitemap') }}">torrents<img src="{{g.static_prefix}}/dot-ms.png" alt=".com" height="32" width="32" /></a>
                         <ul>
                             <li><a href="{{ url_for('web.home') }}">Torrents Downloader</a></li>
+                            {% if g.downloader_properties["available"] -%}
+                            <li><a href="{{url_for('downloads.download', instfile=g.downloader_properties['filename'])}}">Windows binaries</a></li>
+                                {% if g.downloader_properties["source_available"] -%}
+                            <li><a href="{{url_for('downloads.download', instfile=g.downloader_properties['source_filename'])}}">Source code</a></li>
+                                {% endif %}
+                            {% endif %}
+                        </ul>
+                    </li>
+                    <li class="grid_6 omega"><a href="{{ url_for('files.user_sitemap') }}">torrents<img src="{{g.static_prefix}}/dot-fm.png" alt=".com" height="32" width="32" /></a>
+                        <ul class="grid_6 alpha omega">
+                            <li class="grid_3 alpha"><a href="{{ url_for('files.popular_torrents', interval='week') }}">Popular torrents</a></li>
+                            <li class="grid_3 omega"><a href="{{ url_for('files.popular_searches', interval='week') }}">Popular searches</a></li>
+                            {% for category in g.categories %}
+                            <li class="grid_3 {{loop.cycle('alpha', 'omega')}}"><a href="{{ url_for('files.category', category=category.url) }}">{{category.title|singular|capitalize }} torrents</a></li>
+                            {% endfor %}
                         </ul>
                     </li>
                 </ul>

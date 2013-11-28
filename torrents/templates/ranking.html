@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% from "helpers.html" import browse_pagination -%}
 {% block content %}
 <section class="container_24" id="files_page">
 <div class="grid_24">
@@ -13,14 +14,9 @@
 </p>
 </div>
 </div>
-<div class="grid_6">
-{{featured|safe}}
-</div>
-<div class="grid_17 prefix_1">
+<div class="grid_24">
 {{ results |safe }}
-{%- if search_info["next"] %}
-<a class='more_results' href='?s={{search_info["next"]}}'>more torrents...</a>
-{%- endif %}
 </div>
+{{ browse_pagination(pagination) }}
   </section>
 {% endblock %}

@@ -153,7 +153,7 @@
                             <li class="grid_3 alpha"><a href="{{ url_for('files.popular_torrents', interval='week') }}">Popular torrents</a></li>
                             <li class="grid_3 omega"><a href="{{ url_for('files.popular_searches', interval='week') }}">Popular searches</a></li>
                             {% for category in g.categories %}
-                            <li class="grid_3 {{loop.cycle('alpha', 'omega')}}"><a href="{{ url_for('files.category', category=category.url) }}">{{category.title|singular|capitalize }} torrents</a></li>
+                            <li class="grid_3 {{loop.cycle('alpha', 'omega')}}"><a href="{{ url_for('files.browse_category', category=category.url) }}">{{category.title|singular|capitalize }} torrents</a></li>
                             {% endfor %}
                         </ul>
                     </li>

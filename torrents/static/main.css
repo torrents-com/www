@@ -29,8 +29,8 @@ $redhealth:#F2602E;
 @mixin inline-block() {display:inline-block;zoom:1;*display:inline;}
 
 @mixin regular-text() {
-    font-size: 1.4em;
-    line-height:1.4em;
+    font-size: 1.3em;
+    line-height:1.3em;
 }
 @mixin icon{background:url(/static/icons.png?3) top left no-repeat; @include inline-block();}
 .icon-all{ @include icon(); background-position: 0 0; width: 18px; height: 16px; }
@@ -220,7 +220,7 @@ img {
     }
 }
 #about, #legal, #contact, #copyright {
-    li, h3 {
+    >ul li, h3 {
         a {color: $black }
     }
     > div {

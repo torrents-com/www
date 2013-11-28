@@ -28,6 +28,10 @@ def fix_urls(content, external=False):
 def fix_response(filename, mimetype=None):
     full_filename = os.path.join(current_app.root_path, "news", filename)
 
+    # el fichero no existe
+    if not os.path.exists(full_filename):
+        return abort(404)
+
     with open(full_filename) as input_file:
         response = make_response(fix_urls(input_file.read(), True))
         if mimetype:

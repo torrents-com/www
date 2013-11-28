@@ -33,6 +33,7 @@ from torrents.blueprints.index import index
 from torrents.blueprints.news import news
 from torrents.blueprints.files import files, register_files_converters
 from torrents.blueprints.downloader import all_blueprints as downloader_blueprints
+from torrents.blueprints.downloader.web import get_downloader_properties
 from torrents.templates import register_filters
 from torrents.services import *
 
@@ -371,4 +372,7 @@ def init_g(app):
     # Patrón de URL de busqueda, para evitar demasiadas llamadas a url_for
     g.url_search_base = url_for("files.search", query="___")
     g.url_adult_search_base = url_for("files.category", category="porn", query="___")
+
+    # downloader links
+    g.downloader_properties = get_downloader_properties()
 

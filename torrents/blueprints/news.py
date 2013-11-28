@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-import os.path, re, urllib2
+import os.path, re, urllib2, json, math
 from flask import render_template, current_app, g, send_from_directory, abort, make_response, request, url_for, redirect
 from flask.ext.mail import Message
 from torrents.multidomain import MultidomainBlueprint
@@ -146,15 +146,27 @@ def static_sitemap():
     response.mimetype='text/xml'
     return response
 
+LIST_FINDER = re.compile("(?:<h4.*?</h4>\s*)?<ul...+?</ul>", re.M+re.U+re.I+re.S)
 @news.route('/smap')
 def user_sitemap():
-    path_parts = load_html_parts("smap")
-    news_categories = path_parts["content"]
-    news_categories = news_categories[news_categories.index("<ul"):news_categories.rindex("</ul>")+4]
 
-    structure = [[("Home page", url_for("news.home"), [("About us", url_for(".about")), ("Terms & privacy", url_for(".legal")), ("Contact us", url_for(".contact"))])], [("News", None, news_categories)]]
+    with open(os.path.join(current_app.root_path, 'news', 'wp-json.php', 'posts', 'types', 'post', 'taxonomies', 'category', 'terms')) as json_file:
+        posts_categories = json.load(json_file)
+    with open(os.path.join(current_app.root_path, 'news', 'wp-json.php', 'posts', 'types', 'post', 'taxonomies', 'post_tag', 'terms')) as json_file:
+        posts_tags = json.load(json_file)
 
-    return render_template('sitemap.html', structure=structure, column_count=2, column_width=11)
+    structure = [[("Home page", url_for("news.home"), [("About us", url_for(".about")), ("Terms & privacy", url_for(".legal")), ("Contact us", url_for(".contact"))]), ("News categories", None, [(cat["name"], url_for("news.home", path="category/"+cat["slug"])) for cat in posts_categories.itervalues() if cat["count"]>0])]]
+
+    sorted_tags = sorted([(tag["name"], url_for("news.home", path="tag/"+tag["slug"])) for tag in posts_tags.itervalues() if tag["count"]>0], key=lambda x:x[0].lower())
+
+    column_size = int(math.ceil(len(sorted_tags)/3.))
+
+    for i in xrange(3):
+        column_tags = sorted_tags[i*column_size:(i+1)*column_size]
+        structure.append([("Tags "+column_tags[0][0][0].upper()+"-"+column_tags[-1][0][0].upper(), None, column_tags)])
+
+
+    return render_template('sitemap.html', structure=structure, column_count=4, column_width=5)
 
 @news.route('/about')
 def about():

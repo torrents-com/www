@@ -13,8 +13,8 @@ from foofind.utils.downloader import get_file_metadata
 
 web = MultidomainBlueprint('web', __name__, domain="torrents.ms")
 
+@cache.cached(timeout=50)
 def get_downloader_properties():
-    g.cache_code += "D"
     downloader_files = current_app.config["DOWNLOADER_FILES"]
     installer_metadata = get_file_metadata(downloader_files["installer.exe"])
     setup_metadata = get_file_metadata(downloader_files["setup.exe"])
@@ -43,12 +43,12 @@ def get_downloader_properties():
 
 @web.route('/favicon.ico')
 def favicon():
-    g.cache_code = "S"
+    g.cache_code += "S"
     return send_from_directory(os.path.join(current_app.root_path, 'static'), 'favicon.ico', mimetype='image/vnd.microsoft.icon')
 
 @web.route('/robots.txt')
 def robots():
-    g.cache_code = "S"
+    g.cache_code += "S"
     full_filename = os.path.join(os.path.join(current_app.root_path, 'static'), 'robots.txt')
 
     with open(full_filename) as input_file:
@@ -57,18 +57,28 @@ def robots():
     return response
 
 @web.route('/smap')
-def smap():
-    abort(404)
+def user_sitemap():
+    g.cache_code += "S"
+    structure = [[("Torrents Downloader", url_for("web.home"))]]
+
+    if g.downloader_properties["available"]:
+        structure[0].append(("Windows binaries", url_for('downloads.download', instfile=g.downloader_properties['filename'])))
+
+        if g.downloader_properties["source_available"]:
+            structure[0].append(("Source code", url_for('downloads.download', instfile=g.downloader_properties['source_filename'])))
+
+    return render_template('sitemap.html', structure=structure, column_count=1, column_width=22)
 
 @web.route('/sitemap.xml')
 def sitemap():
-    g.cache_code = "S"
+    g.cache_code += "S"
     response = make_response(render_template('sitemap.xml', pages = [url_for(".home", _external=True)]))
     response.mimetype='text/xml'
     return response
 
 @web.route('/')
 def home():
+    g.cache_code += "D"
     g.category=False
     g.title.append("Torrents Downloader")
     g.page_description = "Torrents Downloader is a fast client for the Torrent P2P network"
@@ -77,7 +87,6 @@ def home():
 
     return render_template(
         "microsite/foodownloader.html",
-        properties = get_downloader_properties(),
         mode = "download",
         style_alternative = request.args.get("a", 2, int)
         )

@@ -27,12 +27,12 @@
     <aside class="download-box grid_12">
         <h1>Torrents Downloader</h1>
         <h2>Find. Download. Play!</h2>
-        {% if properties["available"] -%}
-            <a href="{{url_for('downloads.download', instfile=properties['filename'])}}" id="downloader_button" class="downloader-download-button">Download</a>
-            <p><strong class="free">FREE</strong> <span>for Windows | <strong>{{properties["length"]|numbersizeformat}}</strong> (v. {{properties["version_code"].split("-")[0]}})</span></p>
+        {% if g.downloader_properties["available"] -%}
+            <a href="{{url_for('downloads.download', instfile=g.downloader_properties['filename'])}}" id="downloader_button" class="downloader-download-button">Download</a>
+            <p><strong class="free">FREE</strong> <span>for Windows | <strong>{{g.downloader_properties["length"]|numbersizeformat}}</strong> (v. {{g.downloader_properties["version_code"].split("-")[0]}})</span></p>
             <p class="soon">for OSX & Linux: coming soon...</p>
-            {% if properties["source_available"] -%}
-                <p class="source"><a href="{{url_for('downloads.download', instfile=properties['source_filename'])}}">Download source · {{properties["source_length"]|numbersizeformat}}</a></p>
+            {% if g.downloader_properties["source_available"] -%}
+                <p class="source"><a href="{{url_for('downloads.download', instfile=g.downloader_properties['source_filename'])}}">Download source · {{g.downloader_properties["source_length"]|numbersizeformat}}</a></p>
             {% endif %}
         {% endif %}
     </aside>

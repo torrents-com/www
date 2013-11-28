@@ -81,6 +81,8 @@ def update():
         wxART_REMOVABLE
 
     '''
+    g.cache_code += "D"
+
     # TODO(felipe): counter
     version = request.args.get("version", "")
     lang = request.args.get("lang", "en")

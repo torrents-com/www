@@ -28,6 +28,10 @@ $redhealth:#F2602E;
 
 @mixin inline-block() {display:inline-block;zoom:1;*display:inline;}
 
+@mixin regular-text() {
+    font-size: 1.4em;
+    line-height:1.4em;
+}
 @mixin icon{background:url(/static/icons.png?3) top left no-repeat; @include inline-block();}
 .icon-all{ @include icon(); background-position: 0 0; width: 18px; height: 16px; }
 .icon-anime{ @include icon(); background-position: -19px 0; width: 20px; height: 20px; }
@@ -147,7 +151,7 @@ img {
 
 }
 
-#files_page, #text_page, #news_page {
+#files_page, #text_page, .text_page, #news_page {
     margin:6em auto;
     min-height:20em;
 }
@@ -155,27 +159,36 @@ img {
 #text_page, .text_page {
     background-color:white;
 
-    h2 { font-size: 1.6em}
+    h2 { font-size: 2em}
+    h3 { margin:1em 0 0;letter-spacing:1px;font-size: 1.6em; text-transform:uppercase; font-weight:bold;}
+    h4 { margin: 2em 0em 0em; }
 
     .clearer {clear:left}
-    > ul, > ol {
-        margin-top:1em;
-        font-size: 1.4em;
-    }
-
     ul, ol {
+        margin-top:1em;
+        padding-left:1em;
         vertical-align: top;
+        @include regular-text();
+
         li {
-            margin-top:0.2em;
+            margin-top:0.5em;
             list-style-type:inherit;
+            list-style-image:url("data:image/gif;base64,R0lGODlhBQAIAIABALI2M////yH5BAEKAAEALAAAAAAFAAgAAAIHhI+pGO0PCwA7");
+            list-style-position: inside;
         }
     }
+
     li > ul, li > ol {
-        padding-left:3em;
+        margin-top:0em;
+        font-size: inherit;
+        line-height: inherit;
     }
-    ul > li { list-style-type:circle}
+    li li {
+        margin-top:0em;
+    }
+
     p, label, input, textarea, td, th {
-        font-size: 1.4em;
+        @include regular-text();
     }
     p, label, input, textarea, #recaptcha_widget_div {
         margin: 5px 5px 5px 0px;
@@ -205,6 +218,22 @@ img {
             color:$redfont;@include inline-block();
         }
     }
+}
+#about, #legal {
+    li, h3 {
+        a {color: $black }
+    }
+    div {
+        margin-top:4em;
+    }
+    div.alpha {
+        text-align:center;
+    }
+    div.omega {
+        border-left: 1px solid $gray;
+    }
+    h2 { margin-top:0em}
+
 }
 
 #cboxContent .text_page {
@@ -323,7 +352,7 @@ img.error {
 }
 
 #alerts {
-    font-size:1.3em;text-align:center;
+    @include regular-text();text-align:center;
 
     > div {
         border-bottom:1px solid $red; padding:0.5em 0em;display:none;
@@ -550,7 +579,7 @@ img.error {
 }
 
 #links {
-    margin-top:30px;font-size:1.4em;border-top: 3px $darkgray solid; padding:0px;
+    @include regular-text();margin-top:30px;border-top: 3px $darkgray solid; padding:0px;
     >li {list-style:none; margin:12px 0px;
         a{color:$black;font-weight:bold;text-decoration:none;
             &:hover, &:focus, &:active { color:$redfont }}
@@ -687,7 +716,7 @@ ul.browse {
     }
 
     .imdb, .size {
-        font-size: 1.3em;
+        @include regular-text();
         border-radius: 9px;
         padding:5px 20px;
         margin:5px 0px 5px 10px;
@@ -709,7 +738,7 @@ ul.browse {
             font-size: 1.2em; margin:5px 0px 0px;
         }
         dd {
-            font-size: 1.3em;
+            @include regular-text();
         }
     }
 
@@ -765,7 +794,7 @@ h1.extra{text-transform:none; font-weight:normal; margin:0em 0em 2em; font-size:
     }
     .main {font-size:2.5em !important; margin:0}
     .main a {text-decoration:none;color:$black}
-    p {font-size: 1.4em;font-weight:normal;}
+    p {@include regular-text();font-weight:normal;}
 }
 
 .lead {font-size: 1.5em; margin:0; font-weight:normal;text-transform:uppercase;color:$grayfont;
@@ -824,7 +853,7 @@ h1.extra{text-transform:none; font-weight:normal; margin:0em 0em 2em; font-size:
 }
 
 #download p, #metadata > ul , #files > ul, #long_desc > p {
-    font-size:1.3em;
+    @include regular-text();
     color:$black;
 }
 
@@ -1028,7 +1057,7 @@ h1.extra{text-transform:none; font-weight:normal; margin:0em 0em 2em; font-size:
         }
     }
     p {
-        font-size: 1.4em; display: inline;line-height:1.3em;
+        @include regular-text(); display: inline;
         &.date {color: $grayfont}
     }
     .networks {
@@ -1056,7 +1085,7 @@ h1.extra{text-transform:none; font-weight:normal; margin:0em 0em 2em; font-size:
     .share {margin-bottom:0}
 }
 
-.author-date p{font-size:1.4em;}
+.author-date p{@include regular-text();}
 .author-date p span.hour{font-size:0.7em;color:$grayfont;}
 .single .share .networks li{float:none;margin-bottom:1em;}
 
@@ -1064,7 +1093,7 @@ h1.extra{text-transform:none; font-weight:normal; margin:0em 0em 2em; font-size:
 .single .category-tags ul.categories{background:url(/static/ico.folder-15.png) left 0.3em no-repeat;}
 .single .category-tags ul.tags{background:url(/static/ico.tag-15.png) left 0.3em no-repeat;}
 
-.single-post section#content p, .single-post section#content ul li{font-size:1.4em;line-height:1.3em;margin-bottom:1em;}
+.single-post section#content p, .single-post section#content ul li{@include regular-text();margin-bottom:1em;}
 
 #sidebar {
     h3{font-size:1.8em;font-weight:bold;color:$black;text-transform:uppercase}
@@ -1078,7 +1107,7 @@ h1.extra{text-transform:none; font-weight:normal; margin:0em 0em 2em; font-size:
         margin-bottom: 4em;
         li, p {
             margin: 0 0 0.5em 0;
-            font-size: 1.4em;
+            @include regular-text();
         }
     }
 }
@@ -1116,7 +1145,7 @@ h1.extra{text-transform:none; font-weight:normal; margin:0em 0em 2em; font-size:
     .tagline { font-size: 2.5em; font-style:italic; display:block;margin: 0.7em 0em; color: #fff; font-weight:400 }
     a { @include redbutton();margin:1em 0em;padding:0.8em 1.8em;font-size:1.5em;border-radius: 0.5em; @include inline-block();}
     img {margin: -2.5em 1.5em;float: left;}
-    p {font-size: 1.3em; text-align:right}
+    p {@include regular-text(); text-align:right}
     h2 {font-size:1.7em; margin:0.3em 0em 0em; text-align:right}
 }
 #carrusel {
@@ -1128,17 +1157,18 @@ footer{
     background-color:$lightgray;color:$lightgrayfont;padding:3em 0em;
 
     #footer-top {
-        font-size:1.4em;margin-bottom:2em;border-bottom:1px solid $lightgrayfont;
+        @include regular-text();margin-bottom:2em;border-bottom:1px solid $lightgrayfont;
         div:first-child {text-align:right}
         li{margin-right:2em;float:left;margin:1em 2em 0em 0em;}
         .networks li{height:3em;margin:0em 0em 0em 1em;float:right;}
     }
     #footer-bottom {
         a {
-            font-size:1.4em;
+            font-size: 1.2em;
         }
         p {
-            font-size:1.4em;text-align:right;color:$grayfont;font-style:italic;
+            font-size: 1.2em;text-align:left;color:$grayfont;margin-bottom:1em;
+            a { font-size: inherit }
         }
         > ul {
             > li {
@@ -1169,7 +1199,7 @@ footer{
     width:auto;margin:0em;float:right;text-align:center;
     h1 {font-size:4.7em;color:$redfont;text-transform:none;font-weight:100;margin-top:0;}
     h2{text-transform:none;font-weight:100;margin:0 auto 0.5em;text-align:center;color:$black;}
-    p{font-size: 1.3em;color:$black;margin-bottom: 0.5em;}
+    p{@include regular-text();color:$black;margin-bottom: 0.5em;}
     .free{padding:2px 5px;margin-right:4px;color:$white;background:$red; @include inline-block();}
     .source {
         font-size:1.2em;padding:3px 7px;@include inline-block();

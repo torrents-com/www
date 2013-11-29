@@ -1159,13 +1159,14 @@ h1.extra{text-transform:none; font-weight:normal; margin:0em 0em 2em; font-size:
 }
 
 footer{
-    background-color:$lightgray;color:$lightgrayfont;padding:3em 0em;
+    background-color:$lightgray;color:$lightgrayfont;padding:2em 0em 3em;
 
     #footer-top {
-        @include regular-text();margin-bottom:2em;border-bottom:1px solid $lightgrayfont;
+        @include regular-text();margin-bottom:1em;border-bottom:1px solid $lightgrayfont;
         div:first-child {text-align:right}
         li{margin-right:2em;float:left;margin:1em 2em 0em 0em;}
-        .networks li{height:3em;margin:0em 0em 0em 1em;float:right;}
+        .networks li{height:3em;margin:0em;float:right;}
+        img {margin-bottom:0}
     }
     #footer-bottom {
         a {
@@ -1178,16 +1179,33 @@ footer{
         }
         > ul {
             > li {
-                background:url(/static/ico.arrow-khaki-down.png) 0 1em no-repeat;
                 > a {
                     text-decoration:none; margin-left:0.9em; line-height:1em; font-size:2.2em;color:$grayfont;
                     img {margin:0;vertical-align:-0.6em;}
                 }
-                ul {
-                    margin:0em 0em 0em 2em;
-                    li {margin-bottom: 0.5em}
+                > ul {
+                    > li {margin-bottom: 0.5em;
+                        > a {
+                            text-transform:uppercase;
+                            font-weight:bold;
+                        }
+                        ul {margin-left:3px}
+                    }
                 }
             }
+        }
+
+        ul.bulleted {
+            li {
+                list-style-type:square;
+                list-style-position: inside;
+            }
+        }
+        ul.common_links {
+            li {
+                margin-left:1em;margin-bottom:0.5em;
+            }
+            margin-bottom:1em;
         }
     }
 }

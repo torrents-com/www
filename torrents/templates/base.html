@@ -109,12 +109,16 @@
                 <div class="grid_6">
                     <a href="/"><img src="{{g.static_prefix}}/logo.torrents-220-khaki.png" alt="Torrents" title="Torrents"/></a>
                 </div>
-                <div class="grid_11 prefix_2">
-                    <ul>
-                        <li><a href="{{ url_for('news.about') }}">About us</a></li><li><a href="{{ url_for('news.contact') }}">Contact us</a></li><li><a href="{{ url_for('news.legal') }}">Terms &amp; Privacy</a></li><li><a href="{{ url_for('files.copyright') }}">Copyright &amp; DMCA</a></li>
-                    </ul>
+                <div class="grid_5 prefix_2">
+                    <a href="{{ url_for('news.home') }}"><img src="{{g.static_prefix}}/dot-com.png" alt=".com"/></a>
                 </div>
-                <div class="networks grid_5">
+                <div class="grid_5">
+                    <a href="{{ url_for('web.home') }}"><img src="{{g.static_prefix}}/dot-ms.png" alt=".ms"/></a>
+                </div>
+                <div class="grid_5">
+                    <a href="{{ url_for('files.home') }}"><img src="{{g.static_prefix}}/dot-fm.png" alt=".fm"/></a>
+                </div>
+                <div class="networks grid_1">
                     <ul>
                         <li><a href="{{ url_for('news.rss') }}"><img src="{{g.static_prefix}}/ico.rss-30-self.png" alt="Follow us via RSS"/></a></li>
                     </ul>
@@ -122,39 +126,57 @@
             </div>
             <div id="footer-bottom" class="container_24">
                 <div class="grid_8">
+                    <ul class="common_links">
+                        <li><a href="{{ url_for('news.about') }}">About us</a></li><li><a href="{{ url_for('news.contact') }}">Contact us</a></li><li><a href="{{ url_for('news.legal') }}">Terms &amp; Privacy</a></li><li><a href="{{ url_for('files.copyright') }}">Copyright &amp; DMCA</a></li>
+                    </ul>
                     <p><img src="{{g.static_prefix}}/some_rights_reserved.gif"/>Torrent Software, S.L.<br/>Some rights reserved.</p>
                     <p>Website under Creative Commons <a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/es/deed.en">BY-SA</a> license.<br/><a href="https://github.com/torrents-com">Source code</a> under <a rel="license" href="http://www.gnu.org/licenses/agpl.html">Affero GPL</a> license.</p>
                 </div>
                 <ul class="grid_16">
-                    <li class="grid_5 alpha"><a href="{{ url_for('news.user_sitemap') }}">torrents<img src="{{g.static_prefix}}/dot-com.png" alt=".com" height="32" width="32" /></a>
+                    <li class="grid_5 alpha">
                         <ul>
-                            <li><a href="{{ url_for('news.home', path='category/news') }}">General news</a></li>
-                            <li><a href="{{ url_for('news.home', path='category/mobile') }}">Mobile news</a></li>
-                            <li><a href="{{ url_for('news.home', path='category/movies') }}">Movies news</a></li>
-                            <li><a href="{{ url_for('news.home', path='category/music') }}">Music news</a></li>
-                            <li><a href="{{ url_for('news.home', path='category/software') }}">Software news</a></li>
-                            <li><a href="{{ url_for('news.home', path='category/tv') }}">TV news</a></li>
-                            <li><a href="{{ url_for('news.home', path='category/technology') }}">Technology news</a></li>
+                            <li><a href="{{ url_for('news.home') }}">News</a>
+                                <ul class="bulleted">
+                                    <li><a href="{{ url_for('news.home', path='category/news') }}">General</a></li>
+                                    <li><a href="{{ url_for('news.home', path='category/mobile') }}">Mobile</a></li>
+                                    <li><a href="{{ url_for('news.home', path='category/movies') }}">Movies</a></li>
+                                    <li><a href="{{ url_for('news.home', path='category/music') }}">Music</a></li>
+                                    <li><a href="{{ url_for('news.home', path='category/software') }}">Software</a></li>
+                                    <li><a href="{{ url_for('news.home', path='category/tv') }}">TV</a></li>
+                                    <li><a href="{{ url_for('news.home', path='category/technology') }}">Technology</a></li>
+                                </ul>
+                            </li>
+                            <li><a href="{{ url_for('news.user_sitemap') }}">Sitemap</a></li>
                         </ul>
                     </li>
-                    <li class="grid_5"><a href="{{ url_for('web.user_sitemap') }}">torrents<img src="{{g.static_prefix}}/dot-ms.png" alt=".com" height="32" width="32" /></a>
+                    <li class="grid_5">
                         <ul>
-                            <li><a href="{{ url_for('web.home') }}">Torrents Downloader</a></li>
-                            {% if g.downloader_properties["available"] -%}
-                            <li><a href="{{url_for('downloads.download', instfile=g.downloader_properties['filename'])}}">Windows binaries</a></li>
-                                {% if g.downloader_properties["source_available"] -%}
-                            <li><a href="{{url_for('downloads.download', instfile=g.downloader_properties['source_filename'])}}">Source code</a></li>
-                                {% endif %}
-                            {% endif %}
+                            <li><a href="{{ url_for('web.home') }}">Torrents Downloader</a>
+                                <ul class="bulleted">
+                                    {% if g.downloader_properties["available"] -%}
+                                    <li><a href="{{url_for('downloads.download', instfile=g.downloader_properties['filename'])}}">Windows binaries</a></li>
+                                        {% if g.downloader_properties["source_available"] -%}
+                                    <li><a href="{{url_for('downloads.download', instfile=g.downloader_properties['source_filename'])}}">Source code</a></li>
+                                        {% endif %}
+                                    {% endif %}
+                                </ul>
+                            </li>
+                            <li><a href="{{ url_for('web.user_sitemap') }}">Sitemap</a></li>
                         </ul>
                     </li>
-                    <li class="grid_6 omega"><a href="{{ url_for('files.user_sitemap') }}">torrents<img src="{{g.static_prefix}}/dot-fm.png" alt=".com" height="32" width="32" /></a>
-                        <ul class="grid_6 alpha omega">
-                            <li class="grid_3 alpha"><a href="{{ url_for('files.popular_torrents', interval='week') }}">Popular torrents</a></li>
-                            <li class="grid_3 omega"><a href="{{ url_for('files.popular_searches', interval='week') }}">Popular searches</a></li>
-                            {% for category in g.categories %}
-                            <li class="grid_3 {{loop.cycle('alpha', 'omega')}}"><a href="{{ url_for('files.browse_category', category=category.url) }}">{{category.title|singular|capitalize }} torrents</a></li>
-                            {% endfor %}
+                    <li class="grid_5 omega">
+                        <ul>
+                            <li><a href="{{ url_for('files.home') }}">Torrents</a>
+                                <ul class="bulleted">
+                                    <li><a href="{{ url_for('files.popular_torrents', interval='week') }}">Most popular</a></li>
+                                    {% for category in g.categories[:5] %}
+                                    <li><a href="{{ url_for('files.browse_category', category=category.url) }}">{{category.title|singular|capitalize }}</a></li>
+                                    {% endfor %}
+                                    <li><a href="{{ url_for('files.home') }}">Other</a></li>
+                                </ul>
+                            </li>
+                            <li><a href="{{ url_for('files.popular_searches', interval='week') }}">Top searches</a></li>
+                            <li><a href="{{ url_for('files.user_sitemap') }}">Sitemap</a></li>
                         </ul>
                     </li>
                 </ul>

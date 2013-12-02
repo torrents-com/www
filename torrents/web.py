@@ -246,7 +246,9 @@ def create_app(config=None, debug=False):
             if "?" in request.url:
                 root = request.url_root[:-1]
                 path = request.path.rstrip("/")
-                query = request.url.decode("utf-8")
+                query = request.url
+                if not isinstance(query, unicode):
+                    query = query.decode("utf-8")
                 query = query[query.find(u"?"):]
                 return redirect(root+path+query, 301)
             return redirect(request.url.rstrip("/"), 301)

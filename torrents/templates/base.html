@@ -170,7 +170,7 @@
                                 <ul class="bulleted">
                                     <li><a href="{{ url_for('files.popular_torrents', interval='week') }}">Most popular</a></li>
                                     {% for category in g.categories[:5] %}
-                                    <li><a href="{{ url_for('files.browse_category', category=category.url) }}">{{category.title|singular|capitalize }}</a></li>
+                                    <li><a href="{{ url_for('files.browse_category', category=category.url) }}">{{category.title|capitalize }}</a></li>
                                     {% endfor %}
                                     <li><a href="{{ url_for('files.home') }}">Other</a></li>
                                 </ul>

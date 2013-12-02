@@ -460,7 +460,7 @@ def category(category, query=None, subcategory=None):
     if g.category and g.category.adult_content:
         g.is_adult_content = True
 
-    results, search_info = single_search("("+g.subcategory.replace(" ","")+")" if g.subcategory else g.query, category=g.category.tag, not_category=None if g.is_adult_content else "porn", order=order, zone=g.category.url, title=(None, 2, g.category.tag), limit=limit, max_limit=page_size, skip=skip, show_order=show_order, results_template=results_template, details=bool(g.subcategory))
+    results, search_info = single_search("("+g.subcategory.replace(" ","")+")" if g.subcategory else g.query, category=g.category.tag, not_category=None if g.is_adult_content else "porn", order=order, zone=g.category.url, title=(None, 2, g.category.tag), limit=limit, max_limit=page_size, skip=skip, show_order=show_order or True, results_template=results_template, details=bool(g.subcategory))
 
     if g.subcategory:
         pagination = get_browse_pagination(search_info, skip, page_size, pages_limit)

@@ -81,8 +81,6 @@ def update():
         wxART_REMOVABLE
 
     '''
-    g.cache_code += "D"
-
     # TODO(felipe): counter
     version = request.args.get("version", "")
     lang = request.args.get("lang", "en")
@@ -91,7 +89,8 @@ def update():
     # Updates
     update_files = []
     downloader_files = current_app.config["DOWNLOADER_FILES"]
-    setup_version = get_file_metadata(downloader_files["update.exe"]).get("version", "")
+
+    setup_version = g.downloader_properties["update_version"]
 
     if version < setup_version:
         update_files.append({

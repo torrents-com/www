@@ -239,6 +239,18 @@ img {
     input[type="text"], input[type="email"], input[type="password"], textarea {
         margin-bottom:10px;border-radius:5px;width:290px;padding:5px 10px;
     }
+    .techlist {
+        li {
+            text-align:center;list-style-image:none;
+            img {margin:2em 2em 1em}
+            #more_tech {
+                color:$black;
+                display:block;
+                font-size:4em;
+                line-height:1.5em;
+            }
+        }
+    }
 }
 
 #cboxContent .text_page {

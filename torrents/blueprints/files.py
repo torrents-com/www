@@ -422,10 +422,10 @@ def category(category, query=None, subcategory=None):
         return abort(404)
 
     group_count_search = pop_searches = None
+    results_template = "browse.html"
     page_title = singular_filter(g.category.title)+" torrents"
-    results_template = "results.html"
-    limit=70
-    page_size=50
+    limit = 300
+    page_size = 30
     pages_limit = 10
 
     if g.query:
@@ -433,6 +433,9 @@ def category(category, query=None, subcategory=None):
         g.page_description = "%s %s torrents at %s, the free and fast torrent search engine."%(g.query.capitalize(), singular_filter(g.category.title).lower(), g.domain_capitalized)
         order, show_order, order_title = get_order(SEARCH_ORDER)
         group_count_search = start_guess_categories_with_results(g.query)
+        results_template = "results.html"
+        limit=70
+        page_size=50
     elif subcategory:
         if not g.subcategory:
             return abort(404)
@@ -440,7 +443,6 @@ def category(category, query=None, subcategory=None):
         page_title = g.subcategory.capitalize()+" "+page_title.lower()
         g.page_description = "%s %s torrents at %s, the free and fast torrent search engine."%(g.subcategory.capitalize(), singular_filter(g.category.title).lower(), g.domain_capitalized)
         order, show_order, order_title = get_order(SUBCATEGORY_ORDER)
-        results_template = "browse.html"
         limit = 300
         page_size = 30
     else:
@@ -460,23 +462,22 @@ def category(category, query=None, subcategory=None):
     if g.category and g.category.adult_content:
         g.is_adult_content = True
 
-    results, search_info = single_search("("+g.subcategory.replace(" ","")+")" if g.subcategory else g.query, category=g.category.tag, not_category=None if g.is_adult_content else "porn", order=order, zone=g.category.url, title=(None, 2, g.category.tag), limit=limit, max_limit=page_size, skip=skip, show_order=show_order or True, results_template=results_template, details=bool(g.subcategory))
+    results, search_info = single_search("("+g.subcategory.replace(" ","")+")" if g.subcategory else g.query, category=g.category.tag, not_category=None if g.is_adult_content else "porn", order=order, zone=g.category.url, title=(None, 2, g.category.tag), limit=limit, max_limit=page_size, skip=skip, show_order=show_order or True, results_template=results_template, details=not g.query)
 
-    if g.subcategory:
-        pagination = get_browse_pagination(search_info, skip, page_size, pages_limit)
-
-        return render_template('subcategory.html', results=results, search_info=search_info, pagination=pagination, show_order=show_order), 200 if bool(results) else 404
-    else:
-        if g.query:
-            if g.search_bot:
-                searchd.log_bot_event(g.search_bot, (search_info["total_found"]>0 or search_info["sure"]))
-            else:
-                g.track = bool(results)
+    if g.query:
+        if g.search_bot:
+            searchd.log_bot_event(g.search_bot, (search_info["total_found"]>0 or search_info["sure"]))
+        else:
+            g.track = bool(results)
 
         if group_count_search:
             g.categories_results = end_guess_categories_with_results(group_count_search)
 
         return render_template('category.html', results=results, search_info=search_info, show_order=show_order, featured=get_featured(search_info["count"])), 200 if bool(results) else 404
+    else:
+        pagination = get_browse_pagination(search_info, skip, page_size, pages_limit)
+
+        return render_template('subcategory.html', results=results, search_info=search_info, pagination=pagination, show_order=show_order), 200 if bool(results) else 404
 
 
 @files.route('/-<fileid:file_id>')

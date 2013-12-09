@@ -6,9 +6,7 @@
 {%- endblock -%}
 {%- block cookies -%}
     {%- if not results %}
-        {%- if g.query %}
-            trackGAEvent("No results", {{g.clean_query|tojson|safe}}, {{g.category.title|tojson|safe}});
-        {%- endif %}
+        trackGAEvent("No results", {{g.clean_query|tojson|safe}}, {{g.category.title|tojson|safe}});
     {%- endif %}
 {%- endblock -%}
 {% block content %}
@@ -16,8 +14,8 @@
 <div class="title big_icon grid_24 {{g.category.url}}">
     <span></span>
     <div>
-        <div class="lead"><a href='{{url_for("files.home")}}'>All</a>&nbsp;&nbsp;<span>&gt;</span>&nbsp;&nbsp;<a href='{{url_for("files.browse_category", category=g.category.url)}}'>{{g.category.title}}</a>&nbsp;&nbsp;<span>&gt;</span>&nbsp;&nbsp;{{g.query or "popular"}}</div>
-        <h1 class="category">{{(g.query or "popular")|capitalize}} {{g.category.title|singular|lower}} torrents</h1>
+        <div class="lead"><a href='{{url_for("files.home")}}'>All</a>&nbsp;&nbsp;<span>&gt;</span>&nbsp;&nbsp;<a href='{{url_for("files.browse_category", category=g.category.url)}}'>{{g.category.title}}</a>&nbsp;&nbsp;<span>&gt;</span>&nbsp;&nbsp;{{g.query}}</div>
+        <h1 class="category">{{g.query|capitalize}} {{g.category.title|singular|lower}} torrents</h1>
     </div>
 </div>
 {%- if results %}

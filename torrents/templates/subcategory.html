@@ -2,7 +2,9 @@
 {% from "helpers.html" import browse_pagination -%}
 {%- block cookies -%}
     {%- if not results %}
-        trackGAEvent("Empty subcategory", {{g.subcategory|tojson|safe}}, {{g.category.title|tojson|safe}});
+        {%- if g.subcategory %}
+            trackGAEvent("Empty subcategory", {{g.subcategory|tojson|safe}}, {{g.category.title|tojson|safe}});
+        {%- endif %}
     {%- endif %}
 {%- endblock -%}
 {% block content %}
@@ -10,8 +12,8 @@
 <div class="title big_icon grid_24 {{g.category.url}}">
     <span></span>
     <div>
-        <div class="lead"><a href='{{url_for("files.home")}}'>All</a>&nbsp;&nbsp;<span>&gt;</span>&nbsp;&nbsp;<a href='{{url_for("files.browse_category", category=g.category.url)}}'>{{g.category.title}}</a>&nbsp;&nbsp;<span>&gt;</span>&nbsp;&nbsp;{{ g.subcategory}}</div>
-        <h1 class="category">{{g.subcategory|capitalize}} {{g.category.title|singular|lower}} torrents</h1>
+        <div class="lead"><a href='{{url_for("files.home")}}'>All</a>&nbsp;&nbsp;<span>&gt;</span>&nbsp;&nbsp;<a href='{{url_for("files.browse_category", category=g.category.url)}}'>{{g.category.title}}</a>&nbsp;&nbsp;<span>&gt;</span>&nbsp;&nbsp;{{g.subcategory or "popular"}}</div>
+        <h1 class="category">{{(g.subcategory or "popular")|capitalize}} {{g.category.title|singular|lower}} torrents</h1>
     </div>
 </div>
 {%- if results %}
@@ -21,8 +23,8 @@
     {{ browse_pagination(pagination) }}
 {%- else %}
 <div class="text_page">
-    <p>No <strong>{{g.subcategory}}</strong> torrents found in <strong>{{g.category.title|singular}}</strong>.</p>
-    <p>Sorry, we temporarily don't have any files in this subcategory. Please try another one.</p>
+    <p>No <strong>{{g.subcategory or "popular"}}</strong> torrents found in <strong>{{g.category.title|singular}}</strong>.</p>
+    <p>Sorry, we temporarily don't have any files in this {{"sub" if g.subcategory}}category. Please try another one.</p>
 </div>
 {%- endif %}
 </section>

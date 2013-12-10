@@ -19,28 +19,28 @@ def update_downloader_properties():
 @cache.cached(key_prefix="downloader_properties")
 def get_downloader_properties():
     downloader_files = current_app.config["DOWNLOADER_FILES"]
-    installer_metadata = get_file_metadata(downloader_files["installer.exe"])
+    source_available = os.path.exists(downloader_files["source.zip"])
+    installer_available = os.path.exists(downloader_files["installer.exe"])
     setup_metadata = get_file_metadata(downloader_files["setup.exe"])
-    source_metadata = get_file_metadata(downloader_files["source.zip"])
     update_metadata = get_file_metadata(downloader_files["update.exe"])
 
     properties = {
-        "available": installer_metadata and setup_metadata,
-        "source_available": bool(source_metadata),
+        "available": installer_available and setup_metadata,
+        "source_available": source_available,
         "update_version": update_metadata.get("version", "")
         }
 
     try:
         if properties["available"]:
             properties["version_code"] = setup_metadata["version"]
-            properties["length"] = installer_metadata["size"]
+            properties["length"] = os.path.getsize(downloader_files["installer.exe"])
             properties["filename"] = "installer.exe"
     except KeyError:
         properties["available"] = False
 
     try:
-        if properties["source_available"]:
-            properties["source_length"] = source_metadata["size"]
+        if source_available:
+            properties["source_length"] = os.path.getsize(downloader_files["source.zip"])
             properties["source_filename"] = "source.zip"
     except KeyError:
         properties["source_available"] = False

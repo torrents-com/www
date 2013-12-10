@@ -239,10 +239,15 @@ img {
     input[type="text"], input[type="email"], input[type="password"], textarea {
         margin-bottom:10px;border-radius:5px;width:290px;padding:5px 10px;
     }
+    .products {
+        img:first-child {vertical-align:0.5em}
+        p {margin-top:-0.5em}
+    }
+
     .techlist {
         li {
             text-align:center;list-style-image:none;
-            img {margin:2em 2em 1em}
+            img {margin:2em 1em 1em;display:block;}
             #more_tech {
                 color:$black;
                 display:block;

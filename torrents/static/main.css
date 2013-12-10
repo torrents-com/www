@@ -247,12 +247,18 @@ img {
     .techlist {
         li {
             text-align:center;list-style-image:none;
-            img {margin:2em 1em 1em;display:block;}
+            a:first-child:before {
+                content: "";
+                display: inline-block;
+                height: 100%;
+                vertical-align: middle;
+            }
+            a:first-child, #more_tech {margin:20px 10px 10px;display:block;height:60px}
+            img {vertical-align:middle}
             #more_tech {
                 color:$black;
-                display:block;
                 font-size:4em;
-                line-height:1.5em;
+                line-height:0.5em;
             }
         }
     }

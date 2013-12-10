@@ -244,23 +244,32 @@ img {
         p {margin-top:-0.5em}
     }
 
-    .techlist {
-        li {
-            text-align:center;list-style-image:none;
-            a:first-child:before {
-                content: "";
-                display: inline-block;
-                height: 100%;
-                vertical-align: middle;
-            }
-            a:first-child, #more_tech {margin:20px 10px 10px;display:block;height:60px}
-            img {vertical-align:middle}
-            #more_tech {
-                color:$black;
-                font-size:4em;
-                line-height:0.5em;
-            }
+
+}
+
+#about {
+    li {
+        text-align:center;list-style-image:none;
+        a:first-child:before {
+            content: "";
+            display: inline-block;
+            height: 100%;
+            vertical-align: middle;
         }
+        a:first-child, #more_tech {margin:20px 10px 10px;display:block;height:60px}
+        img {vertical-align:middle}
+        #more_tech {
+            color:$black;
+            font-size:4em;
+            line-height:0.5em;
+        }
+
+        h4 {
+            font-size:1em; margin:0.5em 0 0
+        }
+    }
+    .team {
+        li {margin-bottom:2em}
     }
 }
 

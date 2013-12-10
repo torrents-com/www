@@ -180,8 +180,18 @@ def about():
     g.page_description = "Torrents.com is a free torrent search engine that offers users fast, simple, easy access to every torrent in one place."
     g.keywords.clear()
     g.keywords.update(["torrents", "torrents.com", "search engine", "download", "free", "movie", "software", "popular largest"])
-    g.title.append("About")
+    g.title.append("About us")
     return render_template('about.html')
+
+@news.route('/products')
+def products():
+    g.cache_code = "S"
+    g.category=False
+    g.page_description = "Torrents.com is a free torrent search engine that offers users fast, simple, easy access to every torrent in one place."
+    g.keywords.clear()
+    g.keywords.update(["torrents", "torrents.com", "search engine", "download", "free", "movie", "software", "popular largest"])
+    g.title.append("Our products")
+    return render_template('products.html')
 
 @news.route('/legal')
 def legal():

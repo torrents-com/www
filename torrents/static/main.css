@@ -1191,7 +1191,7 @@ h1.extra{text-transform:none; font-weight:normal; margin:0em 0em 2em; font-size:
 }
 
 footer{
-    background-color:$lightgray;color:$lightgrayfont;padding:2em 0em 3em;
+    background-color:$lightgray;color:$lightgrayfont;padding:2em 0em 1em;
 
     #footer-top {
         @include regular-text();margin-bottom:1em;border-bottom:1px solid $lightgrayfont;

@@ -364,6 +364,7 @@ def init_g(app):
     g.section = "torrents" if g.domain=="torrents.fm" else "downloader" if g.domain=="torrents.ms" else "news"
     g.domain_capitalized = g.domain.capitalize()
 
+    # RUM
     if "RUM_CODES" in app.config:
         rum_codes = app.config["RUM_CODES"]
         g.RUM_code = rum_codes[g.domain] if g.domain in rum_codes else rum_codes["torrents.com"]

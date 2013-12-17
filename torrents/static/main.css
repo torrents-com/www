@@ -1205,14 +1205,14 @@ footer{
             font-size: 1.2em;
         }
         p {
-            font-size: 1.2em;text-align:left;color:$grayfont;margin-bottom:1em;
-            img {float: left;margin: 0 1em 0 0}
+            font-size: 1.2em;text-align:left;color:$grayfont;margin:0em 1em;
+            img {margin: 1em 1em 1em 0em; vertical-align:middle}
             a {font-size: inherit}
         }
         > ul {
             > li {
                 > a {
-                    text-decoration:none; margin-left:0.9em; line-height:1em; font-size:2.2em;color:$grayfont;
+                    text-decoration:none; margin-left:1em; line-height:1em; font-size:2.2em;color:$grayfont;
                     img {margin:0;vertical-align:-0.6em;}
                 }
                 > ul {
@@ -1234,10 +1234,12 @@ footer{
             }
         }
         ul.common_links {
+            margin-bottom:1em;font-size: 1.2em;
             li {
+                list-style-type:none;
                 margin-left:1em;margin-bottom:0.5em;
+                a {font-size: inherit}
             }
-            margin-bottom:1em;
         }
     }
 }

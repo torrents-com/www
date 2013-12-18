@@ -643,12 +643,6 @@ def single_search(query, category=None, not_category=None, order=None, title=Non
     else:
         return process_search_results(None, query, category, zone=zone, title=title, last_items=last_items, skip=skip, limit=limit, max_limit=max_limit, ignore_ids=ignore_ids, show_order=show_order, results_template=results_template, details=details)
 
-def multi_search(params, query_time=500, extra_wait_time=500):
-    searches = [(searchd.search((query+u" " if query else u"")+(u"("+category+")" if category else u"")+(u" -("+not_category+")" if not_category else u""), None, order=order, start=True, group=True, no_group=True), query, category, not_category, zone, title, limit, max_limit, show_order) for query, category, not_category, order, zone, title, limit, max_limit, show_order in params]
-
-    for s, query, category, not_category, zone, title, limit, max_limit, show_order in searches:
-        yield process_search_results(s, query, category, not_category, zone=zone, title=title, limit=limit, max_limit=max_limit, show_order=show_order)
-
 def start_guess_categories_with_results(query):
     return searchd.search(query, start=True, group=True, no_group=False)
 

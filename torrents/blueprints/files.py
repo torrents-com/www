@@ -116,6 +116,8 @@ def get_query_info(query=None, category=None, subcategory=None, check_qs=True):
     if category:
         if category in g.categories_by_url:
             g.category = g.categories_by_url[category]
+            if g.category.adult_content:
+                g.is_adult_content = True
 
     if g.category and subcategory:
         subcategory = subcategory.replace("_", " ")
@@ -177,7 +179,6 @@ PIXEL = b64decode("R0lGODlhAQABAPAAAAAAAAAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw=="
 @files.route("/res/pixel.gif")
 @nocache
 def pixel():
-
     pixel_response = make_response(PIXEL)
     pixel_response.mimetype="image/gif"
     g.must_cache = 0
@@ -193,7 +194,7 @@ def pixel():
                     return pixel_response
 
                 # no registra busquedas con palabras no permitidas
-                if blacklists.prepare_phrase(g.safe_query) in blacklists:
+                if blacklists.prepare_phrase(g.safe_query) in (blacklists_adult if g.is_adult_content else blacklists):
                     return pixel_response
 
                 # si toca registrar y hay resultados, registra busqueda para nubes de tags
@@ -283,9 +284,6 @@ def browse_category(category):
     g.cache_code = "B"
     get_query_info(None, category)
     g.must_cache = 7200
-
-    if g.category and g.category.adult_content:
-        g.is_adult_content = True
 
     g.title.append(singular_filter(g.category.title) + " torrents")
     pop_searches = torrentsdb.get_ranking(category)["final_ranking"]
@@ -457,9 +455,6 @@ def category(category, query=None, subcategory=None):
 
     g.title.append(page_title)
 
-    if g.category and g.category.adult_content:
-        g.is_adult_content = True
-
     results, search_info = single_search("("+g.subcategory.replace(" ","")+")" if g.subcategory else g.query, category=g.category.tag, not_category=None if g.is_adult_content else "porn", order=order, zone=g.category.url, title=(None, 2, g.category.tag), limit=limit, max_limit=page_size, skip=skip, show_order=show_order or True, results_template=results_template, details=not g.query)
 
     if g.query:
@@ -536,19 +531,18 @@ def download(file_id, file_name=""):
     if not file_data:
         abort(404)
 
-    # no permite acceder ficheros que deberian ser bloqueados
-    prepared_phrase = blacklists.prepare_phrase(file_data['view']['nfn'])
-    if prepared_phrase in blacklists["forbidden"] or (prepared_phrase in blacklists["misconduct"] and prepared_phrase in blacklists["underage"]):
-        g.blacklisted_content = "File"
-        if not g.show_blacklisted_content:
-            abort(404)
-
     if file_data["view"]["category"]:
         g.category = file_data["view"]["category"]
         if file_data["view"]["category"].tag=="porn":
             g.is_adult_content = True
     else:
         g.category = file_data["view"]["category_type"]
+
+    # no permite acceder ficheros que deberian ser bloqueados
+    if prepared_phrase in blacklists["forbidden"] or (prepared_phrase in blacklists["misconduct"] and prepared_phrase in blacklists["underage"]):
+        g.blacklisted_content = "File"
+        if not g.show_blacklisted_content:
+            abort(404)
 
     query = download_search(file_data, file_name, "torrent").replace("-"," ")
     related = single_search(query, category=None, not_category=(None if g.is_adult_content else "porn"), title=("Related torrents",3,None), zone="File / Related", last_items=[], limit=30, max_limit=15, ignore_ids=[mid2hex(file_id)], show_order=None)

@@ -24,6 +24,10 @@ class Blacklists:
     def prepare_phrase(self, phrase):
         return prepare_phrase(phrase)
 
+    def clone_into(self, new_blacklist, ffilter):
+        new_blacklist.categories = {key:value for key, value in self.categories.iteritems() if ffilter(key)}
+        new_blacklist.debug = self.debug
+
 class BlacklistCategory:
     def __init__(self, name, entries, debug):
         self.debug = debug

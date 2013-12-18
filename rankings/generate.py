@@ -14,6 +14,7 @@ def get_ranking_info(ranking, new_last_update):
     # ranking info
     size = int(ranking["size"])
     category = ranking.get("category", None)
+    adult_content = ranking.get("adult_content", False)
     relevance_factor = ranking["relevance_factor"]
     interval = ranking["interval"]
     order = int(ranking["order"])
@@ -28,7 +29,7 @@ def get_ranking_info(ranking, new_last_update):
 
     weight_threshold = beta * relevance_factor**(ranking["threshold_interval"]/float(interval))
 
-    return {"_id":ranking["_id"], "size":size, "category":category, "relevance_factor":relevance_factor, "alpha":alpha, "beta":beta, "weight_threshold":weight_threshold, "interval":interval, "order":order, "ranking_trends":ranking_trends}
+    return {"_id":ranking["_id"], "size":size, "category":category, "relevance_factor":relevance_factor, "alpha":alpha, "beta":beta, "weight_threshold":weight_threshold, "interval":interval, "order":order, "ranking_trends":ranking_trends, "adult_content":adult_content}
 
 def update_rankings(app):
     try:
@@ -38,7 +39,9 @@ def update_rankings(app):
 
         # initialize blacklists
         blacklists = Blacklists()
+        blacklists_adult = Blacklists()
         blacklists.load_data(torrentsdb.get_blacklists())
+        blacklists_adult.clone_into(blacklists_adult, lambda x:x!="misconduct")
 
         # load rankings information
         rankings = torrentsdb.get_rankings()
@@ -61,7 +64,8 @@ def update_rankings(app):
         # update weights
         for search in searches:
             # check blacklists
-            if blacklists.prepare_phrase(search["s"]) in blacklists:
+            pphrase = blacklists.prepare_phrase(search["s"])
+            if pphrase in blacklists_adult:
                 continue
 
             # normalize search
@@ -82,6 +86,8 @@ def update_rankings(app):
         # create a dictionary with rankings that will be used as trends for other rankings
         final_rankings = {ranking["ranking_trends"]:None for ranking in rankings.itervalues()}
 
+        adult_searches = set()
+
         for ranking in sorted(rankings.itervalues(), key=itemgetter("order")):
             ranking_name = ranking["_id"]
             try:
@@ -90,6 +96,10 @@ def update_rankings(app):
 
                 size = ranking["size"]
                 ranking_size = 0
+
+                # adult searches handling
+                adult_content = ranking["adult_content"]
+                context_blacklists = blacklists_adult if adult_content else blacklists
 
                 # gets trends ranking
                 ranking_trend = ranking.get("ranking_trends", None)
@@ -106,9 +116,16 @@ def update_rankings(app):
                     search = search_row["_id"]
                     weight = search_row[ranking_name]
 
-                    # double-check blacklists
-                    if blacklists.prepare_phrase(search) in blacklists:
+                    # double-check blacklists and check adult content
+                    if blacklists.prepare_phrase(search) in context_blacklists:
                         continue
+
+                    # register adult content or ignore
+                    if adult_content:
+                        adult_searches.add(search)
+                    else:
+                        if search in adult_searches:
+                            continue
 
                     # calculate trend for this search
                     trend_pos = trend_final_ranking.get(search,None) if trend_final_ranking else None

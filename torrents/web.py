@@ -178,7 +178,10 @@ def create_app(config=None, debug=False):
     # Blacklists
     if app.debug:
         blacklists.debug=True
-    blacklists.load_data(torrentsdb.get_blacklists())
+
+    blacklist_data = torrentsdb.get_blacklists()
+    blacklists.load_data(blacklist_data)
+    blacklists.clone_into(blacklists_adult, lambda x:x!="misconduct")
 
     def refresh_blacklists():
         '''

@@ -90,9 +90,9 @@ def get_order(default_order):
 def get_skip(limit=10):
     try:
         if "p" in request.args:
-            return min(int(request.args.get("p","1")),limit+1)-1
+            return min(int(request.args.get("p","1")),limit)-1
         else:
-            return min(int(request.args.get("s","0")),limit)
+            return min(int(request.args.get("s","0")),limit-1)
     except:
         return 0
 
@@ -424,7 +424,7 @@ def category(category, query=None, subcategory=None):
     group_count_search = pop_searches = None
     results_template = "browse.html"
     page_title = singular_filter(g.category.title)+" torrents"
-    limit = 300
+    limit = 150
     page_size = 30
     pages_limit = 10
 
@@ -434,7 +434,7 @@ def category(category, query=None, subcategory=None):
         order, show_order, order_title = get_order(SEARCH_ORDER)
         group_count_search = start_guess_categories_with_results(g.query)
         results_template = "results.html"
-        limit=70
+        limit=75
         page_size=50
     elif subcategory:
         if not g.subcategory:
@@ -443,8 +443,6 @@ def category(category, query=None, subcategory=None):
         page_title = g.subcategory.capitalize()+" "+page_title.lower()
         g.page_description = "%s %s torrents at %s, the free and fast torrent search engine."%(g.subcategory.capitalize(), singular_filter(g.category.title).lower(), g.domain_capitalized)
         order, show_order, order_title = get_order(SUBCATEGORY_ORDER)
-        limit = 300
-        page_size = 30
     else:
         page_title = "Popular "+page_title.lower()
         g.page_description = "Popular %s torrents at %s, the free and fast torrent search engine."%(singular_filter(g.category.title).capitalize(), g.domain_capitalized)

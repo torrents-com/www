@@ -41,7 +41,7 @@ def update_rankings(app):
         blacklists = Blacklists()
         blacklists_adult = Blacklists()
         blacklists.load_data(torrentsdb.get_blacklists())
-        blacklists_adult.clone_into(blacklists_adult, lambda x:x!="misconduct")
+        blacklists.clone_into(blacklists_adult, lambda x:x!="misconduct")
 
         # load rankings information
         rankings = torrentsdb.get_rankings()

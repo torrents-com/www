@@ -43,10 +43,10 @@
             function trackGAPageview(){var args_array = Array.prototype.slice.call(arguments,0);trackGA(['_trackPageview'].concat(args_array),['send','pageview'].concat(args_array));}
 
         {%- if g.must_accept_cookies %}
-            function trackGA(params, new_params){if ($.cookiesLaw.notified) {_gaq.push(params);ga.apply(this,new_params);};}
+            function trackGA(params, new_params){if ($.cookiesLaw.notified) {_gaq.push(params);};}
             $.cookiesLaw.initialize({{g.domain_cookies|tojson}}, cookiesScripts);
         {%- else %}
-            function trackGA(params, new_params){_gaq.push(params);ga.apply(this,new_params);}
+            function trackGA(params, new_params){_gaq.push(params);}
             cookiesScripts();
         {%- endif %}
 

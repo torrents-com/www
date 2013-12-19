@@ -539,6 +539,7 @@ def download(file_id, file_name=""):
         g.category = file_data["view"]["category_type"]
 
     # no permite acceder ficheros que deberian ser bloqueados
+    prepared_phrase = blacklists.prepare_phrase(file_data['view']['nfn'])
     if prepared_phrase in blacklists["forbidden"] or (prepared_phrase in blacklists["misconduct"] and prepared_phrase in blacklists["underage"]):
         g.blacklisted_content = "File"
         if not g.show_blacklisted_content:

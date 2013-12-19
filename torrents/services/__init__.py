@@ -7,10 +7,11 @@ from .ip_ranges import IPRanges
 from .blacklists import Blacklists
 from .categories import CategoriesCache
 
-__all__=['torrentsdb', 'spanish_ips', 'blacklists', 'blacklists_adult', 'categories_cache']
+__all__=['torrentsdb', 'spanish_ips', 'blacklists', 'blacklists_adult', 'categories_cache', 'local_cache']
 
 torrentsdb = TorrentsStore()
 spanish_ips = IPRanges()
 blacklists = Blacklists()
 blacklists_adult = Blacklists()
 categories_cache = CategoriesCache()
+local_cache = {}

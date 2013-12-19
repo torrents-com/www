@@ -13,13 +13,6 @@ from foofind.utils.downloader import get_file_metadata
 
 web = MultidomainBlueprint('web', __name__, domain="torrents.ms")
 
-def update_downloader_properties():
-    '''
-    Downloader updated.
-    '''
-    cache.delete("downloader_properties")
-
-@cache.cached(key_prefix="downloader_properties")
 def get_downloader_properties():
     downloader_files = current_app.config["DOWNLOADER_FILES"]
     source_available = os.path.exists(downloader_files["source.zip"])

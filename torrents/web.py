@@ -33,7 +33,7 @@ from torrents.blueprints.index import index
 from torrents.blueprints.news import news
 from torrents.blueprints.files import files, register_files_converters
 from torrents.blueprints.downloader import all_blueprints as downloader_blueprints
-from torrents.blueprints.downloader.web import get_downloader_properties, update_downloader_properties
+from torrents.blueprints.downloader.web import get_downloader_properties
 from torrents.templates import register_filters
 from torrents.services import *
 
@@ -191,8 +191,15 @@ def create_app(config=None, debug=False):
 
     configdb.register_action("refresh_blacklists", refresh_blacklists)
 
+    def update_downloader_properties():
+        '''
+        Downloader updated.
+        '''
+        local_cache["downloader_properties"] = get_downloader_properties()
 
     configdb.register_action("update_downloader", update_downloader_properties)
+    with app.app_context():
+        local_cache["downloader_properties"] = get_downloader_properties()
 
     # IPs españolas
     spanish_ips.load(os.path.join(os.path.dirname(app.root_path),app.config["SPANISH_IPS_FILENAME"]))
@@ -382,5 +389,5 @@ def init_g(app):
     g.url_adult_search_base = url_for("files.category", category="porn", query="___")
 
     # downloader links
-    g.downloader_properties = get_downloader_properties()
+    g.downloader_properties = local_cache["downloader_properties"]
 

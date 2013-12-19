@@ -26,21 +26,17 @@
             var _gaq,_prum,adult_content={{ g.is_adult_content | tojson }};
             function cookiesScripts(){
                 _gaq = _gaq || [];_gaq.push(['_setAccount','UA-38333996-1']);_gaq.push(['_setDomainName', '{{ g.domain }}']); _gaq.push(['_setAllowLinker', true]);(function(){var ga=document.createElement('script');ga.type='text/javascript';ga.async=true;ga.src=('https:'==document.location.protocol?'https://ssl':'http://www')+'.google-analytics.com/ga.js';var s=document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);})();
-
-                (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){ (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o), m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m) })(window,document,'script','//www.google-analytics.com/analytics.js','ga'); ga('create','UA-38333996-3',{'storage':'none','clientId':$.cookiesLaw.cid});
-
-                {% set track_url = (g.domain[g.domain.rfind("."):] if g.domain_conflict else "") + (request.path.rstrip(g.clean_query or "") if g.query or g.domain_conflict else "") + ("_searchs_" if g.query else "") %}
-
+                {%- set track_url = (g.domain[g.domain.rfind("."):] if g.domain_conflict else "") + (request.path.rstrip(g.clean_query or "") if g.query or g.domain_conflict else "") + ("_searchs_" if g.query else "") %}
+                {%- if g.query %}
+                    _gaq.push(["_set", "title", "_searchs_{{" "+g.category.title|singular|lower if g.category}} torrents"]);
+                {%- endif %}
                 trackGAPageview({{ track_url|tojson if track_url }});
-
                 {%- if g.blacklisted_content %}
                 trackGAEvent("Blacklisted", "{{g.blacklisted_content}}");
                 {%- endif %}
-
                 {%- if g.RUM_code %}
                 _prum=[['id', '{{g.RUM_code}}'],['mark', 'firstbyte', (new Date()).getTime()]];(function(){var s=document.getElementsByTagName('script')[0],p=document.createElement('script');p.async='async';p.src='//rum-static.pingdom.net/prum.min.js';s.parentNode.insertBefore(p, s);})();
                 {%- endif %}
-
                 {%- block cookies -%}{%- endblock -%}
             }
             function trackGAEvent(){var args_array = Array.prototype.slice.call(arguments,0);trackGA(['_trackEvent'].concat(args_array),['send','event'].concat(args_array));}

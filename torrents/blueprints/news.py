@@ -7,7 +7,6 @@ from torrents.multidomain import MultidomainBlueprint
 from foofind.utils import logging
 from foofind.utils.fooprint import Fooprint
 from foofind.services import *
-from .downloader.web import get_downloader_properties
 
 news = MultidomainBlueprint('news', __name__, domain="torrents.com")
 

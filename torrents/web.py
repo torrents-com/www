@@ -191,15 +191,15 @@ def create_app(config=None, debug=False):
 
     configdb.register_action("refresh_blacklists", refresh_blacklists)
 
+    downloader_files = app.config["DOWNLOADER_FILES"]
     def update_downloader_properties():
         '''
         Downloader updated.
         '''
-        local_cache["downloader_properties"] = get_downloader_properties()
+        local_cache["downloader_properties"] = get_downloader_properties(downloader_files)
 
     configdb.register_action("update_downloader", update_downloader_properties)
-    with app.app_context():
-        local_cache["downloader_properties"] = get_downloader_properties()
+    local_cache["downloader_properties"] = get_downloader_properties(downloader_files)
 
     # IPs españolas
     spanish_ips.load(os.path.join(os.path.dirname(app.root_path),app.config["SPANISH_IPS_FILENAME"]))

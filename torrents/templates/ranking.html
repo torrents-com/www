@@ -1,17 +1,18 @@
 {% extends "base.html" %}
 {% from "helpers.html" import browse_pagination -%}
+{%- macro popular_torrents_links() -%}
+    {%- for torrents_interval, torrents in links.iteritems() if torrents_interval!=interval %}
+        {{- (" "+_("or")+" ") if loop.last}}{{- ", " if not (loop.last or loop.first)}}
+        <a href="{{url_for('files.popular_torrents', interval=torrents_interval)}}">{{_(torrents[1])}}</a>
+    {%- endfor %}
+{%- endmacro %}
 {% block content %}
 <section class="container_24" id="files_page">
 <div class="grid_24">
 <div class="title">
-    <h1 class="lead">{{g.h1}}</h1>
-    <h2 class="main">Popular torrents {{interval_info[1]}}</h2>
-<p>You can also browse popular torrents
-    {%- for torrents_interval, torrents in links.iteritems() if torrents_interval!=interval %}
-        {{- " or " if loop.last}}{{- ", " if not (loop.last or loop.first)}}
-        <a href="{{url_for('files.popular_torrents', interval=torrents_interval)}}">{{torrents[1]}}</a>
-    {%- endfor %}.
-</p>
+    <h1 class="lead">{{_("popular_torrents_interval_desc", interval=_(interval_info[1]))}}</h1>
+    <h2 class="main">{{_("popular_torrents_interval", interval=_(interval_info[1]))}}</h2>
+    <p>{{_("popular_torrents_links", links = popular_torrents_links())}}</p>
 </div>
 </div>
 <div class="grid_24">

@@ -1,15 +1,12 @@
 # -*- coding: utf-8 -*-
 import re
 from flask import current_app, url_for, g, Markup
+from flask.ext.babelex import gettext as _
 from foofind.templates import number_format_filter, number_size_format_filter, format_timedelta_filter, urlencode_filter, number_friendly_filter, pformat, numeric_filter, markdown_filter, seoize_filter
 from foofind.utils.htmlcompress import HTMLCompress
 from foofind.services.search.search import WORD_SEARCH_MIN_LEN, NGRAM_CHARS
 from torrents.multidomain import url_for
 from torrents.services import *
-
-import foofind.templates
-def _(x): return x
-foofind.templates._ = _
 
 def register_filters(app):
     '''

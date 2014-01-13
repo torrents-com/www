@@ -38,6 +38,7 @@ $redhealth:#F2602E;
 .icon-audio, .icon-music{ @include icon(); background-position: -40px 0; width: 20px; height: 20px; }
 .icon-document, .icon-ebook{ @include icon(); background-position: -61px 0; width: 20px; height: 20px; }
 .icon-download{ @include icon(); background-position: -82px 0; width: 11px; height: 11px; }
+.icon-check{ @include icon(); background:url(/static/check.png); width: 20px; height: 20px; }
 .icon-download_button{ @include icon(); background-position: -94px 0; width: 20px; height: 20px; }
 .icon-download_ind{ @include icon(); background-position: -115px 0; width: 11px; height: 11px; }
 .icon-download_no{ @include icon(); background-position: -127px 0; width: 11px; height: 11px; }
@@ -89,7 +90,6 @@ $redhealth:#F2602E;
 {
     @include button();
     background-color:$red;
-    text-shadow: none;
 }
 
 *,html{margin:0;padding:0;font-family:'helvetica neue',helvetica,arial,sans-serif;}
@@ -401,6 +401,7 @@ img.error {
     #cookies_accept {
         text-align:center;
         @include redbutton();
+        text-shadow: none;
         display:block;
         border-radius: 7px;
         font-weight:700;
@@ -535,6 +536,7 @@ img.error {
         .download {
             text-align:center;
             @include redbutton();
+            text-shadow: none;
             display:block;
             font-size:1.1em;
             padding: 0px 3px 0px 0px;
@@ -716,7 +718,7 @@ ul.browse {
             span {vertical-align:middle}
         }
         form {
-            display:inline;
+            @include inline-block();
             input {
                 font-size:1.1em;font-weight:bold;border:none; color:$redfont; background:none; cursor:pointer; margin:2px 9px;
                 &:hover, &:focus, &:active { text-decoration:underline;color:$red; outline: none }
@@ -724,7 +726,22 @@ ul.browse {
         }
     }
 
-    h1 {margin:0em 0em 1em}
+    #file_feedback {
+        text-align:center;margin-bottom:1em;
+        a:first-child {
+            margin-top:0; padding-bottom:2px; background-color: $gray; border-bottom-left-radius: 0; border-bottom-right-radius: 0;
+            &:hover, &:focus, &:active { background-color: $greenfont}
+        }
+        #file_bad_feedback {
+            background-color: $lightgray; padding:2px 0; border-bottom-left-radius:10px; border-bottom-right-radius:10px;
+            a {
+                background: none; display:inline; color:$grayfont; font-size:1.1em; padding:0; margin:0.5em
+                &:hover, &:focus, &:active { color: $redfont !important}
+            }
+        }
+    }
+
+    h1 {margin:0em 0em 0.7em}
     h2 {margin:0.5em 0em}
 
     .links {
@@ -735,15 +752,17 @@ ul.browse {
             border-radius: 9px;
             @include button();
             font-size: 1.9em;
+            &.download {
+                @include redbutton();
+            }
         }
 
-        > div > a:first-child+a{@include redbutton();}
         > ul {
-
+            padding:0.5em;
             li {
-                text-align:right;display:block;
-                font-size:1.2em;color: $grayfont;
+                display:block;text-align:right;margin:0.1em 0.3em;font-size:1em;color: $grayfont;
             }
+            li:first-child {float:left}
         }
 
     }

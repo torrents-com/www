@@ -53,16 +53,25 @@
             {%-if g.track%}$('<img src="{{url_for("files.pixel")}}"/>');{%-endif%}
         </script>
     </head>
-    {% set hidden_category = g.category and not g.category in g.categories[:5] -%}
-    {% set hidden_categories_start = 5 if hidden_category else 6 -%}
     <body {{ body_class|safe if body_class }}{%- if g.offer_downloader %}
             data-downloader_href="{{'http://torrents.ms'|forceescape}}"
             data-downloader_title="Hey!<br/>You need a Torrent client to download this file"
             data-downloader_text="Download Torrents Downloader to get this file right now.<br/>Our sofware lets you download torrents faster and more easily than ever - absolutely free! If you already have a Torrent client, click <i>No, thanks</i>."
             data-downloader_yes="<p>Yes, download</p>Torrents Downloader"
-            data-downloader_no="<p>No, thanks</p>I already have a torrent client">
+            data-downloader_no="<p>No, thanks</p>I already have a torrent client"
+        {%- endif %}
+        {%- if g.is_adult_content %}
+            data-adult_confirm_title="{{_('Adult content confirmation')}}"
+            data-adult_confirm_desc="{{_('You should be 18 or older to see this content.')}}"
+            data-adult_confirm_yes="{{_('Yes, I am')}}"
+            data-adult_confirm_no="{{_('No, I\'m not')}}"
+        {%- endif %}
+            data-no_trailer="{{_('No trailer available')}}"
+            data-message_sent="{{_('The message has been sent successfully.')}}"
+            data-write_something="{{_('Write something!')}}">
+        {%- if g.offer_downloader %}
             <div id="dialog" data-dialog_ok="OK" data-dialog_no="No" data-dialog_yes="Yes"></div>
-        {%- else %}>{%- endif %}
+        {%- endif %}
         <header>
             <div id="alerts">
                 {%- for aid, alert in g.alert.iteritems() %}
@@ -79,7 +88,7 @@
                         <a class="logo" href="/"><img src="{{g.static_prefix}}/torrents.png" alt="Torrents" title="Torrents" height="33" width="220" /><img src="{{g.static_prefix}}/dot-{{g.domain.split('.')[-1]}}.png" alt=".{{g.domain.split('.')[-1]}}" height="50" width="50" /></a>
                     </div>
                     <div id="main-nav" class="grid_17">
-                        <a href="{{ url_for('news.home') }}"{{' class=active' if g.section=="news" }}><div class="arrow"></div>News</a>
+                        <a href="{{ url_for('news.home') }}"{{' class=active' if g.section=="news" }}><div class="arrow"></div>{{_("News")}}</a>
                         <a href="{{ url_for('web.home') }}"{{' class=active' if g.section=="downloader" }}><div class="arrow"></div>Downloader</a>
                         <a href="{{ url_for('files.home') }}"{{' class=active' if g.section=="torrents" }}><div class="arrow"></div>Torrents</a>
                     </div>
@@ -89,13 +98,13 @@
                     <div class="container_24">
                         <form method="get" action="{{ url_for('files.search', query='') }}" class="grid_24">
                             <input type="hidden" name="c" value="{{g.category.url if g.category else ""}}" />
-                            <div class="grid_18 alpha"><input placeholder="find torrents" type="text" id="q" name="q" autocomplete="off" value="{{g.query or ''}}"/></div>
-                            <div class="grid_6 omega"><button type="submit">Search files&nbsp;&nbsp;&nbsp;<span class="icon-search"></span></button></div>
+                            <div class="grid_18 alpha"><input placeholder="{{_('find torrents')}}" type="text" id="q" name="q" autocomplete="off" value="{{g.query or ''}}"/></div>
+                            <div class="grid_6 omega"><button type="submit">{{_("Search files")}}&nbsp;&nbsp;&nbsp;<span class="icon-search"></span></button></div>
                         </form>
                         <ul class="grid_24">
-                            <li class="{{'active ' if not g.category and g.section=='torrents'}}{{'searchable' if g.section=='torrents' and ((g.categories_results and g.categories_results[0]) or (not g.category and not g.query))}}"><a href="{{ url_for('files.search', query=g.clean_query ) if g.category and g.categories_results and g.clean_query else url_for('files.home')}}">{{ "<div class='arrow'></div>"|safe if not g.category or g.categories_results }}all torrents</a></li>
+                            <li class="{{'active ' if not g.category and g.section=='torrents'}}{{'searchable' if g.section=='torrents' and ((g.categories_results and g.categories_results[0]) or (not g.category and not g.query))}}"><a href="{{ url_for('files.search', query=g.clean_query ) if g.category and g.categories_results and g.clean_query else url_for('files.home')}}">{{ "<div class='arrow'></div>"|safe if not g.category or g.categories_results}}{{_("All torrents")|lower}}</a></li>
                             {% for category in g.categories %}
-                            <li class="{{'active ' if g.category==category and g.section=='torrents' }}{{'searchable' if (g.categories_results and category.cat_id in g.categories_results) or (g.category==category and not g.query)}}"><a href="{{ url_for('files.browse_category', category=category.url) if g.category == category or not g.categories_results or not category.cat_id in g.categories_results else url_for('files.category', category=category.url, query=g.clean_query)}}">{{ "<div class='arrow'></div>"|safe if g.category == category or (g.categories_results and category.cat_id in g.categories_results)}}{{category.title|lower}}</a></li>
+                            <li class="{{'active ' if g.category==category and g.section=='torrents' }}{{'searchable' if (g.categories_results and category.cat_id in g.categories_results) or (g.category==category and not g.query)}}"><a href="{{ url_for('files.browse_category', category=category.url) if g.category == category or not g.categories_results or not category.cat_id in g.categories_results else url_for('files.category', category=category.url, query=g.clean_query)}}">{{ "<div class='arrow'></div>"|safe if g.category == category or (g.categories_results and category.cat_id in g.categories_results)}}{{_(category.title)|lower}}</a></li>
                             {% endfor %}
                         </ul>
                     </div>
@@ -120,35 +129,35 @@
                 </div>
                 <div class="networks grid_1">
                     <ul>
-                        <li><a href="{{ url_for('news.rss') }}"><img src="{{g.static_prefix}}/ico.rss-30-self.png" alt="Follow us via RSS"/></a></li>
+                        <li><a href="{{ url_for('news.rss') }}"><img src="{{g.static_prefix}}/ico.rss-30-self.png" alt="{{_('Follow us via RSS')}}"/></a></li>
                     </ul>
                 </div>
             </div>
             <div id="footer-bottom" class="container_24">
                 <div class="grid_8">
                     <ul class="common_links">
-                        <li><a href="{{ url_for('news.about') }}">About us</a></li><li><a href="{{ url_for('news.products') }}">Our products</a></li><li><a href="{{ url_for('news.contact') }}">Contact us</a></li><li><a href="{{ url_for('news.legal') }}">Terms &amp; Privacy</a></li><li><a href="{{ url_for('files.copyright') }}">Copyright &amp; DMCA</a></li>
+                        <li><a href="{{ url_for('news.about') }}">{{_("About us")}}</a></li><li><a href="{{ url_for('news.products') }}">{{_("Our products")}}</a></li><li><a href="{{ url_for('news.contact') }}">{{_("Contact us")}}</a></li><li><a href="{{ url_for('news.legal') }}">{{_("Terms &amp; Privacy")}}</a></li><li><a href="{{ url_for('files.copyright') }}">{{_("Copyright &amp; DMCA")}}</a></li>
                     </ul>
-                    <p><img src="{{g.static_prefix}}/some_rights_reserved.gif" alt="Some rights reserved." title="Some rights reserved."/><script type="text/javascript" src="https://seal.verisign.com/getseal?host_name={{g.domain}}&amp;size=XS&amp;use_flash=NO&amp;use_transparent=NO&amp;lang=en"></script></p>
-                    <p>Torrent Software, S.L. Some rights reserved.</p>
-                    <p>Website under Creative Commons <a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/es/deed.en">BY-SA</a> license.</p><p><a href="https://github.com/torrents-com">Source code</a> under <a rel="license" href="http://www.gnu.org/licenses/agpl.html">Affero GPL</a> license.</p>
+                    <p><img src="{{g.static_prefix}}/some_rights_reserved.gif" alt="{{_('Some rights reserved.')}}" title="{{_('Some rights reserved.')}}"/><script type="text/javascript" src="https://seal.verisign.com/getseal?host_name={{g.domain}}&amp;size=XS&amp;use_flash=NO&amp;use_transparent=NO&amp;lang=en"></script></p>
+                    <p>Torrent Software, S.L. {{_("Some rights reserved.")}}</p>
+                    <p>{{_("site_license", license='<a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/es/deed.en">BY-SA</a>'|safe)}}</p><p>{{_("site_source", source_link='<a href="https://github.com/torrents-com">'|safe+_("Source code")+'</a>'|safe, source_license='<a rel="license" href="http://www.gnu.org/licenses/agpl.html">Affero GPL</a>'|safe)}}</p>
 
                 </div>
                 <ul class="grid_16">
                     <li class="grid_5 alpha">
                         <ul>
-                            <li><a href="{{ url_for('news.home') }}">News</a>
+                            <li><a href="{{ url_for('news.home') }}">{{_("News")}}</a>
                                 <ul class="bulleted">
-                                    <li><a href="{{ url_for('news.home', path='category/news') }}">General</a></li>
-                                    <li><a href="{{ url_for('news.home', path='category/mobile') }}">Mobile</a></li>
-                                    <li><a href="{{ url_for('news.home', path='category/movies') }}">Movies</a></li>
-                                    <li><a href="{{ url_for('news.home', path='category/music') }}">Music</a></li>
-                                    <li><a href="{{ url_for('news.home', path='category/software') }}">Software</a></li>
-                                    <li><a href="{{ url_for('news.home', path='category/tv') }}">TV</a></li>
-                                    <li><a href="{{ url_for('news.home', path='category/technology') }}">Technology</a></li>
+                                    <li><a href="{{ url_for('news.home', path='category/news') }}">{{_("General")}}</a></li>
+                                    <li><a href="{{ url_for('news.home', path='category/mobile') }}">{{_("Mobile")}}</a></li>
+                                    <li><a href="{{ url_for('news.home', path='category/movies') }}">{{_("Movies")}}</a></li>
+                                    <li><a href="{{ url_for('news.home', path='category/music') }}">{{_("Music")}}</a></li>
+                                    <li><a href="{{ url_for('news.home', path='category/software') }}">{{_("Software")}}</a></li>
+                                    <li><a href="{{ url_for('news.home', path='category/tv') }}">{{_("TV")}}</a></li>
+                                    <li><a href="{{ url_for('news.home', path='category/technology') }}">{{_("Technology")}}</a></li>
                                 </ul>
                             </li>
-                            <li><a href="{{ url_for('news.user_sitemap') }}">Sitemap</a></li>
+                            <li><a href="{{ url_for('news.user_sitemap') }}">{{_("Sitemap")}}</a></li>
                         </ul>
                     </li>
                     <li class="grid_5">
@@ -156,29 +165,29 @@
                             <li><a href="{{ url_for('web.home') }}">Torrents Downloader</a>
                                 <ul class="bulleted">
                                     {% if g.downloader_properties["available"] -%}
-                                    <li><a href="{{url_for('downloads.download', instfile=g.downloader_properties['filename'])}}">Windows binaries</a></li>
+                                    <li><a href="{{url_for('downloads.download', instfile=g.downloader_properties['filename'])}}">{{_("Windows binaries")}}</a></li>
                                         {% if g.downloader_properties["source_available"] -%}
-                                    <li><a href="{{url_for('downloads.download', instfile=g.downloader_properties['source_filename'])}}">Source code</a></li>
+                                    <li><a href="{{url_for('downloads.download', instfile=g.downloader_properties['source_filename'])}}">{{_("Source code")}}</a></li>
                                         {% endif %}
                                     {% endif %}
                                 </ul>
                             </li>
-                            <li><a href="{{ url_for('web.user_sitemap') }}">Sitemap</a></li>
+                            <li><a href="{{ url_for('web.user_sitemap') }}">{{_("Sitemap")}}</a></li>
                         </ul>
                     </li>
                     <li class="grid_5 omega">
                         <ul>
                             <li><a href="{{ url_for('files.home') }}">Torrents</a>
                                 <ul class="bulleted">
-                                    <li><a href="{{ url_for('files.popular_torrents', interval='week') }}">Most popular</a></li>
+                                    <li><a href="{{ url_for('files.popular_torrents', interval='week') }}">{{_("Most popular")}}</a></li>
                                     {% for category in g.categories[:5] %}
-                                    <li><a href="{{ url_for('files.browse_category', category=category.url) }}">{{category.title|capitalize }}</a></li>
+                                    <li><a href="{{ url_for('files.browse_category', category=category.url) }}">{{_(category.title)|capitalize }}</a></li>
                                     {% endfor %}
-                                    <li><a href="{{ url_for('files.home') }}">Other</a></li>
+                                    <li><a href="{{ url_for('files.home') }}">{{_("Other")}}</a></li>
                                 </ul>
                             </li>
-                            <li><a href="{{ url_for('files.popular_searches', interval='week') }}">Top searches</a></li>
-                            <li><a href="{{ url_for('files.user_sitemap') }}">Sitemap</a></li>
+                            <li><a href="{{ url_for('files.popular_searches', interval='week') }}">{{_("Top searches")}}</a></li>
+                            <li><a href="{{ url_for('files.user_sitemap') }}">{{_("Sitemap")}}</a></li>
                         </ul>
                     </li>
                 </ul>

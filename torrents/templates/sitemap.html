@@ -6,11 +6,11 @@
         <div class="grid_{{column_width}} suffix_1 {{'clearer' if loop.index0%column_count==0 }}"><ul>
         {%- for item in column %}
             <li>
-                {{ item[0] if not item[1] else "<a href='%s'>%s</a>"|safe%(item[1],item[0])}}
+                {{ _(item[0]) if not item[1] else "<a href='%s'>%s</a>"|safe%(item[1],_(item[0]))}}
                 {%- if item[2] %}
                 <ul>
                     {%- for subitem in item[2] %}
-                    <li><a href='{{subitem[1]}}'>{{subitem[0]}}</a></li>
+                    <li><a href='{{subitem[1]}}'>{{_(subitem[0])}}</a></li>
                     {%- endfor %}
                 </ul>
                 {%- endif %}

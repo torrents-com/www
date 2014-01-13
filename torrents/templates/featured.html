@@ -4,16 +4,16 @@
     <li class="grid_6 alpha omega">
         <div class="grid_3 alpha omega"><a title="{{file['view']['fn']}}" href='{{ url_for("files.download", file_name=file["view"]["seo-fn"], file_id=file["view"]["url"])}}'>
     {%- if 'images_server' in file['view'] or 'thumbnail' in file['view']%}
-        <img src="{{g.images_server}}{{ file['file']['_id'] }}0/110{{'/'+ file['view']['icon'].url if file['view']['icon']}}/f/{{file['file']['md'].get('image_filename', file['view']['seo-fn']+'.jpg')}}" alt="Preview {{ file["view"]["nfn"] }}" />
+        <img src="{{g.images_server}}{{ file['file']['_id'] }}0/110{{'/'+ file['view']['icon'].url if file['view']['icon']}}/f/{{file['file']['md'].get('image_filename', file['view']['seo-fn']+'.jpg')}}" alt="{{_('preview_file', name=file['view']['nfn']) }}" />
     {%- else%}
-        <img src="{{g.static_prefix}}/missing-{{ file['view']['icon'].url}}.jpg" width="110" height="147" alt="No preview" />
+        <img src="{{g.static_prefix}}/missing-{{ file['view']['icon'].url}}.jpg" width="110" height="147" alt="{{_('No preview')}}" />
     {%- endif%}</a></div>
         <div class="grid_3 alpha omega">
             <div class="icon-stars"><span class="stars-{{file['view']['rating']}}"></span><span class="nostars stars-{{5-file['view']['rating']}}"></span></div>
             <a class="filelink" title="{{file['view']['fn']}}" href='{{ url_for("files.download", file_name=file["view"]["seo-fn"], file_id=file["view"]["url"])}}'>{{ file["view"]["nfn"] }}</a>
         </div>
         <div class="grid_6 alpha omega">
-            <a class="download" data-downloader="1" data-track="Download,{{'Torrent' if 'download' in file['view']['sources'] else 'Magnet' if 'tmagnet' in file['view']['sources'] else 'HTML'}},Featured / Button" href="{{file['view']['sources']['tmagnet']['urls'][0] if 'tmagnet' in file['view']['sources'] else file['view']['sources']['download']['urls'][0] if 'download' in file['view']['sources'] else file['view']['sources']['download_ind']['urls'][0]}}"{{ ' target="_blank"' if not 'tmagnet' in file['view']['sources'] and not 'download' in file['view']['sources']}}{{ ' rel="nofollow"' if not 'tmagnet' in file['view']['sources']}}><span class="icon-download_button"></span> Download</a>
+            <a class="download" data-downloader="1" data-track="Download,{{'Torrent' if 'download' in file['view']['sources'] else 'Magnet' if 'tmagnet' in file['view']['sources'] else 'HTML'}},Featured / Button" href="{{file['view']['sources']['tmagnet']['urls'][0] if 'tmagnet' in file['view']['sources'] else file['view']['sources']['download']['urls'][0] if 'download' in file['view']['sources'] else file['view']['sources']['download_ind']['urls'][0]}}"{{ ' target="_blank"' if not 'tmagnet' in file['view']['sources'] and not 'download' in file['view']['sources']}}{{ ' rel="nofollow"' if not 'tmagnet' in file['view']['sources']}}><span class="icon-download_button"></span> {{_("Download")}}</a>
         </div>
     </li>
 {%- endfor %}

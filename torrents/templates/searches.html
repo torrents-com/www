@@ -6,17 +6,18 @@
     {%- else %}<span style="color:red">&nabla;{{val2-val}}</span>
     {%- endif%}
 {%- endmacro %}
+{%- macro popular_searches_links() -%}
+    {%- for search_interval, search in links.iteritems() if search_interval!=interval %}
+        {{- (" "+_("or")+" ") if loop.last}}{{- ", " if not (loop.last or loop.first)}}
+        <a href="{{url_for('files.popular_searches', interval=search_interval)}}">{{_(search[1])}}</a>
+    {%- endfor %}
+{%- endmacro %}
 {% block content %}
 <section class="ranking container_24" id="files_page">
     <div class="title grid_24">
-        <h1 class="lead">{{g.h1}}</h1>
-        <h2 class="main">Popular searches {{interval_info[1]}}</h2>
-        <p>You can also browse favorite torrent searches
-            {%- for search_interval, search in links.iteritems() if search_interval!=interval %}
-                {{- " or " if loop.last}}{{- ", " if not (loop.last or loop.first)}}
-                <a href="{{url_for('files.popular_searches', interval=search_interval)}}">{{search[1]}}</a>
-            {%- endfor %}.
-        </p>
+        <h1 class="lead">{{_("popular_searches_desc")}}</h1>
+        <h2 class="main">{{_("Popular searches")}} {{_(interval_info[1])}}</h2>
+        <p>{{_("popular_searches_links", links = popular_searches_links())}}</p>
     </div>
     <table class="grid_24">
         {% set first_width=ranking["final_ranking"][0][1] %}
@@ -26,3 +27,5 @@
     </table>
 </section>
 {% endblock %}
+
+

@@ -13,13 +13,13 @@
 {% block content %}
 <section id="files_page" class="container_24">
 <div class="title grid_24"><span></span><div>
-<div class="lead"><a href='{{url_for("files.home")}}'>All</a>&nbsp;&nbsp;<span>&gt;</span>&nbsp;&nbsp;{{g.query}}</div>
-<h1 class="main with-breadcrumbs">{{g.query}} torrents</h1>
+<div class="lead"><a href='{{url_for("files.home")}}'>{{_("All")}}</a>&nbsp;&nbsp;<span>&gt;</span>&nbsp;&nbsp;{{g.query}}</div>
+<h1 class="main with-breadcrumbs">{{_("search_torrents", query=g.query)}}</h1>
 </div></div>
 {%- if not results %}
     <div class="text_page">
-        <p>No results found for <strong>{{g.query}}</strong>.</p>
-        <p>Sorry, we don't have any result that matches your query. Please, try another search.</p>
+        <p>{{_("no_results", query=g.query)}}</p>
+        <p>{{_("no_results_sorry")}}</p>
     </div>
 {%- endif %}
 {%- if results %}
@@ -33,7 +33,7 @@
     {%- endif %}
     {{ results |safe }}
     {%- if search_info["next"] %}
-    <a class="more_results" href="{{url_for('files.search', query=g.query)}}?s={{search_info['next']}}{{'&o='+show_order if show_order}}">more torrents...</a>
+    <a class="more_results" href="{{url_for('files.search', query=g.query)}}?s={{search_info['next']}}{{'&o='+show_order if show_order}}">{{_("more torrents...")}}</a>
     {%- endif %}
     </div>
 {%- endif %}

@@ -26,35 +26,35 @@
     </div>
     <aside class="download-box grid_12">
         <h1>Torrents Downloader</h1>
-        <h2>Find. Download. Play!</h2>
+        <h2>{{_("Find. Download. Play!")}}</h2>
         {% if g.downloader_properties["available"] -%}
-            <a href="{{url_for('downloads.download', instfile=g.downloader_properties['filename'])}}" id="downloader_button" class="downloader-download-button">Download</a>
-            <p><strong class="free">FREE</strong> <span>for Windows | <strong>{{g.downloader_properties["length"]|numbersizeformat}}</strong> (v. {{g.downloader_properties["version_code"].split("-")[0]}})</span></p>
-            <p class="soon">for OSX & Linux: coming soon...</p>
+            <a href="{{url_for('downloads.download', instfile=g.downloader_properties['filename'])}}" id="downloader_button" class="downloader-download-button">{{_("Download")}}</a>
+            <p><strong class="free">{{_("Free")|upper}}</strong> <span>{{_("for Windows")}} | <strong>{{g.downloader_properties["length"]|numbersizeformat}}</strong> (v. {{g.downloader_properties["version_code"].split("-")[0]}})</span></p>
+            <p class="soon">{{_("for OSX & Linux: coming soon...")}}</p>
             {% if g.downloader_properties["source_available"] -%}
-                <p class="source"><a href="{{url_for('downloads.download', instfile=g.downloader_properties['source_filename'])}}">Download source · {{g.downloader_properties["source_length"]|numbersizeformat}}</a></p>
+                <p class="source"><a href="{{url_for('downloads.download', instfile=g.downloader_properties['source_filename'])}}">{{_("Download source")}} · {{g.downloader_properties["source_length"]|numbersizeformat}}</a></p>
             {% endif %}
         {% endif %}
     </aside>
-    <p class="legal grid_22 prefix_1 suffix_1"><strong>SHARE RESPONSIBLY:</strong> Using Torrents Downloader for the uploading or downloading of copyrighted works without the permission or authorization of the copyright holders may be illegal and could subject you (or the ISP subscriber) to civil and/or criminal liability and penalties. There are a significant number of copyright holders who have authorized the sharing of their content for non-commercial purposes, such as some content with Creative Commons format licenses, and there is also content available in the public domain and not protected by copyright. Most commercially released popular songs are NOT currently authorized for free redistribution but require separate purchase or licensing.</p>
+    <p class="legal grid_22 prefix_1 suffix_1">{{_("share_responsibly")}}</p>
   </section>
 
   <section class="downloader-medium">
     <div class="downloader-main-features container_24">
       <section class="grid_6 suffix_2 downloader-main-feature-1">
-        <img src="{{g.static_prefix}}/downloader/feature-main-1-ico.png" class="feat-ico" alt="Easy to use" />
-        <h2>Easy to use</h2>
-        <p>Start your experience with all you need at your fingertips. No need to learn about any complex configurations.</p>
+        <img src="{{g.static_prefix}}/downloader/feature-main-1-ico.png" class="feat-ico" alt="{{_('Easy to use')}}" />
+        <h2>{{_("Easy to use")}}</h2>
+        <p>{{_("downloader_easy_desc")}}</p>
       </section>
       <section class="prefix_1 grid_6 suffix_1 downloader-main-feature-2">
-        <img src="{{g.static_prefix}}/downloader/feature-main-2-ico.png" class="feat-ico" alt="Fast finder" />
-        <h2>Fast finder</h2>
-        <p>Find instantly anything you are looking for: videos, music, software...</p>
+        <img src="{{g.static_prefix}}/downloader/feature-main-2-ico.png" class="feat-ico" alt="{{_('Fast finder')}}" />
+        <h2>{{_("Fast finder")}}</h2>
+        <p>{{_("downloader_fast_desc")}}</p>
       </section>
       <section class="prefix_2 grid_6 downloader-main-feature-3">
-        <img src="{{g.static_prefix}}/downloader/feature-main-3-ico.png" class="feat-ico" alt="Library and Player" />
-        <h2>Library and Player</h2>
-        <p>All your downloads are automatically organized. Browse and play anything you download!</p>
+        <img src="{{g.static_prefix}}/downloader/feature-main-3-ico.png" class="feat-ico" alt="{{_('Library and Player')}}" />
+        <h2>{{_("Library and Player")}}</h2>
+        <p>{{_("downloader_library_desc")}}</p>
       </section>
     </div>
   </section>
@@ -62,50 +62,26 @@
   <section class="downloader-bottom">
     <section id="find" class="container_24">
         <div class="suffix_1 prefix_2 grid_6">
-            <img src="{{g.static_prefix}}/downloader/feature-1-ss.png" class="feat-ss" alt="Find screenshot" />
+            <img src="{{g.static_prefix}}/downloader/feature-1-ss.png" class="feat-ss" alt="{{_('Find screenshot')}}" />
         </div>
         <div class="grid_13 suffix_2">
-          <h2>Find</h2>
-          <p>Torrents Downloader is designed to be user friendly, intuitive, and
-            safe. You can search for any kind of content in a direct way. See the
-            progress of your downloads, control them in any way you want. View
-            your completed downloads quickly from the app.</p>
-
-          <p>We know you want to enjoy your videos, music and everything else, and
-            spend minimal time to learn about all the boring details. That's fine,
-            we'll take care of them! Our simplified interface will get you to the
-            point.</p>
+          <h2>{{_("Find")}}</h2><p>{{_("downloader_find_desc_1")}}</p><p>{{_("downloader_find_desc_2")}}</p>
         </div>
     </section>
     <section id="downloads" class="container_24">
         <div class="grid_13 prefix_2">
-            <h2>Download</h2>
-            <p>With Torrents Downloader you can now download faster than ever before.
-            Thanks to the torrent network, the fastest P2P solution ever made,
-            your downloads will fly.</p>
-
-            <p>We take security very seriously. Torrents Downloader uses the
-            award-winning libtorrent library, which will make your download
-            experience safe and secure.</p>
+            <h2>{{_("Download")}}</h2><p>{{_("downloader_download_desc_1")}}</p><p>{{_("downloader_download_desc_2")}}</p>
         </div>
         <div class="prefix_1 grid_6 suffix_2">
-            <img src="{{g.static_prefix}}/downloader/feature-2-ss.png" class="feat-ss" alt="Download screenshot" />
+            <img src="{{g.static_prefix}}/downloader/feature-2-ss.png" class="feat-ss" alt="{{_('Download screenshot')}}" />
         </div>
     </section>
     <section id="play" class="container_24">
         <div class="suffix_1 grid_6 prefix_2">
-            <img src="{{g.static_prefix}}/downloader/feature-3-ss.png" class="feat-ss" alt="Play screenshot" />
+            <img src="{{g.static_prefix}}/downloader/feature-3-ss.png" class="feat-ss" alt="{{_('Play screenshot')}}" />
         </div>
         <div class="grid_13 suffix_2">
-            <h2>Play</h2>
-            <p>You need to look no further, all your downloads are classified and
-            ready to play from the app.</p>
-
-            <p>We want you safe. In all cases we recommend you use an antivirus to
-            defend yourself against any kind of malware downloaded from untrusted
-            sources.</p>
-
-            <p>Browse your downloads, choose from your fine collection and "Play"!</p>
+            <h2>{{_("Play")}}</h2><p>{{_("downloader_play_desc_1")}}</p><p>{{_("downloader_play_desc_2")}}</p><p>{{_("downloader_play_desc_3")}}</p>
         </div>
     </section>
   </section>

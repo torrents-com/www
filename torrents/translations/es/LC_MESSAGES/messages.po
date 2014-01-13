@@ -1,0 +1,586 @@
+"Project-Id-Version: 1\n"
+"Plural-Forms: nplurals=2; plural=(n != 1)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+msgid "torrentsfm_desc"
+msgstr "Buscador libre de torrents con acceso rápido, simple y fácil a todas las descargas de torrents en un sólo sitio."
+
+msgid "A free, fast, easy to use search engine for Torrents"
+msgstr "Buscador de torrents rápido, simple y fácil de usar."
+
+msgid "Torrents Search Engine"
+msgstr "Buscador de Torrents"
+
+msgid "Search files"
+msgstr "Buscar"
+
+msgid "find torrents"
+msgstr "encuentra torrents"
+
+msgid "All torrents"
+msgstr "Todos"
+
+msgid "All"
+msgstr "Todos"
+
+msgid "Movie"
+msgstr "Película"
+msgid "Movies"
+msgstr "Películas"
+msgid "Movie torrents"
+msgstr "Torrents de películas"
+
+msgid "Game"
+msgstr "Juego"
+msgid "Games"
+msgstr "Juegos"
+msgid "Game torrents"
+msgstr "Torrents de juegos"
+
+msgid "TV"
+msgstr "TV"
+msgid "TV torrents"
+msgstr "Torrents de TV"
+
+msgid "Music"
+msgstr "Música"
+msgid "Music torrents"
+msgstr "Torrents de música"
+
+msgid "Anime"
+msgstr "Anime"
+msgid "Anime torrents"
+msgstr "Torrents de anime"
+
+msgid "Book"
+msgstr "Libro"
+msgid "Books"
+msgstr "Libros"
+msgid "Book torrents"
+msgstr "Torrents de libros"
+
+msgid "Adult"
+msgstr "Adultos"
+msgid "Adult torrents"
+msgstr "Torrents para adultos"
+
+msgid "Software"
+msgstr "Programas"
+msgid "Software torrents"
+msgstr "Torrents de programas"
+
+msgid "Mobile"
+msgstr "Móvil"
+msgid "Mobile torrents"
+msgstr "Torrents para móviles"
+
+msgid "Picture"
+msgstr "Imagen"
+msgid "Pictures"
+msgstr "Imágenes"
+msgid "Picture torrents"
+msgstr "Torrents de imágenes"
+
+msgid "Follow us via RSS"
+msgstr "Síguenos por RSS"
+
+msgid "Home page"
+msgstr "Inicio"
+
+msgid "About us"
+msgstr "Nosotros"
+
+msgid "Our products"
+msgstr "Nuestros productos"
+
+msgid "Contact us"
+msgstr "Contáctanos"
+
+msgid "Terms &amp; Privacy"
+msgstr "Términos y privacidad"
+
+msgid "Copyright &amp; DMCA"
+msgstr "Copyright y DMCA"
+
+msgid "News"
+msgstr "Noticias"
+
+msgid "General"
+msgstr "Generales"
+
+msgid "Technology"
+msgstr "Tecnología"
+
+msgid "Windows binaries"
+msgstr "Binarios de Windows"
+
+msgid "Source code"
+msgstr "Código fuente"
+
+msgid "Sitemap"
+msgstr "Mapa del sitio"
+
+msgid "Most popular"
+msgstr "Más populares"
+
+msgid "Top searches"
+msgstr "Búsquedas frecuentes"
+
+msgid "Other"
+msgstr "Otros"
+
+msgid "Some rights reserved."
+msgstr "Algunos derechos reservados."
+
+msgid "site_license"
+msgstr "Sitio web bajo licencia Creative Commons %(license)s."
+
+msgid "site_source"
+msgstr "%(source_link)s under %(source_license)s license."
+
+msgid "Find. Download. Play!"
+msgstr "Busca. Descarga. ¡Disfruta!"
+
+msgid "install_downloader"
+msgstr "INSTALA NUESTRO<br/>TORRENTS DOWNLOADER"
+
+msgid "for Windows"
+msgstr "para Windows"
+
+msgid "Free"
+msgstr "Gratis"
+
+msgid "for OSX & Linux: coming soon..."
+msgstr "para OSX y Linux: proximamente..."
+
+msgid "Download source"
+msgstr "Descargar código fuente"
+
+msgid "Get it Now!"
+msgstr "¡Bájalo ya!"
+
+msgid "share_responsibly"
+msgstr "<strong>COMPARTE DE FORMA RESPONSABLEMENTE:</strong> El uso de Torrents Downloader para subir o descargar materiales con derechos de autor sin permiso o autorización de sus titulares puede ser ilegal y podrá someterle a usted (o al abonado del PSI) a responsabilidades y penalizaciones civiles y/o criminales. Existe un número significativo de titulares de derechos de autor que han autorizado el intercambio de sus contenidos para fines no comerciales, como algunos contenidos con formato de licencia de Creative Commons. Además, hay contenidos disponibles de dominio público y no protegidos por derechos de autor. La mayoría de las canciones que están a la venta NO están actualmente autorizadas para su redistribución gratuita, pero requieren una compra o una licencia aparte."
+
+msgid "Easy to use"
+msgstr "Fácil de usar"
+
+msgid "downloader_easy_desc"
+msgstr "Todas las posibilidades de descarga a tu alcance, sin complicaciones técnicas."
+
+msgid "Fast finder"
+msgstr "Búsquedas instantáneas"
+
+msgid "downloader_fast_desc"
+msgstr "Encuentra rápidamente cualquier cosa que estés buscando: videos, música, programas, etc..."
+
+msgid "Library and Player"
+msgstr "Biblioteca y reproductor"
+
+msgid "downloader_library_desc"
+msgstr "Todas tus descargas se organizan automáticamente. Recórrelas y reproduce la descarga que desees!"
+
+msgid "Find"
+msgstr "Buscar"
+
+msgid "Find screenshot"
+msgstr "Captura de la pestaña buscar"
+
+msgid "downloader_find_desc_1"
+msgstr ""
+"Torrents Downloader está diseñado para ser fácil de usar, intuitivo y seguro. Puedes buscar todo tipo de contenidos de forma muy simple."
+"Comprueba el progreso de tus descargas, y manéjalas como desees. Accede a las descargas que han acabado rápidamente desde la aplicación."
+
+msgid "downloader_find_desc_2"
+msgstr ""
+"Sabemos que quieres disfrutar tu vídeos, música y todo lo demás, pero perder el mínimo tiempo posible en aprender todos los aburridos detalles."
+"No te preocupes, ¡nosotros nos ocupamos de todo! La simplicidad de nuestra interfaz te permitirá hacerlo."
+
+msgid "Download screenshot"
+msgstr "Captura de la pestaña descargar"
+
+msgid "downloader_download_desc_1"
+msgstr ""
+"Con Torrents Downloader podrás descargar más rápido que nunca. Tus descargas volarán gracias a la red torrent, la solución P2P más rápida que existe."
+
+msgid "downloader_download_desc_2"
+msgstr ""
+"Nos tomamos la seguridad muy en serio."
+"Torrents Downloader utiliza la tecnología de la librería libtorrent, que garantiza una experiencia de descarga protegida y segura."
+
+msgid "Play"
+msgstr "Reproducir"
+
+msgid "Play screenshot"
+msgstr "Captura de la pestaña reproducir"
+
+msgid "downloader_play_desc_1"
+msgstr "No necesitas rebuscar más, todas tus descargas estarán organizadas y listas para ser reproducidas directamente desde la aplicación."
+
+msgid "downloader_play_desc_2"
+msgstr ""
+"Queremos que estés seguro. Por eso, te recomendamos que utilices un antivirus para protegerte contra amenazas que pudieran provenir de descargas de orígenes no verificados."
+
+msgid "downloader_play_desc_3"
+msgstr "Recorre tus descargas, elige la que quieres y ¡disfruta!"
+
+msgid "Popular searches"
+msgstr "Búsquedas populares"
+
+msgid "Popular torrents"
+msgstr "Torrents populares"
+
+msgid "Popular"
+msgstr "Más populares"
+
+msgid "popular_torrents_interval"
+msgstr "Torrents populares %(interval)s"
+
+msgid "popular_torrents_links"
+msgstr "Tambien puedes visitar los torrents más populares %(links)s."
+
+msgid "popular_torrents_interval_desc"
+msgstr "Estos son los torrents más populares %(interval)s"
+
+msgid "popular_searches_interval"
+msgstr "Búsquedas populares %(interval)s"
+
+msgid "popular_category"
+msgstr "%(categorys)s populares"
+
+msgid "popular_category_torrents"
+msgstr "Torrents populares de %(categorys)s"
+
+msgid "popular_category_desc"
+msgstr "Torrents populares de %(categorys)s en Torrents.fm, el buscador libre y rápido de torrents."
+
+msgid "category_desc"
+msgstr "Torrents de %(query)s en %(categorys)s en Torrents.fm, el buscador libre y rápido de torrents."
+
+msgid "popular_category_searches"
+msgstr "Búsquedas populares en %(categorys)s"
+
+msgid "search_torrents"
+msgstr "Torrents de %(query)s"
+
+msgid "search_desc"
+msgstr "Baja torrents de %(query)s del buscador Torrents.fm con descargas rápidas y gratuitas."
+
+msgid "category_search_torrents"
+msgstr "Torrents de %(query)s en %(categorys)s"
+
+msgid "page_number"
+msgstr "Página %(number)d"
+
+msgid "download_desc"
+msgstr "Descarga torrents en Torrents.fm"
+
+msgid "download_category_desc"
+msgstr "Descarga torrents de %(categorys)s en Torrents.fm"
+
+msgid "Name"
+msgstr "Nombre"
+
+msgid "Size"
+msgstr "Tamaño"
+
+msgid "Created"
+msgstr "Creación"
+
+msgid "Download"
+msgstr "Descargar"
+
+msgid "No preview"
+msgstr "Sin imagen"
+
+msgid "preview_file"
+msgstr "Inagen para %(name)s"
+
+msgid "delta_ago"
+msgstr "hace %(delta)s"
+
+msgid "Share on Facebook"
+msgstr "Compartir en Facebook"
+
+msgid "Share on Twitter"
+msgstr "Compartir en Twitter"
+
+msgid "Download .torrent file"
+msgstr "Descargar fichero .torrent"
+
+msgid "Visit download page"
+msgstr "Ir a página de descarga"
+
+msgid "Download magnet"
+msgstr "Descargar magnet"
+
+msgid "Health"
+msgstr "Disponibilidad"
+
+msgid "popular_searches_links"
+msgstr "Tambien puedes visitar las búsquedas más populares %(links)s."
+
+msgid "or"
+msgstr "o"
+
+msgid "popular_searches_desc"
+msgstr "Conoce las búsquedas de torrents más populares del momento"
+
+msgid "Recent first"
+msgstr "Más recientes primero"
+msgid "Older first"
+msgstr "Antiguos primero"
+msgid "Bigger first"
+msgstr "Grandes primero"
+msgid "Smaller first"
+msgstr "Pequeños primero"
+msgid "High availability first"
+msgstr "Mayor disponibilidad primero"
+msgid "Low availability first"
+msgstr "Menor disponibilidad primero"
+
+msgid "Share"
+msgstr "Compartir"
+
+msgid "Report link"
+msgstr "Reportar enlace"
+
+msgid "Alternative sources"
+msgstr "Orígenes alternativos"
+
+msgid "Watch trailer"
+msgstr "Ver trailer"
+
+msgid "Torrent files"
+msgstr "Archivos del torrent"
+
+msgid "Torrent information"
+msgstr "Información del torrent"
+
+msgid "Torrent description"
+msgstr "Descripción del torrent"
+
+msgid "Related torrents"
+msgstr "Torrents relacionados"
+
+msgid "Type"
+msgstr "Tipo"
+
+msgid "Category"
+msgstr "Categoría"
+
+msgid "Categories"
+msgstr "Categorías"
+
+msgid "Description"
+msgstr "Descripción"
+
+msgid "Language"
+msgstr "Idioma"
+
+msgid "Tags"
+msgstr "Etiquetas"
+
+msgid "Title"
+msgstr "Titulo"
+
+msgid "Comments"
+msgstr "Comentarios"
+
+msgid "Genre"
+msgstr "Género"
+
+msgid "Length"
+msgstr "Duración"
+
+
+msgid "Providers"
+msgstr "Proveedores"
+
+msgid "no_results"
+msgstr "No se han encontrado resultados para <strong>%(query)s</strong>."
+
+msgid "no_results_sorry"
+msgstr "Lo sentimos, no tenemos torrents que coincidan con tu búsqueda. Por favor, intenta otra búsqueda."
+
+msgid "no_results_cat"
+msgstr "No se han encontrado resultados para <strong>%(query)s</strong>."
+msgstr "No <strong>%(category)s</strong> torrents found for <strong>%(query)s</strong>."
+
+msgid "no_results_cat_sorry"
+msgstr "Lo sentimos, no tenemos torrents que coincidan con tu búsqueda en esta categoría. Por favor, intenta otra búsqueda u otra categoría."
+
+msgid "no_results_popular_cat_sorry"
+msgstr "Lo sentimos, no tenemos torrents en esta categoría. Por favor, intenta otra categoría."
+
+msgid "no_results_subcat"
+msgstr "No se han encontrado resultados de <strong>%(subcategory)s</strong> en <strong>%(category)s</strong>."
+
+msgid "no_results_subcat_sorry"
+msgstr "Lo sentimos, no tenemos torrents en esta subcategoría. Por favor, intenta otra subcategoría."
+
+msgid "more torrents..."
+msgstr "más torrents..."
+
+msgid "more_category_torrents"
+msgstr "más torrents de %(categorys)s..."
+
+msgid "at this moment"
+msgstr "en este momento"
+msgid "for today"
+msgstr "de hoy"
+msgid "for this week"
+msgstr "de esta semana"
+msgid "for this month"
+msgstr "de este mes"
+msgid "of all times"
+msgstr "de todos los tiempos"
+
+msgid "Copyright form"
+msgstr "Formulario de reclamación"
+
+msgid "copyright_text"
+msgstr ""
+"<p>Torrents.fm es un buscador y no aloja contenidos con derechos de autor, por tanto no podemos remover el contenido mismo. Si desea solicitar la retirada de contenidos, deberá contactar con el proveedor de ese contenido. De todas formas, si cree que alguno de los contenidos enlazados se están distribuyendo sin la adecuada autorización de los propietarios de los derechos o que infringe los derechos de terceras partes, puede solicitar que retiremos dichos enlaces utilizando este formulario de reclamaciones o enviando un correo electrónico con la reclamación. Por favor, lea la siguiente información antes de hacerlo.</p>"
+"<p>Si deliveradamente falsea la información sobre la actividad o el material infractor podrá estar sujeto a la exigencia de responsabilidad por daños y perjuicios. En consecuencia, si no está seguro de si el material disponible en esta web infringe sus derechos de autor, le sugerimos que primero se ponga en contacto con un abogado. Tenga también en cuenta que su mensaje podría ser remitido a terceras partes involucradas en la actividad.</p>"
+
+msgid "copyright_instructions"
+msgstr ""
+"<p>Por favor, siga las siguientes instrucciones:</p><ul>"
+"<li>Envíe su reclamación por derechos de autor a <img src='%(static_prefix)s/copyright-email.gif' alt='Dirección de correo electrónico para reclamaciones por derechos de autor.' title='Dirección de correo electrónico para reclamaciones por derechos de autor.' />, en inglés o en español.</li>"
+"<li>Por favor, intente ser amable y claro para que podamos entender correctamente su reclamación.</li>"
+"<li>Presente evidencias que muestren claramente que usted es el poseedor de los derechos de autor o que actúa en representación de este.</li>"
+"<li>Proporcione el nombre, el enlace y la URL final del torrent al que se refiere su reclamación. De otra forma, no podremos encontrarlo y procesar la reclamación. Por ejemplo, un enlace a una página de resultados de búsqueda no es un enlace válido para una reclamación. Hay millones de enlaces en Torrents.fm, si no nos proporciona una forma de identificarlo unívocamente, nos será prácticamente imposible encontrarlo.</li>
+"<li>Proporcion suficiente información de contacto y una dirección de correo electrónico.</li>"
+"<li>Por favor, concédanos algunos días (habitualmente 24-48 horas) para procesar la reclamación y compruebe nuevamente los enlaces.</li></ul>"
+
+msgid "Surname"
+msgstr "Apellido(s)"
+
+msgid "Company"
+msgstr "Empresa"
+
+msgid "Email"
+msgstr "Correo electrónico"
+
+msgid "Phone"
+msgstr "Teléfono"
+
+msgid "Link reported"
+msgstr "Enlace reportado"
+
+msgid "Torrents.fm URL"
+msgstr "URL de Torrents.fm"
+
+msgid "Complaint reason"
+msgstr "Motivo de la reclamación"
+
+msgid "Message"
+msgstr "Mensaje"
+
+msgid "Cylons identifier"
+msgstr "Descubridor de Cylons"
+
+msgid "accept_tos"
+msgstr "He leído y acepto los <a href='%(legal)s#terms'>Términos de uso</a> y la <a href='%(legal)s#tos'>Política de privacidad</a>."
+
+msgid "Required field."
+msgstr "Campo obligatorio."
+
+msgid "Invalid email."
+msgstr "Dirección de correo electrónico inválida."
+
+msgid "Invalid URL."
+msgstr "Dirección URL inválida."
+
+msgid "Reported link can't be a Torrents.fm page, must be the final torrent address."
+msgstr "El enlace reportado no puede ser una página de Torrents.fm, debe ser al dirección final del torrent."
+
+msgid "Torrents URL must be a valid URL."
+msgstr "La URL Torrents.fm debe ser una URL válida."
+
+msgid "Torrents.fm URL must be a Torrents.fm page."
+msgstr "La URL de Torrents.fm debe ser una página de Torrents.fm."
+
+# dates
+msgid "year"
+msgstr "año"
+msgid "years"
+msgstr "años"
+
+msgid "month"
+msgstr "mes"
+msgid "months"
+msgstr "meses"
+
+msgid "week"
+msgstr "semana"
+msgid "weeks"
+msgstr "semanas"
+
+msgid "day"
+msgstr "día"
+msgid "days"
+msgstr "días"
+
+msgid "hour"
+msgstr "hora"
+msgid "hours"
+msgstr "horas"
+
+msgid "minute"
+msgstr "minuto"
+msgid "minutes"
+msgstr "munutos"
+
+msgid "second"
+msgstr "segundo"
+msgid "seconds"
+msgstr "segundos"
+
+# recaptcha
+msgid "Get a visual challenge"
+msgstr "Realizar una comprobación visual"
+msgid "Get an audio challenge"
+msgstr "Realizar una comprobación sonora"
+msgid "Get a new challenge"
+msgstr "Cambiar de prueba"
+msgid "Type the two words:"
+msgstr "Escriba las dos palabras:"
+msgid "Type what you hear:"
+msgstr "Escriba lo que oye:"
+msgid "Help"
+msgstr "Ayuda"
+msgid "Play sound again"
+msgstr "Reproducir de nuevo"
+msgid "Download sound as MP3"
+msgstr "Descargar sonido como MP3"
+msgid "Incorrect. Try again."
+msgstr "Incorrecto. Intenta de nuevo."
+msgid "This field is required."
+msgstr "Campo obligatorio."
+
+#javascript
+
+msgid "Adult content confirmation"
+msgstr "Confirmación de contenido para adultos"
+
+msgid "You should be 18 or older to see this content."
+msgstr "Debes ser mayor de 18 años para ver este contenido."
+
+msgid "Yes, I am"
+msgstr "Si, lo soy"
+
+msgid "No, I'm not"
+msgstr "No, no lo soy"
+
+msgid "No trailer available"
+msgstr "No hay trailer disponible"
+
+msgid "The message has been sent successfully."
+msgstr "El mensaje ha sido enviado correctamente."
+
+msgid "Write something!"
+msgstr "¡Escribe algo!"

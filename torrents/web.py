@@ -144,7 +144,10 @@ def create_app(config=None, debug=False):
 
     @babel.localeselector
     def get_locale():
-        return "en"
+        '''
+        Current language settings
+        '''
+        return g.lang
 
     # Cache
     cache.init_app(app)
@@ -309,9 +312,6 @@ def init_g(app):
     g.full_browser=is_full_browser()
     g.search_bot=is_search_bot()
 
-    # idioma ingles
-    g.lang = "en"
-
     # peticiones en modo preproduccion
     g.beta_request = request.url_root[request.url_root.index("//")+2:].startswith("beta.")
 
@@ -373,6 +373,12 @@ def init_g(app):
 
     g.section = "torrents" if g.domain=="torrents.fm" else "downloader" if g.domain=="torrents.ms" else "news"
     g.domain_capitalized = g.domain.capitalize()
+
+    # language selector
+    g.langs = langs = app.config["LANGS"]
+    accept = request.accept_languages.values()
+    locale = Locale.negotiate((option.replace("-","_") for option in accept), langs) if accept else None
+    g.lang = locale.language if locale and g.section!="news" else langs[0] # first language if available languages doesn't matches user languages
 
     # RUM
     if "RUM_CODES" in app.config:

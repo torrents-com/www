@@ -298,7 +298,7 @@ msgid "No preview"
 msgstr "Sin imagen"
 
 msgid "preview_file"
-msgstr "Inagen para %(name)s"
+msgstr "Imagen para %(name)s"
 
 msgid "delta_ago"
 msgstr "hace %(delta)s"

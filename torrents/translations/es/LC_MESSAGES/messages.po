@@ -534,7 +534,7 @@ msgstr "horas"
 msgid "minute"
 msgstr "minuto"
 msgid "minutes"
-msgstr "munutos"
+msgstr "minutos"
 
 msgid "second"
 msgstr "segundo"

@@ -953,7 +953,7 @@ class ComplaintForm(Form):
     urlreported = TextField("Torrents URL", [Required("Required field."),URL("Torrents URL must be a valid URL."),Regexp("^http://torrents.(com|is|ms|fm|ag)/",re.IGNORECASE,"The link must be a Torrents page.")])
     reason = TextField("Complaint reason", [Required("Required field.")])
     message = TextAreaField("Message", [Required("Required field.")])
-    captcha = RecaptchaField("Cylons identifier", [Required("Required field.")])
+    captcha = RecaptchaField("Cylons identifier", [])
     accept_tos = BooleanField(validators=[Required("Required field.")])
     submit = SubmitField("Submit")
 

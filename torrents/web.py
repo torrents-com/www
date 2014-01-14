@@ -247,7 +247,7 @@ def create_app(config=None, debug=False):
 
         # No preprocesamos la peticiones a static
         if request.path.startswith("/static/"):
-            g.must_cache = False
+            g.must_cache = None
             return
 
         g.blacklisted_content = False
@@ -272,7 +272,7 @@ def create_app(config=None, debug=False):
     @app.after_request
     def after_request(response):
         if request.user_agent.browser == "msie": response.headers["X-UA-Compatible"] = "IE-edge"
-        if g.must_cache:
+        if not g.must_cache is None:
             response.headers["X-Cache-Control"] = "max-age=%d"%g.must_cache
         if g.cache_code:
             response.headers["X-Cache-Code"] = g.cache_code

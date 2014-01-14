@@ -1,3 +1,5 @@
+msgid ""
+msgstr ""
 "Project-Id-Version: 1\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
 "MIME-Version: 1.0\n"
@@ -7,11 +9,11 @@
 msgid "torrentsfm_desc"
 msgstr "Buscador libre de torrents con acceso rápido, simple y fácil a todas las descargas de torrents en un sólo sitio."
 
-msgid "A free, fast, easy to use search engine for Torrents"
+msgid "A free, fast, easy to use search engine for Torrents."
 msgstr "Buscador de torrents rápido, simple y fácil de usar."
 
 msgid "Torrents Search Engine"
-msgstr "Buscador de Torrents"
+msgstr "Buscador de torrents"
 
 msgid "Search files"
 msgstr "Buscar"
@@ -162,7 +164,7 @@ msgid "Get it Now!"
 msgstr "¡Bájalo ya!"
 
 msgid "share_responsibly"
-msgstr "<strong>COMPARTE DE FORMA RESPONSABLEMENTE:</strong> El uso de Torrents Downloader para subir o descargar materiales con derechos de autor sin permiso o autorización de sus titulares puede ser ilegal y podrá someterle a usted (o al abonado del PSI) a responsabilidades y penalizaciones civiles y/o criminales. Existe un número significativo de titulares de derechos de autor que han autorizado el intercambio de sus contenidos para fines no comerciales, como algunos contenidos con formato de licencia de Creative Commons. Además, hay contenidos disponibles de dominio público y no protegidos por derechos de autor. La mayoría de las canciones que están a la venta NO están actualmente autorizadas para su redistribución gratuita, pero requieren una compra o una licencia aparte."
+msgstr "<strong>COMPARTE DE FORMA RESPONSABLE:</strong> El uso de Torrents Downloader para subir o descargar materiales con derechos de autor sin permiso o autorización de sus titulares puede ser ilegal y podrá someterle a usted (o al abonado del PSI) a responsabilidades y penalizaciones civiles y/o criminales. Existe un número significativo de titulares de derechos de autor que han autorizado el intercambio de sus contenidos para fines no comerciales, como algunos contenidos con formato de licencia de Creative Commons. Además, hay contenidos disponibles de dominio público y no protegidos por derechos de autor. La mayoría de las canciones que están a la venta NO están actualmente autorizadas para su redistribución gratuita, pero requieren una compra o una licencia aparte."
 
 msgid "Easy to use"
 msgstr "Fácil de usar"
@@ -190,12 +192,12 @@ msgstr "Captura de la pestaña buscar"
 
 msgid "downloader_find_desc_1"
 msgstr ""
-"Torrents Downloader está diseñado para ser fácil de usar, intuitivo y seguro. Puedes buscar todo tipo de contenidos de forma muy simple."
+"Torrents Downloader está diseñado para ser fácil de usar, intuitivo y seguro. Puedes buscar todo tipo de contenidos de forma muy simple. "
 "Comprueba el progreso de tus descargas, y manéjalas como desees. Accede a las descargas que han acabado rápidamente desde la aplicación."
 
 msgid "downloader_find_desc_2"
 msgstr ""
-"Sabemos que quieres disfrutar tu vídeos, música y todo lo demás, pero perder el mínimo tiempo posible en aprender todos los aburridos detalles."
+"Sabemos que quieres disfrutar tu vídeos, música y todo lo demás, pero perder el mínimo tiempo posible en aprender todos los aburridos detalles. "
 "No te preocupes, ¡nosotros nos ocupamos de todo! La simplicidad de nuestra interfaz te permitirá hacerlo."
 
 msgid "Download screenshot"
@@ -207,7 +209,7 @@ msgstr ""
 
 msgid "downloader_download_desc_2"
 msgstr ""
-"Nos tomamos la seguridad muy en serio."
+"Nos tomamos la seguridad muy en serio. "
 "Torrents Downloader utiliza la tecnología de la librería libtorrent, que garantiza una experiencia de descarga protegida y segura."
 
 msgid "Play"
@@ -406,8 +408,7 @@ msgid "no_results_sorry"
 msgstr "Lo sentimos, no tenemos torrents que coincidan con tu búsqueda. Por favor, intenta otra búsqueda."
 
 msgid "no_results_cat"
-msgstr "No se han encontrado resultados para <strong>%(query)s</strong>."
-msgstr "No <strong>%(category)s</strong> torrents found for <strong>%(query)s</strong>."
+msgstr "No se han encontrado resultados para <strong>%(query)s</strong> en <strong>%(categorys)s</strong>."
 
 msgid "no_results_cat_sorry"
 msgstr "Lo sentimos, no tenemos torrents que coincidan con tu búsqueda en esta categoría. Por favor, intenta otra búsqueda u otra categoría."
@@ -416,7 +417,7 @@ msgid "no_results_popular_cat_sorry"
 msgstr "Lo sentimos, no tenemos torrents en esta categoría. Por favor, intenta otra categoría."
 
 msgid "no_results_subcat"
-msgstr "No se han encontrado resultados de <strong>%(subcategory)s</strong> en <strong>%(category)s</strong>."
+msgstr "No se han encontrado resultados de <strong>%(subcategory)s</strong> en <strong>%(categorys)s</strong>."
 
 msgid "no_results_subcat_sorry"
 msgstr "Lo sentimos, no tenemos torrents en esta subcategoría. Por favor, intenta otra subcategoría."

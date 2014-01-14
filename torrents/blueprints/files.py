@@ -269,7 +269,7 @@ def home():
     g.cache_code = "B"
 
     g.title.append(_("Torrents Search Engine"))
-    g.page_description = _("A free, fast, easy to use search engine for Torrents")
+    g.page_description = _("A free, fast, easy to use search engine for Torrents.")
     g.keywords.clear()
     g.keywords.update(["torrent files", "search engine", "download", "movies", "games", "music", "tv shows software"])
 

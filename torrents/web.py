@@ -376,9 +376,10 @@ def init_g(app):
 
     # language selector
     g.langs = langs = app.config["LANGS"]
-    accept = request.accept_languages.values()
-    locale = Locale.negotiate((option.replace("-","_") for option in accept), langs) if accept else None
-    g.lang = locale.language if locale and g.section!="news" else langs[0] # first language if available languages doesn't matches user languages
+    g.translate_domains = app.config["TRANSLATE_DOMAINS"]
+
+    g.lang = "".join(lang for lang in langs[1:] if lang+"."+g.domain in request.url_root) or langs[0]
+    g.langs_switch = app.config["LANGS_SWITCH"]
 
     # RUM
     if "RUM_CODES" in app.config:

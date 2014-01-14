@@ -24,15 +24,20 @@ def multidomain_view(*args, **kwargs):
         return redirect_to_domain(domains.iterkeys().next(), 301)
 
 def url_for(endpoint, **values):
-    if "_domain" in values:
-        domain = values["_domain"]
-        del values["_domain"]
-    else:
-        domain = _MultidomainBlueprint__endpoint_domain.get(endpoint, None)
+    # check for domain change order
+    target_domain = values.pop("_domain", _MultidomainBlueprint__endpoint_domain.get(endpoint, None))
 
-    if domain and domain != g.domain:
+    # check for language change order
+    target_lang = values.pop("_lang", g.lang)
+
+    # if must change anything overrides this method
+    if (target_domain and target_domain != g.domain) or (target_lang and target_lang!=g.lang) :
         values["_external"] = False # Remove external parameter for flask
-        return "http://"+ domain + DOMAIN_SUFFIX + flask_url_for(endpoint, **values)
+
+        if target_lang and target_domain in g.translate_domains and target_lang!=g.langs[0]:
+            return "http://"+ target_lang + "." + target_domain + DOMAIN_SUFFIX + flask_url_for(endpoint, **values)
+        else:
+            return "http://"+ target_domain + DOMAIN_SUFFIX + flask_url_for(endpoint, **values)
 
     return flask_url_for(endpoint, **values)
 

@@ -175,7 +175,7 @@
                             <li><a href="{{ url_for('web.user_sitemap') }}">{{_("Sitemap")}}</a></li>
                         </ul>
                     </li>
-                    <li class="grid_5 omega">
+                    <li class="grid_6 omega">
                         <ul>
                             <li><a href="{{ url_for('files.home') }}">Torrents</a>
                                 <ul class="bulleted">
@@ -189,6 +189,18 @@
                             <li><a href="{{ url_for('files.popular_searches', interval='week') }}">{{_("Top searches")}}</a></li>
                             <li><a href="{{ url_for('files.user_sitemap') }}">{{_("Sitemap")}}</a></li>
                         </ul>
+                    </li>
+                    <li class="prefix_1 grid_15 alpha omega alternatives">
+                        {%-if g.domain in g.translate_domains %}
+                            {%- for lang in g.langs %}
+                                {{" - " if not loop.first}}
+                                {%-if g.lang==lang %}
+                                    <strong>{{g.langs_switch[lang]}}</strong>
+                                {%-else%}
+                                    <a href="{{url_for('files.home', _lang=lang)}}">{{g.langs_switch[lang]}}</a>
+                                {%-endif%}
+                            {%- endfor %}
+                        {%-endif%}
                     </li>
                 </ul>
             </div>

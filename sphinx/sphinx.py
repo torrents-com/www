@@ -145,6 +145,26 @@ def get_url_part(url, t):
     else:
         return url[5:]
 
+def votes_factor(vs):
+    """
+    return factor between 0.5 and 1.5
+    """
+    factor = 0
+
+    # system votes
+    if "s" in vs:
+        factor = sum((count if flag=="f1" else -count)/2 for flag, count in vs['s'].iteritems())
+
+    # user vote
+    if "u" in vs:
+        #TODO
+        pass
+
+    # limits
+    factor = max(min(factor, 50), -50)
+
+    return (100 + factor) / 100.
+
 afile_struct = Struct('III')
 # Calculate info for file
 def init_file(afile):
@@ -205,24 +225,9 @@ def init_file(afile):
 
     # los errores votos no deben afectar a la indexación del fichero
     try:
-        if "vs" in afile and afile["vs"]: # ficheros con votos
-            votes = {all_langs[lang]:log(val["c"][0]+5, val["c"][1]*2+5) for lang, val in afile["vs"].iteritems()}
-            m, M = min(0.9, min(votes.itervalues())), min(max(1.1,max(votes.itervalues())), 3.0)
-
-            e = (m*2-M*0.5)/(M-m) # valores de 0-6
-            f = M/(2+e)           # valores de 0-2
-
-            vc = int(e*42)
-            vd = int(f*127)
-
-            vabs = {l:min((abs(v-(a-0.5*b+vc/42)*vd/127),str(a),str(b)) for a,b in [(0,0),(0,1),(1,0),(1,1)]) for l,v in votes.iteritems()}
-            afile["_va"] = int("".join(str(vabs[i][1]) if i in vabs else "0" for i in langsrange),2)
-            afile["_vb"] = int("".join(str(vabs[i][2]) if i in vabs else "0" for i in langsrange),2)
-            afile["_vc"] = vc
-            afile["_vd"] = vd
-
-        elif "cs" in afile and afile["cs"]: # ficheros sin votos pero con comentarios aumenta el rating secundario
-            r2 += 1
+        vs = afile.get("vs", None)
+        if vs:
+            afile["_r"] *= votes_factor(vs)
     except BaseException as e:
         logging.exception("Error processing votes from file %s."%file_id)
 

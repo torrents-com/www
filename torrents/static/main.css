@@ -748,25 +748,41 @@ ul.browse {
 
     }
 
-    .health, .date, .size, .imdb {
+    .health, .date {
         font-weight:bold;color:$grayfont;@include inline-block();
     }
 
-    .imdb, .size {
+    .imdb, .size, .verified, .fake, .low_quality, .password, .virus  {
+        @include inline-block();
+        font-weight:bold;
         @include regular-text();
         border-radius: 9px;
         padding:5px 20px;
         margin:5px 0px 5px 10px;
         vertical-align: bottom;
     }
-     .imdb {
+
+    .verified {
+        color:$greenfont;
+        border: 1px solid $greenfont;
+        background: $green;
+        text-transform:uppercase;
+    }
+    .fake, .low_quality, .password, .virus {
+        color:white;
+        border: 1px solid darken($red, 10%);
+        background: $red;
+        text-transform:uppercase;
+    }
+
+    .imdb {
         border: 1px solid darken($imdb, 10%);
         background: $imdb;
 
         a {color:$black;font-weight:900;text-shadow:0px 0px 1px white}
-     }
+    }
     .size {
-        border: 1px solid $green; background-color: $lightgreen;
+        color:$grayfont;border: 1px solid $green; background-color: $lightgreen;
     }
 
     .health, .date {

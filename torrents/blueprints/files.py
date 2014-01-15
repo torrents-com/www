@@ -41,6 +41,8 @@ FILE_PAGE_TYPE = 1
 SEARCH_PAGE_TYPE = 2
 CATEGORY_PAGE_TYPE = 3
 
+F2LABEL = {"f1": "verified", "f2": "fake", "f3": "password", "f4": "low_quality", "f5": "virus"}
+
 CATEGORY_ORDER = ("fs*r", "ok DESC, r DESC, fs DESC", "fs*r")
 SUBCATEGORY_ORDER = ("r*r2", "ok DESC, r DESC, fs DESC", "r*r2")
 IMAGES_ORDER = ("fs*r2", "ok DESC, r DESC, fs DESC", "fs*r2")
@@ -931,6 +933,14 @@ def torrents_data(data, details=False, current_category_tag=None):
     data["view"]["icon"] = file_category or file_category_type or CATEGORY_UNKNOWN
     data["view"]["providers"] = providers
     data["view"]["seo-fn"] = data["view"]["nfn"].replace(" ","-")
+
+    vs = data["file"].get("vs",None)
+    if vs:
+
+        if "s" in vs:
+            for flag, count in vs['s'].items():
+                if count == 100 and flag in F2LABEL:
+                    data["view"]["flag"] = F2LABEL[flag]
 
     return data
 

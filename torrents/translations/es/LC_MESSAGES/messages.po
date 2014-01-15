@@ -197,7 +197,7 @@ msgstr ""
 
 msgid "downloader_find_desc_2"
 msgstr ""
-"Sabemos que quieres disfrutar tu vídeos, música y todo lo demás, pero perder el mínimo tiempo posible en aprender todos los aburridos detalles. "
+"Sabemos que quieres disfrutar tus vídeos, música y todo lo demás, pero perder el mínimo tiempo posible en aprender todos los aburridos detalles. "
 "No te preocupes, ¡nosotros nos ocupamos de todo! La simplicidad de nuestra interfaz te permitirá hacerlo."
 
 msgid "Download screenshot"
@@ -497,10 +497,7 @@ msgid "Invalid URL."
 msgstr "Dirección URL inválida."
 
 msgid "Reported link can't be a Torrents.fm page, must be the final torrent address."
-msgstr "El enlace reportado no puede ser una página de Torrents.fm, debe ser al dirección final del torrent."
-
-msgid "Torrents URL must be a valid URL."
-msgstr "La URL Torrents.fm debe ser una URL válida."
+msgstr "El enlace reportado no puede ser una página de Torrents.fm, debe ser la dirección final del torrent."
 
 msgid "Torrents.fm URL must be a Torrents.fm page."
 msgstr "La URL de Torrents.fm debe ser una página de Torrents.fm."

@@ -24,22 +24,32 @@ def multidomain_view(*args, **kwargs):
         return redirect_to_domain(domains.iterkeys().next(), 301)
 
 def url_for(endpoint, **values):
-    # check for domain change order
-    target_domain = values.pop("_domain", _MultidomainBlueprint__endpoint_domain.get(endpoint, None))
-
     # check for language change order
     target_lang = values.pop("_lang", g.lang)
 
+    # absolute URL?
+    external = values.pop("_external", False)
+
+    # allows to use "." for current path
+    if endpoint==".":
+        endpoint = request.endpoint
+        path = request.script_root + request.path
+        if request.query_string:
+            path += "?"+request.query_string
+    else:
+        path = flask_url_for(endpoint, **values)
+
+    # check for domain change order
+    target_domain = values.pop("_domain", _MultidomainBlueprint__endpoint_domain.get(endpoint, None))
+
     # if must change anything overrides this method
-    if (target_domain and target_domain != g.domain) or (target_lang and target_lang!=g.lang) :
-        values["_external"] = False # Remove external parameter for flask
-
+    if external or (target_domain and target_domain != g.domain) or (target_lang and target_lang!=g.lang) :
         if target_lang and target_domain in g.translate_domains and target_lang!=g.langs[0]:
-            return "http://"+ target_lang + "." + target_domain + DOMAIN_SUFFIX + flask_url_for(endpoint, **values)
+            return "http://"+ target_lang + "." + target_domain + DOMAIN_SUFFIX + path
         else:
-            return "http://"+ target_domain + DOMAIN_SUFFIX + flask_url_for(endpoint, **values)
+            return "http://"+ target_domain + DOMAIN_SUFFIX + path
 
-    return flask_url_for(endpoint, **values)
+    return path
 
 def patch_flask():
     global flask

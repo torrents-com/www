@@ -20,7 +20,7 @@ msgid "Torrents Search Engine"
 msgstr "Moteur de recherche de torrents"
 
 msgid "Search files"
-msgstr "Recherche fichiers"
+msgstr "Recherche"
 
 msgid "find torrents"
 msgstr "recherche torrents"

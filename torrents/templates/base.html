@@ -12,6 +12,11 @@
         {% endif %}
         <meta name="keywords" content="{{(g.keywords|list)[:17]|join(', ')}}" />
         <link rel="search" type="application/opensearchdescription+xml" href="{{ url_for('files.opensearch') }}" title="Torrents" />
+        {%-if g.domain in g.translate_domains %}
+            {%- for lang in g.langs %}
+                <link rel="alternate" hreflang="{{lang}}" href="{{url_for('.', _lang=lang, _external=True)}}" />
+            {%- endfor %}
+        {%-endif%}
         <meta charset="utf-8" />
         <link rel="shortcut icon" href="/favicon.ico" />
         {%- block assets -%}
@@ -197,7 +202,7 @@
                                 {%-if g.lang==lang %}
                                     <strong>{{g.langs_switch[lang]}}</strong>
                                 {%-else%}
-                                    <a href="{{url_for('files.home', _lang=lang)}}">{{g.langs_switch[lang]}}</a>
+                                    <a href="{{url_for('.', _lang=lang)}}">{{g.langs_switch[lang]}}</a>
                                 {%-endif%}
                             {%- endfor %}
                         {%-endif%}

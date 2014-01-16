@@ -936,11 +936,11 @@ def torrents_data(data, details=False, current_category_tag=None):
 
     vs = data["file"].get("vs",None)
     if vs:
-
         if "s" in vs:
             for flag, count in vs['s'].items():
                 if count == 100 and flag in F2LABEL:
                     data["view"]["flag"] = F2LABEL[flag]
+                    break
 
     return data
 

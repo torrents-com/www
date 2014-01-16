@@ -210,10 +210,9 @@ def init_file(afile):
             factor = 0.
             # system votes
             if "s" in vs:
-                factor = sum((count/1000. if flag=="f1" else -count/200.) for flag, count in vs['s'].iteritems())
+                factor = sum(-count/200. for flag, count in vs['s'].iteritems() if flag!="f1")
 
             # TO-DO: user vote (if "u" in vs)
-
             afile["_r"] *= 1.+max(min(factor, .1), -.5)
 
     except BaseException as e:

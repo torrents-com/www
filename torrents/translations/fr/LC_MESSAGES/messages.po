@@ -26,7 +26,7 @@ msgid "find torrents"
 msgstr "recherche torrents"
 
 msgid "All torrents"
-msgstr "Tous les torrents"
+msgstr "Tous"
 
 msgid "All"
 msgstr "Tous"

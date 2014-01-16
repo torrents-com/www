@@ -145,26 +145,6 @@ def get_url_part(url, t):
     else:
         return url[5:]
 
-def votes_factor(vs):
-    """
-    return factor between 0.5 and 1.5
-    """
-    factor = 0
-
-    # system votes
-    if "s" in vs:
-        factor = sum((count if flag=="f1" else -count)/2 for flag, count in vs['s'].iteritems())
-
-    # user vote
-    if "u" in vs:
-        #TODO
-        pass
-
-    # limits
-    factor = max(min(factor, 50), -50)
-
-    return (100 + factor) / 100.
-
 afile_struct = Struct('III')
 # Calculate info for file
 def init_file(afile):
@@ -227,7 +207,15 @@ def init_file(afile):
     try:
         vs = afile.get("vs", None)
         if vs:
-            afile["_r"] *= votes_factor(vs)
+
+            # system votes
+            if "s" in vs:
+                factor = sum((count/1000. if flag=="f1" else -count/200.) for flag, count in vs['s'].iteritems())
+
+            # TO-DO: user vote (if "u" in vs)
+
+            afile["_r"] *= 1+max(min(factor, .1), -.5)
+
     except BaseException as e:
         logging.exception("Error processing votes from file %s."%file_id)
 

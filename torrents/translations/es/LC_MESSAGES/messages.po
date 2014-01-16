@@ -1,10 +1,11 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: 1\n"
+"Project-Id-Version: torrents\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Language: en\n"
 
 msgid "torrentsfm_desc"
 msgstr "Buscador libre de torrents con acceso rápido, simple y fácil a todas las descargas de torrents en un sólo sitio."

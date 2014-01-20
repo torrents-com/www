@@ -503,6 +503,48 @@ msgstr "El enlace reportado no puede ser una página de Torrents.fm, debe ser la
 msgid "Torrents.fm URL must be a Torrents.fm page."
 msgstr "La URL de Torrents.fm debe ser una página de Torrents.fm."
 
+msgid "Torrents Downloader screenshot"
+msgstr "Captura de Torrents Downloader"
+
+msgid "Happy downloading!"
+msgstr "¡Felices descargas!"
+
+msgid "Thanks for installing Torrents Downloader, we hope you enjoy it."
+msgstr "Gracias por instalar Torrents Downloader, esperamos que lo disfrutes."
+
+# error page
+msgid "You can go back to our %(link)s."
+msgstr "Puedes volver a nuestra %(link)s."
+
+msgid "homepage"
+msgstr "página de inicio"
+
+msgid "error_desc"
+msgstr "Ups! %(desc)s"
+
+msgid "error_number"
+msgstr "ERROR %(code)d"
+
+msgid "Page not found"
+msgstr "Página no encontrada"
+msgid "The requested address does not exists."
+msgstr "La dirección solicitada no existe."
+
+msgid "File not available"
+msgstr "Archivo no disponible"
+msgid "The file you are trying to access has been removed."
+msgstr "El archivo al que tratas de acceder ha sido eliminado."
+
+msgid "An error happened"
+msgstr "Ha ocurrido un error"
+msgid "We had some problems displaying this page. Maybe later we can show it to you."
+msgstr "Estamos teniendo algunos problemas para mostrar esta página. Tal vez podamos hacerlo más tarde."
+
+msgid "Service unavailable"
+msgstr "Servicio no disponible"
+msgid "This page is temporarily unavailable. Please try again later."
+msgstr "Esta página no está disponible temporalmente. Por favor, intenta acceder más tarde."
+
 # dates
 msgid "year"
 msgstr "año"
@@ -583,12 +625,3 @@ msgstr "El mensaje ha sido enviado correctamente."
 
 msgid "Write something!"
 msgstr "¡Escribe algo!"
-
-msgid "Torrents Downloader screenshot"
-msgstr "Captura de Torrents Downloader"
-
-msgid "Happy downloading!"
-msgstr "¡Felices descargas!"
-
-msgid "Thanks for installing Torrents Downloader, we hope you enjoy it."
-msgstr "Gracias por instalar Torrents Downloader, esperamos que lo disfrutes."

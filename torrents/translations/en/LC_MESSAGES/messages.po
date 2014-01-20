@@ -159,3 +159,9 @@ msgstr ""
 
 msgid "accept_tos"
 msgstr "I have read and accept the <a href='%(legal)s#terms'>Terms of use</a> and <a href='%(legal)s#tos'>Privacy policy</a>."
+
+msgid "error_desc"
+msgstr "Oops! %(desc)s"
+
+msgid "error_number"
+msgstr "ERROR %(code)d"

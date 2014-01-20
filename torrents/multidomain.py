@@ -40,7 +40,7 @@ def url_for(endpoint, **values):
         path = flask_url_for(endpoint, **values)
 
     # check for domain change order
-    target_domain = values.pop("_domain", _MultidomainBlueprint__endpoint_domain.get(endpoint, None))
+    target_domain = values.pop("_domain", _MultidomainBlueprint__endpoint_domain.get(endpoint, None)) or g.domain
 
     # if must change anything overrides this method
     if external or (target_domain and target_domain != g.domain) or (target_lang and target_lang!=g.lang) :

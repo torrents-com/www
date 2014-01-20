@@ -600,6 +600,52 @@ msgstr "La URL Torrents.fm doit être une URL valide."
 msgid "Torrents.fm URL must be a Torrents.fm page."
 msgstr "La URL de Torrents.fm doit être une page de Torrents.fm."
 
+msgid "Torrents Downloader screenshot"
+msgstr "Capture d'écran de Torrents Downloader"
+
+msgid "Happy downloading!"
+msgstr "Joyeux téléchargements!"
+
+msgid "Thanks for installing Torrents Downloader, we hope you enjoy it."
+msgstr "Merci pour installer Torrents Downloader, nous espérons que vous vous amusez."
+
+# error page
+msgid "You can go back to our %(link)s."
+msgstr "Vous pouvez revenir à %(link)s."
+
+msgid "homepage"
+msgstr "page d'accueil"
+
+msgid "error_desc"
+msgstr "Oups! %(desc)s"
+
+msgid "error_number"
+msgstr "ERREUR %(code)d"
+
+msgid "Page not found"
+msgstr "Page non trouvée"
+
+msgid "The requested address does not exists."
+msgstr "L'adresse demandée n'existe pas."
+
+msgid "File not available"
+msgstr "Fichier non disponible"
+
+msgid "The file you are trying to access has been removed."
+msgstr "Le fichier que vous essayez d'accéder a été supprimé"
+
+msgid "An error happened"
+msgstr "Il y a eu une erreur"
+
+msgid "We had some problems displaying this page. Maybe later we can show it to you."
+msgstr "Nous avons eu quelques problèmes pour montrer cette page. Peut-être plus tard nous pouvons vous la montrer."
+
+msgid "Service unavailable"
+msgstr "Service non disponible"
+
+msgid "This page is temporarily unavailable. Please try again later."
+msgstr "Cette page n'est pas disponible temporairement. S'il vous plaît réessayez plus tard."
+
 # dates
 msgid "year"
 msgstr "an"
@@ -695,12 +741,3 @@ msgstr "Le message a été envoyé."
 
 msgid "Write something!"
 msgstr "Écrivez quelque chose!"
-
-msgid "Torrents Downloader screenshot"
-msgstr "Capture d'écran de Torrents Downloader"
-
-msgid "Happy downloading!"
-msgstr "Joyeux téléchargements!"
-
-msgid "Thanks for installing Torrents Downloader, we hope you enjoy it."
-msgstr "Merci pour installer Torrents Downloader, nous espérons que vous vous amusez."

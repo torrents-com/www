@@ -92,7 +92,6 @@ def home():
         )
 
 @web.route("/success")
-@web.route("/<install_lang>/success")
 def foodownloader_success(install_lang=None):
     g.cache_code += "D"
     return render_template(

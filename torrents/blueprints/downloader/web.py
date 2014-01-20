@@ -92,11 +92,8 @@ def home():
         )
 
 @web.route("/success")
-@web.route("/<install_lang>/success")
 def foodownloader_success(install_lang=None):
     g.cache_code += "D"
-    if install_lang and install_lang in g.langs:
-        g.lang = install_lang
     return render_template(
         "microsite/foodownloader.html",
         mode = "success",

@@ -583,3 +583,12 @@ msgstr "El mensaje ha sido enviado correctamente."
 
 msgid "Write something!"
 msgstr "¡Escribe algo!"
+
+msgid "Torrents Downloader screenshot"
+msgstr "Captura de Torrents Downloader"
+
+msgid "Happy downloading!"
+msgstr "¡Felices descargas!"
+
+msgid "Thanks for installing Torrents Downloader, we hope you enjoy it."
+msgstr "Gracias por instalar Torrents Downloader, esperamos que lo disfrutes."

@@ -597,7 +597,7 @@ img.error {
 
 }
 .icon-stars {
-    margin:0px 0px 15px;height:19px;
+    height:19px;
     span {
         background:url(/static/star.png) left center repeat-x;
         height:19px;
@@ -704,30 +704,80 @@ ul.browse {
 #download {
     margin-top:6em; margin-bottom:4em;color:$redfont;
 
-    >div:first-child {
-        overflow:hidden;
-    }
-    .share_report {
-        margin-top:0px;text-align:right;font-size:1.2em;vertical-align:middle
-        > span:first-child {
-            margin: 10px 10px 0px;
-            color: $grayfont;
-            a:first-child {margin-left:5px}
-            span {vertical-align:middle}
-        }
-        form {
-            display:inline;
-            input {
-                font-size:1.1em;font-weight:bold;border:none; color:$redfont; background:none; cursor:pointer; margin:2px 9px;
-                &:hover, &:focus, &:active { text-decoration:underline;color:$red; outline: none }
+    .users {
+        border-top:1px solid $gray;
+        border-bottom:1px solid $gray;
+        text-align:center;
+        margin-bottom:0.5em;
+        >div { margin-top:10px; margin-bottom:10px;}
+
+        .vote {
+            margin-top:9px; margin-bottom:0;
+            >a {
+                @include inline-block(); height:22px; width:28px; border-radius:5px; border:1px solid; text-decoration:none; font-size: 1.2em; padding:0px 0 0 20px; line-height:22px; color: $black;
+                span {
+                    display:none;
+                }
+                &.voteup {
+                    background:url(/static/ico.thumbup-20.png) no-repeat 8px 1px $lightgreen;
+                    border-color:$green;
+                    margin-right:10px;
+                }
+                &.votedown {
+                    background:url(/static/ico.thumbdown-20.png) no-repeat 8px 2px $verylightred;
+                    border-color:$lightred;
+                }
             }
+
+            #vote-problem {
+                a {
+                    text-align:left; padding-left:30px; line-height:20px;
+                    &.fake {background:url(/static/ico.fake-file-14.png) no-repeat 8px 5px}
+                    &.virus {background:url(/static/ico.virus-14.png) no-repeat 8px 5px}
+                    &.password {background:url(/static/ico.pass-protected-14.png) no-repeat 7px 5px}
+                    &.low_quality {background:url(/static/ico.poor-quality-14.png) no-repeat 8px 5px}
+                    &.copyright {background:url(/static/ico.copyright-14.png) no-repeat 8px 5px;}
+                    &:hover, &:focus, &:active {
+                        color:$redfont; text-decoration:underline
+                    }
+                }
+            }
+        }
+
+        .current_flag {
+            margin-top:8px; margin-bottom:0;text-align:left;
+            span {
+                @include inline-block(); padding-left:30px; height:24px;line-height:24px; font-weight:bold; font-size:1.2em; color:$redfont;
+                &.verified {background:url(/static/ico.verified-24.png) no-repeat left center; color:$black}
+
+                &.fake {background:url(/static/ico.warning-fake-24.png) no-repeat left center}
+                &.virus {background:url(/static/ico.warning-virus-24.png) no-repeat left center}
+                &.password {background:url(/static/ico.warning-password-24.png) no-repeat left center}
+                &.low_quality {background:url(/static/ico.warning-poor-quality-24.png) no-repeat left center}
+            }
+        }
+
+        a.share {
+            @include inline-block();height:20px;width:40px;border-radius:3px;
+            span {display:none}
+            &.facebook { background:url(/static/ico.facebook.png)  no-repeat center center #425597}
+            &.twitter { background:url(/static/ico.twitter.png)  no-repeat center center #46A0D4}
+            &.gplus { background:url(/static/ico.gplus.png)  no-repeat center center #CB4134}
         }
     }
 
-    h1 {margin:0em 0em 1em}
+    h1 {margin:0em 0em 0.5em}
     h2 {margin:0.5em 0em}
 
     .links {
+        form {
+            float:right;
+            input {
+                font-size:1.1em;font-weight:bold;border:none; color:$redfont; background:none; text-decoration:underline; cursor:pointer; margin:0 0 1em;
+                &:hover, &:focus, &:active { color:$red; outline: none }
+            }
+        }
+
         > div > a {
             text-align:center;
             width:210px;
@@ -737,12 +787,15 @@ ul.browse {
             font-size: 1.9em;
         }
 
-        > div > a:first-child+a{@include redbutton();}
-        > ul {
+        > div > a.download {@include redbutton();}
 
+        > ul {
+            padding: 0.5em;
+            li:first-child {
+                float: left;
+            }
             li {
-                text-align:right;display:block;
-                font-size:1.2em;color: $grayfont;
+                text-align:right;display:block;margin: 0.1em 0.3em;font-size: 1em;color: $grayfont;
             }
         }
 
@@ -752,7 +805,7 @@ ul.browse {
         font-weight:bold;color:$grayfont;@include inline-block();
     }
 
-    .imdb, .size, .verified, .fake, .low_quality, .password, .virus  {
+    .imdb, .size  {
         @include inline-block();
         font-weight:bold;
         @include regular-text();
@@ -760,19 +813,6 @@ ul.browse {
         padding:5px 20px;
         margin:5px 0px 5px 10px;
         vertical-align: bottom;
-    }
-
-    .verified {
-        color:$greenfont;
-        border: 1px solid $greenfont;
-        background: $green;
-        text-transform:uppercase;
-    }
-    .fake, .low_quality, .password, .virus {
-        color:white;
-        border: 1px solid darken($red, 10%);
-        background: $red;
-        text-transform:uppercase;
     }
 
     .imdb {
@@ -816,11 +856,6 @@ ul.browse {
         &.v8 {@include innerspan(mix($yellowhealth, $greenhealth, 65%), 0.8)}
         &.v9 {@include innerspan(mix($yellowhealth, $greenhealth, 80%), 0.9)}
         &.v10 {@include innerspan($greenhealth, 1)}
-    }
-
-    ul {
-        padding-left:0px;
-        >li {list-style:none;@include inline-block();}
     }
 
     .seeders, .leechers {

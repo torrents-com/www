@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-import datetime, time, itertools, re, math, urllib2, hashlib, os.path
+import datetime, time, itertools, re, math, urllib2, hashlib, os.path, zlib
 from flask import request, render_template, redirect, url_for, g, current_app, abort, escape, jsonify, make_response, send_from_directory
 from struct import pack, unpack
 from base64 import b64decode, urlsafe_b64encode, urlsafe_b64decode
@@ -41,7 +41,8 @@ FILE_PAGE_TYPE = 1
 SEARCH_PAGE_TYPE = 2
 CATEGORY_PAGE_TYPE = 3
 
-F2LABEL = {"f1": "verified", "f2": "fake", "f3": "password", "f4": "low_quality", "f5": "virus"}
+VOTES = {"f1": "verified", "f2": "fake", "f3": "password", "f4": "low_quality", "f5": "virus", "f6": "bad"}
+VOTE_CODES = {v:k for k,v in VOTES.iteritems()}
 
 CATEGORY_ORDER = ("fs*r", "ok DESC, r DESC, fs DESC", "fs*r")
 SUBCATEGORY_ORDER = ("r*r2", "ok DESC, r DESC, fs DESC", "r*r2")
@@ -206,6 +207,37 @@ def pixel():
             logging.warn("Error registering search.")
 
     return pixel_response
+
+@files.route("/res/vote/<vtype>/<fileid>")
+@nocache
+def vote(vtype, fileid):
+    g.must_cache = 0
+
+    if not g.search_bot: # don't allow bots to vote
+
+        vote_code = VOTE_CODES.get(vtype, None)
+        if not vote_code:
+            logging.warn("Wrong vote type: %s."%unicode(vtype))
+            return jsonify({})
+
+        try:
+            filemid = url2mid(fileid)
+
+            # get user's ip and create a unique id for this file and user
+            ip = (request.headers.getlist("X-Forwarded-For") or [request.remote_addr])[0]
+            userid = zlib.crc32(str(filemid)+"_"+ip)
+
+            filesdb.update_file({"_id":filemid, "vs.u.%d"%userid:vote_code})
+            # PENDING: get current info?
+            return jsonify({"msg":["vote_ok", "Your vote has been registered.", "info"]})
+
+
+        except BaseException as e:
+            logging.warn("Error registering vote.")
+            return jsonify({})
+
+    logging.warn("Bot is trying to vote.")
+    return jsonify({})
 
 @files.route('/favicon.ico')
 def favicon():
@@ -936,11 +968,16 @@ def torrents_data(data, details=False, current_category_tag=None):
 
     vs = data["file"].get("vs",None)
     if vs:
+        choosen_flag = None
+        choosen_flag_trust = 0
         if "s" in vs:
-            for flag, count in vs['s'].items():
-                if count == 100 and flag in F2LABEL:
-                    data["view"]["flag"] = F2LABEL[flag]
-                    break
+            for flag, trust in vs['s'].items():
+                if trust > choosen_flag_trust:
+                    choosen_flag = VOTES[flag]
+                    choosen_flag_trust = trust
+
+        if choosen_flag_trust>0:
+            data["view"]["flag"] = (choosen_flag, (20+choosen_flag_trust)/120.)
 
     return data
 

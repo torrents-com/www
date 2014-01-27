@@ -49,5 +49,26 @@ $(function(){
     $("#q").focus();
     $("#view-trailer").each(function(){link=$(this).data("link");if(link==""){$(this).click(function(e){e.preventDefault();var me=$(this),rsearch=me.data("search");if(rsearch!=""){$.ajax({dataType:"jsonp",cache:false,url:"http://gdata.youtube.com/feeds/videos?alt=json&q="+rsearch,success:function(d){entries=d.feed.entry;if(entries && entries.length>0){id=entries[0].id.$t;id=id.substr(id.lastIndexOf('/')+1);me.colorbox({iframe:true,innerWidth:560, innerHeight:360,transition:'none',href:"http://www.youtube.com/embed/"+id+"?autoplay=1",open:true});}else{me.html("<span class='icon-error'></span> No trailer available").data("search","").addClass("disable");}}});}});}else{$(this).colorbox({iframe:true, innerWidth:560, innerHeight:360, transition:'none'});}});
     $("#downloader_button").click(function(e){trackGAEvent('TD',"Download");trackGAPageview(this.getAttribute("href"));e.preventDefault();setTimeout('document.location="'+this.href+'"',100);});
-    var message = window.location.hash.substring(1);if (message in PAGE_MESSAGES){var msg = PAGE_MESSAGES[message];show_alert(message,msg[0],msg[1]);}});
+    if (window.location.hash){
+        var message = window.location.hash.substring(1);if (message in PAGE_MESSAGES){var msg = PAGE_MESSAGES[message];show_alert(message,msg[0],msg[1]);}
+    }
 
+    $(".dropdown a").each(function(){
+        var vtype = this.className;
+        if (vtype=="copyright") {
+            $(this).click(function(e){$('#cclaim').submit();e.preventDefault()});
+        } else {
+            $(this).click(function(e){
+                e.preventDefault();
+                $.ajax({dataType:"json",cache:false,url:"/ressss/vote/"+vtype+"/"+$("input[name=file_id]").val()})
+                    .always(function(d){
+                        if (d&&"msg" in d){
+                            show_message.apply(window,d["msg"]);
+                        } else {
+                            show_message("vote_err", "There was an error registering your vote. Please, try again.", "error");
+                        }
+                    });
+            });
+        }
+    });
+});

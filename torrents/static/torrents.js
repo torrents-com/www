@@ -38,11 +38,11 @@ function data_track(){var elm=$(this),link_href=this.href,target=this.target;var
 function data_flag(){var elm=$(this);var data=elm.data("flag");if (data.length==0) return; elm.click(function(e){e.preventDefault();e.stopImmediatePropagation();$.colorbox({html:"<div id='flag_confirm' class=''><div><h1>Flag confirmation</h1></div><p>This content has been flagged as "+data+". Do you want to download it anyway?</p>"+elm[0].outerHTML+"<a>No, thanks</a></div>", width:"600px",close:false,overlayClose:true,fixed:true});$("#flag_confirm a[data-track]").each(data_track);$("#flag_confirm a").click(function(e){$.colorbox.close()});return false})}
 
 function update_file_info(info){
-    if ("votes" in info){var v = info["votes"]; $("#report_verified .v").text(v[0]);$("#report_bad .v").text(v[1]);}
-    if ("user" in info){ $(".users .votereport > a").removeClass(); if (info["user"]=="verified") { $("#report_verified").addClass("current"); } else { $("#report_bad").addClass("current");}}
+    if ("votes" in info){var v = info["votes"]; $("#report_f1 .v").text(v[0]);$("#report_f6 .v").text(v[1]);}
+    if ("user" in info){ $(".users .votereport > a").removeClass(); if (info["user"]=="f1") { $("#report_f1").addClass("current"); } else { $("#report_f6").addClass("current");}}
 
     if ("flag" in info){
-        $(".users .current_flag").html("<span class='icon "+info['flag'].toLowerCase()+"'>"+info["flag"]+"</span>");
+        $(".users .current_flag").html("<span class='icon "+info['flag'][0]+"'>"+info["flag"][1]+"</span>");
     } else {
         $(".users .current_flag").html("");
     }
@@ -72,7 +72,7 @@ $(function(){
     $("#view-trailer").each(function(){link=$(this).data("link");if(link==""){$(this).click(function(e){e.preventDefault();var me=$(this),rsearch=me.data("search");if(rsearch!=""){$.ajax({dataType:"jsonp",cache:false,url:"http://gdata.youtube.com/feeds/videos?alt=json&q="+rsearch,success:function(d){entries=d.feed.entry;if(entries && entries.length>0){id=entries[0].id.$t;id=id.substr(id.lastIndexOf('/')+1);me.colorbox({iframe:true,innerWidth:560, innerHeight:360,transition:'none',href:"http://www.youtube.com/embed/"+id+"?autoplay=1",open:true});}else{me.html("<span class='icon-error'></span> "+gbody.data("adult_no_trailer")).data("search","").addClass("disable");}}});}});}else{$(this).colorbox({iframe:true, innerWidth:560, innerHeight:360, transition:'none'});}});
     $("#downloader_button").click(function(e){trackGAEvent('TD',"Download");trackGAPageview(this.getAttribute("href"));e.preventDefault();setTimeout('document.location="'+this.href+'"',100);});
 
-    var message = window.location.hash.substring(1);if (message in window.PAGE_MESSAGES){var msg = window.PAGE_MESSAGES[message];show_alert(message,msg[0],msg[1]);}});
+    var message = window.location.hash.substring(1);if (message in window.PAGE_MESSAGES){var msg = window.PAGE_MESSAGES[message];show_alert(message,msg[0],msg[1]);}
     $(".votereport a").click(function(e){
         e.preventDefault();
         if (this.className=="copyright") {
@@ -86,11 +86,11 @@ $(function(){
              .always(function(info){
                     if (info) {
                         update_file_info(info);
-                        var no_alert = ("user" in info) && (info["user"]=="verified" || info["user"]=="bad");
+                        var no_alert = ("user" in info) && (info["user"]=="f1" || info["user"]=="f6");
                         if (no_alert) hide_alert("report");
                         else if ("ret" in info) show_alert.apply(window,info["ret"]);
                     } else {
-                        show_alert("report", "There was an error registering your vote. Please, try again.", "error");
+                        show_alert("report", gbody.data("error_vote"), "error");
                     }
             });
         }

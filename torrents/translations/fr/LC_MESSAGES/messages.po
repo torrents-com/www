@@ -364,6 +364,9 @@ msgstr "Partager en Facebook"
 msgid "Share on Twitter"
 msgstr "Partager en Twitter"
 
+msgid "Share on Google Plus"
+msgstr "Partager en Google Plus"
+
 msgid "Download .torrent file"
 msgstr "Télécharger ficher .torrent"
 
@@ -646,6 +649,26 @@ msgstr "Service non disponible"
 msgid "This page is temporarily unavailable. Please try again later."
 msgstr "Cette page n'est pas disponible temporairement. S'il vous plaît réessayez plus tard."
 
+# votes
+msgid "I like it"
+msgstr "J'aime"
+msgid "Problems"
+msgstr "Problèmes"
+msgid "Fake file"
+msgstr "Faux fichier"
+msgid "Virus"
+msgstr "Virus"
+msgid "Password protected"
+msgstr "Protégé par mot de passe"
+msgid "Low quality"
+msgstr "Mauvaise qualité"
+msgid "Copyright claim"
+msgstr "Revendication de droit d'auteur"
+msgid "Verified"
+msgstr "Vérifié"
+msgid "Your report has been registered."
+msgstr "Votre rapport a été enregistré."
+
 # dates
 msgid "year"
 msgstr "an"
@@ -741,3 +764,6 @@ msgstr "Le message a été envoyé."
 
 msgid "Write something!"
 msgstr "Écrivez quelque chose!"
+
+msgid "There was an error registering your vote. Please, try again."
+msgstr "Il y a eu une erreur pour enregistrer votre vote. S'il vous plaît, essayez de nouveau."

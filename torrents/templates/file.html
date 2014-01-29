@@ -37,22 +37,22 @@
             <div class="rating">{{"<span class='icon star'></span>"|safe*file_data['view']['rating']}}{{"<span class='icon star-no'></span>"|safe*(5-file_data['view']['rating'])}}</div>
         </div>
         <div class="grid_4 votereport">
-            <a title="{{_('I like it')}}" href="#" id="report_verified"><span class='icon thumbup'></span><span class="v">{{file_data['view']['votes'][0] if "votes" in file_data['view'] else "0"}}</span></a>
+            <a title="{{_('I like it')}}" href="#" id="report_f1"><span class='icon thumbup'></span><span class="v">{{file_data['view']['votes'][0] if "votes" in file_data['view'] else "0"}}</span></a>
             <div id="report" class="dropdown dropdown-tip">
                 <ul class="dropdown-menu">
-                    <li><a id="report_fake" href="#"><span class="icon fake"></span>{{_("Fake file")}}</a></li>
-                    <li><a id="report_virus" href="#"><span class="icon virus"></span>{{_("Virus")}}</a></li>
-                    <li><a id="report_password" href="#"><span class="icon pass"></span>{{_("Password protected")}}</a></li>
-                    <li><a id="report_low_quality" href="#"><span class="icon poor"></span>{{_("Poor quality")}}</a></li>
+                    <li><a id="report_f2" href="#"><span class="icon f2"></span>{{_("Fake file")}}</a></li>
+                    <li><a id="report_f5" href="#"><span class="icon f5"></span>{{_("Virus")}}</a></li>
+                    <li><a id="report_f3" href="#"><span class="icon f3"></span>{{_("Password protected")}}</a></li>
+                    <li><a id="report_f4" href="#"><span class="icon f4"></span>{{_("Poor quality")}}</a></li>
                     <li class="dropdown-divider"></li>
                     <li><a class="copyright" href="#"><span class="icon copyright"></span>{{_("Copyright claim")}}</a></li>
                 </ul>
             </div>
-            <a title="{{_('Problems')}}" data-vertical-offset="-1" data-dropdown="#report" href="#" id="report_bad"><span class='icon thumbdown'></span><span class="v">{{file_data['view']['votes'][1] if "votes" in file_data['view'] else "0"}}</span></a>
+            <a title="{{_('Problems')}}" data-vertical-offset="-1" data-dropdown="#report" href="#" id="report_f6"><span class='icon thumbdown'></span><span class="v">{{file_data['view']['votes'][1] if "votes" in file_data['view'] else "0"}}</span></a>
         </div>
         <div class="grid_4 current_flag">
             {%- if 'flag' in file_data['view'] %}
-            <div><span class="icon {{file_data['view']['flag']}}"></span>{{_(file_data['view']['flag']|capitalize)}}</div>
+            <div><span class="icon {{file_data['view']['flag'][0]}}"></span>{{_(file_data['view']['flag'][1])}}</div>
             {%- endif %}
         </div>
         <div class="grid_2">

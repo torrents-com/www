@@ -736,8 +736,8 @@ ul.browse {
         .current_flag {
             margin-top:8px; margin-bottom:0;text-align:left;
             span {
-                @include inline-block(); padding-left:30px; height:24px;line-height:24px; font-weight:bold; font-size:1.2em; color:$redfont;
-                &.verified {color:$black}
+                @include inline-block(); width:120px; padding-left:30px; height:24px;line-height:24px; font-weight:bold; font-size:1.2em; color:$redfont;
+                &.f1 {color:$black}
             }
         }
 

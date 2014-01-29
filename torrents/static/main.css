@@ -34,11 +34,11 @@ $redhealth:#F2602E;
 }
 .icon {
     vertical-align:middle; background:url(/static/icons.png?4) top left no-repeat; @include inline-block();
-    &.f1 { background-position: -0px -96px; width: 24px; height: 24px; }
-    &.warn-f2 { background-position: -0px -48px; width: 27px; height: 24px; }
-    &.warn-f3 { background-position: -0px -72px; width: 27px; height: 24px; }
-    &.warn-f4 { background-position: -0px -0px; width: 27px; height: 24px; }
-    &.warn-f5 { background-position: -0px -24px; width: 27px; height: 24px; }
+    &.big-f1 { background-position: -0px -96px; width: 24px; height: 24px; }
+    &.big-f2 { background-position: -0px -48px; width: 27px; height: 24px; }
+    &.big-f3 { background-position: -0px -72px; width: 27px; height: 24px; }
+    &.big-f4 { background-position: -0px -0px; width: 27px; height: 24px; }
+    &.big-f5 { background-position: -0px -24px; width: 27px; height: 24px; }
     &.image { background-position: -0px -120px; width: 20px; height: 20px; }
     &.download-button { background-position: -0px -140px; width: 20px; height: 20px; }
     &.anime { background-position: -0px -160px; width: 20px; height: 20px; }

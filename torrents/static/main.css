@@ -1152,6 +1152,7 @@ h1.extra{text-transform:none; font-weight:normal; margin:0em 0em 2em; font-size:
 #news-top, #text_top, #files_top {
     margin:6em auto;overflow:hidden;
     section {margin:0em auto 4em}
+    h1 {margin-bottom:0.7em}
     h2 {margin-top:0}
     .share {margin-bottom:0}
 }

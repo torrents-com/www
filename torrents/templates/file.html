@@ -22,29 +22,50 @@
 {% block content %}
 <div class="container_24">
 <section id="download" class="grid_24">
-    <div class="grid_6 alpha">
+    <div class="grid_6 alpha suffix_1">
         {%- if 'images_server' in file_data['view'] or 'thumbnail' in file_data['view']%}
         <img src="{{g.images_server}}{{ file_data['file']['_id'] }}0/225{{'/'+ file_data['view']['icon'].url if file_data['view']['icon']}}/f/{{file_data['file']['md'].get('image_filename', file_data['view']['seo-fn']+'.jpg')}}" alt="{{_('preview_file', name= file_data['view']['nfn']) }}" />
         {%- else %}
         <img src="{{g.static_prefix}}/missing-{{ file_data['view']['icon'].url}}.jpg" width="225" height="300" alt="{{_('No preview')}}" />
         {%- endif %}
     </div>
-    <div class="grid_17 prefix_1 omega">
-        <div class="grid_10 alpha">
-            <div class="icon-stars"><span class="stars-{{file_data['view']['rating']}}"></span><span class="nostars stars-{{5-file_data['view']['rating']}}"></span></div>
+    <div class="grid_17 omega">
+        <h1>{{ file_data['view']['fn'] | seoize(" ",True,0) }}.torrent</h1>
+    </div>
+    <div class="grid_17 users omega">
+        <div class="grid_3 alpha">
+            <div class="rating">{{"<span class='icon star'></span>"|safe*file_data['view']['rating']}}{{"<span class='icon star-no'></span>"|safe*(5-file_data['view']['rating'])}}</div>
         </div>
-        <div class="grid_7 omega share_report">
-            <span>{{_("Share")}} <a title="{{_('Share on Facebook')}}" target="_blank" href="http://www.facebook.com/share.php?u={{ url_for('files.download', file_name=file_data["view"]["seo-fn"], file_id=file_data['view']['url'], _external=True)}}"><span class="icon-facebook"></span></a>&nbsp;<a title="{{_('Share on Twitter')}}" target="_blank" href="http://twitter.com/home?status={{ url_for("files.download", file_name=file_data["view"]["seo-fn"], file_id=file_data["view"]["url"], _external=True)}}"><span class="icon-twitter"></span></a></span>
-            | <form action="{{url_for('files.copyright')}}" method="POST">
-            <input type="hidden" name="_csrf_token" value="{{ csrf_token() }}">
-            <input type="hidden" name="file_id" value="{{file_data["view"]["url"]}}"/>
-            <input type="hidden" name="file_name" value="{{file_data["view"]["fn"]}}"/>
-            <input type="submit" value="{{_('Report link')}}"/>
-            </form>
+        <div class="grid_4 votereport">
+            <a title="{{_('I like it')}}" href="#" id="report_verified"><span class='icon thumbup'></span><span class="v">{{file_data['view']['votes'][0] if "votes" in file_data['view'] else "0"}}</span></a>
+            <div id="report" class="dropdown dropdown-tip">
+                <ul class="dropdown-menu">
+                    <li><a id="report_fake" href="#"><span class="icon fake"></span>{{_("Fake file")}}</a></li>
+                    <li><a id="report_virus" href="#"><span class="icon virus"></span>{{_("Virus")}}</a></li>
+                    <li><a id="report_password" href="#"><span class="icon pass"></span>{{_("Password protected")}}</a></li>
+                    <li><a id="report_low_quality" href="#"><span class="icon poor"></span>{{_("Poor quality")}}</a></li>
+                    <li class="dropdown-divider"></li>
+                    <li><a class="copyright" href="#"><span class="icon copyright"></span>{{_("Copyright claim")}}</a></li>
+                </ul>
+            </div>
+            <a title="{{_('Problems')}}" data-vertical-offset="-1" data-dropdown="#report" href="#" id="report_bad"><span class='icon thumbdown'></span><span class="v">{{file_data['view']['votes'][1] if "votes" in file_data['view'] else "0"}}</span></a>
         </div>
-        <div class="grid_17 alpha omega">
-            <h1>{{ file_data['view']['fn'] | seoize(" ",True,0) }}.torrent</h1>
+        <div class="grid_4 current_flag">
+            {%- if 'flag' in file_data['view'] %}
+            <div><span class="icon {{file_data['view']['flag']}}"></span>{{_(file_data['view']['flag']|capitalize)}}</div>
+            {%- endif %}
         </div>
+        <div class="grid_2">
+            <a class="share facebook" title="{{_('Share on Facebook')}}" target="_blank" href="http://www.facebook.com/share.php?u={{ url_for('files.download', file_name=file_data['view']['seo-fn'], file_id=file_data['view']['url'], _external=True)}}"><span class="icon facebook2"></span></a>
+        </div>
+        <div class="grid_2">
+            <a class="share twitter" title="{{_('Share on Twitter')}}" target="_blank" href="http://twitter.com/home?status={{ url_for('files.download', file_name=file_data['view']['seo-fn'], file_id=file_data['view']['url'], _external=True)}}"><span class="icon twitter2"></span></a>
+        </div>
+        <div class="grid_2 omega">
+            <a class="share gplus" title="{{_('Share on Google Plus')}}" target="_blank" href="https://plus.google.com/share?url={{ url_for('files.download', file_name=file_data['view']['seo-fn'], file_id=file_data['view']['url'], _external=True)}}"><span class="icon gplus"></span></a>
+        </div>
+    </div>
+    <div class="grid_17 omega">
         <div class="grid_11 alpha">
             <div class="big_icon {{file_data['view']['icon'].url}}"><span></span>
             {%- if 'imdb_link' in file_data['view'] %}
@@ -63,12 +84,15 @@
             {% endif %}
         </div>
         <div class="grid_6 omega links">
-            {#- <div id="file_feedback"><a href="#" class=""><span class="icon-check"></span> {{_("Verify")}} (0)</a><div id="file_bad_feedback"><a href="#">{{_("Fake")}}</a><a href="#">{{_("Password")}}</a><a href="#">{{_("Low quality")}}</a><a href="#">{{_("Virus")}}</a></div></div> #}
-
+            <form id="cclaim" action="{{url_for('files.copyright')}}" method="POST">
+                <input type="hidden" name="_csrf_token" value="{{ csrf_token() }}">
+                <input type="hidden" name="file_id" value="{{file_data["view"]["url"]}}"/>
+                <input type="hidden" name="file_name" value="{{file_data["view"]["fn"]}}"/>
+                <input type="submit" value="{{_('Report link')}}"/>
+            </form>
             <div>
-                {%- if file_data['view']["has_trailer"] %}<a target="_blank" id="view-trailer" data-link="{{ file_data['view']['trailer_link'] if 'trailer_link' in file_data['view']}}" data-search="{{related_query|urlencode}}+trailer" href="{{ file_data['view'].get('trailer_link','http://www.youtube.com/results?search_query='+related_query|urlencode+'+trailer')}}"><span class="icon-trailer"></span> {{_("Watch trailer")}}</a>{% endif %}
-                <a class="download" data-track="Download,{{'Magnet' if 'tmagnet' in file_data['view']['sources'] else 'Torrent' if 'download' in file_data['view']['sources'] else 'HTML'}},File / Big Button" data-downloader="1" href="{{file_data['view']['sources']['tmagnet']['urls'][0] if 'tmagnet' in file_data['view']['sources'] else file_data['view']['sources']['download']['urls'][0] if 'download' in file_data['view']['sources'] else file_data['view']['sources']['download_ind']['urls'][0]}}"{{ ' target="_blank"' if not 'tmagnet' in file_data['view']['sources'] and not 'download' in file_data['view']['sources']}}{{ ' rel="nofollow"' if not 'tmagnet' in file_data['view']['sources']}}><span class="icon-download_button"></span> {{_("Download")}}</a>
-            </div>
+            {%- if file_data['view']["has_trailer"] %}<a target="_blank" id="view-trailer" data-link="{{ file_data['view']['trailer_link'] if 'trailer_link' in file_data['view']}}" data-search="{{related_query|urlencode}}+trailer" href="{{ file_data['view'].get('trailer_link','http://www.youtube.com/results?search_query='+related_query|urlencode+'+trailer')}}"><span class="icon trailer"></span> {{_("Watch trailer")}}</a>{% endif %}
+            <a class="download" data-flag="{{file_data['view'].get('flag','')}}" data-track="Download,{{'Magnet' if 'tmagnet' in file_data['view']['sources'] else 'Torrent' if 'download' in file_data['view']['sources'] else 'HTML'}},File / Big Button" data-downloader="1" href="{{file_data['view']['sources']['tmagnet']['urls'][0] if 'tmagnet' in file_data['view']['sources'] else file_data['view']['sources']['download']['urls'][0] if 'download' in file_data['view']['sources'] else file_data['view']['sources']['download_ind']['urls'][0]}}"{{ ' target="_blank"' if not 'tmagnet' in file_data['view']['sources'] and not 'download' in file_data['view']['sources']}}{{ ' rel="nofollow"' if not 'tmagnet' in file_data['view']['sources']}}><span class="icon download-button"></span> {{_("Download")}}</a></div>
             <ul>
                 <li>{{_("Alternative sources")}}:</li>
                 {% if "tmagnet" in file_data['view']["sources"] %}
@@ -78,7 +102,7 @@
                     <li><a class="download" data-downloader="1" data-track="Download,{{'HTML' if 'i' in src['g'] else 'Torrent'}},File / Link List"  href="{{ src['urls'][0] }}" rel="nofollow">{{src["tip"]}}</a></li>
                 {% endfor %}
             </ul>
-        <div>
+        </div>
     </div>
 </section>
 </div>

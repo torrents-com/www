@@ -205,24 +205,16 @@ def init_file(afile):
 
     # los errores votos no deben afectar a la indexación del fichero
     try:
-        if "vs" in afile and afile["vs"]: # ficheros con votos
-            votes = {all_langs[lang]:log(val["c"][0]+5, val["c"][1]*2+5) for lang, val in afile["vs"].iteritems()}
-            m, M = min(0.9, min(votes.itervalues())), min(max(1.1,max(votes.itervalues())), 3.0)
+        vs = afile.get("vs", None)
+        if vs:
+            factor = 0.
+            # system votes
+            if "s" in vs:
+                factor = sum(count/(100. if flag=="f1" else -100.) for flag, count in vs['s'].iteritems() )
 
-            e = (m*2-M*0.5)/(M-m) # valores de 0-6
-            f = M/(2+e)           # valores de 0-2
+            # TO-DO: user vote (if "u" in vs)
+            afile["_r"] *= 1.+max(min(factor, .000001), -.9)
 
-            vc = int(e*42)
-            vd = int(f*127)
-
-            vabs = {l:min((abs(v-(a-0.5*b+vc/42)*vd/127),str(a),str(b)) for a,b in [(0,0),(0,1),(1,0),(1,1)]) for l,v in votes.iteritems()}
-            afile["_va"] = int("".join(str(vabs[i][1]) if i in vabs else "0" for i in langsrange),2)
-            afile["_vb"] = int("".join(str(vabs[i][2]) if i in vabs else "0" for i in langsrange),2)
-            afile["_vc"] = vc
-            afile["_vd"] = vd
-
-        elif "cs" in afile and afile["cs"]: # ficheros sin votos pero con comentarios aumenta el rating secundario
-            r2 += 1
     except BaseException as e:
         logging.exception("Error processing votes from file %s."%file_id)
 

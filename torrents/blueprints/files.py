@@ -1,12 +1,12 @@
 # -*- coding: utf-8 -*-
 
-import datetime, time, itertools, re, math, urllib2, hashlib, os.path
+import datetime, time, itertools, re, math, urllib2, hashlib, os.path, zlib
 from flask import request, render_template, redirect, url_for, g, current_app, abort, escape, jsonify, make_response, send_from_directory
 from flask.ext.babelex import gettext as _
 from struct import pack, unpack
 from base64 import b64decode, urlsafe_b64encode, urlsafe_b64decode
 from urlparse import urlparse, parse_qs
-from collections import OrderedDict
+from collections import OrderedDict, Counter
 from heapq import heapify, heappop
 
 from foofind.utils import url2mid, u, logging, mid2hex, bin2hex, nocache
@@ -22,6 +22,7 @@ from torrents.services import *
 from torrents.multidomain import MultidomainBlueprint
 from torrents.templates import clean_query, singular_filter
 from torrents import Category
+from torrents.votes import VOTES, VOTE_CODES, VERIFIED_VOTE, evaluate_file_votes
 from unicodedata import normalize
 
 files = MultidomainBlueprint('files', __name__, domain="torrents.fm")
@@ -205,6 +206,57 @@ def pixel():
             logging.warn("Error registering search.")
 
     return pixel_response
+
+@files.route("/res/vote/<fileid>/<vtype>")
+@nocache
+def vote(fileid, vtype=None):
+    g.must_cache = 0
+    result = {}
+
+    # don't allow bots to access this feature
+    if g.search_bot:
+        logging.warn("Bot is trying to access to file information.")
+        return jsonify(result)
+
+    try:
+        # get file id
+        filemid = url2mid(fileid)
+        # get user's ip and calculates a unique id for this file and user
+        ip = (request.headers.getlist("X-Forwarded-For") or [request.remote_addr])[0]
+        userid = hashlib.sha1(str(filemid)+"_"+ip).hexdigest()[:10]
+    except BaseException as e:
+        logging.warn("Error parsing request information.")
+        return jsonify(result)
+
+    if vtype:
+        vote_code = VOTE_CODES.get(vtype, None)
+        if not vote_code:
+            logging.warn("Wrong vote type: %s."%unicode(vtype))
+            return jsonify(result)
+
+        try:
+            filesdb.update_file({"_id":filemid, "vs.u.%s"%userid:vote_code})
+            result["ret"] = ["report", "Your report has been registered.", "info"]
+        except BaseException as e:
+            logging.warn("Error registering vote.")
+
+    try:
+        f = {"file":filesdb.get_file(filemid, "1")}
+        calculate_file_info(f)
+
+        result["votes"] = f["view"]["votes"]
+        if "flag" in f["view"]:
+            result["flag"] = f["view"]["flag"]
+        result["rating"] = f["view"]["rating"]
+
+        user_vote = f["file"].get("vs",{}).get("u",{}).get(userid,None)
+        if user_vote:
+            result["user"] = VOTES[user_vote]
+    except BaseException as e:
+        logging.error("Error retrieving file information: %s."%str(filemid))
+
+    return jsonify(result)
+
 
 @files.route('/favicon.ico')
 def favicon():
@@ -923,7 +975,20 @@ def torrents_data(data, details=False, current_category_tag=None):
         if imdb:
             data["view"]["imdb_link"] = imdb[0]
 
-    # salud del torrent
+    data["view"]["icon"] = file_category or file_category_type or CATEGORY_UNKNOWN
+    data["view"]["providers"] = providers
+    data["view"]["seo-fn"] = data["view"]["nfn"].replace(" ","-")
+
+    calculate_file_info(data)
+
+    return data
+
+def calculate_file_info(data):
+    # torrents health
+
+    if "view" not in data: # recover seeds and leechs from file metadata
+        file_md = data["file"].get("md",{})
+        data["view"] = {"md":{k.rsplit(":")[-1]:v for k,v in file_md.iteritems() if k.endswith(":seeds") or k.endswith(":leechs")}}
     try:
         seeds = int(float(data['view']['md']['seeds'])) if 'seeds' in data['view']['md'] else 0
     except:
@@ -932,14 +997,30 @@ def torrents_data(data, details=False, current_category_tag=None):
         leechs = int(float(data['view']['md']['leechs'])) if 'leechs' in data['view']['md'] else 0
     except:
         leechs = 0
-    data['view']['health'] = int(2/(leechs+1.)) if seeds==0 else min(10,int(seeds/(leechs+1.)*5))
-    data['view']['rating'] = int((data['view']['health']+1)/2)
+    data['view']['health'] = health = int(2/(leechs+1.)) if seeds==0 else min(10,int(seeds/(leechs+1.)*5))
 
-    data["view"]["icon"] = file_category or file_category_type or CATEGORY_UNKNOWN
-    data["view"]["providers"] = providers
-    data["view"]["seo-fn"] = data["view"]["nfn"].replace(" ","-")
+    # votes and flags
+    vs = data["file"].get("vs",None)
+    if vs:
+        system = vs.get("s", {})
+        users = Counter(vs['u'].itervalues()) if "u" in vs else {}
 
-    return data
+        # count votes
+        data["view"]["votes"] = (users.get(VERIFIED_VOTE,0), sum(value for vtype, value in users.iteritems() if vtype!=VERIFIED_VOTE))
+    else:
+        system = users = {}
+        data["view"]["votes"] = (0,0)
+
+    votes_val, flags = evaluate_file_votes(system, users)
+
+    if votes_val>0.95:
+        data["view"]["flag"] = VOTES[VERIFIED_VOTE]
+        data["view"]["flag_trust"] = votes_val
+    elif votes_val<0.4:
+        data["view"]["flag"] = VOTES[flags[0][0]]
+        data["view"]["flag_trust"] = flags[0][1]
+
+    data['view']['rating'] = int(round((health*votes_val)/2))
 
 def save_visited(files):
     if not g.search_bot:

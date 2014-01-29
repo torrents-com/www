@@ -18,6 +18,7 @@
             {%- endfor %}
         {%-endif%}
         <meta charset="utf-8" />
+
         <link rel="shortcut icon" href="/favicon.ico" />
         {%- block assets -%}
             {%- assets "css_torrents" -%}
@@ -31,7 +32,7 @@
             var _gaq,_prum,adult_content={{ g.is_adult_content | tojson }};
             function cookiesScripts(){
                 _gaq = _gaq || [];_gaq.push(['_setAccount','UA-38333996-1']);_gaq.push(['_setDomainName', '{{ g.domain }}']); _gaq.push(['_setAllowLinker', true]);(function(){var ga=document.createElement('script');ga.type='text/javascript';ga.async=true;ga.src=('https:'==document.location.protocol?'https://ssl':'http://www')+'.google-analytics.com/ga.js';var s=document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);})();
-                {%- set track_url = (g.domain[g.domain.rfind("."):] if g.domain_conflict else "") + (request.path.rstrip(g.clean_query or "") if g.query or g.domain_conflict else "") + ("_searchs_" if g.query else "") %}
+                {%- set track_url = (g.domain[g.domain.rfind("."):] if g.domain_conflict else "") + ("/"+(g.category.url or "search")+"/_searchs_" if g.query else request.path) %}
                 {%- if g.query %}
                     _gaq.push(["_set", "title", "_searchs_{{" "+g.category.title|singular|lower if g.category}} torrents"]);
                 {%- endif %}
@@ -104,7 +105,7 @@
                         <form method="get" action="{{ url_for('files.search', query='') }}" class="grid_24">
                             <input type="hidden" name="c" value="{{g.category.url if g.category else ""}}" />
                             <div class="grid_18 alpha"><input placeholder="{{_('find torrents')}}" type="text" id="q" name="q" autocomplete="off" value="{{g.query or ''}}"/></div>
-                            <div class="grid_6 omega"><button type="submit">{{_("Search files")}}&nbsp;&nbsp;&nbsp;<span class="icon-search"></span></button></div>
+                            <div class="grid_6 omega"><button type="submit">{{_("Search files")}}&nbsp;&nbsp;&nbsp;<span class="icon search"></span></button></div>
                         </form>
                         <ul class="grid_24">
                             <li class="{{'active ' if not g.category and g.section=='torrents'}}{{'searchable' if g.section=='torrents' and ((g.categories_results and g.categories_results[0]) or (not g.category and not g.query))}}"><a href="{{ url_for('files.search', query=g.clean_query ) if g.category and g.categories_results and g.clean_query else url_for('files.home')}}">{{ "<div class='arrow'></div>"|safe if not g.category or g.categories_results}}{{_("All torrents")|lower}}</a></li>
@@ -153,13 +154,13 @@
                         <ul>
                             <li><a href="{{ url_for('news.home') }}">{{_("News")}}</a>
                                 <ul class="bulleted">
-                                    <li><a href="{{ url_for('news.home', path='category/news') }}">{{_("General")}}</a></li>
-                                    <li><a href="{{ url_for('news.home', path='category/mobile') }}">{{_("Mobile")}}</a></li>
-                                    <li><a href="{{ url_for('news.home', path='category/movies') }}">{{_("Movies")}}</a></li>
-                                    <li><a href="{{ url_for('news.home', path='category/music') }}">{{_("Music")}}</a></li>
-                                    <li><a href="{{ url_for('news.home', path='category/software') }}">{{_("Software")}}</a></li>
-                                    <li><a href="{{ url_for('news.home', path='category/tv') }}">{{_("TV")}}</a></li>
-                                    <li><a href="{{ url_for('news.home', path='category/technology') }}">{{_("Technology")}}</a></li>
+                                    <li><a href="{{ url_for('news.home', path='category/news/') }}">{{_("General")}}</a></li>
+                                    <li><a href="{{ url_for('news.home', path='category/mobile/') }}">{{_("Mobile")}}</a></li>
+                                    <li><a href="{{ url_for('news.home', path='category/movies/') }}">{{_("Movies")}}</a></li>
+                                    <li><a href="{{ url_for('news.home', path='category/music/') }}">{{_("Music")}}</a></li>
+                                    <li><a href="{{ url_for('news.home', path='category/software/') }}">{{_("Software")}}</a></li>
+                                    <li><a href="{{ url_for('news.home', path='category/tv/') }}">{{_("TV")}}</a></li>
+                                    <li><a href="{{ url_for('news.home', path='category/technology/') }}">{{_("Technology")}}</a></li>
                                 </ul>
                             </li>
                             <li><a href="{{ url_for('news.user_sitemap') }}">{{_("Sitemap")}}</a></li>

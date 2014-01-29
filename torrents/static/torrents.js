@@ -34,41 +34,63 @@ function rp(){$("body").addClass("_rp").removeClass("_rp");}
 function hide_alert(aid){$("#alerts #alert_"+aid).remove();rp();}
 function show_alert(aid,html,type){hide_alert(aid);$("#alerts").prepend($("<div id='alert_"+aid+"' class='"+type+"'><div class='container_24'><p class='grid_24'>"+html+"</p></div></div>"));rp();}
 
-function data_track(){var elm=$(this),link_href=this.href,target=this.target;var data=elm.data("track").split(","),wait=elm.attr("_target");elm.click(function(event){trackGAEvent(data[0],data[1],data[2]);if(!target){setTimeout(function(){if(!event.stop_redirection)window.location=link_href;},100);event.preventDefault();}});}
+function data_track(){var elm=$(this),link_href=this.href,target=this.target;var data=elm.data("track").split(","),wait=elm.attr("_target");elm.click(function(e){trackGAEvent(data[0],data[1],data[2]);if(!target){setTimeout(function(){if(!e.stop_redirection)window.location=link_href;},100);e.preventDefault()}});}
+function data_flag(){var elm=$(this);var data=elm.data("flag");if (data.length==0) return; elm.click(function(e){e.preventDefault();e.stopImmediatePropagation();$.colorbox({html:"<div id='flag_confirm' class=''><div><h1>Flag confirmation</h1></div><p>This content has been flagged as "+data+". Do you want to download it anyway?</p>"+elm[0].outerHTML+"<a>No, thanks</a></div>", width:"600px",close:false,overlayClose:true,fixed:true});$("#flag_confirm a[data-track]").each(data_track);$("#flag_confirm a").click(function(e){$.colorbox.close()});return false})}
+
+function update_file_info(info){
+    if ("votes" in info){var v = info["votes"]; $("#report_verified .v").text(v[0]);$("#report_bad .v").text(v[1]);}
+    if ("user" in info){ $(".users .votereport > a").removeClass(); if (info["user"]=="verified") { $("#report_verified").addClass("current"); } else { $("#report_bad").addClass("current");}}
+
+    if ("flag" in info){
+        $(".users .current_flag").html("<span class='icon "+info['flag'].toLowerCase()+"'>"+info["flag"]+"</span>");
+    } else {
+        $(".users .current_flag").html("");
+    }
+
+    if ("rating" in info){
+        var rating = info["rating"];
+        $(".users .rating").html(Array(rating+1).join("<span class='icon star'></span>")+Array(5-rating+1).join("<span class='icon star-no'></span>"));
+    }
+}
 
 $(function(){
     window.suggestmeyes_loaded=true;
+
     if ($("#files >.filepaths li").length>1){$("#files >.filepaths >li").addClass("open");$("#files >.filepaths").treeview({"collapsed":true});}
-    if (adult_content&&!$.cookie("adult_confirm")){trackGAEvent('Adult confirm', "Ask");$.colorbox({html:"<div id='adult_confirm' class='adult_confirm title big_icon porn'><span></span><div><h1>Adult content confirmation</h1></div><p>You should be 18 or older to see this content.</p><a id='yes_button' href='#'>Yes, I am</a><a data-track='Adult confirm,No,' href='/'>No, I'm not</a></div>", width:"65%",close:false,overlayClose:false,fixed:true});$("#adult_confirm a[data-track]").each(data_track);$("#yes_button").click(function(e){e.preventDefault();$.cookie("adult_confirm",1,{path:'/'});trackGAEvent('Adult confirm',"Yes");$.colorbox.close()});}
+    if (adult_content&&!$.cookie("adult_confirm")){trackGAEvent('Adult confirm', "Ask");$.colorbox({html:"<div id='adult_confirm' class='adult_confirm title big_icon porn'><span></span><div><h1>Adult content confirmation</h1></div><p>You should be 18 or older to see this content.</p><a id='yes_button' href='#'>Yes, I am</a><a data-track='Adult confirm,No,' href='/'>No, I'm not</a></div>", width:"600px",close:false,overlayClose:false,fixed:true});$("#adult_confirm a[data-track]").each(data_track);$("#yes_button").click(function(e){e.preventDefault();$.cookie("adult_confirm",1,{path:'/'});trackGAEvent('Adult confirm',"Yes");$.colorbox.close()});}
     $("#more").change(function(){$(this).toggleClass("checked",$(this).is(":checked"));});
     $('html').click(function(){$("#more").removeClass("checked").attr("checked",false);$(".more ul").css("display","");});
     $('.more').click(function(event){event.stopPropagation();});
+    $("a[data-flag]").each(data_flag);
     $("a[data-track]").each(data_track);
     window.downloader.link_lookup("#download");window.downloader.link_lookup("#featured");window.downloader.link_lookup(".results");
 
     $("#q").focus();
     $("#view-trailer").each(function(){link=$(this).data("link");if(link==""){$(this).click(function(e){e.preventDefault();var me=$(this),rsearch=me.data("search");if(rsearch!=""){$.ajax({dataType:"jsonp",cache:false,url:"http://gdata.youtube.com/feeds/videos?alt=json&q="+rsearch,success:function(d){entries=d.feed.entry;if(entries && entries.length>0){id=entries[0].id.$t;id=id.substr(id.lastIndexOf('/')+1);me.colorbox({iframe:true,innerWidth:560, innerHeight:360,transition:'none',href:"http://www.youtube.com/embed/"+id+"?autoplay=1",open:true});}else{me.html("<span class='icon-error'></span> No trailer available").data("search","").addClass("disable");}}});}});}else{$(this).colorbox({iframe:true, innerWidth:560, innerHeight:360, transition:'none'});}});
     $("#downloader_button").click(function(e){trackGAEvent('TD',"Download");trackGAPageview(this.getAttribute("href"));e.preventDefault();setTimeout('document.location="'+this.href+'"',100);});
-    if (window.location.hash){
-        var message = window.location.hash.substring(1);if (message in PAGE_MESSAGES){var msg = PAGE_MESSAGES[message];show_alert(message,msg[0],msg[1]);}
-    }
+    var message = window.location.hash.substring(1);if (message in PAGE_MESSAGES){var msg = PAGE_MESSAGES[message];show_alert(message,msg[0],msg[1]);}
 
-    $(".dropdown a").each(function(){
-        var vtype = this.className;
-        if (vtype=="copyright") {
-            $(this).click(function(e){$('#cclaim').submit();e.preventDefault()});
+    $(".votereport a").click(function(e){
+        e.preventDefault();
+        if (this.className=="copyright") {
+            $('#cclaim').submit();
         } else {
-            $(this).click(function(e){
-                e.preventDefault();
-                $.ajax({dataType:"json",cache:false,url:"/ressss/vote/"+vtype+"/"+$("input[name=file_id]").val()})
-                    .always(function(d){
-                        if (d&&"msg" in d){
-                            show_message.apply(window,d["msg"]);
-                        } else {
-                            show_message("vote_err", "There was an error registering your vote. Please, try again.", "error");
-                        }
-                    });
+            // Avoid repeat voting
+            if ($(this).hasClass("current"))
+                return;
+            var vtype = this.id.substring(7);
+            $.ajax({dataType:"json",cache:false,url:"/res/vote/"+$("input[name=file_id]").val()+"/"+vtype})
+             .always(function(info){
+                    if (info) {
+                        update_file_info(info);
+                        var no_alert = ("user" in info) && (info["user"]=="verified" || info["user"]=="bad");
+                        if (no_alert) hide_alert("report");
+                        else if ("ret" in info) show_alert.apply(window,info["ret"]);
+                    } else {
+                        show_alert("report", "There was an error registering your vote. Please, try again.", "error");
+                    }
             });
         }
     });
+
 });

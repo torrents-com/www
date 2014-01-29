@@ -91,7 +91,7 @@
                         <form method="get" action="{{ url_for('files.search', query='') }}" class="grid_24">
                             <input type="hidden" name="c" value="{{g.category.url if g.category else ""}}" />
                             <div class="grid_18 alpha"><input placeholder="find torrents" type="text" id="q" name="q" autocomplete="off" value="{{g.query or ''}}"/></div>
-                            <div class="grid_6 omega"><button type="submit">Search files&nbsp;&nbsp;&nbsp;<span class="icon-search"></span></button></div>
+                            <div class="grid_6 omega"><button type="submit">Search files&nbsp;&nbsp;&nbsp;<span class="icon search"></span></button></div>
                         </form>
                         <ul class="grid_24">
                             <li class="{{'active ' if not g.category and g.section=='torrents'}}{{'searchable' if g.section=='torrents' and ((g.categories_results and g.categories_results[0]) or (not g.category and not g.query))}}"><a href="{{ url_for('files.search', query=g.clean_query ) if g.category and g.categories_results and g.clean_query else url_for('files.home')}}">{{ "<div class='arrow'></div>"|safe if not g.category or g.categories_results }}all torrents</a></li>

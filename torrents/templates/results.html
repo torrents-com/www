@@ -12,13 +12,13 @@
 </tr>
 {% for file in files %}
     <tr class="{{ loop.cycle('odd', 'even') }}">
-        <td><span class="icon-{{ file['view']['icon'].tag}}"></span></td>
-        <td><a title="{{file['view']['fn']}}" href='{{ url_for("files.download", file_name=file["view"]["seo-fn"], file_id=file["view"]["url"])}}'>{{ file["view"]["fnh"] | safe }}</a><a title="Share on Facebook" target="_blank" href="http://www.facebook.com/share.php?u={{ url_for("files.download", file_name=file["view"]["seo-fn"], file_id=file["view"]["url"], _external=True)}}"><span class="icon-facebook"></span></a><a target="_blank" title="Share on Twitter" href="http://twitter.com/home?status={{ url_for("files.download", file_name=file["view"]["seo-fn"], file_id=file["view"]["url"], _external=True)}}"><span class="icon-twitter"></span></a></td>
-        <td>{%- if "download" in file['view']["sources"] %}<a title="Download .torrent file" data-downloader="1" data-track="Download,Torrent,{{zone}}" rel="nofollow" href="{{file['view']["sources"]["download"]["urls"][0]}}"><span class="icon-download"></span></a>
-            {%- elif "download_ind" in file['view']["sources"] %}<a data-downloader="1" title="Visit download page" data-track="Download,HTML,{{zone}}" rel="nofollow" href="{{file['view']["sources"]["download_ind"]["urls"][0]}}"><span class="icon-download_ind"></span></a>
-            {%- else %}<span class="icon-download_no"></span>{%- endif %}</td>
-        <td>{%- if "tmagnet" in file['view']["sources"] %}<a title="Download magnet" data-downloader="1" data-track="Download,Magnet,{{zone}}" href="{{file['view']["sources"]["tmagnet"]["urls"][0]}}"><span class="icon-magnet"></span></a>
-            {%- else %}<span class="icon-magnet_no"></span>{%- endif %}</td>
+        <td><span class="icon {{ file['view']['icon'].tag}}"></span></td>
+        <td><a title="{{file['view']['fn']}}" href='{{ url_for("files.download", file_name=file["view"]["seo-fn"], file_id=file["view"]["url"])}}'>{{ file["view"]["fnh"] | safe }}</a><a title="Share on Facebook" target="_blank" href="http://www.facebook.com/share.php?u={{ url_for("files.download", file_name=file["view"]["seo-fn"], file_id=file["view"]["url"], _external=True)}}"><span class="icon facebook"></span></a><a target="_blank" title="Share on Twitter" href="http://twitter.com/home?status={{ url_for("files.download", file_name=file["view"]["seo-fn"], file_id=file["view"]["url"], _external=True)}}"><span class="icon twitter"></span></a></td>
+        <td>{%- if "download" in file['view']["sources"] %}<a title="Download .torrent file" data-downloader="1" data-track="Download,Torrent,{{zone}}" rel="nofollow" href="{{file['view']["sources"]["download"]["urls"][0]}}"><span class="icon download"></span></a>
+            {%- elif "download_ind" in file['view']["sources"] %}<a data-downloader="1" title="Visit download page" data-track="Download,HTML,{{zone}}" rel="nofollow" href="{{file['view']["sources"]["download_ind"]["urls"][0]}}"><span class="icon download-ind"></span></a>
+            {%- else %}<span class="icon download-no"></span>{%- endif %}</td>
+        <td>{%- if "tmagnet" in file['view']["sources"] %}<a title="Download magnet" data-downloader="1" data-track="Download,Magnet,{{zone}}" href="{{file['view']["sources"]["tmagnet"]["urls"][0]}}"><span class="icon magnet"></span></a>
+            {%- else %}<span class="icon magnet-no"></span>{%- endif %}</td>
         <td>{% if 'z' in file['file'] and file['file']['z'] %}{{ file['file']['z']|numbersizeformat }}{% else %}?{%endif%}</td>
         <td>{{ (file['file']['date'] if 'date' in file['file'] else file['file']['fs'])|format_timedelta}} ago</td>
         <td>{{ file['view']['md'].get('seeds',0)|float|int}}</td>

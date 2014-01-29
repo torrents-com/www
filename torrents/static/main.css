@@ -32,30 +32,51 @@ $redhealth:#F2602E;
     font-size: 1.3em;
     line-height:1.3em;
 }
-@mixin icon{background:url(/static/icons.png?3) top left no-repeat; @include inline-block();}
-.icon-all{ @include icon(); background-position: 0 0; width: 18px; height: 16px; }
-.icon-anime{ @include icon(); background-position: -19px 0; width: 20px; height: 20px; }
-.icon-audio, .icon-music{ @include icon(); background-position: -40px 0; width: 20px; height: 20px; }
-.icon-document, .icon-ebook{ @include icon(); background-position: -61px 0; width: 20px; height: 20px; }
-.icon-download{ @include icon(); background-position: -82px 0; width: 11px; height: 11px; }
-.icon-download_button{ @include icon(); background-position: -94px 0; width: 20px; height: 20px; }
-.icon-download_ind{ @include icon(); background-position: -115px 0; width: 11px; height: 11px; }
-.icon-download_no{ @include icon(); background-position: -127px 0; width: 11px; height: 11px; }
-.icon-error{ @include icon(); background-position: -139px 0; width: 20px; height: 20px; }
-.icon-facebook{ @include icon(); background-position: -160px 0; width: 17px; height: 17px; }
-.icon-game{ @include icon(); background-position: -178px 0; width: 20px; height: 20px; }
-.icon-image{ @include icon(); background-position: -199px 0; width: 20px; height: 20px; }
-.icon-magnet{ @include icon(); background-position: -220px 0; width: 11px; height: 11px; }
-.icon-magnet_no{ @include icon(); background-position: -232px 0; width: 11px; height: 11px; }
-.icon-mobile{ @include icon(); background-position: -244px 0; width: 20px; height: 20px; }
-.icon-movie, .icon-video{ @include icon(); background-position: -265px 0; width: 20px; height: 20px; }
-.icon-porn{ @include icon(); background-position: -286px 0; width: 20px; height: 20px; }
-.icon-search{ @include icon(); background-position: -307px 0; width: 20px; height: 20px; }
-.icon-series{ @include icon(); background-position: -328px 0; width: 20px; height: 20px; }
-.icon-software{ @include icon(); background-position: -349px 0; width: 20px; height: 20px; }
-.icon-trailer{ @include icon(); background-position: -370px 0; width: 26px; height: 20px; }
-.icon-twitter{ @include icon(); background-position: -397px 0; width: 17px; height: 17px; }
-.icon-unknown{ @include icon(); background-position: -415px 0; width: 16px; height: 16px; }
+.icon {
+    vertical-align:middle; background:url(/static/icons.png?4) top left no-repeat; @include inline-block();
+    &.warn-poor { background-position: -0px -0px; width: 27px; height: 24px; }
+    &.warn-virus { background-position: -0px -24px; width: 27px; height: 24px; }
+    &.warn-fake { background-position: -0px -48px; width: 27px; height: 24px; }
+    &.warn-pass { background-position: -0px -72px; width: 27px; height: 24px; }
+    &.verified { background-position: -0px -96px; width: 24px; height: 24px; }
+    &.image { background-position: -0px -120px; width: 20px; height: 20px; }
+    &.download-button { background-position: -0px -140px; width: 20px; height: 20px; }
+    &.anime { background-position: -0px -160px; width: 20px; height: 20px; }
+    &.ebook, &.document { background-position: -0px -180px; width: 20px; height: 20px; }
+    &.audio, &.music { background-position: -0px -200px; width: 20px; height: 20px; }
+    &.trailer { background-position: -0px -220px; width: 26px; height: 20px; }
+    &.game { background-position: -0px -240px; width: 20px; height: 20px; }
+    &.software { background-position: -0px -260px; width: 20px; height: 20px; }
+    &.series { background-position: -0px -280px; width: 20px; height: 20px; }
+    &.error { background-position: -0px -300px; width: 20px; height: 20px; }
+    &.movie, &.video { background-position: -0px -320px; width: 20px; height: 20px; }
+    &.twitter2 { background-position: -0px -340px; width: 20px; height: 20px; }
+    &.porn { background-position: -0px -360px; width: 20px; height: 20px; }
+    &.mobile { background-position: -0px -380px; width: 20px; height: 20px; }
+    &.search { background-position: -0px -400px; width: 20px; height: 20px; }
+    &.gplus { background-position: -0px -420px; width: 20px; height: 20px; }
+    &.facebook2 { background-position: -0px -440px; width: 20px; height: 20px; }
+    &.star-no { background-position: -0px -460px; width: 19px; height: 19px; }
+    &.star { background-position: -0px -479px; width: 19px; height: 19px; }
+    &.thumbdown { background-position: -0px -498px; width: 17px; height: 19px; }
+    &.thumbup { background-position: -0px -517px; width: 17px; height: 19px; }
+    &.facebook { background-position: -0px -536px; width: 17px; height: 17px; }
+    &.twitter { background-position: -0px -553px; width: 17px; height: 17px; }
+    &.all { background-position: -0px -570px; width: 18px; height: 16px; }
+    &.unknown { background-position: -0px -586px; width: 16px; height: 16px; }
+    &.copyright { background-position: -0px -602px; width: 14px; height: 14px; }
+    &.fake { background-position: -0px -616px; width: 14px; height: 14px; }
+    &.poor { background-position: -0px -630px; width: 14px; height: 14px; }
+    &.pass { background-position: -1px -644px; width: 14px; height: 14px; }
+    &.virus { background-position: -0px -658px; width: 14px; height: 14px; }
+    &.star-no-small { background-position: -14px -602px; width: 12px; height: 12px; }
+    &.star-small { background-position: -14px -614px; width: 12px; height: 12px; }
+    &.download-ind { background-position: -16px -586px; width: 11px; height: 11px; }
+    &.magnet { background-position: -14px -626px; width: 11px; height: 11px; }
+    &.magnet-no { background-position: -14px -637px; width: 11px; height: 11px; }
+    &.download { background-position: -14px -648px; width: 11px; height: 11px; }
+    &.download-no { background-position: -14px -659px; width: 11px; height: 11px; }
+}
 
 @mixin button()
 {
@@ -89,7 +110,6 @@ $redhealth:#F2602E;
 {
     @include button();
     background-color:$red;
-    text-shadow: none;
 }
 
 *,html{margin:0;padding:0;font-family:'helvetica neue',helvetica,arial,sans-serif;}
@@ -131,7 +151,7 @@ img {
     outline-style: dotted;
 }
 
-.icon-download_button { vertical-align:-3px }
+.icon.download-button { vertical-align:-3px }
 
 .big_icon
 {
@@ -411,7 +431,7 @@ img.error {
     }
 }
 
-#adult_confirm {
+#adult_confirm, #flag_confirm {
     background-color:white;padding:12em 3em 5em; text-align:center;
     p {
         margin:1em;
@@ -495,15 +515,8 @@ img.error {
 
 #featured {
     padding-left:0px; margin-top:-20px;
-    .icon-stars {
+    .rating {
         margin:10px 0px 10px 5px;height:12px;
-        span {background:url(/static/star_small.png) left center repeat-x;height:12px}
-        .nostars {background-image:url(/static/star_no_small.png)}
-        .stars-1 {width:12px*1}
-        .stars-2 {width:12px*2}
-        .stars-3 {width:12px*3}
-        .stars-4 {width:12px*4}
-        .stars-5 {width:12px*5}
     }
 
     li {
@@ -513,7 +526,7 @@ img.error {
         }
 
         >div:first-child + div {
-            > .icon-stars{margin-top:25px}
+            > .rating{margin-top:25px}
         }
 
         .filelink {
@@ -535,6 +548,7 @@ img.error {
         .download {
             text-align:center;
             @include redbutton();
+            text-shadow: none;
             display:block;
             font-size:1.1em;
             padding: 0px 3px 0px 0px;
@@ -544,22 +558,15 @@ img.error {
             margin-left:115px;
             width:100px;
 
-            .icon-download_button { vertical-align:-6px }
+            .icon.download-button { vertical-align:-6px }
         }
     }
 }
 
 #browse_torrents {
     padding-left:0px; margin-top:-20px;
-    .icon-stars {
+    .rating {
         margin:10px 0px 10px 5px;height:12px;
-        span {background:url(/static/star_small.png) left center repeat-x;height:12px}
-        .nostars {background-image:url(/static/star_no_small.png)}
-        .stars-1 {width:12px*1}
-        .stars-2 {width:12px*2}
-        .stars-3 {width:12px*3}
-        .stars-4 {width:12px*4}
-        .stars-5 {width:12px*5}
     }
 
     li {
@@ -571,7 +578,7 @@ img.error {
 
         &.clearer {clear:left}
 
-        .icon-stars{margin:0 0 5px 0;}
+        .rating{margin:0 0 5px 0;}
 
         .filelink {
             color:$black;
@@ -595,24 +602,6 @@ img.error {
         }
     }
 
-}
-.icon-stars {
-    height:19px;
-    span {
-        background:url(/static/star.png) left center repeat-x;
-        height:19px;
-        float:left;
-    }
-    .nostars {
-        background-image:url(/static/star_no.png);
-        clear:right;
-    }
-    .stars-0 {width:0px;}
-    .stars-1 {width:19px*1;}
-    .stars-2 {width:19px*2;}
-    .stars-3 {width:19px*3;}
-    .stars-4 {width:19px*4;}
-    .stars-5 {width:19px*5;}
 }
 
 #links {
@@ -711,34 +700,34 @@ ul.browse {
         margin-bottom:0.5em;
         >div { margin-top:10px; margin-bottom:10px;}
 
-        .vote {
+        .votereport {
             margin-top:9px; margin-bottom:0;
             >a {
-                @include inline-block(); height:22px; width:28px; border-radius:5px; border:1px solid; text-decoration:none; font-size: 1.2em; padding:0px 0 0 20px; line-height:22px; color: $black;
+                @include inline-block(); text-align:center; border-radius:5px; border:1px solid; text-decoration:none; font-size: 1.2em; padding:2px 4px; color: $black; outline: none;
+
                 span {
-                    display:none;
+                    vertical-align:middle;
+                    margin:0 2px;
                 }
-                &.voteup {
-                    background:url(/static/ico.thumbup-20.png) no-repeat 8px 1px $lightgreen;
+                &#report_verified {
                     border-color:$green;
                     margin-right:10px;
+                    &.current { background-color: $green}
                 }
-                &.votedown {
-                    background:url(/static/ico.thumbdown-20.png) no-repeat 8px 2px $verylightred;
+                &#report_bad {
                     border-color:$lightred;
+                    &.current { background-color: $lightred}
                 }
             }
 
-            #vote-problem {
+            #report {
                 a {
-                    text-align:left; padding-left:30px; line-height:20px;
-                    &.fake {background:url(/static/ico.fake-file-14.png) no-repeat 8px 5px}
-                    &.virus {background:url(/static/ico.virus-14.png) no-repeat 8px 5px}
-                    &.password {background:url(/static/ico.pass-protected-14.png) no-repeat 7px 5px}
-                    &.low_quality {background:url(/static/ico.poor-quality-14.png) no-repeat 8px 5px}
-                    &.copyright {background:url(/static/ico.copyright-14.png) no-repeat 8px 5px;}
+                    padding-left: 0; text-align:left; line-height:22px;
+                    span {
+                        margin:0 6px 2px 8px;
+                    }
                     &:hover, &:focus, &:active {
-                        color:$redfont; text-decoration:underline
+                        background-color:$verylightred; color:$redfont; text-decoration:underline
                     }
                 }
             }
@@ -748,21 +737,15 @@ ul.browse {
             margin-top:8px; margin-bottom:0;text-align:left;
             span {
                 @include inline-block(); padding-left:30px; height:24px;line-height:24px; font-weight:bold; font-size:1.2em; color:$redfont;
-                &.verified {background:url(/static/ico.verified-24.png) no-repeat left center; color:$black}
-
-                &.fake {background:url(/static/ico.warning-fake-24.png) no-repeat left center}
-                &.virus {background:url(/static/ico.warning-virus-24.png) no-repeat left center}
-                &.password {background:url(/static/ico.warning-password-24.png) no-repeat left center}
-                &.low_quality {background:url(/static/ico.warning-poor-quality-24.png) no-repeat left center}
+                &.verified {color:$black}
             }
         }
 
         a.share {
             @include inline-block();height:20px;width:40px;border-radius:3px;
-            span {display:none}
-            &.facebook { background:url(/static/ico.facebook.png)  no-repeat center center #425597}
-            &.twitter { background:url(/static/ico.twitter.png)  no-repeat center center #46A0D4}
-            &.gplus { background:url(/static/ico.gplus.png)  no-repeat center center #CB4134}
+            &.facebook { background-color:#425597}
+            &.twitter { background-color:#46A0D4}
+            &.gplus { background-color:#CB4134}
         }
     }
 
@@ -1333,6 +1316,105 @@ footer{
     section:first-child+section h2, section:first-child+section+section+section h2, section:first-child+section+section+section+section+section h2{text-align:right}
     p{font-size:1.6em;margin-top:1em}
 }
+
+/* jQuery dropdown */
+.dropdown {
+    position: absolute;
+    z-index: 9999999;
+    display: none;
+    .dropdown-menu, .dropdown-panel {
+        min-width: 160px;
+        max-width: 360px;
+        list-style: none;
+        background: #FFF;
+        border: solid 1px #DDD;
+        border: solid 1px rgba(0, 0, 0, .2);
+        border-radius: 6px;
+        box-shadow: 0 5px 10px rgba(0, 0, 0, .2);
+        overflow: visible;
+        padding: 4px 0;
+        margin: 0;
+    }
+    .dropdown-panel {
+        padding: 10px;
+    }
+
+    &.dropdown-tip {
+        margin-top: 8px;
+        &:before {
+            position: absolute;
+            top: -6px;
+            left: 9px;
+            content: "";
+            border-left: 7px solid transparent;
+            border-right: 7px solid transparent;
+            border-bottom: 7px solid #CCC;
+            border-bottom-color: rgba(0, 0, 0, 0.2);
+            @include inline-block();
+        }
+        &:after {
+            position: absolute;
+            top: -5px;
+            left: 10px;
+            content: "";
+            border-left: 6px solid transparent;
+            border-right: 6px solid transparent;
+            border-bottom: 6px solid #FFF;@include inline-block();
+        }
+        &.dropdown-anchor-right:before {
+            left: auto;
+            right: 9px;
+        }
+        &.dropdown-anchor-right:after {
+            left: auto;
+            right: 10px;
+        }
+    }
+
+    &.dropdown-scroll .dropdown-menu,
+    &.dropdown-scroll .dropdown-panel {
+        max-height: 358px;
+        overflow: auto;
+    }
+
+    .dropdown-menu LI {
+        list-style: none;
+        padding: 0 0;
+        margin: 0;
+        line-height: 18px;
+    }
+
+    .dropdown-menu LI > A,
+    .dropdown-menu LABEL {
+        display: block;
+        color: #555;
+        text-decoration: none;
+        line-height: 18px;
+        padding: 3px 15px;
+        white-space: nowrap;
+    }
+
+    .dropdown-menu LI > A:hover,
+    .dropdown-menu LABEL:hover {
+        background-color: #08C;
+        color: #FFF;
+        cursor: pointer;
+    }
+
+    .dropdown-menu .dropdown-divider {
+        font-size: 1px;
+        border-top: solid 1px #E5E5E5;
+        padding: 0;
+        margin: 5px 0;
+    }
+}
+
+
+
+
+
+
+
 
 
 /* CSS Document For Styling the Rich Snippets Data*/

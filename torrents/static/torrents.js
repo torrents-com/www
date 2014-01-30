@@ -82,7 +82,7 @@ $(function(){
             if ($(this).hasClass("current"))
                 return;
             var vtype = this.id.substring(7);
-            $.ajax({dataType:"json",cache:false,url:"/res/vote/"+vtype})
+            $.ajax({type: "POST", dataType:"json",cache:false,url:"/res/vote/"+vtype})
              .always(function(info){
                     if (info) {
                         update_file_info(info);

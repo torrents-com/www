@@ -34,7 +34,7 @@
     </div>
     <div class="grid_17 users omega">
         <div class="grid_3 alpha">
-            <div class="rating">{{"<span class='icon star'></span>"|safe*file_data['view']['rating']}}{{"<span class='icon star-no'></span>"|safe*(5-file_data['view']['rating'])}}</div>
+            <div class="rating">{{"<span class='icon star'></span>"|safe*(file_data['view']['rating5'])}}{{"<span class='icon star-no'></span>"|safe*(5-file_data['view']['rating5'])}}</div>
         </div>
         <div class="grid_4 votereport">
             <a title="{{_('I like it')}}" href="#" id="report_f1"><span class='icon thumbup'></span><span class="v">{{file_data['view']['votes'][0] if "votes" in file_data['view'] else "0"}}</span></a>
@@ -75,7 +75,7 @@
             <div class="size">{{ file_data['file']['z']|numbersizeformat }}</div>
             {% endif %}
             </div>
-            <dl class="health"><dt>{{_("Health")}}</dt><dd class="v{{file_data['view']['health']}}"><span></span><span title="{{file_data['view']['md']['seeds'] or "0"}} seeds / {{file_data['view']['md']['leechs'] or "0"}} leechers">{{file_data['view']['md']['seeds'] or "0"}} / {{file_data['view']['md']['leechs'] or "0"}}</span></dd></dl>
+            <dl class="health"><dt>{{_("Health")}}</dt><dd class="v{{file_data['view']['health10']}}"><span></span><span title="{{file_data['view']['md']['seeds'] or "0"}} seeds / {{file_data['view']['md']['leechs'] or "0"}} leechers">{{file_data['view']['md']['seeds'] or "0"}} / {{file_data['view']['md']['leechs'] or "0"}}</span></dd></dl>
             {%- if 'date' in file_data['file'] %}
             <dl class="date"><dt>{{_("Created")}}</dt><dd>{{ file_data['file']['date'] }}</dd></dl>
             {%- endif %}

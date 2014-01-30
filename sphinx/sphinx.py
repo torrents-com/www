@@ -36,6 +36,8 @@ from raven import Client
 from raven.handlers.logging import SentryHandler
 from raven.conf import setup_logging
 
+from torrents.votes import rate_torrent
+
 import foofind.defaults
 config = foofind.defaults.__dict__.copy()
 
@@ -95,22 +97,6 @@ def get_definitions():
                 "field": "_l",
                 "field_type": int
             },
-            {"name":"va", "type":"int", "bits":16, "default":0,# Votes flags A
-                "field": "_va",
-                "field_type": int
-            },
-            {"name":"vb", "type":"int", "bits":16, "default":0,# Votes flags B
-                "field": "_vb",
-                "field_type": int
-            },
-            {"name":"vc", "type":"int", "bits":8, "default":42,# Votes C
-                "field": "_vc",
-                "field_type": int
-            },
-            {"name":"vd", "type":"int", "bits":8, "default":127,# Votes D
-                "field": "_vd",
-                "field_type": int
-            },
             {"name":"bl", "type":"int", "bits":2, "default":0, # Blocked
                 "field": False,
                 "field_type": None
@@ -119,12 +105,16 @@ def get_definitions():
                 "field": "_ct",
                 "field_type": int
             },
+            {"name":"r", "type":"float", "default":-1,         # Rating
+                "field": "_r",
+                "field_type": float
+            },
             {"name":"r2", "type":"int", "bits":8, "default":1, # Secondary rating
                 "field": "_r2",
                 "field_type": int
             },
-            {"name":"r", "type":"float", "default":-1,          # Rating
-                "field": "_r",
+            {"name":"h", "type":"float", "default":0,          # Health
+                "field": "_h",
                 "field_type": float
             },
             {"name":"s", "type":"multi",                       # Source type
@@ -195,31 +185,14 @@ def init_file(afile):
     # mira si es fichero Torrent o Torrent Hash
     main_type = 7 if 7 in types and len(types)==1 else 3
 
-    seeds = int(md["torrent:seeds"]) if "torrent:seeds" in md and 0<=md["torrent:seeds"]<500000 else False
-    leechs = int(md["torrent:leechs"]) if "torrent:leechs" in md and 0<=md["torrent:leechs"]<500000 else False
-    afile["_r"] = 2/(leechs+1.) if seeds==0 else (min(10,int(seeds/(leechs+1.)*5))+(seeds/500000.)) if seeds!=False else False
+    rate = rate_torrent(afile)
+    afile["_r"] = rate["rating"]*10
+    afile["_h"] = rate["health"]
+
     inner_group = 0
 
-    # rating secundario
+    # secondary rating
     r2 = 1
-
-    # los errores votos no deben afectar a la indexación del fichero
-    try:
-        vs = afile.get("vs", None)
-        if vs:
-            factor = 0.
-            # system votes
-            if "s" in vs:
-                factor = sum(count/(100. if flag=="f1" else -100.) for flag, count in vs['s'].iteritems() )
-
-            # TO-DO: user vote (if "u" in vs)
-            afile["_r"] *= 1.+max(min(factor, .000001), -.9)
-
-    except BaseException as e:
-        logging.exception("Error processing votes from file %s."%file_id)
-
-    # rating secundario
-
     if "thumbnail" in md_schemaless_keys or ("i" in afile and isinstance(afile["i"],list)): r2+=2  # ficheros con imagenes
     if "description" in md_schemaless_keys: r2+=1  # ficheros con descripcion
     afile["_r2"] = r2

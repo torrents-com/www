@@ -9,7 +9,7 @@ from urlparse import urlparse, parse_qs
 from collections import OrderedDict, Counter
 from heapq import heapify, heappop
 
-from foofind.utils import url2mid, u, logging, mid2hex, bin2hex, nocache
+from foofind.utils import url2mid, u, logging, mid2hex, mid2url, bin2hex, nocache, fileurl2mid
 from foofind.utils.seo import seoize_text
 from foofind.utils.splitter import SEPPER
 from foofind.services import *
@@ -207,9 +207,9 @@ def pixel():
 
     return pixel_response
 
-@files.route("/res/vote/<fileid>/<vtype>")
+@files.route("/res/vote/<vtype>")
 @nocache
-def vote(fileid, vtype=None):
+def vote(vtype):
     g.must_cache = 0
     result = {}
 
@@ -218,26 +218,38 @@ def vote(fileid, vtype=None):
         logging.warn("Bot is trying to access to file information.")
         return jsonify(result)
 
+
+    # check referrer's domain matches this request's domain
+    referrer = urllib2.unquote(request.referrer).decode("utf-8")
+    if not referrer.startswith(request.url_root):
+        logging.warn("Don't allows votes from %s."%referrer)
+        return jsonify(result)
+
+    # get data from request
     try:
-        # get file id
-        filemid = url2mid(fileid)
+        # get file id from referrer url
+        filemid = fileurl2mid(referrer)
         # get user's ip and calculates a unique id for this file and user
         ip = (request.headers.getlist("X-Forwarded-For") or [request.remote_addr])[0]
         userid = hashlib.sha1(str(filemid)+"_"+ip).hexdigest()[:10]
     except BaseException as e:
-        logging.warn("Error parsing request information.")
+        logging.warn("Error parsing information from request.")
         return jsonify(result)
 
-    if vtype:
-        if not vtype in VOTES:
-            logging.warn("Wrong vote type: %s."%unicode(vtype))
-            return jsonify(result)
 
-        try:
-            filesdb.update_file({"_id":filemid, "vs.u.%s"%userid:vtype})
-            result["ret"] = ["report", _("Your report has been registered."), "info"]
-        except BaseException as e:
-            logging.warn("Error registering vote.")
+    if not vtype in VOTES:
+        logging.warn("Wrong vote type: %s."%unicode(vtype))
+        return jsonify(result)
+
+    try:
+        # save user vote
+        updated_votes = torrentsdb.save_vote(filemid, userid, vtype)
+        filesdb.update_file({"_id":filemid, "vs.u":Counter(updated_votes.itervalues())})
+        result["user"] = vtype
+        result["ret"] = ["report", _("Your report has been registered."), "info"]
+    except BaseException as e:
+        logging.warn("Error registering vote.")
+        return jsonify(result)
 
     try:
         f = {"file":filesdb.get_file(filemid, "1")}
@@ -247,10 +259,6 @@ def vote(fileid, vtype=None):
         if "flag" in f["view"]:
             result["flag"] = f["view"]["flag"]
         result["rating"] = f["view"]["rating"]
-
-        user_vote = f["file"].get("vs",{}).get("u",{}).get(userid,None)
-        if user_vote and user_vote in VOTES:
-            result["user"] = user_vote
     except BaseException as e:
         logging.error("Error retrieving file information: %s."%str(filemid))
 
@@ -1002,7 +1010,7 @@ def calculate_file_info(data):
     vs = data["file"].get("vs",None)
     if vs:
         system = vs.get("s", {})
-        users = Counter(vs['u'].itervalues()) if "u" in vs else {}
+        users = vs.get("u", {})
 
         # count votes
         data["view"]["votes"] = (users.get(VERIFIED_VOTE,0), sum(value for vtype, value in users.iteritems() if vtype!=VERIFIED_VOTE))

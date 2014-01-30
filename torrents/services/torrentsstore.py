@@ -181,3 +181,9 @@ class TorrentsStore(object):
             conn.end_request()
         return ret
 
+    def save_vote(self, fileid, userid, vote):
+        ret = self.torrents_conn.torrents.votes.find_and_modify(query={"_id":fileid}, update={"$set":{userid:vote}}, upsert=True, new=True)
+        self.torrents_conn.end_request()
+        del ret["_id"]
+        return ret
+

@@ -248,6 +248,7 @@ def vote(vtype):
         result["ret"] = ["report", "Your report has been registered.", "info"]
     except BaseException as e:
         logging.warn("Error registering vote.")
+        return jsonify(result)
 
     try:
         f = {"file":filesdb.get_file(filemid, "1")}

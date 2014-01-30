@@ -42,7 +42,7 @@ function update_file_info(info){
     if ("user" in info){ $(".users .votereport > a").removeClass(); if (info["user"]=="f1") { $("#report_f1").addClass("current"); } else { $("#report_f6").addClass("current"); }}
 
     if ("flag" in info){
-        $(".users .current_flag").html("<span class='icon "+info['flag'][0]+"'>"+info["flag"][1]+"</span>");
+        $(".users .current_flag").html("<span class='icon big-"+info['flag'][0]+"'>"+info["flag"][1]+"</span>");
     } else {
         $(".users .current_flag").html("");
     }

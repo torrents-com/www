@@ -829,9 +829,9 @@ ul.browse {
         span {text-align:center;display:block}
         span:first-child + span {color:$grayfont;text-shadow: 1px -1px white, -1px 1px white, 1px 1px white, -1px -1px white;margin-top:-15px;letter-spacing:1px;}
         &.v0 {@include innerspan($redhealth, 0)}
-        &.v1 {@include innerspan(mix($redhealth, $yellowhealth, 25%), 0.1)}
-        &.v2 {@include innerspan(mix($redhealth, $yellowhealth, 50%), 0.2)}
-        &.v3 {@include innerspan(mix($redhealth, $yellowhealth, 75%), 0.3)}
+        &.v1 {@include innerspan(mix($yellowhealth, $redhealth, 25%), 0.1)}
+        &.v2 {@include innerspan(mix($yellowhealth, $redhealth, 50%), 0.2)}
+        &.v3 {@include innerspan(mix($yellowhealth, $redhealth, 75%), 0.3)}
         &.v4 {@include innerspan($yellowhealth, 0.4)}
         &.v5 {@include innerspan(mix($yellowhealth, $greenhealth, 20%), 0.5)}
         &.v6 {@include innerspan(mix($yellowhealth, $greenhealth, 35%), 0.6)}

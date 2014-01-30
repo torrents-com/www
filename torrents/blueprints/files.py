@@ -21,7 +21,7 @@ from torrents.services import *
 from torrents.multidomain import MultidomainBlueprint
 from torrents.templates import clean_query, singular_filter
 from torrents import Category
-from torrents.votes import VOTES, VERIFIED_VOTE, evaluate_file_votes
+from torrents.votes import VOTES, VERIFIED_VOTE, rate_torrent
 from unicodedata import normalize
 
 files = MultidomainBlueprint('files', __name__, domain="torrents.fm")
@@ -206,7 +206,7 @@ def pixel():
 
     return pixel_response
 
-@files.route("/res/vote/<vtype>")
+@files.route("/res/vote/<vtype>", methods=['POST'])
 @nocache
 def vote(vtype):
     g.must_cache = 0
@@ -215,14 +215,14 @@ def vote(vtype):
     # don't allow bots to access this feature
     if g.search_bot:
         logging.warn("Bot is trying to access to file information.")
-        return jsonify(result)
+        return abort(404)
 
 
     # check referrer's domain matches this request's domain
     referrer = urllib2.unquote(request.referrer).decode("utf-8")
     if not referrer.startswith(request.url_root):
         logging.warn("Don't allows votes from %s."%referrer)
-        return jsonify(result)
+        return abort(404)
 
     # get data from request
     try:
@@ -251,13 +251,13 @@ def vote(vtype):
         return jsonify(result)
 
     try:
-        f = {"file":filesdb.get_file(filemid, "1")}
-        calculate_file_info(f)
+        f = filesdb.get_file(filemid, "1")
+        rate = rate_torrent(f)
 
-        result["votes"] = f["view"]["votes"]
-        if "flag" in f["view"]:
-            result["flag"] = f["view"]["flag"]
-        result["rating"] = f["view"]["rating"]
+        result["votes"] = (rate["votes"].get(VERIFIED_VOTE,0), sum(value for vtype, value in rate["votes"].iteritems() if vtype!=VERIFIED_VOTE))
+        if "flag" in rate:
+            result["flag"] = rate["flag"]
+        result["rating"] = int(round(rate["rating"]*5))
 
     except BaseException as e:
         logging.error("Error retrieving file information: %s."%str(filemid))
@@ -777,7 +777,7 @@ def process_search_results(s=None, query=None, category=None, not_category=None,
                     files_text.append(afile["view"]["nfn"])
 
 
-                    featured_weight = (afile['view']["rating"]
+                    featured_weight = (afile['view']["rating5"]
                                         + (10 if 'images_server' in afile['view'] or 'thumbnail' in afile['view'] else 0))
 
                     g.featured.append((-featured_weight, position, afile))
@@ -980,46 +980,13 @@ def torrents_data(data, details=False, current_category_tag=None):
     data["view"]["providers"] = providers
     data["view"]["seo-fn"] = data["view"]["nfn"].replace(" ","-")
 
-    calculate_file_info(data)
-
+    rate = rate_torrent(data["file"])
+    if "flag" in rate:
+        data['view']['flag'] = rate["flag"]
+    data['view']['rating5'] = int(round(rate["rating"]*5))
+    data['view']['health10'] = int(round(rate["health"]*10))
+    data["view"]["votes"] = (rate["votes"].get(VERIFIED_VOTE,0), sum(value for vtype, value in rate["votes"].iteritems() if vtype!=VERIFIED_VOTE))
     return data
-
-def calculate_file_info(data):
-    # torrents health
-
-    if "view" not in data: # recover seeds and leechs from file metadata
-        file_md = data["file"].get("md",{})
-        data["view"] = {"md":{k.rsplit(":")[-1]:v for k,v in file_md.iteritems() if k.endswith(":seeds") or k.endswith(":leechs")}}
-    try:
-        seeds = int(float(data['view']['md']['seeds'])) if 'seeds' in data['view']['md'] else 0
-    except:
-        seeds = 0
-    try:
-        leechs = int(float(data['view']['md']['leechs'])) if 'leechs' in data['view']['md'] else 0
-    except:
-        leechs = 0
-    data['view']['health'] = health = int(2/(leechs+1.)) if seeds==0 else min(10,int(seeds/(leechs+1.)*5))
-
-    # votes and flags
-    vs = data["file"].get("vs",None)
-    if vs:
-        system = vs.get("s", {})
-        users = vs.get("u", {})
-
-        # count votes
-        data["view"]["votes"] = (users.get(VERIFIED_VOTE,0), sum(value for vtype, value in users.iteritems() if vtype!=VERIFIED_VOTE))
-    else:
-        system = users = {}
-        data["view"]["votes"] = (0,0)
-
-    votes_val, flags = evaluate_file_votes(system, users)
-
-    if votes_val>0.95:
-        data["view"]["flag"] = [VERIFIED_VOTE, VOTES[VERIFIED_VOTE], votes_val]
-    elif votes_val<0.4:
-        data["view"]["flag"] = [flags[0][0], VOTES[flags[0][0]], flags[0][1]]
-
-    data['view']['rating'] = int(round((health*votes_val)/2))
 
 def save_visited(files):
     if not g.search_bot:

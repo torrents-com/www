@@ -8,7 +8,13 @@ VERIFIED_VOTE = "f1"
 GENERIC_BAD_VOTE = "f6"
 REAL_VOTE_TYPES = 5
 
-torrents_probs = {"f1": 0.50, "f2": 0.25, "f3": 0.05, "f4": 0.19, "f5": 0.01}
+# votes and rating constants
+TORRENTS_PROBS = {"f1": 0.50, "f2": 0.25, "f3": 0.05, "f4": 0.19, "f5": 0.01}
+VERIFIED_THRESHOLD = 0.95
+FLAG_THRESHOLD = 0.4
+HALF_PRIZE_SEEDS = 10
+
+
 def prob_bad(bads, oks):
     return math.exp(-0.02*oks*oks-0.0002*bads*bads)
 
@@ -29,9 +35,9 @@ def evaluate_file_votes(system, users):
         system_vote_norm = (system_vote[1]+100)/200.
         rest_vote_norm = (1.-system_vote_norm)/(REAL_VOTE_TYPES-1)
 
-        system_probs = {vtype:(0.00001*p0 + 0.99999*(system_vote_norm if vtype==system_vote[0] else rest_vote_norm)) for vtype, p0 in torrents_probs.iteritems()}
+        system_probs = {vtype:(0.00001*p0 + 0.99999*(system_vote_norm if vtype==system_vote[0] else rest_vote_norm)) for vtype, p0 in TORRENTS_PROBS.iteritems()}
     else:
-        system_probs = torrents_probs
+        system_probs = TORRENTS_PROBS
 
     # adds users votes to system probs
     extra_bad = users.get(GENERIC_BAD_VOTE,0)
@@ -54,14 +60,50 @@ def evaluate_file_votes(system, users):
 
 no_votes = evaluate_file_votes({},{})
 
+def rate_torrent(data):
+    # calculate torrent health
+    try:
+        seeds = float(data['md'].get('torrent:seeds',0))
+    except:
+        seeds = 0.
+    try:
+        leechs = float(data['md'].get('torrent:leechs',0))
+    except:
+        leechs = 0.
+    health = min(1,(seeds*0.75+0.5)/(leechs+2))# int(0.2/(leechs+1.) if seeds==0 else min(1,(+1)/1.5/(+1)))
+
+    # votes and flags
+    vs = data.get("vs",{})
+    system = vs.get("s", {})
+    users = vs.get("u", {})
+    votes_val, flags = evaluate_file_votes(system, users)
+
+    # calculates file rating
+    rating = health*votes_val
+
+    # adds rating to torrents with many seeders and without negative flags
+    if votes_val>=FLAG_THRESHOLD:
+        rating = rating*.9 + (1-rating*.9)*seeds/(seeds+HALF_PRIZE_SEEDS)
+
+    # add info to file
+    res = {'content': votes_val, 'health': health, 'rating': rating, "votes": users}
+
+    # adds flags
+    if votes_val>VERIFIED_THRESHOLD:
+        res["flag"] = [VERIFIED_VOTE, VOTES[VERIFIED_VOTE], votes_val]
+    elif votes_val<FLAG_THRESHOLD:
+        res["flag"] = [flags[0][0], VOTES[flags[0][0]], (1-votes_val)*flags[0][1]]
+
+    return res
+
 if __name__ == '__main__':
     import timeit
 
     print "Performance"
-    print "No votes", timeit.timeit(lambda: evaluate_file_votes({}, {}), number=100000)
-    print "System votes", timeit.timeit(lambda: evaluate_file_votes({"f1":60}, {}), number=100000)
-    print "User votes", timeit.timeit(lambda: evaluate_file_votes({}, {"f1":10, "f3":23, "f2":12}), number=100000)
-    print "Both votes", timeit.timeit(lambda: evaluate_file_votes({"f2":60}, {"f1":10, "f3":23, "f2":12}), number=100000)
+    print "No votes", timeit.timeit(lambda: evaluate_file_votes({}, {}), number=10000)
+    print "System votes", timeit.timeit(lambda: evaluate_file_votes({"f1":60}, {}), number=10000)
+    print "User votes", timeit.timeit(lambda: evaluate_file_votes({}, {"f1":10, "f3":23, "f2":12}), number=10000)
+    print "Both votes", timeit.timeit(lambda: evaluate_file_votes({"f2":60}, {"f1":10, "f3":23, "f2":12}), number=10000)
 
     # evaluate for different system votes
     for system in [{}, {"f1":30}, {"f1":100}, {"f2":20}, {"f2":100}, {"f3":100}]:
@@ -82,3 +124,6 @@ if __name__ == '__main__':
             print "%s: %s"%(users, evaluate_file_votes(system, users))
         print
         print
+
+    print rate_torrent({"md":{"torrent:seeds":20}})
+    print rate_torrent({"md":{"torrent:seeds":5}, "vs":{"u":{"f1":100}}})

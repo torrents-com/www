@@ -38,11 +38,11 @@ function data_track(){var elm=$(this),link_href=this.href,target=this.target;var
 function data_flag(){var elm=$(this);var data=elm.data("flag");if (data.length==0) return; elm.click(function(e){e.preventDefault();e.stopImmediatePropagation();$.colorbox({html:"<div id='flag_confirm' class=''><div><h1>Flag confirmation</h1></div><p>This content has been flagged as "+data+". Do you want to download it anyway?</p>"+elm[0].outerHTML+"<a>No, thanks</a></div>", width:"600px",close:false,overlayClose:true,fixed:true});$("#flag_confirm a[data-track]").each(data_track);$("#flag_confirm a").click(function(e){$.colorbox.close()});return false})}
 
 function update_file_info(info){
-    if ("votes" in info){var v = info["votes"]; $("#report_verified .v").text(v[0]);$("#report_bad .v").text(v[1]);}
-    if ("user" in info){ $(".users .votereport > a").removeClass(); if (info["user"]=="verified") { $("#report_verified").addClass("current"); } else { $("#report_bad").addClass("current");}}
+    if ("votes" in info){var v = info["votes"]; $("#report_f1 .v").text(v[0]);$("#report_f6 .v").text(v[1]);}
+    if ("user" in info){ $(".users .votereport > a").removeClass(); if (info["user"]=="f1") { $("#report_f1").addClass("current"); } else { $("#report_f6").addClass("current"); }}
 
     if ("flag" in info){
-        $(".users .current_flag").html("<span class='icon "+info['flag'].toLowerCase()+"'>"+info["flag"]+"</span>");
+        $(".users .current_flag").html("<span class='icon "+info['flag'][0]+"'>"+info["flag"][1]+"</span>");
     } else {
         $(".users .current_flag").html("");
     }
@@ -83,7 +83,7 @@ $(function(){
              .always(function(info){
                     if (info) {
                         update_file_info(info);
-                        var no_alert = ("user" in info) && (info["user"]=="verified" || info["user"]=="bad");
+                        var no_alert = ("user" in info) && (info["user"]=="f1" || info["user"]=="f6");
                         if (no_alert) hide_alert("report");
                         else if ("ret" in info) show_alert.apply(window,info["ret"]);
                     } else {

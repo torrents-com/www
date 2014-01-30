@@ -21,7 +21,7 @@ from torrents.services import *
 from torrents.multidomain import MultidomainBlueprint
 from torrents.templates import clean_query, singular_filter
 from torrents import Category
-from torrents.votes import VOTES, VOTE_CODES, VERIFIED_VOTE, evaluate_file_votes
+from torrents.votes import VOTES, VERIFIED_VOTE, evaluate_file_votes
 from unicodedata import normalize
 
 files = MultidomainBlueprint('files', __name__, domain="torrents.fm")
@@ -228,13 +228,12 @@ def vote(fileid, vtype=None):
         return jsonify(result)
 
     if vtype:
-        vote_code = VOTE_CODES.get(vtype, None)
-        if not vote_code:
+        if not vtype in VOTES:
             logging.warn("Wrong vote type: %s."%unicode(vtype))
             return jsonify(result)
 
         try:
-            filesdb.update_file({"_id":filemid, "vs.u.%s"%userid:vote_code})
+            filesdb.update_file({"_id":filemid, "vs.u.%s"%userid:vtype})
             result["ret"] = ["report", "Your report has been registered.", "info"]
         except BaseException as e:
             logging.warn("Error registering vote.")
@@ -249,8 +248,8 @@ def vote(fileid, vtype=None):
         result["rating"] = f["view"]["rating"]
 
         user_vote = f["file"].get("vs",{}).get("u",{}).get(userid,None)
-        if user_vote:
-            result["user"] = VOTES[user_vote]
+        if user_vote and user_vote in VOTES:
+            result["user"] = user_vote
     except BaseException as e:
         logging.error("Error retrieving file information: %s."%str(filemid))
 
@@ -1007,11 +1006,9 @@ def calculate_file_info(data):
     votes_val, flags = evaluate_file_votes(system, users)
 
     if votes_val>0.95:
-        data["view"]["flag"] = VOTES[VERIFIED_VOTE]
-        data["view"]["flag_trust"] = votes_val
+        data["view"]["flag"] = [VERIFIED_VOTE, VOTES[VERIFIED_VOTE], votes_val]
     elif votes_val<0.4:
-        data["view"]["flag"] = VOTES[flags[0][0]]
-        data["view"]["flag_trust"] = flags[0][1]
+        data["view"]["flag"] = [flags[0][0], VOTES[flags[0][0]], flags[0][1]]
 
     data['view']['rating'] = int(round((health*votes_val)/2))
 

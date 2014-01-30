@@ -34,11 +34,11 @@ $redhealth:#F2602E;
 }
 .icon {
     vertical-align:middle; background:url(/static/icons.png?4) top left no-repeat; @include inline-block();
-    &.warn-poor { background-position: -0px -0px; width: 27px; height: 24px; }
-    &.warn-virus { background-position: -0px -24px; width: 27px; height: 24px; }
-    &.warn-fake { background-position: -0px -48px; width: 27px; height: 24px; }
-    &.warn-pass { background-position: -0px -72px; width: 27px; height: 24px; }
-    &.verified { background-position: -0px -96px; width: 24px; height: 24px; }
+    &.big-f1 { background-position: -0px -96px; width: 24px; height: 24px; }
+    &.big-f2 { background-position: -0px -48px; width: 27px; height: 24px; }
+    &.big-f3 { background-position: -0px -72px; width: 27px; height: 24px; }
+    &.big-f4 { background-position: -0px -0px; width: 27px; height: 24px; }
+    &.big-f5 { background-position: -0px -24px; width: 27px; height: 24px; }
     &.image { background-position: -0px -120px; width: 20px; height: 20px; }
     &.download-button { background-position: -0px -140px; width: 20px; height: 20px; }
     &.anime { background-position: -0px -160px; width: 20px; height: 20px; }
@@ -65,10 +65,10 @@ $redhealth:#F2602E;
     &.all { background-position: -0px -570px; width: 18px; height: 16px; }
     &.unknown { background-position: -0px -586px; width: 16px; height: 16px; }
     &.copyright { background-position: -0px -602px; width: 14px; height: 14px; }
-    &.fake { background-position: -0px -616px; width: 14px; height: 14px; }
-    &.poor { background-position: -0px -630px; width: 14px; height: 14px; }
-    &.pass { background-position: -1px -644px; width: 14px; height: 14px; }
-    &.virus { background-position: -0px -658px; width: 14px; height: 14px; }
+    &.f2 { background-position: -0px -616px; width: 14px; height: 14px; }
+    &.f3 { background-position: -1px -644px; width: 14px; height: 14px; }
+    &.f4 { background-position: -0px -630px; width: 14px; height: 14px; }
+    &.f5 { background-position: -0px -658px; width: 14px; height: 14px; }
     &.star-no-small { background-position: -14px -602px; width: 12px; height: 12px; }
     &.star-small { background-position: -14px -614px; width: 12px; height: 12px; }
     &.download-ind { background-position: -16px -586px; width: 11px; height: 11px; }
@@ -709,12 +709,12 @@ ul.browse {
                     vertical-align:middle;
                     margin:0 2px;
                 }
-                &#report_verified {
+                &#report_f1 {
                     border-color:$green;
                     margin-right:10px;
                     &.current { background-color: $green}
                 }
-                &#report_bad {
+                &#report_f6 {
                     border-color:$lightred;
                     &.current { background-color: $lightred}
                 }
@@ -737,7 +737,7 @@ ul.browse {
             margin-top:8px; margin-bottom:0;text-align:left;
             span {
                 @include inline-block(); padding-left:30px; height:24px;line-height:24px; font-weight:bold; font-size:1.2em; color:$redfont;
-                &.verified {color:$black}
+                &.big-f1 {color:$black}
             }
         }
 

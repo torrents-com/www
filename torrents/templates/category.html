@@ -34,7 +34,7 @@
     </div>
 {%- else %}
 <div class="text_page">
-    <p>{{_("no_results_cat", category=g.category.title|singular, query=g.query)}}</p>
+    <p>{{_("no_results_cat", category=g.category.title|singular, categorys=g.category.title, query=g.query)}}</p>
     <p>{{_("no_results_cat_sorry")}}</p>
 </div>
 {%- endif %}

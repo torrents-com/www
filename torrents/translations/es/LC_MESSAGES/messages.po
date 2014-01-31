@@ -568,6 +568,22 @@ msgstr "Verificado"
 msgid "Your report has been registered."
 msgstr "Su voto ha sido registrado."
 
+msgid "Flagged content"
+msgstr "Contenido inapropiado"
+msgid "This content has been flagged as $FLAG$. Do you want to download it anyway?"
+msgstr "Este contenido ha sido marcado como $FLAG$. ¿Deseas descargarlo de todas formas?"
+msgid "No, thanks"
+msgstr "No, gracias"
+
+msgid "Possible fake file"
+msgstr "Probable fichero falso"
+msgid "Possible virus"
+msgstr "Probable virus"
+msgid "Possible password protected"
+msgstr "Probable contraseña"
+msgid "Possible low quality"
+msgstr "Probable baja calidad"
+
 # dates
 msgid "year"
 msgstr "año"

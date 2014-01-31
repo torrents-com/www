@@ -36,7 +36,7 @@
         <div class="grid_3 alpha">
             <div class="rating">{{"<span class='icon star'></span>"|safe*(file_data['view']['rating5'])}}{{"<span class='icon star-no'></span>"|safe*(5-file_data['view']['rating5'])}}</div>
         </div>
-        <div class="grid_4 votereport">
+        <div class="grid_3 votereport">
             <a title="{{_('I like it')}}" href="#" id="report_f1"><span class='icon thumbup'></span><span class="v">{{file_data['view']['votes'][0] if "votes" in file_data['view'] else "0"}}</span></a>
             <div id="report" class="dropdown dropdown-tip">
                 <ul class="dropdown-menu">
@@ -50,7 +50,7 @@
             </div>
             <a title="{{_('Problems')}}" data-vertical-offset="-1" data-dropdown="#report" href="#" id="report_f6"><span class='icon thumbdown'></span><span class="v">{{file_data['view']['votes'][1] if "votes" in file_data['view'] else "0"}}</span></a>
         </div>
-        <div class="grid_4 current_flag">
+        <div class="grid_5 current_flag">
             {%- if 'flag' in file_data['view'] %}
             <div><span class="icon {{'possible' if not file_data['view']['flag'][2]}} big-{{file_data['view']['flag'][0]}}">{{file_data['view']['flag_text']}}</span></div>
             {%- endif %}

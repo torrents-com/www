@@ -75,7 +75,10 @@
             data-no_trailer="{{_('No trailer available')}}"
             data-message_sent="{{_('The message has been sent successfully.')}}"
             data-write_something="{{_('Write something!')}}"
-            data-error_vote="{{_('There was an error registering your vote. Please, try again.')}}">
+            data-error_vote="{{_('There was an error registering your vote. Please, try again.')}}"
+            data-flagged_title="{{_('Flagged content')}}"
+            data-flagged_desc="{{_('This content has been flagged as $FLAG$. Do you want to download it anyway?')}}"
+            data-no_thanks="{{_('No, thanks')}}">
         {%- if g.offer_downloader %}
             <div id="dialog" data-dialog_ok="OK" data-dialog_no="No" data-dialog_yes="Yes"></div>
         {%- endif %}

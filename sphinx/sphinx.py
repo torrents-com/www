@@ -113,8 +113,8 @@ def get_definitions():
                 "field": "_r2",
                 "field_type": int
             },
-            {"name":"h", "type":"float", "default":0,          # Health
-                "field": "_h",
+            {"name":"d", "type":"float", "default":0,          # Seeders
+                "field": "_d",
                 "field_type": float
             },
             {"name":"s", "type":"multi",                       # Source type
@@ -187,7 +187,7 @@ def init_file(afile):
 
     rate = rate_torrent(afile)
     afile["_r"] = rate["rating"]*10
-    afile["_h"] = rate["health"]
+    afile["_d"] = rate["seeders"]
 
     inner_group = 0
 

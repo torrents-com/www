@@ -701,7 +701,7 @@ ul.browse {
         >div { margin-top:10px; margin-bottom:10px;}
 
         .votereport {
-            margin-top:9px; margin-bottom:0;
+            margin-top:8px; margin-bottom:0;
             >a {
                 @include inline-block(); text-align:center; border-radius:5px; border:1px solid; text-decoration:none; font-size: 1.2em; padding:2px 4px; color: $black; outline: none;
 
@@ -711,11 +711,13 @@ ul.browse {
                 }
                 &#report_f1 {
                     border-color:$green;
+                    background-color: $lightgreen;
                     margin-right:10px;
                     &.current { background-color: $green}
                 }
                 &#report_f6 {
                     border-color:$lightred;
+                    background-color: $verylightred;
                     &.current { background-color: $lightred}
                 }
             }

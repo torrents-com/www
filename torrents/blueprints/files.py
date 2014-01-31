@@ -980,9 +980,19 @@ def torrents_data(data, details=False, current_category_tag=None):
     data["view"]["providers"] = providers
     data["view"]["seo-fn"] = data["view"]["nfn"].replace(" ","-")
 
-    rate = rate_torrent(data["file"])
+    data["file"]["rate"] = rate = rate_torrent(data["file"])
+
     if "flag" in rate:
-        data['view']['flag'] = rate["flag"]
+        flag = rate["flag"]
+        data['view']['flag'] = flag
+
+        # bad flags can be only possible and must used to warn user
+        if flag[0]=="f1":
+            data['view']['flag_text'] = flag[1]
+        else:
+            data['view']['flag_text'] = flag[1] if flag[2] else 'Possible '+flag[1].lower()
+            data['view']['flag_warn'] = data['view']['flag_text']
+
     data['view']['rating5'] = int(round(rate["rating"]*5))
     data['view']['health10'] = int(round(rate["health"]*10))
     data["view"]["votes"] = (rate["votes"].get(VERIFIED_VOTE,0), sum(value for vtype, value in rate["votes"].iteritems() if vtype!=VERIFIED_VOTE))

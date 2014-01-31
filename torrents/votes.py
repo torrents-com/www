@@ -12,6 +12,7 @@ REAL_VOTE_TYPES = 5
 TORRENTS_PROBS = {"f1": 0.50, "f2": 0.25, "f3": 0.05, "f4": 0.19, "f5": 0.01}
 VERIFIED_THRESHOLD = 0.95
 FLAG_THRESHOLD = 0.4
+TRUSTED_FLAG_THRESHOLD = 0.6
 HALF_PRIZE_SEEDS = 10
 
 
@@ -92,7 +93,7 @@ def rate_torrent(data):
     if votes_val>VERIFIED_THRESHOLD:
         res["flag"] = [VERIFIED_VOTE, VOTES[VERIFIED_VOTE], votes_val]
     elif votes_val<FLAG_THRESHOLD:
-        res["flag"] = [flags[0][0], VOTES[flags[0][0]], (1-votes_val)*flags[0][1]]
+        res["flag"] = [flags[0][0], VOTES[flags[0][0]], (1-votes_val)*flags[0][1]>TRUSTED_FLAG_THRESHOLD]
 
     return res
 

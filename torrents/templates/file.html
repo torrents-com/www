@@ -52,7 +52,7 @@
         </div>
         <div class="grid_4 current_flag">
             {%- if 'flag' in file_data['view'] %}
-            <div><span class="icon big-{{file_data['view']['flag'][0]}}">{{_(file_data['view']['flag'][1])}}</span></div>
+            <div><span class="icon {{'possible' if not file_data['view']['flag'][2]}} big-{{file_data['view']['flag'][0]}}">{{file_data['view']['flag_text']}}</span></div>
             {%- endif %}
         </div>
         <div class="grid_2">
@@ -92,7 +92,7 @@
             </form>
             <div>
             {%- if file_data['view']["has_trailer"] %}<a target="_blank" id="view-trailer" data-link="{{ file_data['view']['trailer_link'] if 'trailer_link' in file_data['view']}}" data-search="{{related_query|urlencode}}+trailer" href="{{ file_data['view'].get('trailer_link','http://www.youtube.com/results?search_query='+related_query|urlencode+'+trailer')}}"><span class="icon trailer"></span> {{_("Watch trailer")}}</a>{% endif %}
-            <a class="download" data-flag="{{file_data['view'].get('flag','')}}" data-track="Download,{{'Magnet' if 'tmagnet' in file_data['view']['sources'] else 'Torrent' if 'download' in file_data['view']['sources'] else 'HTML'}},File / Big Button" data-downloader="1" href="{{file_data['view']['sources']['tmagnet']['urls'][0] if 'tmagnet' in file_data['view']['sources'] else file_data['view']['sources']['download']['urls'][0] if 'download' in file_data['view']['sources'] else file_data['view']['sources']['download_ind']['urls'][0]}}"{{ ' target="_blank"' if not 'tmagnet' in file_data['view']['sources'] and not 'download' in file_data['view']['sources']}}{{ ' rel="nofollow"' if not 'tmagnet' in file_data['view']['sources']}}><span class="icon download-button"></span> {{_("Download")}}</a></div>
+            <a class="download" data-flag="{{file_data['view'].get('flag_warn','')}}" data-track="Download,{{'Magnet' if 'tmagnet' in file_data['view']['sources'] else 'Torrent' if 'download' in file_data['view']['sources'] else 'HTML'}},File / Big Button" data-downloader="1" href="{{file_data['view']['sources']['tmagnet']['urls'][0] if 'tmagnet' in file_data['view']['sources'] else file_data['view']['sources']['download']['urls'][0] if 'download' in file_data['view']['sources'] else file_data['view']['sources']['download_ind']['urls'][0]}}"{{ ' target="_blank"' if not 'tmagnet' in file_data['view']['sources'] and not 'download' in file_data['view']['sources']}}{{ ' rel="nofollow"' if not 'tmagnet' in file_data['view']['sources']}}><span class="icon download-button"></span> {{_("Download")}}</a></div>
             <ul>
                 <li>{{_("Alternative sources")}}:</li>
                 {% if "tmagnet" in file_data['view']["sources"] %}

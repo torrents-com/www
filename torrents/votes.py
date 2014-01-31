@@ -87,7 +87,7 @@ def rate_torrent(data):
         rating = rating*.9 + (1-rating*.9)*seeds/(seeds+HALF_PRIZE_SEEDS)
 
     # add info to file
-    res = {'content': votes_val, 'health': health, 'rating': rating, "votes": users}
+    res = {'seeds':seeds+.1/(1+leechs), 'content': votes_val, 'health': health, 'rating': rating, "votes": users}
 
     # adds flags
     if votes_val>VERIFIED_THRESHOLD:

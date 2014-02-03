@@ -57,8 +57,8 @@ COLUMN_ORDERS = {
     "rfs": ("-fs", "ok DESC, r DESC, e DESC", "-fs"),
     "z": ("z", "ok DESC, r DESC, e DESC, e DESC, fs DESC", "z"),
     "rz": ("if(z>0,1/z,-1)", "ok DESC, r DESC, e DESC, e DESC, fs DESC", "if(z>0,1/z,-1)"),
-    "s": ("r", "ok DESC, e DESC, fs DESC", "r"),
-    "rs": ("if(r>0,1/r,-1)", "ok DESC, e DESC, fs DESC", "if(r>0,1/r,-1)"),
+    "s": ("d", "ok DESC, e DESC, fs DESC", "d"),
+    "rs": ("1/d", "ok DESC, e DESC, fs DESC", "1/d"),
 }
 COLUMN_ORDERS_TITLES = {
     "fs": "Recent first",
@@ -1004,7 +1004,8 @@ def torrents_data(data, details=False, current_category_tag=None):
 
     data['view']['rating5'] = int(round(rate["rating"]*5))
     data['view']['health10'] = int(round(rate["health"]*10))
-    data["view"]["votes"] = (rate["votes"].get(VERIFIED_VOTE,0), sum(value for vtype, value in rate["votes"].iteritems() if vtype!=VERIFIED_VOTE))
+    if rate["votes"]:
+        data["view"]["votes"] = (rate["votes"].get(VERIFIED_VOTE,0), sum(value for vtype, value in rate["votes"].iteritems() if vtype!=VERIFIED_VOTE))
     return data
 
 def save_visited(files):

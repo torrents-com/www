@@ -703,7 +703,7 @@ ul.browse {
         .votereport {
             margin-top:8px; margin-bottom:0;
             >a {
-                @include inline-block(); text-align:center; border-radius:5px; border:1px solid; text-decoration:none; font-size: 1.2em; padding:2px 4px; color: $black; outline: none;
+                @include inline-block(); text-align:center; border-radius:5px; border:1px solid; text-decoration:none; font-size: 1.2em; padding:2px 4px; color: $black; outline: none; min-width: 3em;
 
                 span {
                     vertical-align:middle;

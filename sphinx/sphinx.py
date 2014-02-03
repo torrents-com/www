@@ -187,7 +187,7 @@ def init_file(afile):
 
     rate = rate_torrent(afile)
     afile["_r"] = rate["rating"]*10
-    afile["_d"] = rate["seeders"]
+    afile["_d"] = rate["seeds"]
 
     inner_group = 0
 

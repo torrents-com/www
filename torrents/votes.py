@@ -17,10 +17,10 @@ HALF_PRIZE_SEEDS = 10
 
 
 def prob_bad(bads, oks):
-    return math.exp(-0.02*oks*oks-0.0002*bads*bads)
+    return math.exp(-0.05*oks*oks-0.0005*bads*bads)
 
 def prob_ok(bads, oks):
-    return math.exp(-0.0002*oks*oks-0.02*bads*bads)
+    return math.exp(-0.0005*oks*oks-0.05*bads*bads)
 
 no_votes = None
 
@@ -121,10 +121,11 @@ if __name__ == '__main__':
             print
 
         # specific user cases votes
-        for users in [{"f1":8, "f2":4}, {"f6":4}, {"f1":4, "f2":1}, {"f6":10, "f2":1}, {u'f1': 8, u'f2': 4, u'f6': 1}]:
+        for users in [{"f3":1, "f6":2}, {"f1":8, "f2":4}, {"f6":4}, {"f1":4, "f2":1}, {"f6":10, "f2":1}, {u'f1': 8, u'f2': 4, u'f6': 1}]:
             print "%s: %s"%(users, evaluate_file_votes(system, users))
         print
         print
 
     print rate_torrent({"md":{"torrent:seeds":20}})
     print rate_torrent({"md":{"torrent:seeds":5}, "vs":{"u":{"f1":100}}})
+    print rate_torrent({"md":{"torrent:seeds":67, "torrents:leechs":7}, "vs":{"u":{"f3":1, "f6":2}}})

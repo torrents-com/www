@@ -17,10 +17,10 @@ HALF_PRIZE_SEEDS = 10
 
 
 def prob_bad(bads, oks):
-    return math.exp(-0.05*oks*oks-0.0005*bads*bads)
+    return math.exp(-0.07*oks*oks-0.0007*bads*bads)
 
 def prob_ok(bads, oks):
-    return math.exp(-0.0005*oks*oks-0.05*bads*bads)
+    return math.exp(-0.0007*oks*oks-0.07*bads*bads)
 
 no_votes = None
 

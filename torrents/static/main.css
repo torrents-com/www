@@ -1122,8 +1122,8 @@ h1.extra{text-transform:none; font-weight:normal; margin:0em 0em 2em; font-size:
         border-top: 1px solid $gray;
         padding: 4em 0em;
     }
-    h2 {
-        margin-top:0;
+    h1, h2 {
+        margin:0 0 0.7em;
         line-height:inherit;
         & + article {
             padding-top: 0em;

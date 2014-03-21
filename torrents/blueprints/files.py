@@ -199,8 +199,7 @@ def pixel():
                     return pixel_response
 
                 # si toca registrar y hay resultados, registra busqueda para nubes de tags
-                ip = (request.headers.getlist("X-Forwarded-For") or [request.remote_addr])[0]
-                torrentsdb.save_search(g.query, hashlib.md5((g.safe_query+"_"+ip).encode("utf-8")).digest(), g.category.cat_id if g.category else 0)
+                torrentsdb.save_search(g.query, hashlib.md5((g.safe_query+"_"+request.remote_addr).encode("utf-8")).digest(), g.category.cat_id if g.category else 0)
         except BaseException as e:
             logging.warn("Error registering search.")
 

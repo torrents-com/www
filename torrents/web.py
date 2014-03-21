@@ -45,21 +45,6 @@ class NoSessionInterface(SessionInterface):
         pass
 
 def create_app(config=None, debug=False):
-    '''
-    Inicializa la aplicación Flask. Carga los siguientes módulos:
-     - index: página de inicio
-     - page: páginas estáticas
-     - user: gestión del usuario
-     - files: búsqueda y obtención de ficheros
-     - status: servicio de monitorización de la aplicación
-
-    Y además, inicializa los siguientes servicios:
-     - Configuración: carga valores por defecto y modifica con el @param config
-     - Web Assets: compilación y compresión de recursos estáticos
-     - i18n: detección de idioma en la URL y catálogos de mensajes
-     - Cache y auth: Declarados en el módulo services
-     - Files: Clases para acceso a datos
-    '''
     app = Flask(__name__)
     app.config.from_object(defaults)
     app.debug = debug

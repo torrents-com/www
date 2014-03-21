@@ -19,8 +19,7 @@ def cookies():
 
     # si no está aceptando...
     if not "accept" in request.args:
-        ip = (request.headers.getlist("X-Forwarded-For") or [request.remote_addr])[0]
-        if ip in spanish_ips or any(lang_code in request.accept_languages.values() for lang_code in current_app.config["SPANISH_LANG_CODES"]):
+        if request.remote_addr in spanish_ips or any(lang_code in request.accept_languages.values() for lang_code in current_app.config["SPANISH_LANG_CODES"]):
             new_value = None if current_value == "2" else "1"
         else:
             current_value = "2"

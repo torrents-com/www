@@ -255,6 +255,7 @@ def create_app(config=None, debug=False):
         if request.user_agent.browser == "msie": response.headers["X-UA-Compatible"] = "IE-edge"
         if not g.must_cache is None:
             response.headers["X-Cache-Control"] = "max-age=%d"%g.must_cache
+            response.headers["Cache-Control"] = "public, max-age=%d"%g.must_cache
         if g.cache_code:
             response.headers["X-Cache-Code"] = g.cache_code
         if g.last_modified:

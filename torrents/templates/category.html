@@ -2,7 +2,7 @@
 {%- block head -%}
     {%- if g.query and results %}
         <link rel="canonical" href="{{url_for('files.category', category=g.category.url, query=search_info['canonical_query'], _external=True)}}" />
-        {%- if search_info["total_found"]<=5 %}
+        {%- if search_info["total_found"]<5 %}
         <meta name="robots" content="noindex" />
         {%- endif %}
     {%- endif %}

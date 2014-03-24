@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 
 import os.path, re, urllib2, json, math
-from flask import render_template, current_app, g, send_from_directory, abort, make_response, request, url_for, redirect
+from flask import render_template, current_app, g, send_from_directory, abort, make_response, request, url_for
 from flask.ext.mail import Message
-from torrents.multidomain import MultidomainBlueprint
+from torrents.multidomain import MultidomainBlueprint, empty_redirect
 from foofind.utils import logging
 from foofind.utils.fooprint import Fooprint
 from foofind.services import *
@@ -108,28 +108,28 @@ def rss():
 @news.route('/news/rss')
 def old_rss():
     g.cache_code = "S"
-    return redirect(url_for("news.rss"), 301)
+    return empty_redirect(url_for("news.rss"), 301)
 
 
 @news.route('/downloader')
 def old_downloader():
     g.cache_code = "S"
-    return redirect(url_for("web.home"), 301)
+    return empty_redirect(url_for("web.home"), 301)
 
 @news.route('/popular')
 def old_popular_torrents():
     g.cache_code = "S"
-    return redirect(url_for("files.popular_torrents", interval="month"), 301)
+    return empty_redirect(url_for("files.popular_torrents", interval="month"), 301)
 
 @news.route('/recent')
 def old_recent_torrents():
     g.cache_code = "S"
-    return redirect(url_for("files.popular_torrents", interval="today"), 301)
+    return empty_redirect(url_for("files.popular_torrents", interval="today"), 301)
 
 @news.route('/popular_searches')
 def old_popular_searches():
     g.cache_code = "S"
-    return redirect(url_for("files.popular_searches", interval="today"), 301)
+    return empty_redirect(url_for("files.popular_searches", interval="today"), 301)
 
 @news.route('/robots.txt')
 def robots():
@@ -218,7 +218,7 @@ def contact():
             to = current_app.config["CONTACT_EMAIL"]
             try:
                 mail.send(Message("contact", sender=form.email.data, recipients=[to], html="<p>%s, %s</p><p>%s</p>"%(request.remote_addr, request.user_agent, form.message.data)))
-                return redirect(url_for('.home', _anchor="sent"))
+                return empty_redirect(url_for('.home', _anchor="sent"))
 
             except BaseException as e:
                 g.alert["mail_error"] = ("error", "The message has not been sent. Try again later or send mail to %s."%to)

@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import datetime, time, itertools, re, math, urllib2, hashlib, os.path, zlib
-from flask import request, render_template, redirect, url_for, g, current_app, abort, escape, jsonify, make_response, send_from_directory
+from flask import request, render_template, url_for, g, current_app, abort, escape, jsonify, make_response, send_from_directory
 from struct import pack, unpack
 from base64 import b64decode, urlsafe_b64encode, urlsafe_b64decode
 from urlparse import urlparse, parse_qs
@@ -18,7 +18,7 @@ from foofind.blueprints.files import download_search
 from foofind.blueprints.files.helpers import *
 from foofind.blueprints.files.fill_data import secure_fill_data, get_file_metadata
 from torrents.services import *
-from torrents.multidomain import MultidomainBlueprint
+from torrents.multidomain import MultidomainBlueprint, empty_redirect
 from torrents.templates import clean_query, singular_filter
 from torrents import Category
 from torrents.votes import VOTES, VERIFIED_VOTE, rate_torrent
@@ -313,7 +313,7 @@ def robots():
     full_filename = os.path.join(os.path.join(current_app.root_path, 'static'), 'robots.txt')
 
     with open(full_filename) as input_file:
-        response = make_response(input_file.read() + "\n\nUser-agent: Googlebot\nDisallow: /search/*\n"+"".join("Disallow: /%s/*\n"%cat.url for cat in g.categories) + "\n\nSitemap: " + url_for("files.dynamic_sitemap", _external=True) + "\nSitemap: "+ url_for("files.static_sitemap", _external=True))
+        response = make_response(input_file.read() + "\n\nSitemap: " + url_for("files.dynamic_sitemap", _external=True) + "\nSitemap: "+ url_for("files.static_sitemap", _external=True))
         response.mimetype='text/plain'
     return response
 
@@ -429,14 +429,14 @@ def search(query=None):
     must_redirect = get_query_info(query)
 
     if not g.query:
-        return redirect(url_for(".category", category=g.category.url, _anchor="write") if g.category else
+        return empty_redirect(url_for(".category", category=g.category.url, _anchor="write") if g.category else
                         url_for(".home", _anchor="write"))
 
     if must_redirect:
         if g.category:
-            return redirect(url_for(".category", category=g.category.url, query=g.clean_query))
+            return empty_redirect(url_for(".category", category=g.category.url, query=g.clean_query))
         else:
-            return redirect(url_for(".search", query=g.clean_query))
+            return empty_redirect(url_for(".search", query=g.clean_query))
 
     order, show_order, order_title = get_order(SEARCH_ORDER)
     if order_title:
@@ -559,7 +559,7 @@ def download(file_id, file_name=""):
                     error=404
                 else:
                     logging.warn("Identificadores numericos antiguos encontrados: %s."%e, extra={"fileid":file_id})
-                    return {"html": redirect(url_for(".download", file_id=mid2url(possible_file_id), file_name=file_name), 301),"error":301}
+                    return {"html": empty_redirect(url_for(".download", file_id=mid2url(possible_file_id), file_name=file_name), 301),"error":301}
 
             except BaseException as e:
                 logging.exception(e)
@@ -684,7 +684,7 @@ def copyright():
                 logging.exception(e)
         elif form.validate():
             pagesdb.create_complaint(dict([("ip",request.remote_addr)]+[(field.name,field.data) for field in form]))
-            return redirect(url_for('.home', _anchor="sent"))
+            return empty_redirect(url_for('.home', _anchor="sent"))
     return render_template('copyright.html',form=form)
 
 def single_search(query, category=None, not_category=None, order=None, title=None, zone="", query_time=800, skip=None, last_items=[], limit=70, max_limit=50, ignore_ids=[], show_order=None, results_template="results.html", details=False):

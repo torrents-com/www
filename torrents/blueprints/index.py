@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 import os, re, datetime
-from flask import redirect, url_for, render_template, send_from_directory, current_app, make_response, request, g
+from flask import url_for, render_template, send_from_directory, current_app, make_response, request, g
 
 from foofind.utils import logging
 from torrents.multidomain import MultidomainBlueprint

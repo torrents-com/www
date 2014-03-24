@@ -9,8 +9,13 @@ _MultidomainBlueprint__endpoint_domain = {}
 
 DOMAIN_REPLACER=re.compile(r"^(https?://)[^\/?]*(.*)$")
 
+def empty_redirect(url, code):
+    response = redirect(url, code)
+    response.data = ""
+    return response
+
 def redirect_to_domain(domain, http_code):
-    return redirect(DOMAIN_REPLACER.sub(r"\1"+domain + DOMAIN_SUFFIX + r"\2", request.url), http_code)
+    return empty_redirect(DOMAIN_REPLACER.sub(r"\1"+domain + DOMAIN_SUFFIX + r"\2", request.url), http_code)
 
 def multidomain_view(*args, **kwargs):
     domains = _MultidomainBlueprint__rule_domains[request.url_rule.rule]

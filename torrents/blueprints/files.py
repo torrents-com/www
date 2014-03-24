@@ -305,7 +305,7 @@ def user_sitemap():
                         [(subcategory, url_for(".category", category=category.url, subcategory=clean_query(subcategory))) for subcategory in category.subcategories])]
                                 for category in g.categories
                 ]
-    return render_template('sitemap.html', structure=structure, column_count=4, column_width=5)
+    return render_template('sitemap.html', canonical=url_for("files.user_sitemap", _external=True), structure=structure, column_count=4, column_width=5)
 
 @files.route('/robots.txt')
 def robots():

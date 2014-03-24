@@ -1,4 +1,7 @@
 {% extends "base.html" %}
+{%- block head -%}
+        <link rel="canonical" href="{{url_for('news.about', _external=True)}}" />
+{%- endblock -%}
 {% block content %}
 <section class="container_24 text_page" id="about">
 <h1>About us</h1>

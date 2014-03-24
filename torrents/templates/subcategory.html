@@ -1,4 +1,7 @@
 {% extends "base.html" %}
+{%- block head -%}
+    <link rel="canonical" href="{{url_for('files.category', category=g.category.url, subcategory=g.subcategory , _external=True)}}" />
+{%- endblock -%}
 {% from "helpers.html" import browse_pagination -%}
 {%- block cookies -%}
     {%- if not results %}

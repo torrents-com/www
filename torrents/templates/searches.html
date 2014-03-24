@@ -6,6 +6,9 @@
     {%- else %}<span style="color:red">&nabla;{{val2-val}}</span>
     {%- endif%}
 {%- endmacro %}
+{%- block head -%}
+        <link rel="canonical" href="{{url_for('files.popular_searches', interval=interval, _external=True)}}" />
+{%- endblock -%}
 {% block content %}
 <section class="ranking container_24" id="files_page">
     <div class="title grid_24">

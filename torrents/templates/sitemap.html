@@ -1,4 +1,7 @@
 {% extends "base.html" %}
+{%- block head -%}
+    <link rel="canonical" href="{{canonical}}" />
+{%- endblock -%}
 {% block content %}
     <div class="container_24" id="text_page">
         <h1>{{g.domain}} sitemap</h1>

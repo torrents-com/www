@@ -76,6 +76,11 @@ def home(path=""):
     g.override_header = True
     path_parts = load_html_parts(path)
 
+    #compile?
+    canonical = re.findall( 'canonical["|\'] href=["|\'](.*)["|\']', path_parts['head'])
+    if canonical:
+        path_parts['head'] = path_parts['head'].replace('<link rel="canonical" href="%s" />'%canonical[0], '<link rel="canonical" href="%s://%s%s" />' % (request.url.split(":")[0], g.domain, canonical[0] if canonical[0] != "/" else ""))
+
     if not path_parts:
         return abort(404)
 
@@ -170,7 +175,7 @@ def user_sitemap():
         structure.append([("Tags "+column_tags[0][0][0].upper()+"-"+column_tags[-1][0][0].upper(), None, column_tags)])
 
 
-    return render_template('sitemap.html', structure=structure, column_count=4, column_width=5)
+    return render_template('sitemap.html', canonical=url_for("news.user_sitemap", _external=True), structure=structure, column_count=4, column_width=5)
 
 @news.route('/about')
 def about():

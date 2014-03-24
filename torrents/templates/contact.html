@@ -1,4 +1,7 @@
 {% extends "base.html" %}
+{%- block head -%}
+        <link rel="canonical" href="{{url_for('news.contact', _external=True)}}" />
+{%- endblock -%}
 {% from "helpers.html" import render_field -%}
 {% block content %}
 <section class="container_24 text_page" id="contact">

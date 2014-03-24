@@ -1,5 +1,8 @@
 {% extends "base.html" %}
 {% from "helpers.html" import browse_pagination -%}
+{%- block head -%}
+        <link rel="canonical" href="{{url_for('files.popular_torrents', interval=interval, _external=True)}}" />
+{%- endblock -%}
 {% block content %}
 <section class="container_24" id="files_page">
 <div class="grid_24">

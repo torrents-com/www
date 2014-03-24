@@ -1,7 +1,10 @@
 {% extends "base.html" %}
 {%- block head -%}
-    {%- if g.query and g.query!=search_info["canonical_query"] %}
+    {%- if g.query and results %}
         <link rel="canonical" href="{{url_for('files.category', category=g.category.url, query=search_info['canonical_query'])}}" />
+        {%- if search_info["total_found"]<=5 %}
+        <meta name="robots" content="noindex" />
+        {%- endif %}
     {%- endif %}
 {%- endblock -%}
 {%- block cookies -%}

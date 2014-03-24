@@ -9,7 +9,7 @@ _MultidomainBlueprint__endpoint_domain = {}
 
 DOMAIN_REPLACER=re.compile(r"^(https?://)[^\/?]*(.*)$")
 
-def empty_redirect(url, code):
+def empty_redirect(url, code=302):
     response = redirect(url, code)
     response.data = ""
     return response

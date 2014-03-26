@@ -76,13 +76,13 @@ def home(path=""):
     g.override_header = True
     path_parts = load_html_parts(path)
 
-    #compile?
-    canonical = re.findall( 'canonical["|\'] href=["|\'](.*)["|\']', path_parts['head'])
-    if canonical:
-        path_parts['head'] = path_parts['head'].replace('<link rel="canonical" href="%s" />'%canonical[0], '<link rel="canonical" href="%s://%s%s" />' % (request.url.split(":")[0], g.domain, canonical[0] if canonical[0] != "/" else ""))
-
     if not path_parts:
         return abort(404)
+
+    if "head" in path_parts:
+        canonical = re.findall( 'canonical["|\'] href=["|\'](.*)["|\']', path_parts['head'])
+        if canonical:
+            path_parts['head'] = path_parts['head'].replace('<link rel="canonical" href="%s" />'%canonical[0], '<link rel="canonical" href="%s://%s%s" />' % (request.url.split(":")[0], g.domain, canonical[0] if canonical[0] != "/" else ""))
 
     if not path:
         g.keywords.clear()

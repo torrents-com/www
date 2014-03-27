@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {%- block head -%}
     {%- if results %}
-        <link rel="canonical" href="{{url_for('files.search', query=search_info['canonical_query'], _external=True)}}" />
+        <link rel="canonical" href="{{url_for('files.search', query=search_info['canonical_query'], _external=True, _secure=False)}}" />
         {%- if search_info["total_found"]<5 %}
         <meta name="robots" content="noindex" />
         {%- endif %}

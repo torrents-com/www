@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% from "helpers.html" import small_banner -%}
 {%- block head -%}
-    <link rel="canonical" href="{{url_for('files.browse_category', category=g.category.url, _external=True)}}" />
+    <link rel="canonical" href="{{url_for('files.browse_category', category=g.category.url, _secure=False, _external=True)}}" />
 {%- endblock -%}
 {%- block content -%}
 <section class="container_24" id="files_top">

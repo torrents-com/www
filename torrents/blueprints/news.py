@@ -142,14 +142,14 @@ def robots():
     full_filename = os.path.join(os.path.join(current_app.root_path, 'static'), 'robots.txt')
 
     with open(full_filename) as input_file:
-        response = make_response(input_file.read() + "\nSitemap: "+ url_for("news.main_sitemap", _external=True) + "\nSitemap: "+ url_for(".static_sitemap", _external=True))
+        response = make_response(input_file.read() + "\nSitemap: "+ url_for("news.main_sitemap", _external=True, _secure=False) + "\nSitemap: "+ url_for(".static_sitemap", _external=True, _secure=False))
         response.mimetype='text/plain'
     return response
 
 @news.route('/st_sitemap.xml')
 def static_sitemap():
     g.cache_code += "SN"
-    pages = [url_for(page, _external=True) for page in ("news.home", ".about", ".legal", ".contact")]
+    pages = [url_for(page, _external=True, _secure=False) for page in ("news.home", ".about", ".legal", ".contact")]
     response = make_response(render_template('sitemap.xml', pages = pages))
     response.mimetype='text/xml'
     return response

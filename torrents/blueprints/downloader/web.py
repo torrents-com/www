@@ -52,7 +52,7 @@ def robots():
     full_filename = os.path.join(os.path.join(current_app.root_path, 'static'), 'robots.txt')
 
     with open(full_filename) as input_file:
-        response = make_response(input_file.read() + "\nSitemap: " + url_for(".sitemap", _external=True))
+        response = make_response(input_file.read() + "\nSitemap: " + url_for(".sitemap", _external=True, _secure=False))
         response.mimetype='text/plain'
     return response
 
@@ -72,7 +72,7 @@ def user_sitemap():
 @web.route('/sitemap.xml')
 def sitemap():
     g.cache_code += "S"
-    response = make_response(render_template('sitemap.xml', pages = [url_for(".home", _external=True)]))
+    response = make_response(render_template('sitemap.xml', pages = [url_for(".home", _external=True, _secure=False)]))
     response.mimetype='text/xml'
     return response
 

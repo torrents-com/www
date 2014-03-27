@@ -282,12 +282,12 @@ def opensearch():
 @files.route('/st_sitemap.xml')
 def static_sitemap():
     g.cache_code = "S"
-    pages = [url_for(page, _external=True) for page in (".home", ".copyright")]
-    pages.extend(url_for(".browse_category", category=category.url, _external=True) for category in g.categories)
-    pages.extend(url_for(".category", category=category.url, _external=True) for category in g.categories)
-    pages.extend(url_for(".category", category=category.url, subcategory=clean_query(subcategory), _external=True) for category in g.categories for subcategory in category.subcategories)
-    pages.extend(url_for(".popular_searches", interval=interval, _external=True) for interval in POPULAR_SEARCHES_INTERVALS.iterkeys())
-    pages.extend(url_for(".popular_torrents", interval=interval, _external=True) for interval in POPULAR_TORRENTS_INTERVALS.iterkeys())
+    pages = [url_for(page, _external=True, _secure=False) for page in (".home", ".copyright")]
+    pages.extend(url_for(".browse_category", category=category.url, _external=True, _secure=False) for category in g.categories)
+    pages.extend(url_for(".category", category=category.url, _external=True, _secure=False) for category in g.categories)
+    pages.extend(url_for(".category", category=category.url, subcategory=clean_query(subcategory), _external=True, _secure=False) for category in g.categories for subcategory in category.subcategories)
+    pages.extend(url_for(".popular_searches", interval=interval, _external=True, _secure=False) for interval in POPULAR_SEARCHES_INTERVALS.iterkeys())
+    pages.extend(url_for(".popular_torrents", interval=interval, _external=True, _secure=False) for interval in POPULAR_TORRENTS_INTERVALS.iterkeys())
     response = make_response(render_template('sitemap.xml', pages = pages))
     response.mimetype='text/xml'
     return response
@@ -316,7 +316,11 @@ def robots():
     full_filename = os.path.join(os.path.join(current_app.root_path, 'static'), 'robots.txt')
 
     with open(full_filename) as input_file:
-        response = make_response(input_file.read() + "\n\nSitemap: " + url_for("files.dynamic_sitemap", _external=True) + "\nSitemap: "+ url_for("files.static_sitemap", _external=True))
+        response_content = input_file.read() + "\nSitemap: "+ url_for("files.static_sitemap", _external=True, _secure=False)
+        if g.lang==g.langs[0]:
+            response_content += "\n\nSitemap: " + url_for("files.dynamic_sitemap", _external=True, _secure=False)
+
+        response = make_response(response_content)
         response.mimetype='text/plain'
     return response
 
@@ -687,7 +691,7 @@ def copyright():
                 file_name = request.form.get("file_name",None)
                 data = torrents_data(get_file_metadata(url2mid(file_id), file_name))
                 if data:
-                    form.urlreported.data=url_for("files.download",file_id=file_id,file_name=file_name,_external=True)
+                    form.urlreported.data=url_for("files.download",file_id=file_id,file_name=file_name,_external=True, _secure=False)
                     form.linkreported.data=data['view']["sources"]["tmagnet"]["urls"][0] if "tmagnet" in data['view']["sources"] else data['view']["sources"]["download"]["urls"][0] if "download" in data['view']["sources"] else data['view']["sources"]["download_ind"]["urls"][0]
             except BaseException as e:
                 logging.exception(e)

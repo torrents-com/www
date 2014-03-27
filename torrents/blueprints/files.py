@@ -282,12 +282,12 @@ def opensearch():
 @files.route('/st_sitemap.xml')
 def static_sitemap():
     g.cache_code = "S"
-    pages = [url_for(page, _external=True, _secure=False) for page in (".home", ".copyright")]
-    pages.extend(url_for(".browse_category", category=category.url, _external=True, _secure=False) for category in g.categories)
-    pages.extend(url_for(".category", category=category.url, _external=True, _secure=False) for category in g.categories)
-    pages.extend(url_for(".category", category=category.url, subcategory=clean_query(subcategory), _external=True, _secure=False) for category in g.categories for subcategory in category.subcategories)
-    pages.extend(url_for(".popular_searches", interval=interval, _external=True, _secure=False) for interval in POPULAR_SEARCHES_INTERVALS.iterkeys())
-    pages.extend(url_for(".popular_torrents", interval=interval, _external=True, _secure=False) for interval in POPULAR_TORRENTS_INTERVALS.iterkeys())
+    pages = [url_for(page, _external=True) for page in (".home", ".copyright")]
+    pages.extend(url_for(".browse_category", category=category.url, _external=True) for category in g.categories)
+    pages.extend(url_for(".category", category=category.url, _external=True) for category in g.categories)
+    pages.extend(url_for(".category", category=category.url, subcategory=clean_query(subcategory), _external=True) for category in g.categories for subcategory in category.subcategories)
+    pages.extend(url_for(".popular_searches", interval=interval, _external=True) for interval in POPULAR_SEARCHES_INTERVALS.iterkeys())
+    pages.extend(url_for(".popular_torrents", interval=interval, _external=True) for interval in POPULAR_TORRENTS_INTERVALS.iterkeys())
     response = make_response(render_template('sitemap.xml', pages = pages))
     response.mimetype='text/xml'
     return response
@@ -316,9 +316,9 @@ def robots():
     full_filename = os.path.join(os.path.join(current_app.root_path, 'static'), 'robots.txt')
 
     with open(full_filename) as input_file:
-        response_content = input_file.read() + "\nSitemap: "+ url_for("files.static_sitemap", _external=True, _secure=False)
+        response_content = input_file.read() + "\nSitemap: "+ url_for("files.static_sitemap", _external=True)
         if g.lang==g.langs[0]:
-            response_content += "\n\nSitemap: " + url_for("files.dynamic_sitemap", _external=True, _secure=False)
+            response_content += "\n\nSitemap: " + url_for("files.dynamic_sitemap", _external=True)
 
         response = make_response(response_content)
         response.mimetype='text/plain'
@@ -1026,8 +1026,8 @@ class ComplaintForm(Form):
     company = TextField("Company")
     email = TextField("Email", [Required("Required field."),Email("Invalid email.")])
     phonenumber = TextField("Phone")
-    linkreported = TextField("Link reported", [Required("Required field."),Regexp("^(?!http://[^/]*torrents.(com|is|ms|fm|ag)/?.*).*$",re.IGNORECASE,"Reported link can't be a Torrents.fm page, must be the final torrent address.")])
-    urlreported = TextField("Torrents.fm URL", [Required("Required field."),URL("Torrents.fm URL must be a valid URL."),Regexp("^http://torrents.(com|is|ms|fm|ag)/",re.IGNORECASE,"Torrents.fm URL must be a Torrents.fm page.")])
+    linkreported = TextField("Link reported", [Required("Required field."),Regexp("^(?!https?://[^/]*torrents.(com|is|ms|fm|ag)/?.*).*$",re.IGNORECASE,"Reported link can't be a Torrents.fm page, must be the final torrent address.")])
+    urlreported = TextField("Torrents.fm URL", [Required("Required field."),URL("Torrents.fm URL must be a valid URL."),Regexp("^https?://torrents.(com|is|ms|fm|ag)/",re.IGNORECASE,"Torrents.fm URL must be a Torrents.fm page.")])
     reason = TextField("Complaint reason", [Required("Required field.")])
     message = TextAreaField("Message", [Required("Required field.")])
     captcha = RecaptchaField("Cylons identifier")

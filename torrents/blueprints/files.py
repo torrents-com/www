@@ -317,7 +317,7 @@ def robots():
 
     with open(full_filename) as input_file:
         response_content = input_file.read() + "\nSitemap: "+ url_for("files.static_sitemap", _external=True)
-        if g.lang==g.langs[0]:
+        if g.lang==g.langs[0] and not g.secure_request:
             response_content += "\n\nSitemap: " + url_for("files.dynamic_sitemap", _external=True)
 
         response = make_response(response_content)

@@ -1280,7 +1280,7 @@ footer{
             }
         }
         li.alternatives {
-            color:$redfont;text-align:right;margin:1em 0em 0.5em;
+            color:$redfont;text-align:right;margin:2em 0em 0.5em;line-height:2em;
             strong, a {
                 font-size:1.2em;
             }

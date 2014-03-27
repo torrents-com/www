@@ -304,7 +304,7 @@ def user_sitemap():
                     [("Popular torrents", None, [(info[-1], url_for(".popular_torrents", interval=interval)) for interval, info in POPULAR_TORRENTS_INTERVALS.iteritems()])]
                  ] + [
                     [(category.title, url_for(".browse_category", category=category.url),
-                        [("popular "+category.title.lower(),url_for(".category", category=category.url))] +
+                        [(_("popular_category", category=_(singular_filter(category.title)).lower(), categorys=_(category.title).lower()), url_for(".category", category=category.url))] +
                         [(subcategory, url_for(".category", category=category.url, subcategory=clean_query(subcategory))) for subcategory in category.subcategories])]
                                 for category in g.categories
                 ]

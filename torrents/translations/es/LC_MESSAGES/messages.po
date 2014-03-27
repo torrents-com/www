@@ -143,6 +143,12 @@ msgstr "Sitio web bajo licencia Creative Commons %(license)s."
 msgid "site_source"
 msgstr "%(source_link)s under %(source_license)s license."
 
+msgid "Fast version"
+msgstr "Versión rápida"
+
+msgid "Secure version"
+msgstr "Versión segura"
+
 msgid "Find. Download. Play!"
 msgstr "Busca. Descarga. ¡Disfruta!"
 
@@ -236,7 +242,7 @@ msgid "Popular torrents"
 msgstr "Torrents populares"
 
 msgid "Popular"
-msgstr "Más populares"
+msgstr "Populares"
 
 msgid "popular_torrents_interval"
 msgstr "Torrents populares %(interval)s"

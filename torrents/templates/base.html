@@ -212,6 +212,15 @@
                             {%- endfor %}
                         {%-endif%}
                     </li>
+                    <li class="prefix_1 grid_15 alpha omega alternatives">
+                        {%-if g.secure_request %}
+                            <a href="{{url_for('.', _secure=False)}}">{{_("Fast version")}}</a> -
+                            <strong>{{_("Secure version")}}</strong>
+                        {%-else %}
+                            <strong>{{_("Fast version")}}</strong> -
+                            <a href="{{url_for('.', _secure=True)}}">{{_("Secure version")}}</a>
+                        {%-endif%}
+                    </li>
                 </ul>
             </div>
         </footer>

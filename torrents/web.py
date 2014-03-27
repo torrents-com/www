@@ -360,6 +360,9 @@ def init_g(app):
     g.section = "torrents" if g.domain=="torrents.fm" else "downloader" if g.domain=="torrents.ms" else "news"
     g.domain_capitalized = g.domain.capitalize()
 
+    # secure?
+    g.secure_request = request.headers.get("X-SSL-Active", "No")=="Yes"
+
     # language selector
     g.langs = langs = app.config["LANGS"]
     g.translate_domains = app.config["TRANSLATE_DOMAINS"]

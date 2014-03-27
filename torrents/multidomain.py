@@ -48,6 +48,9 @@ def url_for(endpoint, **values):
     # absolute URL?
     external = values.pop("_external", False)
 
+    # force schema change?
+    schema = values.pop("_secure", None)
+
     # allows to use "." for current path
     if endpoint==".":
         endpoint = request.endpoint
@@ -61,11 +64,14 @@ def url_for(endpoint, **values):
     target_domain = values.pop("_domain", _MultidomainBlueprint__endpoint_domain.get(endpoint, None)) or g.domain
 
     # if must change anything overrides this method
-    if external or (target_domain and target_domain != g.domain) or (target_lang and target_lang!=g.lang) :
+    if external or not schema is None or (target_domain and target_domain != g.domain) or (target_lang and target_lang!=g.lang):
+        # Use https if forced or is current schema
+        schema = "https://" if schema or (schema is None and g.secure_request) else "http://"
+
         if target_lang and target_domain in g.translate_domains and target_lang!=g.langs[0]:
-            return "http://"+ target_lang + "." + target_domain + get_domain_suffix() + path
+            return schema + target_lang + "." + target_domain + get_domain_suffix() + path
         else:
-            return "http://"+ target_domain + get_domain_suffix() + path
+            return schema + target_domain + get_domain_suffix() + path
 
     return path
 

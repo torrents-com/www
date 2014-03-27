@@ -1,4 +1,8 @@
 {% extends "base.html" %}
+{%- block head -%}
+        <link rel="canonical" href="{{url_for('files.home', _external=True)[:-1]}}" />
+{%- endblock -%}
+
 {% from "helpers.html" import small_banner -%}
 {% block content %}
 <section class="container_24" id="files_top">

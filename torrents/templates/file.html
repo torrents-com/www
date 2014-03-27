@@ -1,9 +1,7 @@
 {% extends "base.html" %}
 {% from "helpers.html" import small_banner -%}
 {%- block head -%}
-    {%- if not is_canonical_filename: %}
-        <link rel="canonical" href="{{url_for('files.download', file_id=file_data["view"]["url"], file_name=file_data['view']['seo-fn'])}}" />
-    {%- endif %}
+    <link rel="canonical" href="{{url_for('files.download', file_id=file_data['view']['url'], file_name=file_data['view']['seo-fn'], _external=True)}}" />
 {%- endblock -%}
 {%- macro print_filepaths(paths) %}
     <ul class="filepaths">
@@ -36,8 +34,8 @@
         <div class="grid_3 alpha">
             <div class="rating">{{"<span class='icon star'></span>"|safe*(file_data['view']['rating5'])}}{{"<span class='icon star-no'></span>"|safe*(5-file_data['view']['rating5'])}}</div>
         </div>
-        <div class="grid_3 votereport">
-            <a title="{{_('I like it')}}" href="#" id="report_f1"><span class='icon thumbup'></span><span class="v">{{file_data['view']['votes'][0] if "votes" in file_data['view']}}</span></a>
+        <div class="grid_4 votereport">
+             <a title="{{_('I like it')}}" href="#" id="report_f1"><span class='icon thumbup'></span><span class="v">{{file_data['view']['votes'][0] if "votes" in file_data['view']}}</span></a>
             <div id="report" class="dropdown dropdown-tip">
                 <ul class="dropdown-menu">
                     <li><a id="report_f2" href="#"><span class="icon f2"></span>{{_("Fake file")}}</a></li>

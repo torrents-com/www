@@ -1,4 +1,7 @@
 {% extends "base.html" %}
+{%- block head -%}
+        <link rel="canonical" href="{{url_for('web.home', _external=True)[:-1]}}" />
+{%- endblock -%}
 {% block cookies %}
 {% if mode == "success" %}
     trackGAEvent("TD", "installed");

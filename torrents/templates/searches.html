@@ -12,6 +12,9 @@
         <a href="{{url_for('files.popular_searches', interval=search_interval)}}">{{_(search[1])}}</a>
     {%- endfor %}
 {%- endmacro %}
+{%- block head -%}
+        <link rel="canonical" href="{{url_for('files.popular_searches', interval=interval, _external=True)}}" />
+{%- endblock -%}
 {% block content %}
 <section class="ranking container_24" id="files_page">
     <div class="title grid_24">

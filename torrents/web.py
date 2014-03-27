@@ -45,21 +45,6 @@ class NoSessionInterface(SessionInterface):
         pass
 
 def create_app(config=None, debug=False):
-    '''
-    Inicializa la aplicación Flask. Carga los siguientes módulos:
-     - index: página de inicio
-     - page: páginas estáticas
-     - user: gestión del usuario
-     - files: búsqueda y obtención de ficheros
-     - status: servicio de monitorización de la aplicación
-
-    Y además, inicializa los siguientes servicios:
-     - Configuración: carga valores por defecto y modifica con el @param config
-     - Web Assets: compilación y compresión de recursos estáticos
-     - i18n: detección de idioma en la URL y catálogos de mensajes
-     - Cache y auth: Declarados en el módulo services
-     - Files: Clases para acceso a datos
-    '''
     app = Flask(__name__)
     app.config.from_object(defaults)
     app.debug = debug
@@ -273,6 +258,7 @@ def create_app(config=None, debug=False):
         if request.user_agent.browser == "msie": response.headers["X-UA-Compatible"] = "IE-edge"
         if not g.must_cache is None:
             response.headers["X-Cache-Control"] = "max-age=%d"%g.must_cache
+            response.headers["Cache-Control"] = "public, max-age=%d"%g.must_cache
         if g.cache_code:
             response.headers["X-Cache-Code"] = g.cache_code
         if g.last_modified:
@@ -289,7 +275,7 @@ def create_app(config=None, debug=False):
 
     @allerrors(app, 400, 401, 403, 404, 405, 408, 409, 410, 411, 412, 413, 414, 415, 416, 417, 418, 500, 501, 502, 503)
     def all_errors(e):
-        g.cache_code = ""
+        g.cache_code = "E"
         g.last_modified = None
 
         error = e.code if hasattr(e,"code") else 500

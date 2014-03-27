@@ -10,16 +10,32 @@ REAL_VOTE_TYPES = 5
 # votes and rating constants
 TORRENTS_PROBS = {"f1": 0.50, "f2": 0.25, "f3": 0.05, "f4": 0.19, "f5": 0.01}
 VERIFIED_THRESHOLD = 0.95
-FLAG_THRESHOLD = 0.4
+FLAG_THRESHOLD = 0.5
 TRUSTED_FLAG_THRESHOLD = 0.6
 HALF_PRIZE_SEEDS = 10
 
 
+NORM_STEPS = 100
+W_OK_BAD = 0.03     # inverse weight of ok votes for bad files
+W_BAD_BAD = 0.0007  # inverse weight of bad votes for bad files
+W_OK_OK = 0.0007    # inverse weight of ok votes for ok files
+W_BAD_OK = 0.25     # inverse weight of bad votes for ok files
+
+def prob_bad_wo_norm(bads, oks):
+    return math.exp(- W_OK_BAD * oks*oks - W_BAD_BAD * bads*bads)
+
+def prob_ok_wo_norm(bads, oks):
+    return math.exp(- W_OK_OK * oks*oks - W_BAD_OK * bads*bads)
+
+NORM_BAD = sum(prob_bad_wo_norm(bads,oks) for bads in xrange(NORM_STEPS) for oks in xrange(NORM_STEPS))
+NORM_OK = sum(prob_ok_wo_norm(bads,oks) for bads in xrange(NORM_STEPS) for oks in xrange(NORM_STEPS))
+
 def prob_bad(bads, oks):
-    return math.exp(-0.02*oks*oks-0.0002*bads*bads)
+    return prob_bad_wo_norm(bads, oks)/NORM_BAD
 
 def prob_ok(bads, oks):
-    return math.exp(-0.0002*oks*oks-0.02*bads*bads)
+    return prob_ok_wo_norm(bads, oks)/NORM_OK
+
 
 no_votes = None
 
@@ -120,10 +136,13 @@ if __name__ == '__main__':
             print
 
         # specific user cases votes
-        for users in [{"f1":8, "f2":4}, {"f6":4}, {"f1":4, "f2":1}, {"f6":10, "f2":1}, {u'f1': 8, u'f2': 4, u'f6': 1}]:
+        for users in [{"f3":1, "f6":2}, {"f1":8, "f2":4}, {"f6":4}, {"f1":4, "f2":1}, {"f6":10, "f2":1}, {u'f1': 8, u'f2': 4, u'f6': 1}]:
             print "%s: %s"%(users, evaluate_file_votes(system, users))
         print
         print
 
     print rate_torrent({"md":{"torrent:seeds":20}})
     print rate_torrent({"md":{"torrent:seeds":5}, "vs":{"u":{"f1":100}}})
+    print rate_torrent({"md":{"torrent:seeds":67, "torrents:leechs":7}, "vs":{"u":{"f3":1, "f6":2}}})
+    print rate_torrent({"md":{'torrent:leechs': 74, 'torrent:seeds': 430}, "vs":{u'u': {u'f1': 27, u'f2': 3, u'f3': 1, u'f5': 1, u'f6': 8}}})
+    print rate_torrent({"md":{'torrent:leechs': 10, 'torrent:seeds': 69}, "vs":{u'u': {u'f3': 2, u'f6': 5}}})

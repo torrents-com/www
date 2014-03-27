@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 
 import os.path, re, urllib2, json, math
-from flask import render_template, current_app, g, send_from_directory, abort, make_response, request, url_for, redirect
+from flask import render_template, current_app, g, send_from_directory, abort, make_response, request, url_for
 from flask.ext.mail import Message
-from torrents.multidomain import MultidomainBlueprint
+from torrents.multidomain import MultidomainBlueprint, empty_redirect
 from foofind.utils import logging
 from foofind.utils.fooprint import Fooprint
 from foofind.services import *
@@ -79,6 +79,11 @@ def home(path=""):
     if not path_parts:
         return abort(404)
 
+    if "head" in path_parts:
+        canonical = re.findall( 'canonical["|\'] href=["|\'](.*)["|\']', path_parts['head'])
+        if canonical:
+            path_parts['head'] = path_parts['head'].replace('<link rel="canonical" href="%s" />'%canonical[0], '<link rel="canonical" href="%s://%s%s" />' % (request.url.split(":")[0], g.domain, canonical[0] if canonical[0] != "/" else ""))
+
     if not path:
         g.keywords.clear()
         g.keywords.update(["movies", "tv", "video", "music", "torrents", "software"])
@@ -108,28 +113,28 @@ def rss():
 @news.route('/news/rss')
 def old_rss():
     g.cache_code = "S"
-    return redirect(url_for("news.rss"), 301)
+    return empty_redirect(url_for("news.rss"), 301)
 
 
 @news.route('/downloader')
 def old_downloader():
     g.cache_code = "S"
-    return redirect(url_for("web.home"), 301)
+    return empty_redirect(url_for("web.home"), 301)
 
 @news.route('/popular')
 def old_popular_torrents():
     g.cache_code = "S"
-    return redirect(url_for("files.popular_torrents", interval="month"), 301)
+    return empty_redirect(url_for("files.popular_torrents", interval="month"), 301)
 
 @news.route('/recent')
 def old_recent_torrents():
     g.cache_code = "S"
-    return redirect(url_for("files.popular_torrents", interval="today"), 301)
+    return empty_redirect(url_for("files.popular_torrents", interval="today"), 301)
 
 @news.route('/popular_searches')
 def old_popular_searches():
     g.cache_code = "S"
-    return redirect(url_for("files.popular_searches", interval="today"), 301)
+    return empty_redirect(url_for("files.popular_searches", interval="today"), 301)
 
 @news.route('/robots.txt')
 def robots():
@@ -137,7 +142,7 @@ def robots():
     full_filename = os.path.join(os.path.join(current_app.root_path, 'static'), 'robots.txt')
 
     with open(full_filename) as input_file:
-        response = make_response(input_file.read() + "\n\nUser-agent: Googlebot\nDisallow: /search/*\n"+"".join("Disallow: /%s/*\n"%cat.url for cat in g.categories) + "\nSitemap: "+ url_for("news.main_sitemap", _external=True) + "\nSitemap: "+ url_for(".static_sitemap", _external=True))
+        response = make_response(input_file.read() + "\nSitemap: "+ url_for("news.main_sitemap", _external=True) + "\nSitemap: "+ url_for(".static_sitemap", _external=True))
         response.mimetype='text/plain'
     return response
 
@@ -170,7 +175,7 @@ def user_sitemap():
         structure.append([("Tags "+column_tags[0][0][0].upper()+"-"+column_tags[-1][0][0].upper(), None, column_tags)])
 
 
-    return render_template('sitemap.html', structure=structure, column_count=4, column_width=5)
+    return render_template('sitemap.html', canonical=url_for("news.user_sitemap", _external=True), structure=structure, column_count=4, column_width=5)
 
 @news.route('/about')
 def about():
@@ -218,7 +223,7 @@ def contact():
             to = current_app.config["CONTACT_EMAIL"]
             try:
                 mail.send(Message("contact", sender=form.email.data, recipients=[to], html="<p>%s, %s</p><p>%s</p>"%(request.remote_addr, request.user_agent, form.message.data)))
-                return redirect(url_for('.home', _anchor="sent"))
+                return empty_redirect(url_for('.home', _anchor="sent"))
 
             except BaseException as e:
                 g.alert["mail_error"] = ("error", "The message has not been sent. Try again later or send mail to %s."%to)

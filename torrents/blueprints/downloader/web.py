@@ -52,7 +52,7 @@ def robots():
     full_filename = os.path.join(os.path.join(current_app.root_path, 'static'), 'robots.txt')
 
     with open(full_filename) as input_file:
-        response = make_response(input_file.read() + "\n\nUser-agent: Googlebot\nDisallow: /search/*\n"+"".join("Disallow: /%s/*\n"%cat.url for cat in g.categories) + "\nSitemap: " + url_for(".sitemap", _external=True))
+        response = make_response(input_file.read() + "\nSitemap: " + url_for(".sitemap", _external=True))
         response.mimetype='text/plain'
     return response
 
@@ -67,7 +67,7 @@ def user_sitemap():
         if g.downloader_properties["source_available"]:
             structure[0].append(("Source code", url_for('downloads.download', instfile=g.downloader_properties['source_filename'])))
 
-    return render_template('sitemap.html', structure=structure, column_count=1, column_width=22)
+    return render_template('sitemap.html', canonical=url_for("web.user_sitemap", _external=True), structure=structure, column_count=1, column_width=22)
 
 @web.route('/sitemap.xml')
 def sitemap():

@@ -48,7 +48,7 @@
             </div>
             <a title="{{_('Problems')}}" data-vertical-offset="-1" data-dropdown="#report" href="#" id="report_f6"><span class='icon thumbdown'></span><span class="v">{{file_data['view']['votes'][1] if "votes" in file_data['view']}}</span></a>
         </div>
-        <div class="grid_5 current_flag">
+        <div class="grid_4 current_flag">
             {%- if 'flag' in file_data['view'] %}
             <div><span class="icon {{'possible' if not file_data['view']['flag'][2]}} big-{{file_data['view']['flag'][0]}}">{{file_data['view']['flag_text']}}</span></div>
             {%- endif %}

@@ -12,7 +12,7 @@ foofind.services.search.search.WORD_SEARCH_MIN_LEN = 1
 import os, os.path, time
 from foofind import defaults
 from collections import OrderedDict
-from flask import Flask, g, request, render_template, redirect, abort, url_for, make_response, get_flashed_messages, current_app
+from flask import Flask, g, request, render_template, abort, url_for, make_response, get_flashed_messages, current_app
 from flask.sessions import SessionInterface
 from flask.ext.assets import Environment, Bundle
 from flask.ext.babelex import gettext as _
@@ -36,6 +36,7 @@ from torrents.blueprints.downloader import all_blueprints as downloader_blueprin
 from torrents.blueprints.downloader.web import get_downloader_properties
 from torrents.templates import register_filters
 from torrents.services import *
+from torrents.multidomain import empty_redirect, redirect_to_domain
 
 class NoSessionInterface(SessionInterface):
     def open_session(self, app, request):
@@ -238,7 +239,7 @@ def create_app(config=None, debug=False):
         init_g(current_app)
 
         if not g.domain:
-            return multidomain.redirect_to_domain(g.domains_family[0], 301)
+            return redirect_to_domain(g.domains_family[0], 301)
 
         # ignora peticiones sin blueprint
         if request.blueprint is None and request.path.endswith("/"):
@@ -249,8 +250,8 @@ def create_app(config=None, debug=False):
                 if not isinstance(query, unicode):
                     query = query.decode("utf-8")
                 query = query[query.find(u"?"):]
-                return redirect(root+path+query, 301)
-            return redirect(request.url.rstrip("/"), 301)
+                return empty_redirect(root+path+query, 301)
+            return empty_redirect(request.url.rstrip("/"), 301)
 
 
     @app.after_request
@@ -283,7 +284,7 @@ def create_app(config=None, debug=False):
 
         init_g(current_app)
         if not g.domain:
-            return multidomain.redirect_to_domain(g.domains_family[0], 301)
+            return redirect_to_domain(g.domains_family[0], 301)
 
         g.title.append(title)
         return render_template('error.html', code=str(error), title=title, description=description), error
@@ -292,6 +293,8 @@ def create_app(config=None, debug=False):
     return app
 
 def init_g(app):
+    # secure?
+    g.secure_request = request.headers.get("X-SSL-Active", "No")=="Yes"
 
     # cache por defecto
     g.must_cache = 7200
@@ -359,9 +362,6 @@ def init_g(app):
 
     g.section = "torrents" if g.domain=="torrents.fm" else "downloader" if g.domain=="torrents.ms" else "news"
     g.domain_capitalized = g.domain.capitalize()
-
-    # secure?
-    g.secure_request = request.headers.get("X-SSL-Active", "No")=="Yes"
 
     # language selector
     g.langs = langs = app.config["LANGS"]

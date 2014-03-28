@@ -295,7 +295,7 @@ def create_app(config=None, debug=False):
 def init_g(app):
     # secure?
     g.secure_request = request.headers.get("X-SSL-Active", "No")=="Yes"
-    flask.request.environ['wsgi.url_scheme'] = "https" if g.secure_request else "http"
+    request.environ['wsgi.url_scheme'] = "https" if g.secure_request else "http"
 
     # cache por defecto
     g.must_cache = 7200

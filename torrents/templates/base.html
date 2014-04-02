@@ -212,13 +212,13 @@
                             {%- endfor %}
                         {%-endif%}
                         <br/>
-                        {%-if g.secure_request %}
+                        {#{%-if g.secure_request %}
                             <a href="{{url_for('.', _secure=False)}}">{{_("Fast version")}}</a> -
                             <strong>{{_("Secure version")}}</strong>
                         {%-else %}
                             <strong>{{_("Fast version")}}</strong> -
                             <a href="{{url_for('.', _secure=True)}}">{{_("Secure version")}}</a>
-                        {%-endif%}
+                        {%-endif%}#}
                     </li>
                 </ul>
             </div>

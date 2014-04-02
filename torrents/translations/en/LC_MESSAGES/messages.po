@@ -95,7 +95,7 @@ msgid "category_desc"
 msgstr "%(query)s %(category)s torrents at Torrents.fm, the free and fast torrent search engine."
 
 msgid "popular_category"
-msgstr "popular %(category)s"
+msgstr "popular %(categorys)s"
 
 msgid "popular_category_desc"
 msgstr "Popular %(category)s torrents at Torrents.fm, the free and fast torrent search engine."

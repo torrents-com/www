@@ -15,8 +15,8 @@
 <div class="title big_icon grid_24 {{g.category.url}}">
     <span></span>
     <div>
-        <div class="lead"><a href='{{url_for("files.home")}}'>{{_("All")}}</a>&nbsp;&nbsp;<span>&gt;</span>&nbsp;&nbsp;<a href='{{url_for("files.browse_category", category=g.category.url)}}'>{{_(g.category.title)}}</a>&nbsp;&nbsp;<span>&gt;</span>&nbsp;&nbsp;{{g.subcategory or _("Popular")}}</div>
-        <h1 class="category">{%- if g.subcategory %}
+        <div class="lead" id="subcat_breadcrumbs"><a href='{{url_for("files.home")}}'>{{_("All")}}</a>&nbsp;&nbsp;<span>&gt;</span>&nbsp;&nbsp;<a href='{{url_for("files.browse_category", category=g.category.url)}}'>{{_(g.category.title)}}</a>&nbsp;&nbsp;<span>&gt;</span>&nbsp;&nbsp;{{g.subcategory or _("Popular")}}</div>
+        <h1 class="category" id="subcat_title">{%- if g.subcategory %}
             {{_("category_search_torrents", query=g.subcategory|lower, category=_(g.category.title|singular)|lower, categorys=_(g.category.title)|lower)|capitalize}}
             {%- else %}
             {{_("popular_category_torrents", category=_(g.category.title|singular)|lower, categorys=_(g.category.title)|lower)|capitalize}}

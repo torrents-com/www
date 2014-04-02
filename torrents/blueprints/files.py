@@ -305,7 +305,7 @@ def user_sitemap():
                  ] + [
                     [(category.title, url_for(".browse_category", category=category.url),
                         [(_("popular_category", category=_(singular_filter(category.title)).lower(), categorys=_(category.title).lower()), url_for(".category", category=category.url))] +
-                        [(subcategory, url_for(".category", category=category.url, subcategory=clean_query(subcategory))) for subcategory in category.subcategories])]
+                        [(subcategory, url_for(".category", category=category.url, subcategory=clean_query(subcategory)), "%s_subcat_%d"%(category.url, index)) for index, subcategory in enumerate(category.subcategories)])]
                                 for category in g.categories
                 ]
     return render_template('sitemap.html', canonical=url_for("files.user_sitemap", _external=True, _secure=False), structure=structure, column_count=4, column_width=5)

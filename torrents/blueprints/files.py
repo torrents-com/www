@@ -279,19 +279,6 @@ def opensearch():
     response.headers['content-type']='application/opensearchdescription+xml'
     return response
 
-@files.route('/st_sitemap.xml')
-def static_sitemap():
-    g.cache_code = "S"
-    pages = [url_for(page, _external=True) for page in (".home", ".copyright")]
-    pages.extend(url_for(".browse_category", category=category.url, _external=True) for category in g.categories)
-    pages.extend(url_for(".category", category=category.url, _external=True) for category in g.categories)
-    pages.extend(url_for(".category", category=category.url, subcategory=clean_query(subcategory), _external=True) for category in g.categories for subcategory in category.subcategories)
-    pages.extend(url_for(".popular_searches", interval=interval, _external=True) for interval in POPULAR_SEARCHES_INTERVALS.iterkeys())
-    pages.extend(url_for(".popular_torrents", interval=interval, _external=True) for interval in POPULAR_TORRENTS_INTERVALS.iterkeys())
-    response = make_response(render_template('sitemap.xml', pages = pages))
-    response.mimetype='text/xml'
-    return response
-
 @files.route('/sitemap/sitemap0.xml.gz')
 def dynamic_sitemap():
     pass
@@ -316,8 +303,8 @@ def robots():
     full_filename = os.path.join(os.path.join(current_app.root_path, 'static'), 'robots.txt')
 
     with open(full_filename) as input_file:
-        response_content = input_file.read() + "\nSitemap: "+ url_for("files.static_sitemap", _external=True)
-        if g.lang==g.langs[0] and not g.secure_request:
+        response_content = input_file.read()
+        if not g.secure_request:
             response_content += "\n\nSitemap: " + url_for("files.dynamic_sitemap", _external=True)
 
         response = make_response(response_content)

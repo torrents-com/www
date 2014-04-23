@@ -129,7 +129,8 @@ def generate(server, part, afilter, batch_size, output):
                     filename = u(main_src["url"].rsplit("/",1)[-1])
 
             if filename:
-                get_writer(afile["fs"], count, output, suffix).write("<url><loc>http://torrents.fm/%s-%s</loc></url>\n"%(seoize_text(filename, "-", True), mid2url(afile["_id"])))
+                first_seen = afile["fs"]
+                get_writer(first_seen, count, output, suffix).write("<url><lastmod>%s</lastmod><loc>%%s%s-%s</loc></url>\n"%(first_seen.isoformat(), seoize_text(filename, "-", True), mid2url(afile["_id"])))
 
         except BaseException as e:
             error_count += 1

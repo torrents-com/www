@@ -78,11 +78,11 @@ class InputNode:
                     if end and end[0] and name==end[0]:
                         break
 
-                    output.writelines(self.get_unique_data(name, parts))
+                    output.extend(self.get_unique_data(name, parts))
 
     def get_unique_data(self, name, parts):
         files = [open(self.input_folder+name+"."+part) for (part, size, lastmod) in parts]
-        unique_lines = {line for afile in files for line in afile}
+        unique_lines = sorted({line for afile in files for line in afile})
         for afile in files:
             afile.close()
         return unique_lines
@@ -256,8 +256,10 @@ class OutputTree:
     def _open_file(self, filename):
         return gzip.GzipFile(filename, "r", 9)
 
-    def save(self, output_folder, sitemaps_url):
+    def save(self, output_folder, files_baseurl, sitemaps_baseurl):
+        reverse_files_list = []
         main_filename = output_folder+"sitemap%d.xml.gz"
+
         for i, chunk in enumerate(self.files):
             with self._create_file(main_filename%i) as main:
                 main.write('<?xml version="1.0" encoding="UTF-8"?><sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n')
@@ -267,13 +269,16 @@ class OutputTree:
                     # si el fichero respeta los limites (lo + habitual)
                     if afile.size<=FILESIZE_HARDLIMIT:
                         sitemap_filename = afile.get_filename()+".gz"
-                        main.write('<sitemap><loc>%s%s</loc><lastmod>%s</lastmod></sitemap>\n'%(sitemaps_url, sitemap_filename, lastmod))
+                        reverse_files_list.append('<sitemap><loc>%s%s</loc><lastmod>%s</lastmod></sitemap>\n'%(sitemaps_baseurl, sitemap_filename, lastmod))
 
                         # comprueba si se debe reescribir
                         if afile.force_write or afile.lastmod > self.old_files.get(afile.start, 0):
                             with self._create_file(output_folder+sitemap_filename) as sitemap:
                                 sitemap.write('<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n')
-                                self.input_tree.copydata(afile.start, afile.end, sitemap)
+                                temp_buffer = []
+                                self.input_tree.copydata(afile.start, afile.end, temp_buffer)
+                                while temp_buffer:
+                                    sitemap.write(temp_buffer.pop() % files_baseurl)
                                 sitemap.write('</urlset>')
 
                     # para excepciones con ficheros muy grandes
@@ -286,30 +291,35 @@ class OutputTree:
                             path = path[1:]
 
                         # trocea el fichero en partes
-                        data_iter = iter(folder.get_unique_data(path[0], folder.files[path[0]]))
+                        data_iter = folder.get_unique_data(path[0], folder.files[path[0]])
                         part = list(islice(data_iter, FILESIZE_HARDLIMIT))
                         part_index=0
                         while part:
                             sitemap_filename = afile.get_filename(part_index)+".gz"
-                            main.write('<sitemap><loc>%s%s</loc><lastmod>%s</lastmod></sitemap>\n'%(sitemaps_url, sitemap_filename, lastmod))
+                            reverse_files_list.append('<sitemap><loc>%s%s</loc><lastmod>%s</lastmod></sitemap>\n'%(sitemaps_baseurl, sitemap_filename, lastmod))
                             with self._create_file(output_folder+sitemap_filename) as sitemap:
                                 sitemap.write('<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n')
-                                sitemap.writelines(part)
+                                while part:
+                                    main.write(part.pop() % files_baseurl)
                                 sitemap.write('</urlset>')
                                 part = list(islice(data_iter, FILESIZE_HARDLIMIT))
                             part_index+=1
 
+                while reverse_files_list:
+                    main.write(reverse_files_list.pop())
                 main.write('</sitemapindex>')
 
-def build(input_folder, output_folder, url, previous_folder=None):
+def build(input_folder, output_folder, files_baseurl, sitemaps_baseurl, previous_folder=None):
 
     # añade barra final a las rutas
     if input_folder[-1]!="/":
         input_folder += "/"
     if output_folder[-1]!="/":
         output_folder += "/"
-    if url[-1]!="/":
-        url += "/"
+    if files_baseurl[-1]!="/":
+        files_baseurl += "/"
+    if sitemaps_baseurl[-1]!="/":
+        sitemaps_baseurl += "/"
 
     print "Parseando estructura de entrada: "
     # parsea estructura de entrada
@@ -328,15 +338,16 @@ def build(input_folder, output_folder, url, previous_folder=None):
 
     # guarda ficheros
     print "Guardando estructura de salida."
-    output_tree.save(output_folder, url)
+    output_tree.save(output_folder, files_baseurl, sitemaps_baseurl)
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='')
     parser.add_argument('input', type=str, help='Input folder.')
     parser.add_argument('output', type=str, help='Output folder.')
-    parser.add_argument('url', type=str, help='Sitemaps folder.')
+    parser.add_argument('files_baseurl', type=str, help='Start for torrent files URLs.')
+    parser.add_argument('sitemaps_baseurl', type=str, help='Start for sitemaps URLs.')
     parser.add_argument('--previous', type=str, help='Output folder in the last execution.', default=None)
 
     params = parser.parse_args()
 
-    build(params.input, params.output, params.url, params.previous)
+    build(params.input, params.output, params.files_baseurl, params.sitemaps_baseurl, params.previous)

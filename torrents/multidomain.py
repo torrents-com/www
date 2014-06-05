@@ -23,7 +23,7 @@ def empty_redirect(url, code=302):
     return response
 
 def get_domain_suffix():
-    if DOMAIN_SUFFIX_CHECKER.match(request.url_root):
+    if DOMAIN_SUFFIX_CHECKER and DOMAIN_SUFFIX_CHECKER.match(request.url_root):
         return DOMAIN_SUFFIX
     return ""
 

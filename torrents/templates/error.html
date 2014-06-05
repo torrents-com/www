@@ -4,8 +4,8 @@
 {%- endblock -%}
 {% block content %}
 <section class="container_24" id="text_page">
-<h1>{{title}} - ERROR {{code}}</h1>
-<p>Oops! {{description}}</p>
-<p>You can go back to our <a href="/">homepage</a>.</p>
+<h1>{{_(title)}} - {{_("error_number", code=code)}}</h1>
+<p>{{_("error_desc", desc = _(description))}}</p>
+<p>{{_("You can go back to our %(link)s.", link='<a href="/">'|safe+_("homepage")+'</a>'|safe)}}</p>
 </section>
 {% endblock %}

@@ -1,0 +1,168 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: torrents\n"
+"Plural-Forms: nplurals=2; plural=(n != 1)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: en\n"
+
+msgid "torrentsfm_desc"
+msgstr "A free torrent search engine offering fast, simple, and easy access to torrent downloads in one place."
+
+msgid "site_license"
+msgstr "Website under Creative Commons %(license)s license."
+
+msgid "site_source"
+msgstr "%(source_link)s under %(source_license)s license."
+
+msgid "install_downloader"
+msgstr "INSTALL OUR FREE<br/>TORRENTS DOWNLOADER"
+
+msgid "share_responsibly"
+msgstr "<strong>SHARE RESPONSIBLY:</strong> Using Torrents Downloader for the uploading or downloading of copyrighted works without the permission or authorization of the copyright holders may be illegal and could subject you (or the ISP subscriber) to civil and/or criminal liability and penalties. There are a significant number of copyright holders who have authorized the sharing of their content for non-commercial purposes, such as some content with Creative Commons format licenses, and there is also content available in the public domain and not protected by copyright. Most commercially released popular songs are NOT currently authorized for free redistribution but require separate purchase or licensing."
+
+msgid "downloader_easy_desc"
+msgstr "Start your experience with all you need at your fingertips. No need to learn about any complex configurations."
+
+msgid "downloader_fast_desc"
+msgstr "Find instantly anything you are looking for: videos, music, software..."
+
+msgid "downloader_library_desc"
+msgstr "All your downloads are automatically organized. Browse and play anything you download!"
+
+msgid "downloader_find_desc_1"
+msgstr ""
+"Torrents Downloader is designed to be user friendly, intuitive, and safe. You can search for any kind of content in a direct way. See the"
+"progress of your downloads, control them in any way you want. View your completed downloads quickly from the app."
+
+msgid "downloader_find_desc_2"
+msgstr ""
+"We know you want to enjoy your videos, music and everything else, and spend minimal time to learn about all the boring details. "
+"That's fine, we'll take care of them! Our simplified interface will get you to the point."
+
+msgid "downloader_download_desc_1"
+msgstr ""
+"With Torrents Downloader you can now download faster than ever before. Thanks to the torrent network, the fastest P2P solution ever made, "
+"your downloads will fly."
+
+msgid "downloader_download_desc_2"
+msgstr ""
+"We take security very seriously. "
+"Torrents Downloader uses the award-winning libtorrent library, which will make your download experience safe and secure."
+
+msgid "downloader_play_desc_1"
+msgstr "You need to look no further, all your downloads are classified and ready to play from the app."
+
+msgid "downloader_play_desc_2"
+msgstr ""
+"We want you safe. In all cases we recommend you use an antivirus to defend yourself against any kind of malware downloaded from untrusted sources."
+
+msgid "downloader_play_desc_3"
+msgstr "Browse your downloads, choose from your fine collection and \"Play\"!"
+
+msgid "search_torrents"
+msgstr "%(query)s torrents"
+
+msgid "search_desc"
+msgstr "Download %(query)s torrent from Torrents.fm search engine with free, fast downloads."
+
+msgid "category_search_torrents"
+msgstr "%(query)s %(category)s torrents"
+
+msgid "page_number"
+msgstr "Page %(number)d"
+
+msgid "download_desc"
+msgstr "Download torrents from Torrents.fm"
+
+msgid "download_category_desc"
+msgstr "Download %(category)s torrents from Torrents.fm"
+
+msgid "popular_torrents_interval"
+msgstr "Popular torrents %(interval)s"
+
+msgid "popular_torrents_links"
+msgstr "You can also browse popular torrents %(links)s."
+
+msgid "popular_torrents_interval_desc"
+msgstr "These are the most popular torrents %(interval)s"
+
+msgid "popular_searches_interval"
+msgstr "Popular searches %(interval)s"
+
+msgid "category_desc"
+msgstr "%(query)s %(category)s torrents at Torrents.fm, the free and fast torrent search engine."
+
+msgid "popular_category"
+msgstr "popular %(category)s"
+
+msgid "popular_category_desc"
+msgstr "Popular %(category)s torrents at Torrents.fm, the free and fast torrent search engine."
+
+msgid "popular_category_torrents"
+msgstr "popular %(category)s torrents"
+
+msgid "popular_category_searches"
+msgstr "Popular %(category)s searches"
+
+msgid "preview_file"
+msgstr "Preview %(name)s"
+
+msgid "delta_ago"
+msgstr "%(delta)s ago"
+
+msgid "popular_searches_links"
+msgstr "You can also browse favorite torrent searches %(links)s."
+
+msgid "popular_searches_desc"
+msgstr "See up to the minute results for most popular torrent searches ranging from movies to music"
+
+msgid "no_results"
+msgstr "No results found for <strong>%(query)s</strong>."
+
+msgid "no_results_sorry"
+msgstr "Sorry, we don't have any result that matches your query. Please, try another search."
+
+msgid "no_results_cat"
+msgstr "No <strong>%(category)s</strong> torrents found for <strong>%(query)s</strong>."
+
+msgid "no_results_cat_sorry"
+msgstr "Sorry, we don't have any result that matches your query in this category. Please try another search or another category."
+
+msgid "no_results_popular_cat_sorry"
+msgstr "Sorry, we temporarily don't have any files in this category. Please try another one."
+
+msgid "no_results_subcat"
+msgstr "No <strong>%(subcategory)s</strong> torrents found in <strong>%(category)s</strong>."
+
+msgid "no_results_subcat_sorry"
+msgstr "Sorry, we temporarily don't have any files in this subcategory. Please try another one."
+
+msgid "more_category_torrents"
+msgstr "more %(category)s torrents..."
+
+msgid "copyright_text"
+msgstr ""
+"<p>Torrents.fm is a search engine, we do not host any copyrighted content and therefore we can't remove the content itself. If you are looking for content removal, you should contact the provider of that content. Nevertheless, if you believe any of the linked works are being disseminated without the appropriate authorisation from the rights holders, or that they infringe the rights of third parties, you may request that we remove them using this copyright claim form or sending a copyright claim by email. Please read this important information before doing so.</p>"
+"<p>If you knowingly misrepresent that material or activity is infringing, you may be subject to liability for damages. Accordingly, if you are not sure whether material available online infringes your copyright, we suggest that you first contact a lawyer. Please also note that your message to us may be forwarded to the party involved in the activity.</p>"
+
+msgid "copyright_instructions"
+msgstr ""
+"<p>Please follow these the instructions:</p><ul>"
+"<li>Send your copyright claim to <img src='%(static_prefix)s/copyright-email.gif' alt='Copyright claim email address.' title='Copyright claim email address.' />, in English or Spanish.</li>"
+"<li>Please, try to be nice and respect grammar so we can understand what your claims are.</li>"
+"<li>Present evidence that clearly shows that you are the copyright holder or acting on behalf of the copyright holder.</li>"
+"<li>Provide the name, the link and the URL of the final torrent that your claim refers to. Otherwise we won't be able to find it and process the claim. A link to a search results page, for example, is not a valid link for a claim. There are millions of links in Torrents.fm, if you don't provide us with uniquely identifying information, it will be almost impossible for us to find it.</li>"
+"<li>Provide sufficient contact information and an email address.</li>"
+"<li>Please, allow a few days (usually 24-48 hours) for us to process the claim, and check again the links.</li></ul>"
+
+msgid "accept_tos"
+msgstr "I have read and accept the <a href='%(legal)s#terms'>Terms of use</a> and <a href='%(legal)s#tos'>Privacy policy</a>."
+
+msgid "error_desc"
+msgstr "Oops! %(desc)s"
+
+msgid "error_number"
+msgstr "ERROR %(code)d"
+

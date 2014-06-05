@@ -3,7 +3,6 @@
 import operator, math
 
 VOTES = {"f1": "Verified", "f2": "Fake file", "f3": "Password protected", "f4": "Low quality", "f5": "Virus", "f6": "Bad"}
-VOTE_CODES = {v:k for k,v in VOTES.iteritems()}
 VERIFIED_VOTE = "f1"
 GENERIC_BAD_VOTE = "f6"
 REAL_VOTE_TYPES = 5

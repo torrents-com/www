@@ -77,7 +77,6 @@ $redhealth:#F2602E;
     &.download { background-position: -14px -648px; width: 11px; height: 11px; }
     &.download-no { background-position: -14px -659px; width: 11px; height: 11px; }
 }
-
 @mixin button()
 {
     @include inline-block();
@@ -421,6 +420,7 @@ img.error {
     #cookies_accept {
         text-align:center;
         @include redbutton();
+        text-shadow: none;
         display:block;
         border-radius: 7px;
         font-weight:700;
@@ -738,7 +738,7 @@ ul.browse {
         .current_flag {
             margin-top:8px; margin-bottom:0;text-align:left;
             span {
-                @include inline-block(); width:120px; padding-left:30px; height:24px;line-height:24px; font-weight:bold; font-size:1.2em; color:$redfont;
+                @include inline-block(); width:140px; padding-left:30px; height:24px;line-height:24px; font-weight:bold; font-size:1.2em; color:$redfont;
                 &.big-f1 {color:$black}
                 &.possible {opacity:0.6}
             }
@@ -771,6 +771,9 @@ ul.browse {
             border-radius: 9px;
             @include button();
             font-size: 1.9em;
+            &.download {
+                @include redbutton();
+            }
         }
 
         > div > a.download {@include redbutton();}
@@ -783,6 +786,7 @@ ul.browse {
             li {
                 text-align:right;display:block;margin: 0.1em 0.3em;font-size: 1em;color: $grayfont;
             }
+            li:first-child {float:left}
         }
 
     }
@@ -1239,27 +1243,25 @@ footer{
         img {margin-bottom:0}
     }
     #footer-bottom {
-        a {
-            font-size: 1.2em;
-        }
         p {
-            font-size: 1.2em;text-align:left;color:$grayfont;margin:0em 1em;
+            font-size:1.2em;text-align:left;color:$grayfont;margin:0em 1em;
             img {margin: 1em 1em 1em 0em; vertical-align:middle}
             a {font-size: inherit}
         }
         > ul {
             > li {
-                > a {
-                    text-decoration:none; margin-left:1em; line-height:1em; font-size:2.2em;color:$grayfont;
-                    img {margin:0;vertical-align:-0.6em;}
-                }
                 > ul {
                     > li {margin-bottom: 0.5em;
                         > a {
+                            font-size:1.2em;
                             text-transform:uppercase;
                             font-weight:bold;
                         }
-                        ul {margin-left:3px}
+                        ul {margin-left:3px;
+                            li > a {
+                                font-size:1.2em;
+                            }
+                        }
                     }
                 }
             }
@@ -1272,11 +1274,15 @@ footer{
             }
         }
         ul.common_links {
-            margin-bottom:1em;font-size: 1.2em;
+            margin-bottom:1em;
             li {
-                list-style-type:none;
-                margin-left:1em;margin-bottom:0.5em;
-                a {font-size: inherit}
+                list-style-type:none;font-size:1.2em;margin-left:1em;margin-bottom:0.5em;
+            }
+        }
+        li.alternatives {
+            color:$redfont;text-align:right;margin:2.7em 0em 1em;
+            strong, a {
+                font-size:1.2em;
             }
         }
     }

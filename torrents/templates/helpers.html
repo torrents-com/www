@@ -2,9 +2,9 @@
     {%- if not field %}
         <input type="hidden" name="_csrf_token" id="_csrf_token" value="{{ csrf_token() }}" />
     {%- elif field.type=="BooleanField" %}
-        <label class="errors grid_9 prefix_5 alpha clearer">{{ field }}
+        <label class="errors grid_8 prefix_5 alpha clearer">{{ field }}
         {%- if field.name=="accept_tos" -%}
-            I have read and accept the <a href="{{url_for('news.legal')}}#terms">Terms of use</a> and <a href="{{url_for('news.legal')}}#tos">Privacy policy</a>.
+             {{ _("accept_tos", legal=url_for("news.legal")) }}
         {%- else -%}
             {{ field.label.text }}
         {%- endif -%}
@@ -21,17 +21,17 @@
         {%- endfor %}
     {%- else %}
         {%- if field.type!="SubmitField" %}
-            <label class="grid_4 suffix_1 alpha clearer" for="{{ field.name }}">{% if field.flags.required %}<span title="Required field">*</span>{% endif %} {{ field.label.text|safe }}</label>
+            <label class="grid_4 suffix_1 alpha clearer" for="{{ field.name }}">{% if field.flags.required %}<span title="{{_('Required field')}}">*</span>{% endif %} {{ _(field.label.text)|safe if field.label.text}}</label>
         {%- endif %}
-        <div class="grid_9{{' alpha prefix_5' if field.type=='SubmitField' }}">{{ field(**kwargs)|safe }}{%- if field.type!="FileField" %}<span></span>{%- endif %}</div>
+        <div class="grid_8{{' alpha prefix_5' if field.type=='SubmitField' }}">{{ field(**kwargs)|safe }}{%- if field.type!="FileField" %}<span></span>{%- endif %}</div>
     {%- endif %}
     {%- if field.description %}
-        <div class="description">{{ field.description }}</div>
+        <div class="description">{{ _(field.description) }}</div>
     {%- endif %}
     {%- if field.errors %}
-        <div class="grid_4 omega"><ul class="errors">
+        <div class="grid_5 omega"><ul class="errors">
         {%- for error in field.errors %}
-            <li>{{ error }}</li>
+            <li>{{ _(error) }}</li>
         {%- endfor %}
         </ul></div>
     {%- endif %}
@@ -50,14 +50,14 @@
 {%- macro small_banner() %}
 <section id="carrusel">
     <div class="container_24">
-        <div class="grid_12">
+        <div class="grid_13">
             <img src="{{g.static_prefix}}/downloader/feature-logo-120.png" width="120" height="120" alt="Torrents Downloader preview" />
-            <span class="tagline">Find. Download. Play!</span></div>
+            <span class="tagline">{{_("Find. Download. Play!")}}</span></div>
         <div class="grid_7">
-            <h2>INSTALL OUR FREE<br/>TORRENTS DOWNLOADER</h2>
-            <p>for Windows</p>
+            <h2>{{_("install_downloader")}}</h2>
+            <p>{{_("for Windows")}}</p>
         </div>
-        <div class="grid_4 prefix_1"><a href="{{ url_for('web.home') }}">Get it Now!</a>
+        <div class="grid_4"><a href="{{ url_for('web.home') }}">{{_("Get it Now!")}}</a>
         </div>
     </div>
 </section>

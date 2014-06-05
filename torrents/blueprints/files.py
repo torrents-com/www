@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
 
 import datetime, time, itertools, re, math, urllib2, hashlib, os.path, zlib
-from flask import request, render_template, url_for, g, current_app, abort, escape, jsonify, make_response, send_from_directory
+from flask import request, render_template, redirect, url_for, g, current_app, abort, escape, jsonify, make_response, send_from_directory
+from flask.ext.babelex import gettext as _
 from struct import pack, unpack
 from base64 import b64decode, urlsafe_b64encode, urlsafe_b64decode
 from urlparse import urlparse, parse_qs
@@ -22,6 +23,7 @@ from torrents.multidomain import MultidomainBlueprint, empty_redirect
 from torrents.templates import clean_query, singular_filter
 from torrents import Category
 from torrents.votes import VOTES, VERIFIED_VOTE, rate_torrent
+
 from unicodedata import normalize
 
 files = MultidomainBlueprint('files', __name__, domain="torrents.fm")
@@ -83,7 +85,7 @@ def get_order(default_order):
     try:
         order = request.args.get("o",None)
         if order and order in COLUMN_ORDERS:
-            return COLUMN_ORDERS[order], order, COLUMN_ORDERS_TITLES[order]
+            return COLUMN_ORDERS[order], order, _(COLUMN_ORDERS_TITLES[order])
     except:
         pass
     return default_order, None, None
@@ -244,7 +246,7 @@ def vote(vtype):
         updated_votes = torrentsdb.save_vote(filemid, userid, vtype)
         filesdb.update_file({"_id":filemid, "vs.u":Counter(updated_votes.itervalues())})
         result["user"] = vtype
-        result["ret"] = ["report", "Your report has been registered.", "info"]
+        result["ret"] = ["report", _("Your report has been registered."), "info"]
     except BaseException as e:
         logging.warn("Error registering vote.")
         return jsonify(result)
@@ -256,6 +258,7 @@ def vote(vtype):
         result["votes"] = (rate["votes"].get(VERIFIED_VOTE,0), sum(value for vtype, value in rate["votes"].iteritems() if vtype!=VERIFIED_VOTE))
         if "flag" in rate:
             result["flag"] = rate["flag"]
+            result['flag'][1] = _(result['flag'][1]) # translate flag text
         result["rating"] = int(round(rate["rating"]*5))
 
     except BaseException as e:
@@ -326,8 +329,8 @@ def home():
     g.category=False
     g.cache_code = "B"
 
-    g.title.append("Torrents Search Engine")
-    g.page_description = "A free, fast, easy to use search engine for Torrents"
+    g.title.append(_("Torrents Search Engine"))
+    g.page_description = _("A free, fast, easy to use search engine for Torrents.")
     g.keywords.clear()
     g.keywords.update(["torrent files", "search engine", "download", "movies", "games", "music", "tv shows software"])
 
@@ -344,10 +347,10 @@ def browse_category(category):
     get_query_info(None, category)
     g.must_cache = 7200
 
-    g.title.append(singular_filter(g.category.title) + " torrents")
+    g.title.append(_(singular_filter(g.category.title) + " torrents"))
     pop_searches = torrentsdb.get_ranking(category)["final_ranking"]
 
-    g.page_description = "Popular %s torrents at %s, the free and fast torrent search engine."%(singular_filter(g.category.title).capitalize(), g.domain_capitalized)
+    g.page_description = _("popular_category_desc", category=_(singular_filter(g.category.title)).lower(), categorys=_(g.category.title).lower()).capitalize()
 
     return render_template('browse_category.html', pop_searches = pop_searches)
 
@@ -366,9 +369,8 @@ def popular_searches(interval):
     g.category=False
     g.keywords.clear()
     g.keywords.update(["popular torrent", "free movie", "full download", "search engine", "largest"])
-    g.page_description = "Torrents.com is a free torrent search engine that offers users fast, simple, easy access to every torrent in one place."
-    g.title.append("Popular searches "+interval_info[1])
-    g.h1 = "See up to the minute results for most popular torrent searches ranging from movies to music"
+    g.page_description = _("torrentsfm_desc")
+    g.title.append(_("popular_searches_interval", interval=_(interval_info[1])))
 
     ranking = torrentsdb.get_ranking(interval_info[0])
 
@@ -382,19 +384,18 @@ def popular_torrents(interval):
         abort(404)
 
     g.category = False
-    g.title.append("Popular torrents "+interval_info[1])
+    g.title.append(_("popular_torrents_interval", interval=_(interval_info[1])))
 
     pages_limit = 10
     page_size = 30
     skip = get_skip(pages_limit)
     if skip>0:
-        g.title.append("Page %d" % (int(skip) + 1))
+        g.title.append(_("page_number", number=int(skip) + 1))
 
     results, search_info = single_search(None, "torrent", "porn", order=interval_info[0], zone="Popular", title=("Popular torrents", 2, None), skip=skip, show_order=None, results_template = "browse.html", details=True, limit=page_size, max_limit=page_size)
     g.keywords.clear()
     g.keywords.update(["torrent", "torrents", "search engine", "popular downloads", "online movies"])
-    g.page_description = "%s is a free torrent search engine that offers users fast, simple, easy access to every torrent in one place." % g.domain_capitalized
-    g.h1 = " These are the most popular torrents %s"%interval_info[1]
+    g.page_description = _("torrentsfm_desc")
 
     pagination = get_browse_pagination(search_info, skip, page_size, pages_limit)
 
@@ -444,7 +445,7 @@ def search(query=None):
 
     skip = get_skip()
     if skip>0:
-        g.title.append("Page %d" % (int(skip) + 1))
+        g.title.append(_("page_number", number=int(skip) + 1))
 
     group_count_search = start_guess_categories_with_results(g.query)
 
@@ -452,7 +453,7 @@ def search(query=None):
 
     g.title.append(g.query)
 
-    g.page_description = "Download %s torrent from %s search engine with free, fast downloads." % (g.query, g.domain_capitalized)
+    g.page_description = _("search_desc", query=g.query)
 
     if search_bot:
         searchd.log_bot_event(search_bot, (search_info["total_found"]>0 or search_info["sure"]))
@@ -480,14 +481,18 @@ def category(category, query=None, subcategory=None):
 
     group_count_search = pop_searches = None
     results_template = "browse.html"
-    page_title = singular_filter(g.category.title)+" torrents"
+
+    page_title = _(singular_filter(g.category.title)+" torrents")
     limit = 150
     page_size = 30
     pages_limit = 10
 
+    _category = _(singular_filter(g.category.title)).lower()
+    _categorys = _(g.category.title).lower()
+
     if g.query:
-        page_title = g.query.capitalize()+" "+page_title.lower()
-        g.page_description = "%s %s torrents at %s, the free and fast torrent search engine."%(g.query.capitalize(), singular_filter(g.category.title).lower(), g.domain_capitalized)
+        page_title = _("category_search_torrents", query=g.query, category=_category, categorys=_categorys).capitalize()
+        g.page_description = _("category_desc", query=g.query,  category=_category, categorys=_categorys).capitalize()
         order, show_order, order_title = get_order(SEARCH_ORDER)
         group_count_search = start_guess_categories_with_results(g.query)
         results_template = "results.html"
@@ -497,17 +502,17 @@ def category(category, query=None, subcategory=None):
         if not g.subcategory:
             return abort(404)
         g.cache_code = "B"
-        page_title = g.subcategory.capitalize()+" "+page_title.lower()
-        g.page_description = "%s %s torrents at %s, the free and fast torrent search engine."%(g.subcategory.capitalize(), singular_filter(g.category.title).lower(), g.domain_capitalized)
+        page_title = _("category_search_torrents", query=g.subcategory, category=_(singular_filter(g.category.title)).lower(), categorys=_(g.category.title).lower()).capitalize()
+        g.page_description = _("category_desc", query=g.subcategory, category=_category, categorys=_categorys).capitalize()
         order, show_order, order_title = get_order(SUBCATEGORY_ORDER)
     else:
-        page_title = "Popular "+page_title.lower()
-        g.page_description = "Popular %s torrents at %s, the free and fast torrent search engine."%(singular_filter(g.category.title).capitalize(), g.domain_capitalized)
+        page_title = _("popular_category", category=_(singular_filter(g.category.title)).lower(), categorys=_(g.category.title).lower()).capitalize()
+        g.page_description = _("popular_category_desc", category=_category, categorys=_categorys).capitalize()
         order, show_order, order_title = get_order(CATEGORY_ORDER)
 
     skip = get_skip(pages_limit)
     if skip>0:
-        g.title.append("Page %d" % (int(skip) + 1))
+        g.title.append(_("page_number", number=int(skip) + 1))
 
     if order_title:
         g.title.append(order_title)
@@ -626,7 +631,11 @@ def download(file_id, file_name=""):
         page_description = file_data["view"]["md"]["description"].replace("\n", " ")
 
     if not page_description:
-        page_description = "Download %s torrents from %s" % (file_data["view"]['file_type'].capitalize() if file_data["view"]['file_type'] != "unknown" else "All", g.domain_capitalized)
+        if g.category:
+            page_description = _("download_category_desc", category=singular_filter(g.category.title).lower(), categorys=g.category.title.lower()).capitalize()
+        else:
+            page_description = _("download_desc")
+
 
     if len(page_description)<50:
         if page_description:
@@ -666,10 +675,10 @@ def copyright():
     '''
     g.cache_code = "S"
     g.category = False
-    g.page_description = "%s is a free torrent search engine that offers users fast, simple, easy access to every torrent in one place." % g.domain_capitalized
+    g.page_description = _("torrentsfm_desc")
     g.keywords.clear()
     g.keywords.update(["torrents search engine popular largest copyright"])
-    g.title.append("Copyright form")
+    g.title.append(_("Copyright form"))
     form = ComplaintForm(request.form)
     if request.method=='POST':
         if "file_id" in request.form:
@@ -987,9 +996,9 @@ def torrents_data(data, details=False, current_category_tag=None):
 
         # bad flags can be only possible and must used to warn user
         if flag[0]=="f1":
-            data['view']['flag_text'] = flag[1]
+            data['view']['flag_text'] = _(flag[1])
         else:
-            data['view']['flag_text'] = flag[1] if flag[2] else 'Possible '+flag[1].lower()
+            data['view']['flag_text'] = _(flag[1] if flag[2] else 'Possible '+flag[1].lower())
             data['view']['flag_warn'] = data['view']['flag_text']
 
     data['view']['rating5'] = int(round(rate["rating"]*5))
@@ -1013,11 +1022,11 @@ class ComplaintForm(Form):
     company = TextField("Company")
     email = TextField("Email", [Required("Required field."),Email("Invalid email.")])
     phonenumber = TextField("Phone")
-    linkreported = TextField("Link reported", [Required("Required field."),Regexp("^(?!http://[^/]*torrents.(com|is|ms|fm|ag)/?.*).*$",re.IGNORECASE,"Link URL can't be from Torrents.")])
-    urlreported = TextField("Torrents URL", [Required("Required field."),URL("Torrents URL must be a valid URL."),Regexp("^http://torrents.(com|is|ms|fm|ag)/",re.IGNORECASE,"The link must be a Torrents page.")])
+    linkreported = TextField("Link reported", [Required("Required field."),Regexp("^(?!http://[^/]*torrents.(com|is|ms|fm|ag)/?.*).*$",re.IGNORECASE,"Reported link can't be a Torrents.fm page, must be the final torrent address.")])
+    urlreported = TextField("Torrents.fm URL", [Required("Required field."),URL("Torrents.fm URL must be a valid URL."),Regexp("^http://torrents.(com|is|ms|fm|ag)/",re.IGNORECASE,"Torrents.fm URL must be a Torrents.fm page.")])
     reason = TextField("Complaint reason", [Required("Required field.")])
     message = TextAreaField("Message", [Required("Required field.")])
-    captcha = RecaptchaField("Cylons identifier", [])
+    captcha = RecaptchaField("Cylons identifier")
     accept_tos = BooleanField(validators=[Required("Required field.")])
     submit = SubmitField("Submit")
 

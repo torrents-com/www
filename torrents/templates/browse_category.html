@@ -6,13 +6,13 @@
 {%- block content -%}
 <section class="container_24" id="files_top">
 <div class="title big_icon grid_24 {{g.category.url}}">
-    <span></span><div><h1 class="main">{{g.category.title|singular}} torrents</h1></div>
+    <span></span><div><h1 class="main">{{_(g.category.title|singular + " torrents")}}</h1></div>
 </div>
-<ul class="browse_cat"><li class="grid_3"><a href="{{url_for('files.category', category=g.category.url)}}">popular {{g.category.title|lower}}</a></li>{%- for subcat in g.category.subcategories|sort %}<li class="grid_3"><a href="{{url_for('files.category', category=g.category.url, subcategory=subcat|clean_query)}}">{{subcat}}</a></li>{%- endfor %}</ul>
+<ul class="browse_cat"><li class="grid_6"><a href="{{url_for('files.category', category=g.category.url)}}">{{_("popular_category", category=_(g.category.title|singular)|lower, categorys=_(g.category.title)|lower)|capitalize}}</a></li>{%- for subcat in g.category.subcategories|sort %}<li class="grid_6"><a href="{{url_for('files.category', category=g.category.url, subcategory=subcat|clean_query)}}">{{subcat}}</a></li>{%- endfor %}</ul>
 </section>
 {{ small_banner() }}
 <section class="ranking container_24" id="files_page">
-<h2 class="grid_24">Popular {{g.category.title|singular}} searches</h2>
+<h2 class="grid_24">{{_("popular_category_searches", category=_(g.category.title|singular)|lower, categorys=_(g.category.title)|lower)|capitalize}}</h2>
 <table class="ranking grid_24">
     {% set first_width=pop_searches[0][1] %}
     {%- for search in pop_searches %}

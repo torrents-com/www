@@ -130,7 +130,10 @@ def create_app(config=None, debug=False):
 
     @babel.localeselector
     def get_locale():
-        return "en"
+        '''
+        Current language settings
+        '''
+        return g.lang
 
     # Cache
     cache.init_app(app)
@@ -297,9 +300,6 @@ def init_g(app):
     g.full_browser=is_full_browser()
     g.search_bot=is_search_bot()
 
-    # idioma ingles
-    g.lang = "en"
-
     # peticiones en modo preproduccion
     g.beta_request = request.url_root[request.url_root.index("//")+2:].startswith("beta.")
 
@@ -357,10 +357,17 @@ def init_g(app):
     else:
         return
 
-    g.domain_cookies = [url_for('index.cookies', _domain=domain) for domain in g.domains_family if domain!=g.domain]
-
     g.section = "torrents" if g.domain=="torrents.fm" else "downloader" if g.domain=="torrents.ms" else "news"
     g.domain_capitalized = g.domain.capitalize()
+
+    # language selector
+    g.langs = langs = app.config["LANGS"]
+    g.translate_domains = app.config["TRANSLATE_DOMAINS"]
+
+    g.lang = "".join(lang for lang in langs[1:] if lang+"."+g.domain in request.url_root) or langs[0]
+    g.langs_switch = app.config["LANGS_SWITCH"]
+
+    # IMPORTANT: DON'T USE URL_FOR BEFORE THIS POINT IN THIS FUNCTION!
 
     # RUM
     if "RUM_CODES" in app.config:
@@ -371,6 +378,9 @@ def init_g(app):
 
     # título de la página por defecto
     g.title = [g.domain_capitalized]
+
+    # cookies
+    g.domain_cookies = [url_for('index.cookies', _domain=domain) for domain in g.domains_family if domain!=g.domain]
 
     # Patrón de URL de busqueda, para evitar demasiadas llamadas a url_for
     g.url_search_base = url_for("files.search", query="___")

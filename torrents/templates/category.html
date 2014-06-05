@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {%- block head -%}
     {%- if g.query and results %}
-        <link rel="canonical" href="{{url_for('files.category', category=g.category.url, query=search_info['canonical_query'], _external=True)}}" />
+        <link rel="canonical" href="{{url_for('files.category', category=g.category.url, query=search_info['canonical_query'], _external=True, _secure=False)}}" />
         {%- if search_info["total_found"]<5 %}
         <meta name="robots" content="noindex" />
         {%- endif %}
@@ -17,8 +17,8 @@
 <div class="title big_icon grid_24 {{g.category.url}}">
     <span></span>
     <div>
-        <div class="lead"><a href='{{url_for("files.home")}}'>{{_("All")}}</a>&nbsp;&nbsp;<span>&gt;</span>&nbsp;&nbsp;<a href='{{url_for("files.browse_category", category=g.category.url)}}'>{{_(g.category.title)}}</a>&nbsp;&nbsp;<span>&gt;</span>&nbsp;&nbsp;{{g.query}}</div>
-        <h1 class="category">{{_("category_search_torrents", query=g.query, category=_(g.category.title|singular)|lower, categorys=_(g.category.title)|lower)|capitalize}}</h1>
+        <div class="lead" id="query_breadcrumbs"><a href='{{url_for("files.home")}}'>{{_("All")}}</a>&nbsp;&nbsp;<span>&gt;</span>&nbsp;&nbsp;<a href='{{url_for("files.browse_category", category=g.category.url)}}'>{{_(g.category.title)}}</a>&nbsp;&nbsp;<span>&gt;</span>&nbsp;&nbsp;{{g.query}}</div>
+        <h1 class="category" id="query_title">{{_("category_search_torrents", query=g.query, category=_(g.category.title|singular)|lower, categorys=_(g.category.title)|lower)|capitalize}}</h1>
     </div>
 </div>
 {%- if results %}

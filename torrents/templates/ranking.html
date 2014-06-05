@@ -7,7 +7,7 @@
     {%- endfor %}
 {%- endmacro %}
 {%- block head -%}
-        <link rel="canonical" href="{{url_for('files.popular_torrents', interval=interval, _external=True)}}" />
+        <link rel="canonical" href="{{url_for('files.popular_torrents', interval=interval, _external=True, _secure=False)}}" />
 {%- endblock -%}
 {% block content %}
 <section class="container_24" id="files_page">

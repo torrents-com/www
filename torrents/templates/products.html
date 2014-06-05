@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 {%- block head -%}
-        <link rel="canonical" href="{{url_for('news.products', _external=True)}}" />
+        <link rel="canonical" href="{{url_for('news.products', _external=True, _secure=False)}}" />
 {%- endblock -%}
 
 {% block content %}

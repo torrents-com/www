@@ -1,13 +1,13 @@
 {% extends "base.html" %}
 {%- block head -%}
-        <link rel="canonical" href="{{url_for('files.home', _external=True)[:-1]}}" />
+        <link rel="canonical" href="{{url_for('files.home', _external=True, _secure=False)[:-1]}}" />
 {%- endblock -%}
 
 {% from "helpers.html" import small_banner -%}
 {% block content %}
 <section class="container_24" id="files_top">
     <h1 class="extra">{{_("torrentsfm_desc")}}</h1>
-    <ul class="browse grid_24">{%- for category in g.categories if not category.adult_content %}<li class="grid_8 {{'clearer alpha' if loop.index0%3==0}} {{'omega' if loop.index0%3==2}} big_icon {{category.url}}" ><span></span><div><h2 class="category"><a href="{{url_for('files.browse_category', category=category.url)}}">{{_(category.title|singular + " torrents") }}</a></h2><ul><li><a href="{{url_for('files.category', category=category.url)}}">popular</a></li>{%- for subcat in category.subcategories[:6] %}<li><a href="{{url_for('files.category', category=category.url, subcategory=subcat|clean_query)}}">{{subcat}}</a></li>{%- endfor %}<li><a href="{{url_for('files.browse_category', category=category.url)}}">...</a></li></ul></div>{%- endfor %}</ul>
+    <ul class="browse grid_24">{%- for category in g.categories if not category.adult_content %}<li class="grid_8 {{'clearer alpha' if loop.index0%3==0}} {{'omega' if loop.index0%3==2}} big_icon {{category.url}}" ><span></span><div><h2 class="category"><a href="{{url_for('files.browse_category', category=category.url)}}">{{_(category.title|singular + " torrents") }}</a></h2><ul><li><a href="{{url_for('files.category', category=category.url)}}">{{_("Popular")|lower}}</a></li>{%- for subcat in category.subcategories[:6] %}<li><a href="{{url_for('files.category', category=category.url, subcategory=subcat|clean_query)}}" id="{{category.url}}_subcat_{{loop.index}}">{{subcat}}</a></li>{%- endfor %}<li><a href="{{url_for('files.browse_category', category=category.url)}}">...</a></li></ul></div>{%- endfor %}</ul>
 </section>
 {{ small_banner() }}
 <section class="ranking container_24" id="files_page">
@@ -15,7 +15,7 @@
     <table class="grid_24">
         {% set first_width=pop_searches[0][1] %}
         {%- for search in pop_searches[:20] %}
-            <tr><td class="position grid_1 alpha"><div class="bar" style="width:{{120+(search[1]/first_width*830)|int}}px"></div><span>{{ loop.index }}</span></td><td class="grid_21">{{search[0]|clean_query|blacklist_query(search[0])}}</td><td class="grid_2 omega popularity"><span>{{"%0.2f"|format(search[1]/first_width*10)}}</span></td></tr>
+            <tr><td class="position grid_1 alpha"><div class="bar" style="width:{{120+(search[1]/first_width*830)|int}}px"></div><span>{{ loop.index }}</span></td><td class="grid_21">{{search[0]|clean_query|blacklist_query(search[0], elem_id="popular_search_%d"%loop.index)}}</td><td class="grid_2 omega popularity"><span>{{"%0.2f"|format(search[1]/first_width*10)}}</span></td></tr>
         {%- endfor %}
     </table>
 </section>

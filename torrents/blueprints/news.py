@@ -82,7 +82,7 @@ def home(path=""):
     if "head" in path_parts:
         canonical = re.findall( 'canonical["|\'] href=["|\'](.*)["|\']', path_parts['head'])
         if canonical:
-            path_parts['head'] = path_parts['head'].replace('<link rel="canonical" href="%s" />'%canonical[0], '<link rel="canonical" href="%s://%s%s" />' % (request.url.split(":")[0], g.domain, canonical[0] if canonical[0] != "/" else ""))
+            path_parts['head'] = path_parts['head'].replace('<link rel="canonical" href="%s" />'%canonical[0], '<link rel="canonical" href="http://%s%s" />' % (g.domain, canonical[0] if canonical[0] != "/" else ""))
 
     if not path:
         g.keywords.clear()
@@ -142,16 +142,8 @@ def robots():
     full_filename = os.path.join(os.path.join(current_app.root_path, 'static'), 'robots.txt')
 
     with open(full_filename) as input_file:
-        response = make_response(input_file.read() + "\nSitemap: "+ url_for("news.main_sitemap", _external=True) + "\nSitemap: "+ url_for(".static_sitemap", _external=True))
+        response = make_response(input_file.read() + "\nSitemap: "+ url_for("news.main_sitemap", _external=True))
         response.mimetype='text/plain'
-    return response
-
-@news.route('/st_sitemap.xml')
-def static_sitemap():
-    g.cache_code += "SN"
-    pages = [url_for(page, _external=True) for page in ("news.home", ".about", ".legal", ".contact")]
-    response = make_response(render_template('sitemap.xml', pages = pages))
-    response.mimetype='text/xml'
     return response
 
 LIST_FINDER = re.compile("(?:<h4.*?</h4>\s*)?<ul...+?</ul>", re.M+re.U+re.I+re.S)
@@ -175,7 +167,7 @@ def user_sitemap():
         structure.append([("Tags "+column_tags[0][0][0].upper()+"-"+column_tags[-1][0][0].upper(), None, column_tags)])
 
 
-    return render_template('sitemap.html', canonical=url_for("news.user_sitemap", _external=True), structure=structure, column_count=4, column_width=5)
+    return render_template('sitemap.html', canonical=url_for("news.user_sitemap", _external=True, _secure=False), structure=structure, column_count=4, column_width=5)
 
 @news.route('/about')
 def about():

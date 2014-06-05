@@ -5,7 +5,7 @@
         {%- endblock -%}
         {% if not g.override_header %}
             <title>{{ g.title|reverse|join(" | ")}}</title>
-            <meta http-equiv="content-language" content="en" />
+            <meta http-equiv="content-language" content="{{g.lang}}" />
             {% if g.page_description %}
             <meta name="description" content="{{g.page_description}}" />
             {% endif %}
@@ -211,6 +211,14 @@
                                 {%-endif%}
                             {%- endfor %}
                         {%-endif%}
+                        <br/>
+                        {#{%-if g.secure_request %}
+                            <a href="{{url_for('.', _secure=False)}}">{{_("Fast version")}}</a> -
+                            <strong>{{_("Secure version")}}</strong>
+                        {%-else %}
+                            <strong>{{_("Fast version")}}</strong> -
+                            <a href="{{url_for('.', _secure=True)}}">{{_("Secure version")}}</a>
+                        {%-endif%}#}
                     </li>
                 </ul>
             </div>

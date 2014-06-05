@@ -1,17 +1,17 @@
 {% extends "base.html" %}
 {% from "helpers.html" import small_banner -%}
 {%- block head -%}
-    <link rel="canonical" href="{{url_for('files.download', file_id=file_data['view']['url'], file_name=file_data['view']['seo-fn'], _external=True)}}" />
+    <link rel="canonical" href="{{url_for('files.download', file_id=file_data['view']['url'], file_name=file_data['view']['seo-fn'], _external=True, _secure=False)}}" />
 {%- endblock -%}
-{%- macro print_filepaths(paths) %}
+{%- macro print_filepaths(paths, sublevel="") %}
     <ul class="filepaths">
         {%- for path, info in (paths.items() | sort) %}
             <li>
                 {% if path[0] == "/" %}
-                    {{ path[1:]|seoize('_', True) | blacklist_query(path[1:]) }}
-                    {{ print_filepaths(info) }}
+                    {{ path[1:]|seoize('_', True) | blacklist_query(path[1:], elem_id="filepath%s_%d"%(sublevel, loop.index)) }}
+                    {{ print_filepaths(info, sublevel="%s_%d"%(sublevel, loop.index)) }}
                 {% else %}
-                    {{ path|seoize('_', True) | blacklist_query(path) }}<span>{{ info | numbersizeformat("en") }}</span>
+                    {{ path|seoize('_', True) | blacklist_query(path, elem_id="filepath%s_%d"%(sublevel, loop.index)) }}<span>{{ info | numbersizeformat("en") }}</span>
                 {% endif %}
             </li>
         {%- endfor %}
@@ -28,7 +28,7 @@
         {%- endif %}
     </div>
     <div class="grid_17 omega">
-        <h1>{{ file_data['view']['fn'] | seoize(" ",True,0) }}.torrent</h1>
+        <h1 id="torrent_title">{{ file_data['view']['fn'] | seoize(" ",True,0) }}.torrent</h1>
     </div>
     <div class="grid_17 users omega">
         <div class="grid_3 alpha">
@@ -48,7 +48,7 @@
             </div>
             <a title="{{_('Problems')}}" data-vertical-offset="-1" data-dropdown="#report" href="#" id="report_f6"><span class='icon thumbdown'></span><span class="v">{{file_data['view']['votes'][1] if "votes" in file_data['view']}}</span></a>
         </div>
-        <div class="grid_5 current_flag">
+        <div class="grid_4 current_flag">
             {%- if 'flag' in file_data['view'] %}
             <div><span class="icon {{'possible' if not file_data['view']['flag'][2]}} big-{{file_data['view']['flag'][0]}}">{{file_data['view']['flag_text']}}</span></div>
             {%- endif %}
@@ -78,7 +78,7 @@
             <dl class="date"><dt>{{_("Created")}}</dt><dd>{{ file_data['file']['date'] }}</dd></dl>
             {%- endif %}
             {% if "short_desc" in file_data['view']['md'] %}
-                <p>{{ file_data['view']['md']['short_desc']|truncate(400) }}</p>
+                <p id="torrent_short_desc">{{ file_data['view']['md']['short_desc']|truncate(400) }}</p>
             {% endif %}
         </div>
         <div class="grid_6 omega links">
@@ -125,11 +125,11 @@
     {% set rowcycle = ['even', 'odd'] %}
     <ul>
         <li class="grid_17 alpha omega {{ rowcycle|cycle }}"><div class="grid_5 alpha">{{_("Name")}}</div>
-            <div class="grid_12 omega">{{ file_data['view']['nfn'] }}</div>
+            <div class="grid_12 omega" id="torrent_filename">{{ file_data['view']['nfn'] }}</div>
         </li>
         {%- if file_data['view']['file_type'] %}
         <li class="grid_17 alpha omega {{ rowcycle|cycle }}"><div class="grid_5 alpha">{{_("Type")}}</div>
-            <div class="grid_12 omega">{{ file_data['view']['file_type']|capitalize}}</div>
+            <div class="grid_12 omega" id="torrent_filetype">{{ file_data['view']['file_type']|capitalize}}</div>
         </li>
         {% endif %}
         {%- if file_data['view']["categories"] %}
@@ -142,16 +142,16 @@
         {%- for metadata, value in file_data['view']['md'].iteritems() if metadata not in ("long_desc", "short_desc", "filepaths", "seeds","leechs") %}
         <li class="grid_17 alpha omega {{ rowcycle|cycle }}">
         <div class="grid_5 alpha">{{_(metadata|replace("_"," ")|capitalize)}}</div>
-        <div class="grid_12 omega">
+        <div class="grid_12 omega" id="torrent_md_{{metadata}}">
             {%-if metadata in file_data['view']['searches'] %}
                 {%-if file_data['view']['searches'][metadata] == [] %}
                     {% for avalue in value.split(",") %}
-                        {{avalue|clean_query|blacklist_query(avalue|trim)}}{{", " if not loop.last}}
+                        {{avalue|clean_query|blacklist_query(avalue|trim, elem_id="torrent_md_%s_%d"%(metadata, loop.index))}}{{", " if not loop.last}}
                     {% endfor %}
                 {%-elif file_data['view']['searches'][metadata] == {} %}
                     {{print_filepaths(value)}}
                 {%-else %}
-                    {{file_data['view']['searches'][metadata]|clean_query|blacklist_query((value|string)[:100000].replace("\n","<br />"))}}
+                    {{file_data['view']['searches'][metadata]|clean_query|blacklist_query((value|string)[:100000].replace("\n","<br />"), elem_id="torrent_md_"+metadata+"_link")}}
                 {%-endif %}
             {%-else %}
                 {{ (value|string)[:100000].replace("\n","<br />") | safe }}
@@ -174,8 +174,8 @@
 
 {%- if "long_desc" in file_data['view']['md'] %}
 <section id="long_desc" class="grid_17">
-    <h2>{{_("Torrent description")}}</h2>
-    <p>
+    <h2 id="long_desc_title">{{_("Torrent description")}}</h2>
+    <p id="long_desc_content">
     {{ (file_data['view']['md']['long_desc']|string)[:100000].replace("\n","<br />") | safe }}
     </p>
 </section>

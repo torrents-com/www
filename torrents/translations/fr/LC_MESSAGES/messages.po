@@ -160,6 +160,12 @@ msgstr "Site sous licence Creative Commons %(license)s."
 msgid "site_source"
 msgstr "%(source_link)s sous %(source_license)s licence."
 
+msgid "Fast version"
+msgstr "Version rapide"
+
+msgid "Secure version"
+msgstr "Version sécurisée"
+
 msgid "Find. Download. Play!"
 msgstr "Recherchez. Téléchargez. Amusez-vous!"
 

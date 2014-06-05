@@ -13,7 +13,7 @@
                 {%- if item[2] %}
                 <ul>
                     {%- for subitem in item[2] %}
-                    <li><a href='{{subitem[1]}}'>{{_(subitem[0])}}</a></li>
+                    <li><a {{"id='%s'"%subitem[2] if subitem|length>2}} href='{{subitem[1]}}'>{{_(subitem[0])}}</a></li>
                     {%- endfor %}
                 </ul>
                 {%- endif %}

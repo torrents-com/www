@@ -279,19 +279,6 @@ def opensearch():
     response.headers['content-type']='application/opensearchdescription+xml'
     return response
 
-@files.route('/st_sitemap.xml')
-def static_sitemap():
-    g.cache_code = "S"
-    pages = [url_for(page, _external=True) for page in (".home", ".copyright")]
-    pages.extend(url_for(".browse_category", category=category.url, _external=True) for category in g.categories)
-    pages.extend(url_for(".category", category=category.url, _external=True) for category in g.categories)
-    pages.extend(url_for(".category", category=category.url, subcategory=clean_query(subcategory), _external=True) for category in g.categories for subcategory in category.subcategories)
-    pages.extend(url_for(".popular_searches", interval=interval, _external=True) for interval in POPULAR_SEARCHES_INTERVALS.iterkeys())
-    pages.extend(url_for(".popular_torrents", interval=interval, _external=True) for interval in POPULAR_TORRENTS_INTERVALS.iterkeys())
-    response = make_response(render_template('sitemap.xml', pages = pages))
-    response.mimetype='text/xml'
-    return response
-
 @files.route('/sitemap/sitemap0.xml.gz')
 def dynamic_sitemap():
     pass
@@ -304,11 +291,11 @@ def user_sitemap():
                     [("Popular torrents", None, [(info[-1], url_for(".popular_torrents", interval=interval)) for interval, info in POPULAR_TORRENTS_INTERVALS.iteritems()])]
                  ] + [
                     [(category.title, url_for(".browse_category", category=category.url),
-                        [("popular "+category.title.lower(),url_for(".category", category=category.url))] +
-                        [(subcategory, url_for(".category", category=category.url, subcategory=clean_query(subcategory))) for subcategory in category.subcategories])]
+                        [(_("popular_category", category=_(singular_filter(category.title)).lower(), categorys=_(category.title).lower()), url_for(".category", category=category.url))] +
+                        [(subcategory, url_for(".category", category=category.url, subcategory=clean_query(subcategory)), "%s_subcat_%d"%(category.url, index)) for index, subcategory in enumerate(category.subcategories)])]
                                 for category in g.categories
                 ]
-    return render_template('sitemap.html', canonical=url_for("files.user_sitemap", _external=True), structure=structure, column_count=4, column_width=5)
+    return render_template('sitemap.html', canonical=url_for("files.user_sitemap", _external=True, _secure=False), structure=structure, column_count=4, column_width=5)
 
 @files.route('/robots.txt')
 def robots():
@@ -316,7 +303,11 @@ def robots():
     full_filename = os.path.join(os.path.join(current_app.root_path, 'static'), 'robots.txt')
 
     with open(full_filename) as input_file:
-        response = make_response(input_file.read() + "\n\nSitemap: " + url_for("files.dynamic_sitemap", _external=True) + "\nSitemap: "+ url_for("files.static_sitemap", _external=True))
+        response_content = input_file.read()
+        if not g.secure_request:
+            response_content += "\n\nSitemap: " + url_for("files.dynamic_sitemap", _external=True)
+
+        response = make_response(response_content)
         response.mimetype='text/plain'
     return response
 
@@ -687,7 +678,7 @@ def copyright():
                 file_name = request.form.get("file_name",None)
                 data = torrents_data(get_file_metadata(url2mid(file_id), file_name))
                 if data:
-                    form.urlreported.data=url_for("files.download",file_id=file_id,file_name=file_name,_external=True)
+                    form.urlreported.data=url_for("files.download",file_id=file_id,file_name=file_name,_external=True, _secure=False)
                     form.linkreported.data=data['view']["sources"]["tmagnet"]["urls"][0] if "tmagnet" in data['view']["sources"] else data['view']["sources"]["download"]["urls"][0] if "download" in data['view']["sources"] else data['view']["sources"]["download_ind"]["urls"][0]
             except BaseException as e:
                 logging.exception(e)
@@ -1022,8 +1013,8 @@ class ComplaintForm(Form):
     company = TextField("Company")
     email = TextField("Email", [Required("Required field."),Email("Invalid email.")])
     phonenumber = TextField("Phone")
-    linkreported = TextField("Link reported", [Required("Required field."),Regexp("^(?!http://[^/]*torrents.(com|is|ms|fm|ag)/?.*).*$",re.IGNORECASE,"Reported link can't be a Torrents.fm page, must be the final torrent address.")])
-    urlreported = TextField("Torrents.fm URL", [Required("Required field."),URL("Torrents.fm URL must be a valid URL."),Regexp("^http://torrents.(com|is|ms|fm|ag)/",re.IGNORECASE,"Torrents.fm URL must be a Torrents.fm page.")])
+    linkreported = TextField("Link reported", [Required("Required field."),Regexp("^(?!https?://[^/]*torrents.(com|is|ms|fm|ag)/?.*).*$",re.IGNORECASE,"Reported link can't be a Torrents.fm page, must be the final torrent address.")])
+    urlreported = TextField("Torrents.fm URL", [Required("Required field."),URL("Torrents.fm URL must be a valid URL."),Regexp("^https?://torrents.(com|is|ms|fm|ag)/",re.IGNORECASE,"Torrents.fm URL must be a Torrents.fm page.")])
     reason = TextField("Complaint reason", [Required("Required field.")])
     message = TextAreaField("Message", [Required("Required field.")])
     captcha = RecaptchaField("Cylons identifier")

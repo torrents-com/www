@@ -143,6 +143,12 @@ msgstr "Sitio web bajo licencia Creative Commons %(license)s."
 msgid "site_source"
 msgstr "%(source_link)s under %(source_license)s license."
 
+msgid "Fast version"
+msgstr "Versión rápida"
+
+msgid "Secure version"
+msgstr "Versión segura"
+
 msgid "Find. Download. Play!"
 msgstr "Busca. Descarga. ¡Disfruta!"
 
@@ -165,7 +171,7 @@ msgid "Get it Now!"
 msgstr "¡Bájalo ya!"
 
 msgid "share_responsibly"
-msgstr "<strong>COMPARTE DE FORMA RESPONSABLE:</strong> El uso de Torrents Downloader para subir o descargar materiales con derechos de autor sin permiso o autorización de sus titulares puede ser ilegal y podrá someterle a usted (o al abonado del PSI) a responsabilidades y penalizaciones civiles y/o criminales. Existe un número significativo de titulares de derechos de autor que han autorizado el intercambio de sus contenidos para fines no comerciales, como algunos contenidos con formato de licencia de Creative Commons. Además, hay contenidos disponibles de dominio público y no protegidos por derechos de autor. La mayoría de las canciones que están a la venta NO están actualmente autorizadas para su redistribución gratuita, pero requieren una compra o una licencia aparte."
+msgstr "<strong>COMPARTE DE FORMA RESPONSABLE:</strong> El uso de Torrents Downloader para subir o descargar materiales con derechos de autor sin permiso o autorización de sus titulares puede ser ilegal y podrá someterle a usted (o al abonado del PSI) a responsabilidades y penalizaciones civiles y/o criminales. Existe un número significativo de titulares de derechos de autor que han autorizado el intercambio de sus contenidos para fines no comerciales, como algunos contenidos con formato de licencia de Creative Commons. Además, hay contenidos disponibles de dominio público y no protegidos por derechos de autor. La mayoría de las canciones que están a la venta NO están actualmente autorizadas para su redistribución gratuita, sino que requieren una compra o una licencia aparte."
 
 msgid "Easy to use"
 msgstr "Fácil de usar"
@@ -236,7 +242,7 @@ msgid "Popular torrents"
 msgstr "Torrents populares"
 
 msgid "Popular"
-msgstr "Más populares"
+msgstr "Populares"
 
 msgid "popular_torrents_interval"
 msgstr "Torrents populares %(interval)s"

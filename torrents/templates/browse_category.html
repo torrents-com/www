@@ -1,14 +1,14 @@
 {% extends "base.html" %}
 {% from "helpers.html" import small_banner -%}
 {%- block head -%}
-    <link rel="canonical" href="{{url_for('files.browse_category', category=g.category.url, _external=True)}}" />
+    <link rel="canonical" href="{{url_for('files.browse_category', category=g.category.url, _secure=False, _external=True)}}" />
 {%- endblock -%}
 {%- block content -%}
 <section class="container_24" id="files_top">
 <div class="title big_icon grid_24 {{g.category.url}}">
-    <span></span><div><h1 class="main">{{_(g.category.title|singular + " torrents")}}</h1></div>
+    <span></span><div><h1 class="main" id="category_title">{{_(g.category.title|singular + " torrents")}}</h1></div>
 </div>
-<ul class="browse_cat"><li class="grid_6"><a href="{{url_for('files.category', category=g.category.url)}}">{{_("popular_category", category=_(g.category.title|singular)|lower, categorys=_(g.category.title)|lower)|capitalize}}</a></li>{%- for subcat in g.category.subcategories|sort %}<li class="grid_6"><a href="{{url_for('files.category', category=g.category.url, subcategory=subcat|clean_query)}}">{{subcat}}</a></li>{%- endfor %}</ul>
+<ul class="browse_cat"><li class="grid_6"><a href="{{url_for('files.category', category=g.category.url)}}">{{_("popular_category", category=_(g.category.title|singular)|lower, categorys=_(g.category.title)|lower)}}</a></li>{%- for subcat in g.category.subcategories|sort %}<li class="grid_6"><a id="subcat_{{loop.index}}" href="{{url_for('files.category', category=g.category.url, subcategory=subcat|clean_query)}}">{{subcat}}</a></li>{%- endfor %}</ul>
 </section>
 {{ small_banner() }}
 <section class="ranking container_24" id="files_page">
@@ -16,7 +16,7 @@
 <table class="ranking grid_24">
     {% set first_width=pop_searches[0][1] %}
     {%- for search in pop_searches %}
-        <tr><td class="position grid_1 alpha"><div class="bar" style="width:{{120+(search[1]/first_width*830)|int}}px"></div><span>{{ loop.index }}</span></td><td class="grid_21">{{search[0]|clean_query|blacklist_query(search[0])}}</td><td class="grid_2 popularity omega"><span>{{"%0.2f"|format(search[1]/first_width*10)}}</span></td></tr>
+        <tr><td class="position grid_1 alpha"><div class="bar" style="width:{{120+(search[1]/first_width*830)|int}}px"></div><span>{{ loop.index }}</span></td><td class="grid_21">{{search[0]|clean_query|blacklist_query(search[0], elem_id="popular_search_%d"%loop.index)}}</td><td class="grid_2 popularity omega"><span>{{"%0.2f"|format(search[1]/first_width*10)}}</span></td></tr>
     {%- endfor %}
 </table>
 </section>

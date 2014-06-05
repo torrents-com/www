@@ -2,7 +2,7 @@
 <ul id="browse_torrents">
 {% for file in files %}
     <li class="grid_8 {{'clearer alpha' if loop.index0%3==0}} {{'omega' if loop.index0%3==2}}">
-        <div class="grid_3 alpha omega"><a title="{{file['view']['fn']}}" href='{{ url_for("files.download", file_name=file["view"]["seo-fn"], file_id=file["view"]["url"])}}'>
+        <div class="grid_3 alpha omega"><a id="browse_filename_{{loop.index}}" title="{{file['view']['fn']}}" href='{{ url_for("files.download", file_name=file["view"]["seo-fn"], file_id=file["view"]["url"])}}'>
     {%- if 'images_server' in file['view'] or 'thumbnail' in file['view']%}
         <img src="{{g.images_server}}{{ file['file']['_id'] }}0/110{{'/'+ file['view']['icon'].url if file['view']['icon']}}/f/{{file['file']['md'].get('image_filename', file['view']['seo-fn']+'.jpg')}}" alt="Preview {{ file["view"]["nfn"] }}" />
     {%- else %}
@@ -12,7 +12,7 @@
             <div class="rating">{{"<span class='icon star-small'></span>"|safe*file['view']['rating5']}}{{"<span class='icon star-no-small'></span>"|safe*(5-file['view']['rating5'])}}</div>
             <a class="filelink" title="{{file['view']['fn']}}" href='{{ url_for("files.download", file_name=file["view"]["seo-fn"], file_id=file["view"]["url"])}}'>{{ file["view"]["nfn"] }}</a>
             {% if "short_desc" in file['view']['md'] %}
-            <p>{{ file['view']['md']['short_desc']|truncate(250) }}</p>
+            <p id="browse_short_desc_{{loop.index}}">{{ file['view']['md']['short_desc']|truncate(250) }}</p>
             {% endif %}
         </div>
 

@@ -300,7 +300,7 @@ class OutputTree:
                             with self._create_file(output_folder+sitemap_filename) as sitemap:
                                 sitemap.write('<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n')
                                 while part:
-                                    main.write(part.pop() % files_baseurl)
+                                    sitemap.write(part.pop() % files_baseurl)
                                 sitemap.write('</urlset>')
                                 part = list(islice(data_iter, FILESIZE_HARDLIMIT))
                             part_index+=1

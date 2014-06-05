@@ -47,14 +47,17 @@ def cycle_filter(alist):
     alist.insert(0, alist.pop())
     return alist[0]
 
-def blacklist_query(query, text=None, title=None):
+def blacklist_query(query, text=None, title=None, elem_id=""):
 
+    if elem_id:
+        elem_id=" id='%s'"%elem_id
     if (len(query)<WORD_SEARCH_MIN_LEN and query not in NGRAM_CHARS) or blacklists.prepare_phrase(query) in blacklists:
-        return Markup("<a>"+(text or query)+"</a>")
+        return Markup("<a%s>%s</a>"%(elem_id, text or query))
 
-    if g.is_adult_content:
-        return Markup("<a href='" + g.url_adult_search_base.replace('___', query)+"' title='"+(title or text or query)+"'>"+(text or query)+"</a>")
-    elif g.category:
-        return Markup("<a href='" + url_for("files.category", query=query, category=g.category.url)+"' title='"+(title or text or query)+"'>"+(text or query)+"</a>")
-    else:
-        return Markup("<a href='" + g.url_search_base.replace('___', query)+"' title='"+(title or text or query)+"'>"+(text or query)+"</a>")
+    return Markup("<a%s href='%s' title='%s'>%s</a>" % (
+                    elem_id,
+                    g.url_adult_search_base.replace('___', query) if g.is_adult_content else
+                        url_for("files.category", query=query, category=g.category.url) if g.category else
+                        g.url_search_base.replace('___', query),
+                    title or text or query, text or query)
+                )

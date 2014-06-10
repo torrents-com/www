@@ -130,7 +130,7 @@ def generate(server, part, afilter, batch_size, output):
 
             if filename:
                 first_seen = afile["fs"]
-                get_writer(first_seen, count, output, suffix).write("<url><lastmod>%s</lastmod><loc>%%s%s-%s</loc></url>\n"%(first_seen.isoformat(), seoize_text(filename, "-", True), mid2url(afile["_id"])))
+                get_writer(first_seen, count, output, suffix).write("<url><lastmod>%s</lastmod><loc>%%s%s-%s</loc></url>\n"%(first_seen.strftime("%Y-%m-%dT%H:%M:%SZ"), seoize_text(filename, "-", True), mid2url(afile["_id"])))
 
         except BaseException as e:
             error_count += 1

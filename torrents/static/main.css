@@ -129,6 +129,19 @@ h3{font-size:2.4em;line-height:1.3em;font-weight:normal;margin-bottom:0.5em}
 h4{font-size:2.4em;margin-bottom:1em;}
 aside,article,footer,header,nav,section {display:block}
 
+#topbanner {
+    text-align: center;
+    height: 90px;
+    background-color: $lightgray;
+    background-image: repeating-linear-gradient(-45deg, transparent, transparent 5px, rgba(255,255,255,.5) 5px, rgba(255,255,255,.5) 10px);
+}
+
+.smallbanner {
+    background-color: $lightgray;
+    background-image: repeating-linear-gradient(-45deg, transparent, transparent 5px, rgba(255,255,255,.5) 5px, rgba(255,255,255,.5) 10px);
+    text-align: center;
+}
+
 input, button {
     font-family: 'Open Sans', Arial, Verdana, sans-serif;
 }
@@ -1233,7 +1246,7 @@ h1.extra{text-transform:none; font-weight:normal; margin:0em 0em 2em; font-size:
 }
 
 footer{
-    background-color:$lightgray;color:$lightgrayfont;padding:2em 0em 1em;
+    background-color:$lightgray;color:$lightgrayfont;padding:2em 0em 10em;
 
     #footer-top {
         @include regular-text();margin-bottom:1em;border-bottom:1px solid $lightgrayfont;

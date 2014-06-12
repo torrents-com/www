@@ -393,3 +393,5 @@ def init_g(app):
     # downloader links
     g.downloader_properties = local_cache["downloader_properties"]
 
+    # banners
+    g.banners = app.config["BANNERS"]

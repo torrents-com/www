@@ -15,12 +15,13 @@
 
 {% block content %}
 <section id="files_page" class="container_24">
-<div class="title grid_24"><span></span><div>
+<div class="title grid_12"><span></span><div>
 <div class="lead"><a href='{{url_for("files.home")}}' id="query_breadcrumbs">{{_("All")}}</a>&nbsp;&nbsp;<span>&gt;</span>&nbsp;&nbsp;{{g.query}}</div>
 <h1 class="main with-breadcrumbs" id="query_title">{{_("search_torrents", query=g.query)}}</h1>
 </div></div>
+<div class="smallbanner grid_12 omega">{{g.banners["smallbanner"]|safe}}</div>
 {%- if not results %}
-    <div class="text_page">
+    <div class="text_page grid_24">
         <p>{{_("no_results", query=g.query)}}</p>
         <p>{{_("no_results_sorry")}}</p>
     </div>

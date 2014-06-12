@@ -12,7 +12,7 @@
 {%- endblock -%}
 {% block content %}
 <section id="files_page" class="container_24">
-<div class="title big_icon grid_24 {{g.category.url}}">
+<div class="title big_icon grid_12 {{g.category.url}}">
     <span></span>
     <div>
         <div class="lead" id="subcat_breadcrumbs"><a href='{{url_for("files.home")}}'>{{_("All")}}</a>&nbsp;&nbsp;<span>&gt;</span>&nbsp;&nbsp;<a href='{{url_for("files.browse_category", category=g.category.url)}}'>{{_(g.category.title)}}</a>&nbsp;&nbsp;<span>&gt;</span>&nbsp;&nbsp;{{g.subcategory or _("Popular")}}</div>
@@ -23,6 +23,7 @@
         {%-endif%}</h1>
     </div>
 </div>
+<div class="smallbanner grid_12 omega">{{g.banners["smallbanner"]|safe}}</div>
 {%- if results %}
     <div class="grid_24">
     {{ results |safe }}

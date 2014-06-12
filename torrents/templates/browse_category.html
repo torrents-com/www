@@ -5,10 +5,11 @@
 {%- endblock -%}
 {%- block content -%}
 <section class="container_24" id="files_top">
-<div class="title big_icon grid_24 {{g.category.url}}">
+<div class="title big_icon grid_12 {{g.category.url}}">
     <span></span><div><h1 class="main" id="category_title">{{_(g.category.title|singular + " torrents")}}</h1></div>
 </div>
-<ul class="browse_cat"><li class="grid_6"><a href="{{url_for('files.category', category=g.category.url)}}">{{_("popular_category", category=_(g.category.title|singular)|lower, categorys=_(g.category.title)|lower)}}</a></li>{%- for subcat in g.category.subcategories|sort %}<li class="grid_6"><a id="subcat_{{loop.index}}" href="{{url_for('files.category', category=g.category.url, subcategory=subcat|clean_query)}}">{{subcat}}</a></li>{%- endfor %}</ul>
+<div class="smallbanner grid_12 omega">{{g.banners["smallbanner"]|safe}}</div>
+<ul class="browse_cat grid_24"><li class="grid_6 alpha"><a href="{{url_for('files.category', category=g.category.url)}}">{{_("popular_category", category=_(g.category.title|singular)|lower, categorys=_(g.category.title)|lower)}}</a></li>{%- for subcat in g.category.subcategories|sort %}<li class="grid_6{{[' alpha','','',' omega'][loop.index%4]}}"><a id="subcat_{{loop.index}}" href="{{url_for('files.category', category=g.category.url, subcategory=subcat|clean_query)}}">{{subcat}}</a></li>{%- endfor %}</ul>
 </section>
 {{ small_banner() }}
 <section class="ranking container_24" id="files_page">

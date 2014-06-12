@@ -291,7 +291,7 @@ class OutputTree:
                             path = path[1:]
 
                         # trocea el fichero en partes
-                        data_iter = folder.get_unique_data(path[0], folder.files[path[0]])
+                        data_iter = iter(folder.get_unique_data(path[0], folder.files[path[0]]))
                         part = list(islice(data_iter, FILESIZE_HARDLIMIT))
                         part_index=0
                         while part:

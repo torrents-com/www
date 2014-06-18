@@ -789,3 +789,16 @@ msgstr "Écrivez quelque chose!"
 
 msgid "There was an error registering your vote. Please, try again."
 msgstr "Il y a eu une erreur pour enregistrer votre vote. S'il vous plaît, essayez de nouveau."
+
+
+msgid "offer_downloader_title"
+msgstr "Hey!<br/>Vous avez besoin d'un client torrent pour télécharger ce fichier"
+
+msgid "offer_downloader_text"
+msgstr "Télécharger Torrents Downloader pour obtenir ce fichier maintenant.<br/> Notre téléchargements vous permet de télécharger des torrents rapidement et plus facilement que jamais - absolument gratuit! Si vous avez déjà un client Torrent, cliquez sur <i>Non, merci</i>."
+
+msgid "offer_downloader_yes"
+msgstr "<p>Oui, téléchargez</p>Torrents Downloader"
+
+msgid "offer_downloader_no"
+msgstr "<p>Non, merci</p>J'ai déjà un client torrent"

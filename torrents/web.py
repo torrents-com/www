@@ -348,7 +348,7 @@ def init_g(app):
     g.is_adult_content = False
 
     # permite ofrecer el downloader en enlaces de descarga
-    g.offer_downloader = False
+    g.offer_downloader = True
 
     # dominio de la web
     g.domain = None

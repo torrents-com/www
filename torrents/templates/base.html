@@ -60,11 +60,11 @@
         </script>
     </head>
     <body {{ body_class|safe if body_class }}{%- if g.offer_downloader %}
-            data-downloader_href="{{'http://torrents.ms'|forceescape}}"
-            data-downloader_title="Hey!<br/>You need a Torrent client to download this file"
-            data-downloader_text="Download Torrents Downloader to get this file right now.<br/>Our sofware lets you download torrents faster and more easily than ever - absolutely free! If you already have a Torrent client, click <i>No, thanks</i>."
-            data-downloader_yes="<p>Yes, download</p>Torrents Downloader"
-            data-downloader_no="<p>No, thanks</p>I already have a torrent client"
+            data-downloader_href="{{ url_for('web.home') }}"
+            data-downloader_title="{{_('offer_downloader_title')}}"
+            data-downloader_text="{{_('offer_downloader_text')}}"
+            data-downloader_yes="{{_('offer_downloader_yes')}}"
+            data-downloader_no="{{_('offer_downloader_no')}}"
         {%- endif %}
         {%- if g.is_adult_content %}
             data-adult_confirm_title="{{_('Adult content confirmation')}}"

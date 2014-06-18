@@ -673,3 +673,15 @@ msgstr "¡Escribe algo!"
 
 msgid "There was an error registering your vote. Please, try again."
 msgstr "Ha ocurrido un error al registrar su voto. Por favor, intentelo nuevamente."
+
+msgid "offer_downloader_title"
+msgstr "Atención!<br/>Necesitas un cliente Torrent para descargar este fichero"
+
+msgid "offer_downloader_text"
+msgstr "Instala Torrents Downloader para poder descargar este fichero ahora mismo.<br/>Nuestro programa permite descargar torrents más rápido y fácil que nunca, ¡y es totalmente gratuito! Si ya tienes un cliente Torrent instalado, haz click en <i>No, gracias</i>."
+
+msgid "offer_downloader_yes"
+msgstr "<p>Si, descargar</p>Torrents Downloader"
+
+msgid "offer_downloader_no"
+msgstr "<p>No, gracias</p>ya tengo un cliente Torrent"

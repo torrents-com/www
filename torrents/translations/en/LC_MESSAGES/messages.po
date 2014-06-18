@@ -166,3 +166,14 @@ msgstr "Oops! %(desc)s"
 msgid "error_number"
 msgstr "ERROR %(code)d"
 
+msgid "offer_downloader_title"
+msgstr "Hey!<br/>You need a Torrent client to download this file"
+
+msgid "offer_downloader_text"
+msgstr "Download Torrents Downloader to get this file right now.<br/>Our sofware lets you download torrents faster and more easily than ever - absolutely free! If you already have a Torrent client, click <i>No, thanks</i>."
+
+msgid "offer_downloader_yes"
+msgstr "<p>Yes, download</p>Torrents Downloader"
+
+msgid "offer_downloader_no"
+msgstr "<p>No, thanks</p>I already have a torrent client"

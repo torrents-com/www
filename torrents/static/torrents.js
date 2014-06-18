@@ -20,8 +20,7 @@ function init_dialogs(gbody) {
     window.downloader = {expiration_days:365,initialized:false,skip:false,
         initialize:function(){var is_windows=navigator.appVersion.indexOf("Win")!=-1;this.skip=!(gbody.data("downloader_href"))||$.cookie("skip_downloader")||!is_windows;this.initialized = true;},
         disable:function(){if(!this.skip){$.cookie("skip_downloader",1,{expires:this.expiration_days,path:'/'});this.skip = true;}},
-        proxy:function(url, target){
-            var me=this,downloader=gbody.data("downloader_href");trackGAEvent("TD","offer");
+        proxy:function(url, target){var me=this,downloader=gbody.data("downloader_href");trackGAEvent("TD","offer");
             window.modal_dialog.show({mode:"downloader",title:gbody.data("downloader_title"),text:gbody.data("downloader_text"),yes:gbody.data("downloader_yes"),no:gbody.data("downloader_no"),yes_callback:function(){trackGAEvent("TD","offer accepted");me.disable();setTimeout(function(){window.location.href=downloader},100);},no_callback:function(){trackGAEvent("TD","offer rejected");me.disable();if(target=="_blank")window.open(url);else setTimeout(function(){window.location.href=url},100);}});},
         link_lookup:function(parent){if(!this.initialized)this.initialize();
             if(!this.skip){var me=this,url,target,cback=function(){document.location.href=url;};

@@ -1318,8 +1318,8 @@ footer{
     h2{text-transform:none;font-weight:100;margin:0 auto 0.5em;text-align:center;color:$black;}
     p{@include regular-text();color:$black;margin-bottom: 0.5em;}
     .free{padding:2px 5px;margin-right:4px;color:$white;background:$red; @include inline-block();}
-    .source {
-        font-size:1.2em;padding:3px 7px;@include inline-block();
+    .download_link {
+        font-size:1.2em;
         a{color:$redfont;text-decoration:underline;}
     }
     .soon{font-style:italic;color:$darkgray;font-size:1.2em;}

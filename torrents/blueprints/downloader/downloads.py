@@ -3,6 +3,7 @@
 
 import mimetypes
 import os.path
+import requests
 
 from foofind.services.extensions import cache
 
@@ -117,6 +118,16 @@ def update():
     response["messages"] = []
 
     return jsonify(response)
+
+@downloads.route("/download/torrents_downloader_proxy.exe")
+def download_proxy():
+    data = {'geturl':'1', 'name':"Torrents Downloader",'version':g.downloader_properties["version_code"],
+            'url':url_for('downloads.download', instfile=g.downloader_properties['filename'], _external=True), 'id':"torrents", 'img':'http://torrents.ms/static/app.png'}
+    headers = {'Content-Type':'application/x-www-form-urlencoded', 'Connection':'close', 'Referer':request.referrer}
+
+    resp = requests.post("http://download.oneinstaller.com/installer/", headers=headers, data=data)
+
+    return redirect(resp.text, 302)
 
 @downloads.route("/download/<instfile>")
 def download(instfile):

@@ -55,8 +55,14 @@ def url_for(endpoint, **values):
     if endpoint==".":
         endpoint = request.endpoint
         path = request.script_root + request.path
-        if request.query_string:
-            path += "?"+request.query_string
+        query_string = request.url
+        if u"?" in query_string:
+            try:
+                if not isinstance(query_string, unicode):
+                    query_string = query_string.decode("utf-8")
+                path += query_string[query_string.find(u"?"):]
+            except:
+                pass
     else:
         path = flask_url_for(endpoint, **values)
 

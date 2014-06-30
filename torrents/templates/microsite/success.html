@@ -3,9 +3,8 @@
         <link rel="canonical" href="{{url_for('downloader.success', _external=True)[:-1]}}" />
 {%- endblock -%}
 {% block cookies %}
-{% if mode == "success" %}
-    trackGAEvent("TD", "installed");
-{% endif %}
+    var qs = (function(a) {if (a == '') return {}; var b = {}; for (var i = 0; i < a.length; ++i) { var p=a[i].split('='); if (p.length != 2) continue; b[p[0]] = decodeURIComponent(p[1].replace(/\+/g, ' ')); } return b;})(window.location.search.substr(1).split('&')); var version = qs['version'] || 'unknown-UNK';
+    trackGAEvent("TD", "installed " + version.split('-')[2] || 'UNK', version);
 {% endblock %}
 {% block content %}
 <div id="downloader-page">

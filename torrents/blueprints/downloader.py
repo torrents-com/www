@@ -64,15 +64,16 @@ def robots():
 @downloader.route('/smap')
 def user_sitemap():
     g.cache_code += "S"
-    structure = [[("Torrents Downloader", url_for("web.home"))]]
+    structure = [[("Torrents Downloader", url_for("downloader.home")),(_("Browse all downloads"), url_for("downloader.downloads"))]]
 
-    if g.downloader_properties["available"]:
-        structure[0].append(("Windows binaries", url_for('downloads.download', instfile=g.downloader_properties['filename'])))
+    return render_template('sitemap.html', canonical=url_for("downloader.user_sitemap", _external=True), structure=structure, column_count=1, column_width=22)
 
-        if g.downloader_properties["source_available"]:
-            structure[0].append(("Source code", url_for('downloads.download', instfile=g.downloader_properties['source_filename'])))
-
-    return render_template('sitemap.html', canonical=url_for("web.user_sitemap", _external=True), structure=structure, column_count=1, column_width=22)
+@downloader.route('/sitemap.xml')
+def sitemap():
+    g.cache_code += "S"
+    response = make_response(render_template('sitemap.xml', pages = [url_for(".home", _external=True), url_for(".downloads", _external=True)]))
+    response.mimetype='text/xml'
+    return response
 
 @downloader.route("/")
 def home():

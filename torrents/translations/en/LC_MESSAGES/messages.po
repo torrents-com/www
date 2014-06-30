@@ -177,3 +177,6 @@ msgstr "<p>Yes, download</p>Torrents Downloader"
 
 msgid "offer_downloader_no"
 msgstr "<p>No, thanks</p>I already have a torrent client"
+
+msgid "downloader_update_message"
+msgstr "Version %(version)s of %(appname)s is ready to install.\nDo you want to upgrade?"

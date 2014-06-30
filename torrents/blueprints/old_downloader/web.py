@@ -86,16 +86,25 @@ def home():
     g.keywords.update(["files", "search", "document", "image", "video", "torrents", "audio", "software"])
 
     return render_template(
-        "microsite/foodownloader.html",
+        "microsite/index.html",
         mode = "download",
         style_alternative = request.args.get("a", 2, int)
         )
 
 @web.route("/success")
-def foodownloader_success(install_lang=None):
+def success(install_lang=None):
     g.cache_code += "D"
     return render_template(
-        "microsite/foodownloader.html",
+        "microsite/success.html",
+        mode = "success",
+        style_alternative = 0
+        )
+
+@web.route("/downloads")
+def downloads():
+    g.cache_code += "D"
+    return render_template(
+        "microsite/downloads.html",
         mode = "success",
         style_alternative = 0
         )

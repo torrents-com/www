@@ -60,7 +60,7 @@
         </script>
     </head>
     <body {{ body_class|safe if body_class }}{%- if g.offer_downloader %}
-            data-downloader_href="{{ url_for('web.home') }}"
+            data-downloader_href="{{ url_for('downloader.home') }}"
             data-downloader_title="{{_('offer_downloader_title')}}"
             data-downloader_text="{{_('offer_downloader_text')}}"
             data-downloader_yes="{{_('offer_downloader_yes')}}"
@@ -100,7 +100,7 @@
                     </div>
                     <div id="main-nav" class="grid_17">
                         <a href="{{ url_for('news.home') }}"{{' class=active' if g.section=="news" }}><div class="arrow"></div>{{_("News")}}</a>
-                        <a href="{{ url_for('web.home') }}"{{' class=active' if g.section=="downloader" }}><div class="arrow"></div>Downloader</a>
+                        <a href="{{ url_for('downloader.home') }}"{{' class=active' if g.section=="downloader" }}><div class="arrow"></div>Downloader</a>
                         <a href="{{ url_for('files.home') }}"{{' class=active' if g.section=="torrents" }}><div class="arrow"></div>Torrents</a>
                     </div>
                 </div>
@@ -133,7 +133,7 @@
                     <a href="{{ url_for('news.home') }}"><img src="{{g.static_prefix}}/dot-com.png" alt=".com"/></a>
                 </div>
                 <div class="grid_5">
-                    <a href="{{ url_for('web.home') }}"><img src="{{g.static_prefix}}/dot-ms.png" alt=".ms"/></a>
+                    <a href="{{ url_for('downloader.home') }}"><img src="{{g.static_prefix}}/dot-ms.png" alt=".ms"/></a>
                 </div>
                 <div class="grid_5">
                     <a href="{{ url_for('files.home') }}"><img src="{{g.static_prefix}}/dot-fm.png" alt=".fm"/></a>
@@ -173,7 +173,7 @@
                     </li>
                     <li class="grid_5">
                         <ul>
-                            <li><a href="{{ url_for('web.home') }}">Torrents Downloader</a>
+                            <li><a href="{{ url_for('downloader.home') }}">Torrents Downloader</a>
                                 <ul class="bulleted">
                                     {% if g.downloader_properties["available"] -%}
                                     <li><a href="{{url_for('downloads.download', instfile=g.downloader_properties['filename'])}}">{{_("Windows binaries")}}</a></li>
@@ -183,7 +183,7 @@
                                     {% endif %}
                                 </ul>
                             </li>
-                            <li><a href="{{ url_for('web.user_sitemap') }}">{{_("Sitemap")}}</a></li>
+                            <li><a href="{{ url_for('downloader.user_sitemap') }}">{{_("Sitemap")}}</a></li>
                         </ul>
                     </li>
                     <li class="grid_6 omega">

@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{%- block head -%}
+        <link rel="canonical" href="{{url_for('downloader.downloads', _external=True)[:-1]}}" />
+{%- endblock -%}
+{% block content %}
+<div id="downloader-page">
+    <section class="downloader-top container_24">
+        <div class="download-box grid_12">
+            <h1>Torrents Downloader</h1>
+            <h2>{{_("Browse all downloads")}}</h2>
+            <ul class="download_links">
+                <li><a href="{{url_for('downloader.download_proxy', build='W32')}}">{{_("Download Windows version")}}</a> · {{g.downloader_properties['W32']["length"]|numbersizeformat}}</li>
+                <li><a href="{{url_for('downloader.download', build='W32', instfile=g.downloader_properties['W32']["mini"])}}">{{_("Download clean nightly build")}}</a> · {{g.downloader_properties['W32']["length"]|numbersizeformat}}</li>
+                <li><a href="{{url_for('downloader.download', build='SRC', instfile=g.downloader_properties['SRC']["main"])}}">{{_("Download source")}}</a> · {{g.downloader_properties['SRC']["length"]|numbersizeformat}}</li>
+                <li class="soon">{{_("OSX & Linux versions coming soon...")}}</li>
+            </ul>
+        </div>
+        <div class="grid_12">
+            <img src="{{g.static_prefix}}/downloader/feature-main-2-ss.png" width="220" height="220" alt="{{_('Torrents Downloader screenshot')}}" />
+        </div>
+    </section>
+    <section class="downloader-bottom container_24">
+        <div class="grid_24">&nbsp;
+        </div>
+    </section>
+</div>
+{% endblock %}
+

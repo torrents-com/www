@@ -32,8 +32,7 @@ from foofind.utils.bots import is_search_bot, is_full_browser, check_rate_limit
 from torrents.blueprints.index import index
 from torrents.blueprints.news import news
 from torrents.blueprints.files import files, register_files_converters
-from torrents.blueprints.downloader import all_blueprints as downloader_blueprints
-from torrents.blueprints.downloader.web import get_downloader_properties
+from torrents.blueprints.downloader import downloader, get_downloader_properties
 from torrents.templates import register_filters
 from torrents.services import *
 from torrents.multidomain import empty_redirect, redirect_to_domain
@@ -54,12 +53,6 @@ def create_app(config=None, debug=False):
     # Configuración
     if config:
         app.config.from_object(config)
-
-    # Runtime config
-    app.config["DOWNLOADER_FILES"] = {
-        k: os.path.join(os.path.abspath(os.path.join(app.root_path,"../downloads")), v)
-        for k, v in app.config["DOWNLOADER_FILES"].iteritems()
-        }
 
     # Gestión centralizada de errores
     if app.config["SENTRY_DSN"]:
@@ -101,8 +94,7 @@ def create_app(config=None, debug=False):
     register_files_converters(app)
     app.register_blueprint(news)
     app.register_blueprint(files)
-    for blueprint in downloader_blueprints:
-        app.register_blueprint(blueprint)
+    app.register_blueprint(downloader)
 
     # Registra filtros de plantillas
     register_filters(app)
@@ -179,15 +171,18 @@ def create_app(config=None, debug=False):
 
     configdb.register_action("refresh_blacklists", refresh_blacklists)
 
+
+    # downloader files
     downloader_files = app.config["DOWNLOADER_FILES"]
+    base_path = os.path.abspath(os.path.join(app.root_path,"../downloads"))
     def update_downloader_properties():
         '''
         Downloader updated.
         '''
-        local_cache["downloader_properties"] = get_downloader_properties(downloader_files)
+        local_cache["downloader_properties"] = get_downloader_properties(base_path, downloader_files)
 
     configdb.register_action("update_downloader", update_downloader_properties)
-    local_cache["downloader_properties"] = get_downloader_properties(downloader_files)
+    local_cache["downloader_properties"] = get_downloader_properties(base_path, downloader_files)
 
     # IPs españolas
     spanish_ips.load(os.path.join(os.path.dirname(app.root_path),app.config["SPANISH_IPS_FILENAME"]))
@@ -347,9 +342,6 @@ def init_g(app):
 
     g.is_adult_content = False
 
-    # permite ofrecer el downloader en enlaces de descarga
-    g.offer_downloader = True
-
     # dominio de la web
     g.domain = None
     g.domains_family = app.config["ALLOWED_DOMAINS"]
@@ -390,8 +382,20 @@ def init_g(app):
     g.url_search_base = url_for("files.search", query="___")
     g.url_adult_search_base = url_for("files.category", category="porn", query="___")
 
+    # permite ofrecer el downloader en enlaces de descarga
+    g.offer_downloader = True
+
     # downloader links
     g.downloader_properties = local_cache["downloader_properties"]
+
+    g.user_build = current_app.config["DOWNLOADER_DEFAULT_BUILD"]
+    # Find the best active build for the user
+    for build, info in g.downloader_properties.iteritems():
+        try:
+            if build != "common" and info["active"] and info["length"] and info.get("check_user_agent", lambda x:False)(request.user_agent):
+                g.user_build = build
+        except BaseException as e:
+            logging.exception(e)
 
     # banners
     g.banners = app.config["BANNERS"]

@@ -188,6 +188,20 @@ img {
     min-height:20em;
 }
 
+#downloader-page, #text_page, .text_page {
+    ul, ol {
+        padding-left:1em;
+        margin-top:1em;
+        vertical-align: top;
+        @include regular-text();
+        li {
+            margin-top:0.5em;
+            list-style-type:inherit;
+            list-style-image:url("data:image/gif;base64,R0lGODlhBQAIAIABALI2M////yH5BAEKAAEALAAAAAAFAAgAAAIHhI+pGO0PCwA7");
+            list-style-position: inside;
+        }
+    }
+}
 #text_page, .text_page {
     background-color:white;
 
@@ -196,19 +210,6 @@ img {
     h4 { margin: 2em 0em 0em; }
 
     .clearer {clear:left}
-    ul, ol {
-        margin-top:1em;
-        padding-left:1em;
-        vertical-align: top;
-        @include regular-text();
-
-        li {
-            margin-top:0.5em;
-            list-style-type:inherit;
-            list-style-image:url("data:image/gif;base64,R0lGODlhBQAIAIABALI2M////yH5BAEKAAEALAAAAAAFAAgAAAIHhI+pGO0PCwA7");
-            list-style-position: inside;
-        }
-    }
 
     li > ul, li > ol {
         margin-top:0em;
@@ -1309,9 +1310,9 @@ footer{
     h2 {margin-top:0}
 }
 
-.downloader-top{margin-top:6em
+.downloader-top{margin-top:6em;
   .download-box{
-    width:auto;margin:0em;float:right;text-align:center;
+    width:auto;margin:0em;text-align:center;
     a.downloader-download-button {font-size:3em;background:$red;text-transform:uppercase;color:$white;text-decoration: none;margin:0 auto 0.5em;border-radius:4px;padding: 0.5em 1.7em;text-align: center;@include inline-block();}
     a.downloader-download-button:hover {background:$black;}
     h1 {font-size:4.7em;color:$redfont;text-transform:none;font-weight:100;margin-top:0;}
@@ -1322,7 +1323,10 @@ footer{
         font-size:1.2em;
         a{color:$redfont;text-decoration:underline;}
     }
-    .soon{font-style:italic;color:$darkgray;font-size:1.2em;}
+    .soon{font-style:italic;color:$darkgray;font-size:1em;}
+    .download_links {
+        text-align:left;
+    }
   }
   .legal {margin-top:1em; color:$grayfont; padding:0.5em}
 }

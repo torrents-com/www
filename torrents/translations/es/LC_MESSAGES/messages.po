@@ -685,3 +685,18 @@ msgstr "<p>Si, descargar</p>Torrents Downloader"
 
 msgid "offer_downloader_no"
 msgstr "<p>No, gracias</p>ya tengo un cliente Torrent"
+
+msgid "downloader_update_message"
+msgstr "La versión %(version)s de %s está lista para instalar.\n¿Desea actualizar ahora?"
+
+msgid "Browse all downloads"
+msgstr "Todas las descargas"
+
+msgid "Download Windows version"
+msgstr "Descargar versión para Windows"
+
+msgid "Download clean nightly build"
+msgstr "Descargar nightly build"
+
+msgid "OSX & Linux versions coming soon..."
+msgstr "Versiones para OSX y Linux próximamente..."

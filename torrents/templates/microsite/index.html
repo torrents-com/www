@@ -1,27 +1,8 @@
 {% extends "base.html" %}
 {%- block head -%}
-        <link rel="canonical" href="{{url_for('web.home', _external=True)[:-1]}}" />
+        <link rel="canonical" href="{{url_for('downloader.home', _external=True)[:-1]}}" />
 {%- endblock -%}
-{% block cookies %}
-{% if mode == "success" %}
-    trackGAEvent("TD", "installed");
-{% endif %}
-{% endblock %}
 {% block content %}
-{% if mode == "success" %}
-<div id="downloader-page">
-    <section class="downloader-top container_24">
-        <div class="grid_12">
-            <img src="{{g.static_prefix}}/downloader/downloader-computer.png" width="358" height="295" alt="{{_('Torrents Downloader screenshot')}}" />
-        </div>
-        <div class="download-box grid_12">
-            <h1>{{_("Happy downloading!")}}</h1>
-            <p>&nbsp;</p>
-            <h2>{{_("Thanks for installing Torrents Downloader, we hope you enjoy it.")}}</h2>
-        </div>
-    </section>
-</div>
-{% elif mode == "download" %}
 <div id="downloader-page">
   <section class="downloader-top container_24">
     <div class="grid_12">
@@ -30,15 +11,13 @@
     <aside class="download-box grid_12">
         <h1>Torrents Downloader</h1>
         <h2>{{_("Find. Download. Play!")}}</h2>
-        {% if g.downloader_properties["available"] -%}
-            <a href="{{url_for('downloads.download_proxy')}}" id="downloader_button" class="downloader-download-button">{{_("Download")}}</a>
-            <p><strong class="free">{{_("Free")|upper}}</strong> <span>{{_("for Windows")}} | <strong>{{g.downloader_properties["length"]|numbersizeformat}}</strong> (v. {{g.downloader_properties["version_code"].split("-")[0]}})</span></p>
-            <p class="soon">{{_("for OSX & Linux: coming soon...")}}</p>
-            {% if g.downloader_properties["source_available"] -%}
-                <p class="download_link"><a href="{{url_for('downloads.download', instfile=g.downloader_properties['filename'])}}">{{_("Download")}} clean nightly build · {{g.downloader_properties["length"]|numbersizeformat}}</a></p>
-                <p class="download_link"><a href="{{url_for('downloads.download', instfile=g.downloader_properties['source_filename'])}}">{{_("Download source")}} · {{g.downloader_properties["source_length"]|numbersizeformat}}</a></p>
-            {% endif %}
+        {% if g.downloader_properties[g.user_build]["active"] and g.downloader_properties[g.user_build]['length'] %}
+            <a href="{{url_for('downloader.download_proxy') if 'proxy' in g.downloader_properties[g.user_build] else url_for('downloader.download', build=g.user_build, instfile=g.downloader_properties[g.user_build]['main'])}}" id="downloader_button" class="downloader-download-button" >{{_("Download")}}</a>
+            <p><strong class="free">{{_("Free")|upper}}</strong> <span>{{_("for Windows")}} | <strong>{{g.downloader_properties[g.user_build]["length"]|numbersizeformat}}</strong> (v. {{g.downloader_properties[g.user_build]["version"].split("-")[0]}})</span></p>
+        {% else %}
+        <p>{{_("Sorry: Not yet available for your OS.")}}</p>
         {% endif %}
+        <p class="download_link"><a href="{{url_for('downloader.downloads')}}">{{_("Browse all downloads")}}</a></p>
     </aside>
     <p class="legal grid_22 prefix_1 suffix_1">{{_("share_responsibly")}}</p>
   </section>
@@ -90,6 +69,5 @@
     </section>
   </section>
 </div>
-{% endif %}
 {% endblock %}
 

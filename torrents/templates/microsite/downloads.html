@@ -11,8 +11,9 @@
             <ul class="download_links">
                 <li><a href="{{url_for('downloader.download_proxy', build='W32')}}">{{_("Download Windows version")}}</a> · {{g.downloader_properties['W32']["length"]|numbersizeformat}}</li>
                 <li><a href="{{url_for('downloader.download', build='W32', instfile=g.downloader_properties['W32']["mini"])}}">{{_("Download clean nightly build")}}</a> · {{g.downloader_properties['W32']["length"]|numbersizeformat}}</li>
+                <li><a href="{{url_for('downloader.download', build='MAC', instfile=g.downloader_properties['MAC']["main"])}}">{{_("Download Mac version")}} (BETA)</a> · {{g.downloader_properties['MAC']["length"]|numbersizeformat}}</li>
                 <li><a href="{{url_for('downloader.download', build='SRC', instfile=g.downloader_properties['SRC']["main"])}}">{{_("Download source")}}</a> · {{g.downloader_properties['SRC']["length"]|numbersizeformat}}</li>
-                <li class="soon">{{_("OSX & Linux versions coming soon...")}}</li>
+                <li class="soon">{{_("Linux versions coming soon...")}}</li>
             </ul>
         </div>
         <div class="grid_12">

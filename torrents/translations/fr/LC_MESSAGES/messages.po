@@ -815,5 +815,5 @@ msgstr "Télécharger la version de Windows"
 msgid "Download clean nightly build"
 msgstr "Télécharger propre nightly build limpia"
 
-msgid "OSX & Linux versions coming soon..."
-msgstr "Versions OSX et Linux bientôt..."
+msgid "Linux versions coming soon..."
+msgstr "Versions Linux bientôt..."

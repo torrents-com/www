@@ -695,8 +695,11 @@ msgstr "Todas las descargas"
 msgid "Download Windows version"
 msgstr "Descargar versión para Windows"
 
+msgid "Download Mac version"
+msgstr "Descargar versión para Mac"
+
 msgid "Download clean nightly build"
 msgstr "Descargar nightly build"
 
-msgid "OSX & Linux versions coming soon..."
-msgstr "Versiones para OSX y Linux próximamente..."
+msgid "Linux versions coming soon..."
+msgstr "Versiones para Linux próximamente..."

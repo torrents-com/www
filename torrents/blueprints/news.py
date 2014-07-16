@@ -119,7 +119,7 @@ def old_rss():
 @news.route('/downloader')
 def old_downloader():
     g.cache_code = "S"
-    return empty_redirect(url_for("web.home"), 301)
+    return empty_redirect(url_for("downloader.home"), 301)
 
 @news.route('/popular')
 def old_popular_torrents():

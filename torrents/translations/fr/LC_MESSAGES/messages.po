@@ -812,6 +812,9 @@ msgstr "Tous les téléchargements"
 msgid "Download Windows version"
 msgstr "Télécharger la version de Windows"
 
+msgid "Download Mac version"
+msgstr "Télécharger la version de Mac"
+
 msgid "Download clean nightly build"
 msgstr "Télécharger propre nightly build limpia"
 

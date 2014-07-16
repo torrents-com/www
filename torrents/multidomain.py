@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-import re, flask
+import re, flask, urllib2
 from newrelic.agent import transaction_name
 from flask import g, url_for as flask_url_for, redirect, Blueprint, request, current_app, _request_ctx_stack
 
@@ -54,7 +54,7 @@ def url_for(endpoint, **values):
     # allows to use "." for current path
     if endpoint==".":
         endpoint = request.endpoint
-        path = request.script_root + request.path
+        path = request.script_root + urllib2.quote(request.path.encode('utf-8'))
         query_string = request.url
         if u"?" in query_string:
             try:

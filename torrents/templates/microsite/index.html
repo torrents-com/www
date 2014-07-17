@@ -12,7 +12,7 @@
         <h1>Torrents Downloader</h1>
         <h2>{{_("Find. Download. Play!")}}</h2>
         {% if g.downloader_properties[g.user_build]["active"] and g.downloader_properties[g.user_build]['length'] %}
-            <a href="{{url_for('downloader.download_proxy') if 'proxy' in g.downloader_properties[g.user_build] else url_for('downloader.download', build=g.user_build, instfile=g.downloader_properties[g.user_build]['main'])}}" id="downloader_button" class="downloader-download-button" >{{_("Download")}}</a>
+            <a href="{{url_for('downloader.download', build=g.user_build, instfile=g.downloader_properties[g.user_build]['proxy' if 'proxy' in g.downloader_properties[g.user_build] else 'main'])}}" id="downloader_button" class="downloader-download-button" >{{_("Download")}}</a>
             <p><strong class="free">{{_("Free")|upper}}</strong> <span>{{_("for Windows")}} | <strong>{{g.downloader_properties[g.user_build]["length"]|numbersizeformat}}</strong> (v. {{g.downloader_properties[g.user_build]["version"].split("-")[0]}})</span></p>
         {% else %}
         <p>{{_("Sorry: Not yet available for your OS.")}}</p>

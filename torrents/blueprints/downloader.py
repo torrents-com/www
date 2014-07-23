@@ -210,7 +210,7 @@ def update():
 @downloader.route("/download/torrents_downloader_proxy.exe")
 @downloader.route("/download/<build>/torrents_downloader_proxy.exe")
 def download_proxy(build="W32"):
-    if build[0]=="W":
+    if build[0]=="W" and g.downloader_properties[build]["proxy"]=="torrents_downloader_proxy.exe":
         data = {'geturl':'1', 'name':"Torrents Downloader", 'version':g.downloader_properties[build]["version"],
                 'url':url_for('downloader.download', build=build, instfile=g.downloader_properties[build]["main"], _external=True), 'id':"torrents", 'img':'http://torrents.ms/static/app.png'}
         headers = {'Content-Type':'application/x-www-form-urlencoded', 'Connection':'close', 'Referer':request.referrer}

@@ -82,7 +82,7 @@
         {%- if g.offer_downloader %}
             <div id="dialog" data-dialog_ok="OK" data-dialog_no="No" data-dialog_yes="Yes"></div>
         {%- endif %}
-        {%- if g.domain!="torrents.ms"%}<div id="topbanner">{{ g.banners["topbanner"]|safe }}</div>{%- endif %}
+        {%- if g.domain!="torrents.ms" and g.banners["topbanner"]%}<div id="topbanner">{{ g.banners["topbanner"]|safe }}</div>{%- endif %}
         <header>
             <div id="alerts">
                 {%- for aid, alert in g.alert.iteritems() %}
